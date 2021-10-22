@@ -66,51 +66,51 @@ public class TcUsuario implements Serializable {
 	public TcUsuario() {
 	}
 
-	public Long getNId() {
+	public Long getn_Id() {
 		return this.nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setn_Id(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getNPerfil() {
+	public int getn_Perfil() {
 		return this.nPerfil;
 	}
 
-	public void setNPerfil(int nPerfil) {
+	public void setn_Perfil(int nPerfil) {
 		this.nPerfil = nPerfil;
 	}
 
-	public String getSClaveuser() {
+	public String gets_Claveuser() {
 		return this.sClaveuser;
 	}
 
-	public void setSClaveuser(String sClaveuser) {
+	public void sets_Claveuser(String sClaveuser) {
 		this.sClaveuser = sClaveuser;
 	}
 
-	public String getSNombreusuario() {
+	public String gets_Nombreusuario() {
 		return this.sNombreusuario;
 	}
 
-	public void setSNombreusuario(String sNombreusuario) {
+	public void sets_Nombreusuario(String sNombreusuario) {
 		this.sNombreusuario = sNombreusuario;
 	}
 
-	public String getSPassword() {
+	public String gets_Password() {
 		return this.sPassword;
 	}
 
-	public void setSPassword(String sPassword) {
+	public void sets_Password(String sPassword) {
 		this.sPassword = sPassword;
 	}
 
-	public String getSUsuario() {
+	public String gets_Usuario() {
 		return this.sUsuario;
 	}
 
-	public void setSUsuario(String sUsuario) {
+	public void sets_Usuario(String sUsuario) {
 		this.sUsuario = sUsuario;
 	}
 

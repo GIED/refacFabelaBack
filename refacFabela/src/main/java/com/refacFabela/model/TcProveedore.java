@@ -45,59 +45,59 @@ public class TcProveedore implements Serializable {
 	public TcProveedore() {
 	}
 
-	public Long getNId() {
+	public Long getn_Id() {
 		return this.nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setn_Id(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getNEstatus() {
+	public int getn_Estatus() {
 		return this.nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setn_Estatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
-	public int getNIdusuario() {
+	public int getn_Idusuario() {
 		return this.nIdusuario;
 	}
 
-	public void setNIdusuario(int nIdusuario) {
+	public void setn_Idusuario(int nIdusuario) {
 		this.nIdusuario = nIdusuario;
 	}
 
-	public String getSDireccion() {
+	public String gets_Direccion() {
 		return this.sDireccion;
 	}
 
-	public void setSDireccion(String sDireccion) {
+	public void sets_Direccion(String sDireccion) {
 		this.sDireccion = sDireccion;
 	}
 
-	public String getSRazonSocial() {
+	public String gets_RazonSocial() {
 		return this.sRazonSocial;
 	}
 
-	public void setSRazonSocial(String sRazonSocial) {
+	public void sets_RazonSocial(String sRazonSocial) {
 		this.sRazonSocial = sRazonSocial;
 	}
 
-	public String getSRfc() {
+	public String gets_Rfc() {
 		return this.sRfc;
 	}
 
-	public void setSRfc(String sRfc) {
+	public void sets_Rfc(String sRfc) {
 		this.sRfc = sRfc;
 	}
 
-	public String getSTelefono() {
+	public String gets_Telefono() {
 		return this.sTelefono;
 	}
 
-	public void setSTelefono(String sTelefono) {
+	public void sets_Telefono(String sTelefono) {
 		this.sTelefono = sTelefono;
 	}
 

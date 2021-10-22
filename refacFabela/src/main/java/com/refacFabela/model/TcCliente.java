@@ -27,7 +27,7 @@ public class TcCliente implements Serializable {
 	@Column(name="n_estatus")
 	private int nEstatus;
 
-	private int n_idUsuarioCredito;
+	private Long n_idUsuarioCredito;
 
 	private double n_limiteCredito;
 
@@ -62,83 +62,83 @@ public class TcCliente implements Serializable {
 	public TcCliente() {
 	}
 
-	public Long getNId() {
+	public Long getn_Id() {
 		return this.nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setn_Id(Long nId) {
 		this.nId = nId;
 	}
 
-	public Date getD_fechaCredito() {
+	public Date getd_fechaCredito() {
 		return this.d_fechaCredito;
 	}
 
-	public void setD_fechaCredito(Date d_fechaCredito) {
+	public void setd_fechaCredito(Date d_fechaCredito) {
 		this.d_fechaCredito = d_fechaCredito;
 	}
 
-	public int getNEstatus() {
+	public int getn_Estatus() {
 		return this.nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setn_Estatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
-	public int getN_idUsuarioCredito() {
+	public Long getn_idUsuarioCredito() {
 		return this.n_idUsuarioCredito;
 	}
 
-	public void setN_idUsuarioCredito(int n_idUsuarioCredito) {
+	public void setn_idUsuarioCredito(Long n_idUsuarioCredito) {
 		this.n_idUsuarioCredito = n_idUsuarioCredito;
 	}
 
-	public double getN_limiteCredito() {
+	public double getn_limiteCredito() {
 		return this.n_limiteCredito;
 	}
 
-	public void setN_limiteCredito(double n_limiteCredito) {
+	public void setn_limiteCredito(double n_limiteCredito) {
 		this.n_limiteCredito = n_limiteCredito;
 	}
 
-	public String getSCorreo() {
+	public String gets_Correo() {
 		return this.sCorreo;
 	}
 
-	public void setSCorreo(String sCorreo) {
+	public void sets_Correo(String sCorreo) {
 		this.sCorreo = sCorreo;
 	}
 
-	public String getSDireccion() {
+	public String gets_Direccion() {
 		return this.sDireccion;
 	}
 
-	public void setSDireccion(String sDireccion) {
+	public void sets_Direccion(String sDireccion) {
 		this.sDireccion = sDireccion;
 	}
 
-	public String getSRazonSocial() {
+	public String gets_RazonSocial() {
 		return this.sRazonSocial;
 	}
 
-	public void setSRazonSocial(String sRazonSocial) {
+	public void sets_RazonSocial(String sRazonSocial) {
 		this.sRazonSocial = sRazonSocial;
 	}
 
-	public String getSRfc() {
+	public String gets_Rfc() {
 		return this.sRfc;
 	}
 
-	public void setSRfc(String sRfc) {
+	public void sets_Rfc(String sRfc) {
 		this.sRfc = sRfc;
 	}
 
-	public String getSTelefono() {
+	public String gets_Telefono() {
 		return this.sTelefono;
 	}
 
-	public void setSTelefono(String sTelefono) {
+	public void sets_Telefono(String sTelefono) {
 		this.sTelefono = sTelefono;
 	}
 
