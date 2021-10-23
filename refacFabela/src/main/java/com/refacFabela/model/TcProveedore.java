@@ -45,82 +45,70 @@ public class TcProveedore implements Serializable {
 	public TcProveedore() {
 	}
 
-	public Long getn_Id() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setn_Id(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getn_Estatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setn_Estatus(int nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
-	public int getn_Idusuario() {
-		return this.nIdusuario;
+	public int getnIdusuario() {
+		return nIdusuario;
 	}
 
-	public void setn_Idusuario(int nIdusuario) {
+	public void setnIdusuario(int nIdusuario) {
 		this.nIdusuario = nIdusuario;
 	}
 
-	public String gets_Direccion() {
-		return this.sDireccion;
+	public String getsDireccion() {
+		return sDireccion;
 	}
 
-	public void sets_Direccion(String sDireccion) {
+	public void setsDireccion(String sDireccion) {
 		this.sDireccion = sDireccion;
 	}
 
-	public String gets_RazonSocial() {
-		return this.sRazonSocial;
+	public String getsRazonSocial() {
+		return sRazonSocial;
 	}
 
-	public void sets_RazonSocial(String sRazonSocial) {
+	public void setsRazonSocial(String sRazonSocial) {
 		this.sRazonSocial = sRazonSocial;
 	}
 
-	public String gets_Rfc() {
-		return this.sRfc;
+	public String getsRfc() {
+		return sRfc;
 	}
 
-	public void sets_Rfc(String sRfc) {
+	public void setsRfc(String sRfc) {
 		this.sRfc = sRfc;
 	}
 
-	public String gets_Telefono() {
-		return this.sTelefono;
+	public String getsTelefono() {
+		return sTelefono;
 	}
 
-	public void sets_Telefono(String sTelefono) {
+	public void setsTelefono(String sTelefono) {
 		this.sTelefono = sTelefono;
 	}
 
 	public List<TwPedido> getTwPedidos() {
-		return this.twPedidos;
+		return twPedidos;
 	}
 
 	public void setTwPedidos(List<TwPedido> twPedidos) {
 		this.twPedidos = twPedidos;
 	}
 
-	public TwPedido addTwPedido(TwPedido twPedido) {
-		getTwPedidos().add(twPedido);
-		twPedido.setTcProveedore(this);
-
-		return twPedido;
-	}
-
-	public TwPedido removeTwPedido(TwPedido twPedido) {
-		getTwPedidos().remove(twPedido);
-		twPedido.setTcProveedore(null);
-
-		return twPedido;
-	}
+	
 
 }
