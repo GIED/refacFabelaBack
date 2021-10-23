@@ -45,6 +45,9 @@ public class TcCliente implements Serializable {
 
 	@Column(name="s_telefono")
 	private String sTelefono;
+	
+	@Column(name="s_clave")
+	private String sClave;
 
 	//bi-directional many-to-one association to TcUsuario
 	@ManyToOne
@@ -62,88 +65,96 @@ public class TcCliente implements Serializable {
 	public TcCliente() {
 	}
 
-	public Long getn_Id() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setn_Id(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public Date getd_fechaCredito() {
-		return this.d_fechaCredito;
+	public Date getD_fechaCredito() {
+		return d_fechaCredito;
 	}
 
-	public void setd_fechaCredito(Date d_fechaCredito) {
+	public void setD_fechaCredito(Date d_fechaCredito) {
 		this.d_fechaCredito = d_fechaCredito;
 	}
 
-	public int getn_Estatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
+	}
+	
+	public String getsClave() {
+		return sClave;
 	}
 
-	public void setn_Estatus(int nEstatus) {
+	public void setsClave(String sClave) {
+		this.sClave = sClave;
+	}
+
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
-	public Long getn_idUsuarioCredito() {
-		return this.n_idUsuarioCredito;
+	public Long getN_idUsuarioCredito() {
+		return n_idUsuarioCredito;
 	}
 
-	public void setn_idUsuarioCredito(Long n_idUsuarioCredito) {
+	public void setN_idUsuarioCredito(Long n_idUsuarioCredito) {
 		this.n_idUsuarioCredito = n_idUsuarioCredito;
 	}
 
-	public double getn_limiteCredito() {
-		return this.n_limiteCredito;
+	public double getN_limiteCredito() {
+		return n_limiteCredito;
 	}
 
-	public void setn_limiteCredito(double n_limiteCredito) {
+	public void setN_limiteCredito(double n_limiteCredito) {
 		this.n_limiteCredito = n_limiteCredito;
 	}
 
-	public String gets_Correo() {
-		return this.sCorreo;
+	public String getsCorreo() {
+		return sCorreo;
 	}
 
-	public void sets_Correo(String sCorreo) {
+	public void setsCorreo(String sCorreo) {
 		this.sCorreo = sCorreo;
 	}
 
-	public String gets_Direccion() {
-		return this.sDireccion;
+	public String getsDireccion() {
+		return sDireccion;
 	}
 
-	public void sets_Direccion(String sDireccion) {
+	public void setsDireccion(String sDireccion) {
 		this.sDireccion = sDireccion;
 	}
 
-	public String gets_RazonSocial() {
-		return this.sRazonSocial;
+	public String getsRazonSocial() {
+		return sRazonSocial;
 	}
 
-	public void sets_RazonSocial(String sRazonSocial) {
+	public void setsRazonSocial(String sRazonSocial) {
 		this.sRazonSocial = sRazonSocial;
 	}
 
-	public String gets_Rfc() {
-		return this.sRfc;
+	public String getsRfc() {
+		return sRfc;
 	}
 
-	public void sets_Rfc(String sRfc) {
+	public void setsRfc(String sRfc) {
 		this.sRfc = sRfc;
 	}
 
-	public String gets_Telefono() {
-		return this.sTelefono;
+	public String getsTelefono() {
+		return sTelefono;
 	}
 
-	public void sets_Telefono(String sTelefono) {
+	public void setsTelefono(String sTelefono) {
 		this.sTelefono = sTelefono;
 	}
 
 	public TcUsuario getTcUsuario() {
-		return this.tcUsuario;
+		return tcUsuario;
 	}
 
 	public void setTcUsuario(TcUsuario tcUsuario) {
@@ -151,47 +162,21 @@ public class TcCliente implements Serializable {
 	}
 
 	public List<TwCotizacione> getTwCotizaciones() {
-		return this.twCotizaciones;
+		return twCotizaciones;
 	}
 
 	public void setTwCotizaciones(List<TwCotizacione> twCotizaciones) {
 		this.twCotizaciones = twCotizaciones;
 	}
 
-	public TwCotizacione addTwCotizacione(TwCotizacione twCotizacione) {
-		getTwCotizaciones().add(twCotizacione);
-		twCotizacione.setTcCliente(this);
-
-		return twCotizacione;
-	}
-
-	public TwCotizacione removeTwCotizacione(TwCotizacione twCotizacione) {
-		getTwCotizaciones().remove(twCotizacione);
-		twCotizacione.setTcCliente(null);
-
-		return twCotizacione;
-	}
-
 	public List<TwVenta> getTwVentas() {
-		return this.twVentas;
+		return twVentas;
 	}
 
 	public void setTwVentas(List<TwVenta> twVentas) {
 		this.twVentas = twVentas;
 	}
 
-	public TwVenta addTwVenta(TwVenta twVenta) {
-		getTwVentas().add(twVenta);
-		twVenta.setTcCliente(this);
-
-		return twVenta;
-	}
-
-	public TwVenta removeTwVenta(TwVenta twVenta) {
-		getTwVentas().remove(twVenta);
-		twVenta.setTcCliente(null);
-
-		return twVenta;
-	}
+	
 
 }
