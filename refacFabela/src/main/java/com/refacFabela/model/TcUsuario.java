@@ -34,6 +34,9 @@ public class TcUsuario implements Serializable {
 
 	@Column(name="s_usuario")
 	private String sUsuario;
+	
+	@Column(name="n_estatus")
+	private Integer nEstatus;
 
 	//bi-directional many-to-one association to TcCliente
 	@OneToMany(mappedBy="tcUsuario")
@@ -66,206 +69,117 @@ public class TcUsuario implements Serializable {
 	public TcUsuario() {
 	}
 
-	public Long getn_Id() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setn_Id(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getn_Perfil() {
-		return this.nPerfil;
+	public int getnPerfil() {
+		return nPerfil;
 	}
 
-	public void setn_Perfil(int nPerfil) {
+	public void setnPerfil(int nPerfil) {
 		this.nPerfil = nPerfil;
 	}
 
-	public String gets_Claveuser() {
-		return this.sClaveuser;
+	public String getsClaveuser() {
+		return sClaveuser;
 	}
 
-	public void sets_Claveuser(String sClaveuser) {
+	public void setsClaveuser(String sClaveuser) {
 		this.sClaveuser = sClaveuser;
 	}
 
-	public String gets_Nombreusuario() {
-		return this.sNombreusuario;
+	public String getsNombreusuario() {
+		return sNombreusuario;
 	}
 
-	public void sets_Nombreusuario(String sNombreusuario) {
+	public void setsNombreusuario(String sNombreusuario) {
 		this.sNombreusuario = sNombreusuario;
 	}
 
-	public String gets_Password() {
-		return this.sPassword;
+	public String getsPassword() {
+		return sPassword;
 	}
 
-	public void sets_Password(String sPassword) {
+	public void setsPassword(String sPassword) {
 		this.sPassword = sPassword;
 	}
 
-	public String gets_Usuario() {
-		return this.sUsuario;
+	public String getsUsuario() {
+		return sUsuario;
 	}
 
-	public void sets_Usuario(String sUsuario) {
+	public void setsUsuario(String sUsuario) {
 		this.sUsuario = sUsuario;
 	}
 
+	public Integer getnEstatus() {
+		return nEstatus;
+	}
+
+	public void setnEstatus(Integer nEstatus) {
+		this.nEstatus = nEstatus;
+	}
+
 	public List<TcCliente> getTcClientes() {
-		return this.tcClientes;
+		return tcClientes;
 	}
 
 	public void setTcClientes(List<TcCliente> tcClientes) {
 		this.tcClientes = tcClientes;
 	}
 
-	public TcCliente addTcCliente(TcCliente tcCliente) {
-		getTcClientes().add(tcCliente);
-		tcCliente.setTcUsuario(this);
-
-		return tcCliente;
-	}
-
-	public TcCliente removeTcCliente(TcCliente tcCliente) {
-		getTcClientes().remove(tcCliente);
-		tcCliente.setTcUsuario(null);
-
-		return tcCliente;
-	}
-
 	public List<TcProducto> getTcProductos() {
-		return this.tcProductos;
+		return tcProductos;
 	}
 
 	public void setTcProductos(List<TcProducto> tcProductos) {
 		this.tcProductos = tcProductos;
 	}
 
-	public TcProducto addTcProducto(TcProducto tcProducto) {
-		getTcProductos().add(tcProducto);
-		tcProducto.setTcUsuario(this);
-
-		return tcProducto;
-	}
-
-	public TcProducto removeTcProducto(TcProducto tcProducto) {
-		getTcProductos().remove(tcProducto);
-		tcProducto.setTcUsuario(null);
-
-		return tcProducto;
-	}
-
 	public List<TwAbono> getTwAbonos() {
-		return this.twAbonos;
+		return twAbonos;
 	}
 
 	public void setTwAbonos(List<TwAbono> twAbonos) {
 		this.twAbonos = twAbonos;
 	}
 
-	public TwAbono addTwAbono(TwAbono twAbono) {
-		getTwAbonos().add(twAbono);
-		twAbono.setTcUsuario(this);
-
-		return twAbono;
-	}
-
-	public TwAbono removeTwAbono(TwAbono twAbono) {
-		getTwAbonos().remove(twAbono);
-		twAbono.setTcUsuario(null);
-
-		return twAbono;
-	}
-
 	public List<TwCaja> getTwCajas() {
-		return this.twCajas;
+		return twCajas;
 	}
 
 	public void setTwCajas(List<TwCaja> twCajas) {
 		this.twCajas = twCajas;
 	}
 
-	public TwCaja addTwCaja(TwCaja twCaja) {
-		getTwCajas().add(twCaja);
-		twCaja.setTcUsuario(this);
-
-		return twCaja;
-	}
-
-	public TwCaja removeTwCaja(TwCaja twCaja) {
-		getTwCajas().remove(twCaja);
-		twCaja.setTcUsuario(null);
-
-		return twCaja;
-	}
-
 	public List<TwCotizacione> getTwCotizaciones() {
-		return this.twCotizaciones;
+		return twCotizaciones;
 	}
 
 	public void setTwCotizaciones(List<TwCotizacione> twCotizaciones) {
 		this.twCotizaciones = twCotizaciones;
 	}
 
-	public TwCotizacione addTwCotizacione(TwCotizacione twCotizacione) {
-		getTwCotizaciones().add(twCotizacione);
-		twCotizacione.setTcUsuario(this);
-
-		return twCotizacione;
-	}
-
-	public TwCotizacione removeTwCotizacione(TwCotizacione twCotizacione) {
-		getTwCotizaciones().remove(twCotizacione);
-		twCotizacione.setTcUsuario(null);
-
-		return twCotizacione;
-	}
-
 	public List<TwVenta> getTwVentas() {
-		return this.twVentas;
+		return twVentas;
 	}
 
 	public void setTwVentas(List<TwVenta> twVentas) {
 		this.twVentas = twVentas;
 	}
 
-	public TwVenta addTwVenta(TwVenta twVenta) {
-		getTwVentas().add(twVenta);
-		twVenta.setTcUsuario(this);
-
-		return twVenta;
-	}
-
-	public TwVenta removeTwVenta(TwVenta twVenta) {
-		getTwVentas().remove(twVenta);
-		twVenta.setTcUsuario(null);
-
-		return twVenta;
-	}
-
 	public List<TwVentasProducto> getTwVentasProductos() {
-		return this.twVentasProductos;
+		return twVentasProductos;
 	}
 
 	public void setTwVentasProductos(List<TwVentasProducto> twVentasProductos) {
 		this.twVentasProductos = twVentasProductos;
 	}
 
-	public TwVentasProducto addTwVentasProducto(TwVentasProducto twVentasProducto) {
-		getTwVentasProductos().add(twVentasProducto);
-		twVentasProducto.setTcUsuario(this);
-
-		return twVentasProducto;
-	}
-
-	public TwVentasProducto removeTwVentasProducto(TwVentasProducto twVentasProducto) {
-		getTwVentasProductos().remove(twVentasProducto);
-		twVentasProducto.setTcUsuario(null);
-
-		return twVentasProducto;
-	}
-
+	
 }
