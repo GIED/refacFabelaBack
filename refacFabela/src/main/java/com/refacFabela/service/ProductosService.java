@@ -7,5 +7,8 @@ import com.refacFabela.model.TcProducto;
 public interface ProductosService {
 	public List<TcProducto> obtenerProductos();
 	public TcProducto obtenerProductoNoParte(String No_Parte);
+	public List<TcProducto> obtenerProductoLike(String Producto);
+	public List<TcProducto> obtenerNoParteLike(String No_Parte);
+	
 
 }

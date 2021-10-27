@@ -45,5 +45,29 @@ public class ProductosController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/obtenerProductosLike")
+	public List<TcProducto> obtenerProductosLike(@RequestParam() String Producto) {
+
+		try {
+			return productosService.obtenerProductoLike(Producto);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerProductosNoParteLike")
+	public List<TcProducto> obtenerProductosNoParteLike(@RequestParam() String No_Parte) {
+
+		try {
+			return productosService.obtenerNoParteLike(No_Parte);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
 
 }

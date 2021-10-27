@@ -24,4 +24,16 @@ public class ProductosServiceImp implements ProductosService {
 		return productosRepository.findBysNoParte(No_parte);
 	}
 
+	@Override
+	public List<TcProducto> obtenerProductoLike(String producto) {
+		
+		return productosRepository.ConsultaProductoLike(producto) ;
+	}
+
+	@Override
+	public List<TcProducto> obtenerNoParteLike(String No_Parte) {
+		
+		return productosRepository.ConsultaNoParteLike(No_Parte);
+	}
+
 }
