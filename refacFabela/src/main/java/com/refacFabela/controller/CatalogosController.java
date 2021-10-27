@@ -83,7 +83,7 @@ public class CatalogosController {
 	}
 	
 	@GetMapping("/catalogoCategoriaId")
-	public List<TcCategoria> consultaCategoriaId(HttpServletResponse response, @RequestParam() int id){
+	public List<TcCategoria> consultaCategoriaId(@RequestParam() int id){
 		try {			
 			
 			return catalagosService.catalogoCategoriaId(id);

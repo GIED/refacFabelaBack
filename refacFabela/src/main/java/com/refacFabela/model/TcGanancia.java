@@ -32,30 +32,31 @@ public class TcGanancia implements Serializable {
 	public TcGanancia() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
-	public double getNGanancia() {
-		return this.nGanancia;
+	public double getnGanancia() {
+		return nGanancia;
 	}
 
-	public void setNGanancia(double nGanancia) {
+	public void setnGanancia(double nGanancia) {
 		this.nGanancia = nGanancia;
 	}
 
+	
 	
 
 }
