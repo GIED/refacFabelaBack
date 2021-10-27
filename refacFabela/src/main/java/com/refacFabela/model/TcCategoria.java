@@ -20,61 +20,57 @@ public class TcCategoria implements Serializable {
 	@Column(name="n_id")
 	private Long nId;
 
-	@Column(name="s_categoria")
-	private String sCategoria;
+	@Column(name="n_idCategoriaGeneral")
+	private int nIdCategoriaGeneral;
 
-	@Column(name="s_categoria_general")
-	private String sCategoriaGeneral;
+
+	@Column(name="s_descripcion")
+	private String sDescripcion;
+
 
 	@Column(name="n_estatus")
 	private int nEstatus;
 
-	//bi-directional many-to-one association to TcProducto
-	@OneToMany(mappedBy="tcCategoria")
-	private List<TcProducto> tcProductos;
-
-	public TcCategoria() {
-	}
 
 	public Long getnId() {
 		return nId;
 	}
 
+
 	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public String getsCategoria() {
-		return sCategoria;
+
+	public int getnIdCategoriaGeneral() {
+		return nIdCategoriaGeneral;
 	}
 
-	public void setsCategoria(String sCategoria) {
-		this.sCategoria = sCategoria;
+
+	public void setnIdCategoriaGeneral(int nIdCategoriaGeneral) {
+		this.nIdCategoriaGeneral = nIdCategoriaGeneral;
 	}
 
-	public String getsCategoriaGeneral() {
-		return sCategoriaGeneral;
+
+	public String getsDescripcion() {
+		return sDescripcion;
 	}
 
-	public void setsCategoriaGeneral(String sCategoriaGeneral) {
-		this.sCategoriaGeneral = sCategoriaGeneral;
+
+	public void setsDescripcion(String sDescripcion) {
+		this.sDescripcion = sDescripcion;
 	}
+
 
 	public int getnEstatus() {
 		return nEstatus;
 	}
 
+
 	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
-	public List<TcProducto> getTcProductos() {
-		return tcProductos;
-	}
-
-	public void setTcProductos(List<TcProducto> tcProductos) {
-		this.tcProductos = tcProductos;
-	}
 
 	
 

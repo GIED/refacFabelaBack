@@ -27,8 +27,7 @@ public class TcGanancia implements Serializable {
 	private double nGanancia;
 
 	//bi-directional many-to-one association to TcProducto
-	@OneToMany(mappedBy="tcGanancia")
-	private List<TcProducto> tcProductos;
+	
 
 	public TcGanancia() {
 	}
@@ -57,26 +56,6 @@ public class TcGanancia implements Serializable {
 		this.nGanancia = nGanancia;
 	}
 
-	public List<TcProducto> getTcProductos() {
-		return this.tcProductos;
-	}
-
-	public void setTcProductos(List<TcProducto> tcProductos) {
-		this.tcProductos = tcProductos;
-	}
-
-	public TcProducto addTcProducto(TcProducto tcProducto) {
-		getTcProductos().add(tcProducto);
-		tcProducto.setTcGanancia(this);
-
-		return tcProducto;
-	}
-
-	public TcProducto removeTcProducto(TcProducto tcProducto) {
-		getTcProductos().remove(tcProducto);
-		tcProducto.setTcGanancia(null);
-
-		return tcProducto;
-	}
+	
 
 }
