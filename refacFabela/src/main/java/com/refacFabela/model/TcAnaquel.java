@@ -27,56 +27,34 @@ public class TcAnaquel implements Serializable {
 	private String sAnaquel;
 
 	//bi-directional many-to-one association to TwProductobodega
-	@OneToMany(mappedBy="tcAnaquel")
-	private List<TwProductobodega> twProductobodegas;
+	
 
 	public TcAnaquel() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public String getNEstatus() {
-		return this.nEstatus;
+	public String getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(String nEstatus) {
+	public void setnEstatus(String nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
-	public String getSAnaquel() {
-		return this.sAnaquel;
+	public String getsAnaquel() {
+		return sAnaquel;
 	}
 
-	public void setSAnaquel(String sAnaquel) {
+	public void setsAnaquel(String sAnaquel) {
 		this.sAnaquel = sAnaquel;
 	}
 
-	public List<TwProductobodega> getTwProductobodegas() {
-		return this.twProductobodegas;
-	}
-
-	public void setTwProductobodegas(List<TwProductobodega> twProductobodegas) {
-		this.twProductobodegas = twProductobodegas;
-	}
-
-	public TwProductobodega addTwProductobodega(TwProductobodega twProductobodega) {
-		getTwProductobodegas().add(twProductobodega);
-		twProductobodega.setTcAnaquel(this);
-
-		return twProductobodega;
-	}
-
-	public TwProductobodega removeTwProductobodega(TwProductobodega twProductobodega) {
-		getTwProductobodegas().remove(twProductobodega);
-		twProductobodega.setTcAnaquel(null);
-
-		return twProductobodega;
-	}
-
+	
 }

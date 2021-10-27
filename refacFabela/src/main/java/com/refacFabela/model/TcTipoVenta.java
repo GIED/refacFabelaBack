@@ -27,56 +27,35 @@ public class TcTipoVenta implements Serializable {
 	private String sDescripcion;
 
 	//bi-directional many-to-one association to TwVenta
-	@OneToMany(mappedBy="tcTipoVenta")
-	private List<TwVenta> twVentas;
+	
 
 	public TcTipoVenta() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public String getSClave() {
-		return this.sClave;
+	public String getsClave() {
+		return sClave;
 	}
 
-	public void setSClave(String sClave) {
+	public void setsClave(String sClave) {
 		this.sClave = sClave;
 	}
 
-	public String getSDescripcion() {
-		return this.sDescripcion;
+	public String getsDescripcion() {
+		return sDescripcion;
 	}
 
-	public void setSDescripcion(String sDescripcion) {
+	public void setsDescripcion(String sDescripcion) {
 		this.sDescripcion = sDescripcion;
 	}
 
-	public List<TwVenta> getTwVentas() {
-		return this.twVentas;
-	}
-
-	public void setTwVentas(List<TwVenta> twVentas) {
-		this.twVentas = twVentas;
-	}
-
-	public TwVenta addTwVenta(TwVenta twVenta) {
-		getTwVentas().add(twVenta);
-		twVenta.setTcTipoVenta(this);
-
-		return twVenta;
-	}
-
-	public TwVenta removeTwVenta(TwVenta twVenta) {
-		getTwVentas().remove(twVenta);
-		twVenta.setTcTipoVenta(null);
-
-		return twVenta;
-	}
+	
 
 }

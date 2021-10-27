@@ -31,36 +31,38 @@ public class TcUsocfdi implements Serializable {
 	public TcUsocfdi() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
-	public String getSClave() {
-		return this.sClave;
+	public String getsClave() {
+		return sClave;
 	}
 
-	public void setSClave(String sClave) {
+	public void setsClave(String sClave) {
 		this.sClave = sClave;
 	}
 
-	public String getSDescripcion() {
-		return this.sDescripcion;
+	public String getsDescripcion() {
+		return sDescripcion;
 	}
 
-	public void setSDescripcion(String sDescripcion) {
+	public void setsDescripcion(String sDescripcion) {
 		this.sDescripcion = sDescripcion;
 	}
+
+	
 
 }

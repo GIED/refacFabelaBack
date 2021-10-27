@@ -47,24 +47,24 @@ public class TwCotizacionesProducto implements Serializable {
 	public TwCotizacionesProducto() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getNCantidad() {
-		return this.nCantidad;
+	public int getnCantidad() {
+		return nCantidad;
 	}
 
-	public void setNCantidad(int nCantidad) {
+	public void setnCantidad(int nCantidad) {
 		this.nCantidad = nCantidad;
 	}
 
 	public double getN_ivaPartida() {
-		return this.n_ivaPartida;
+		return n_ivaPartida;
 	}
 
 	public void setN_ivaPartida(double n_ivaPartida) {
@@ -72,7 +72,7 @@ public class TwCotizacionesProducto implements Serializable {
 	}
 
 	public double getN_ivaUnitario() {
-		return this.n_ivaUnitario;
+		return n_ivaUnitario;
 	}
 
 	public void setN_ivaUnitario(double n_ivaUnitario) {
@@ -80,7 +80,7 @@ public class TwCotizacionesProducto implements Serializable {
 	}
 
 	public double getN_precioPartida() {
-		return this.n_precioPartida;
+		return n_precioPartida;
 	}
 
 	public void setN_precioPartida(double n_precioPartida) {
@@ -88,7 +88,7 @@ public class TwCotizacionesProducto implements Serializable {
 	}
 
 	public double getN_precioUnitario() {
-		return this.n_precioUnitario;
+		return n_precioUnitario;
 	}
 
 	public void setN_precioUnitario(double n_precioUnitario) {
@@ -96,7 +96,7 @@ public class TwCotizacionesProducto implements Serializable {
 	}
 
 	public double getN_totalPartida() {
-		return this.n_totalPartida;
+		return n_totalPartida;
 	}
 
 	public void setN_totalPartida(double n_totalPartida) {
@@ -104,7 +104,7 @@ public class TwCotizacionesProducto implements Serializable {
 	}
 
 	public double getN_totalUnitario() {
-		return this.n_totalUnitario;
+		return n_totalUnitario;
 	}
 
 	public void setN_totalUnitario(double n_totalUnitario) {
@@ -112,7 +112,7 @@ public class TwCotizacionesProducto implements Serializable {
 	}
 
 	public TcProducto getTcProducto() {
-		return this.tcProducto;
+		return tcProducto;
 	}
 
 	public void setTcProducto(TcProducto tcProducto) {
@@ -120,11 +120,13 @@ public class TwCotizacionesProducto implements Serializable {
 	}
 
 	public TwCotizacione getTwCotizacione() {
-		return this.twCotizacione;
+		return twCotizacione;
 	}
 
 	public void setTwCotizacione(TwCotizacione twCotizacione) {
 		this.twCotizacione = twCotizacione;
 	}
+
+
 
 }

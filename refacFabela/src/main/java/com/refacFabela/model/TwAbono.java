@@ -48,40 +48,40 @@ public class TwAbono implements Serializable {
 	public TwAbono() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public Date getDFecha() {
-		return this.dFecha;
+	public Date getdFecha() {
+		return dFecha;
 	}
 
-	public void setDFecha(Date dFecha) {
+	public void setdFecha(Date dFecha) {
 		this.dFecha = dFecha;
 	}
 
-	public double getNAbono() {
-		return this.nAbono;
+	public double getnAbono() {
+		return nAbono;
 	}
 
-	public void setNAbono(double nAbono) {
+	public void setnAbono(double nAbono) {
 		this.nAbono = nAbono;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
 	public TcFormapago getTcFormapago() {
-		return this.tcFormapago;
+		return tcFormapago;
 	}
 
 	public void setTcFormapago(TcFormapago tcFormapago) {
@@ -89,7 +89,7 @@ public class TwAbono implements Serializable {
 	}
 
 	public TcUsuario getTcUsuario() {
-		return this.tcUsuario;
+		return tcUsuario;
 	}
 
 	public void setTcUsuario(TcUsuario tcUsuario) {
@@ -97,11 +97,13 @@ public class TwAbono implements Serializable {
 	}
 
 	public TwVenta getTwVenta() {
-		return this.twVenta;
+		return twVenta;
 	}
 
 	public void setTwVenta(TwVenta twVenta) {
 		this.twVenta = twVenta;
 	}
+
+	
 
 }

@@ -39,8 +39,7 @@ public class TcProveedore implements Serializable {
 	private String sTelefono;
 
 	//bi-directional many-to-one association to TwPedido
-	@OneToMany(mappedBy="tcProveedore")
-	private List<TwPedido> twPedidos;
+	
 
 	public TcProveedore() {
 	}
@@ -101,14 +100,7 @@ public class TcProveedore implements Serializable {
 		this.sTelefono = sTelefono;
 	}
 
-	public List<TwPedido> getTwPedidos() {
-		return twPedidos;
-	}
-
-	public void setTwPedidos(List<TwPedido> twPedidos) {
-		this.twPedidos = twPedidos;
-	}
-
+	
 	
 
 }

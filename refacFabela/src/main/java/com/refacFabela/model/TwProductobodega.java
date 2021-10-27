@@ -48,32 +48,32 @@ public class TwProductobodega implements Serializable {
 	public TwProductobodega() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getNCantidad() {
-		return this.nCantidad;
+	public int getnCantidad() {
+		return nCantidad;
 	}
 
-	public void setNCantidad(int nCantidad) {
+	public void setnCantidad(int nCantidad) {
 		this.nCantidad = nCantidad;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
 	public TcAnaquel getTcAnaquel() {
-		return this.tcAnaquel;
+		return tcAnaquel;
 	}
 
 	public void setTcAnaquel(TcAnaquel tcAnaquel) {
@@ -81,7 +81,7 @@ public class TwProductobodega implements Serializable {
 	}
 
 	public TcBodega getTcBodega() {
-		return this.tcBodega;
+		return tcBodega;
 	}
 
 	public void setTcBodega(TcBodega tcBodega) {
@@ -89,7 +89,7 @@ public class TwProductobodega implements Serializable {
 	}
 
 	public TcNivel getTcNivel() {
-		return this.tcNivel;
+		return tcNivel;
 	}
 
 	public void setTcNivel(TcNivel tcNivel) {
@@ -97,11 +97,13 @@ public class TwProductobodega implements Serializable {
 	}
 
 	public TcProducto getTcProducto() {
-		return this.tcProducto;
+		return tcProducto;
 	}
 
 	public void setTcProducto(TcProducto tcProducto) {
 		this.tcProducto = tcProducto;
 	}
+
+
 
 }

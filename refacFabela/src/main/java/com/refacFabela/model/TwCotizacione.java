@@ -40,81 +40,70 @@ public class TwCotizacione implements Serializable {
 	@JoinColumn(name="n_idUsuario")
 	private TcUsuario tcUsuario;
 
-	//bi-directional many-to-one association to TwCotizacionesProducto
-	@OneToMany(mappedBy="twCotizacione")
-	private List<TwCotizacionesProducto> twCotizacionesProductos;
-
+	
 	public TwCotizacione() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public Date getDFecha() {
-		return this.dFecha;
+
+	public Date getdFecha() {
+		return dFecha;
 	}
 
-	public void setDFecha(Date dFecha) {
+
+	public void setdFecha(Date dFecha) {
 		this.dFecha = dFecha;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
+
 	public String getS_folioCotizacion() {
-		return this.s_folioCotizacion;
+		return s_folioCotizacion;
 	}
+
 
 	public void setS_folioCotizacion(String s_folioCotizacion) {
 		this.s_folioCotizacion = s_folioCotizacion;
 	}
 
+
 	public TcCliente getTcCliente() {
-		return this.tcCliente;
+		return tcCliente;
 	}
+
 
 	public void setTcCliente(TcCliente tcCliente) {
 		this.tcCliente = tcCliente;
 	}
 
+
 	public TcUsuario getTcUsuario() {
-		return this.tcUsuario;
+		return tcUsuario;
 	}
+
 
 	public void setTcUsuario(TcUsuario tcUsuario) {
 		this.tcUsuario = tcUsuario;
 	}
 
-	public List<TwCotizacionesProducto> getTwCotizacionesProductos() {
-		return this.twCotizacionesProductos;
-	}
-
-	public void setTwCotizacionesProductos(List<TwCotizacionesProducto> twCotizacionesProductos) {
-		this.twCotizacionesProductos = twCotizacionesProductos;
-	}
-
-	public TwCotizacionesProducto addTwCotizacionesProducto(TwCotizacionesProducto twCotizacionesProducto) {
-		getTwCotizacionesProductos().add(twCotizacionesProducto);
-		twCotizacionesProducto.setTwCotizacione(this);
-
-		return twCotizacionesProducto;
-	}
-
-	public TwCotizacionesProducto removeTwCotizacionesProducto(TwCotizacionesProducto twCotizacionesProducto) {
-		getTwCotizacionesProductos().remove(twCotizacionesProducto);
-		twCotizacionesProducto.setTwCotizacione(null);
-
-		return twCotizacionesProducto;
-	}
+	
 
 }

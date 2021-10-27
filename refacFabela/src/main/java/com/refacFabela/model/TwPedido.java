@@ -53,16 +53,16 @@ public class TwPedido implements Serializable {
 	public TwPedido() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
 	public Date getD_fechaPedido() {
-		return this.d_fechaPedido;
+		return d_fechaPedido;
 	}
 
 	public void setD_fechaPedido(Date d_fechaPedido) {
@@ -70,7 +70,7 @@ public class TwPedido implements Serializable {
 	}
 
 	public Date getD_fechaRecibida() {
-		return this.d_fechaRecibida;
+		return d_fechaRecibida;
 	}
 
 	public void setD_fechaRecibida(Date d_fechaRecibida) {
@@ -78,7 +78,7 @@ public class TwPedido implements Serializable {
 	}
 
 	public int getN_cantidadPedida() {
-		return this.n_cantidadPedida;
+		return n_cantidadPedida;
 	}
 
 	public void setN_cantidadPedida(int n_cantidadPedida) {
@@ -86,23 +86,23 @@ public class TwPedido implements Serializable {
 	}
 
 	public int getN_cantidaRecibida() {
-		return this.n_cantidaRecibida;
+		return n_cantidaRecibida;
 	}
 
 	public void setN_cantidaRecibida(int n_cantidaRecibida) {
 		this.n_cantidaRecibida = n_cantidaRecibida;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
 	public int getN_MotivoPedido() {
-		return this.n_MotivoPedido;
+		return n_MotivoPedido;
 	}
 
 	public void setN_MotivoPedido(int n_MotivoPedido) {
@@ -110,23 +110,23 @@ public class TwPedido implements Serializable {
 	}
 
 	public String getS_clavePedido() {
-		return this.s_clavePedido;
+		return s_clavePedido;
 	}
 
 	public void setS_clavePedido(String s_clavePedido) {
 		this.s_clavePedido = s_clavePedido;
 	}
 
-	public String getSObservaciones() {
-		return this.sObservaciones;
+	public String getsObservaciones() {
+		return sObservaciones;
 	}
 
-	public void setSObservaciones(String sObservaciones) {
+	public void setsObservaciones(String sObservaciones) {
 		this.sObservaciones = sObservaciones;
 	}
 
 	public TcProducto getTcProducto() {
-		return this.tcProducto;
+		return tcProducto;
 	}
 
 	public void setTcProducto(TcProducto tcProducto) {
@@ -134,11 +134,13 @@ public class TwPedido implements Serializable {
 	}
 
 	public TcProveedore getTcProveedore() {
-		return this.tcProveedore;
+		return tcProveedore;
 	}
 
 	public void setTcProveedore(TcProveedore tcProveedore) {
 		this.tcProveedore = tcProveedore;
 	}
+
+	
 
 }

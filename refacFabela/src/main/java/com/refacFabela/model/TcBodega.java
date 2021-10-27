@@ -27,56 +27,35 @@ public class TcBodega implements Serializable {
 	private String sBodega;
 
 	//bi-directional many-to-one association to TwProductobodega
-	@OneToMany(mappedBy="tcBodega")
-	private List<TwProductobodega> twProductobodegas;
+	
 
 	public TcBodega() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
-	public String getSBodega() {
-		return this.sBodega;
+	public String getsBodega() {
+		return sBodega;
 	}
 
-	public void setSBodega(String sBodega) {
+	public void setsBodega(String sBodega) {
 		this.sBodega = sBodega;
 	}
 
-	public List<TwProductobodega> getTwProductobodegas() {
-		return this.twProductobodegas;
-	}
-
-	public void setTwProductobodegas(List<TwProductobodega> twProductobodegas) {
-		this.twProductobodegas = twProductobodegas;
-	}
-
-	public TwProductobodega addTwProductobodega(TwProductobodega twProductobodega) {
-		getTwProductobodegas().add(twProductobodega);
-		twProductobodega.setTcBodega(this);
-
-		return twProductobodega;
-	}
-
-	public TwProductobodega removeTwProductobodega(TwProductobodega twProductobodega) {
-		getTwProductobodegas().remove(twProductobodega);
-		twProductobodega.setTcBodega(null);
-
-		return twProductobodega;
-	}
+	
 
 }

@@ -30,36 +30,38 @@ public class TcCatalogogeneral implements Serializable {
 	public TcCatalogogeneral() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public double getNValor() {
-		return this.nValor;
+	public double getnValor() {
+		return nValor;
 	}
 
-	public void setNValor(double nValor) {
+	public void setnValor(double nValor) {
 		this.nValor = nValor;
 	}
 
-	public String getSClave() {
-		return this.sClave;
+	public String getsClave() {
+		return sClave;
 	}
 
-	public void setSClave(String sClave) {
+	public void setsClave(String sClave) {
 		this.sClave = sClave;
 	}
 
-	public String getSDescripcion() {
-		return this.sDescripcion;
+	public String getsDescripcion() {
+		return sDescripcion;
 	}
 
-	public void setSDescripcion(String sDescripcion) {
+	public void setsDescripcion(String sDescripcion) {
 		this.sDescripcion = sDescripcion;
 	}
+
+	
 
 }

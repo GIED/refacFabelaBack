@@ -32,24 +32,24 @@ public class TwProductosAlternativo implements Serializable {
 	public TwProductosAlternativo() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
 	public int getN_idProductoAlternativo() {
-		return this.n_idProductoAlternativo;
+		return n_idProductoAlternativo;
 	}
 
 	public void setN_idProductoAlternativo(int n_idProductoAlternativo) {
@@ -57,11 +57,13 @@ public class TwProductosAlternativo implements Serializable {
 	}
 
 	public TcProducto getTcProducto() {
-		return this.tcProducto;
+		return tcProducto;
 	}
 
 	public void setTcProducto(TcProducto tcProducto) {
 		this.tcProducto = tcProducto;
 	}
+
+	
 
 }

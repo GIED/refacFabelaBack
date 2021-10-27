@@ -61,16 +61,16 @@ public class TwVentasProducto implements Serializable {
 	public TwVentasProducto() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
 	public Date getD_fechaEntregaAlmacen() {
-		return this.d_fechaEntregaAlmacen;
+		return d_fechaEntregaAlmacen;
 	}
 
 	public void setD_fechaEntregaAlmacen(Date d_fechaEntregaAlmacen) {
@@ -78,23 +78,23 @@ public class TwVentasProducto implements Serializable {
 	}
 
 	public Date getD_fechaEntregaEstimada() {
-		return this.d_fechaEntregaEstimada;
+		return d_fechaEntregaEstimada;
 	}
 
 	public void setD_fechaEntregaEstimada(Date d_fechaEntregaEstimada) {
 		this.d_fechaEntregaEstimada = d_fechaEntregaEstimada;
 	}
 
-	public int getNCantidad() {
-		return this.nCantidad;
+	public int getnCantidad() {
+		return nCantidad;
 	}
 
-	public void setNCantidad(int nCantidad) {
+	public void setnCantidad(int nCantidad) {
 		this.nCantidad = nCantidad;
 	}
 
 	public int getN_estatusEntregaAlmacen() {
-		return this.n_estatusEntregaAlmacen;
+		return n_estatusEntregaAlmacen;
 	}
 
 	public void setN_estatusEntregaAlmacen(int n_estatusEntregaAlmacen) {
@@ -102,7 +102,7 @@ public class TwVentasProducto implements Serializable {
 	}
 
 	public double getN_ivaPartida() {
-		return this.n_ivaPartida;
+		return n_ivaPartida;
 	}
 
 	public void setN_ivaPartida(double n_ivaPartida) {
@@ -110,7 +110,7 @@ public class TwVentasProducto implements Serializable {
 	}
 
 	public double getN_ivaUnitario() {
-		return this.n_ivaUnitario;
+		return n_ivaUnitario;
 	}
 
 	public void setN_ivaUnitario(double n_ivaUnitario) {
@@ -118,7 +118,7 @@ public class TwVentasProducto implements Serializable {
 	}
 
 	public double getN_precioPartida() {
-		return this.n_precioPartida;
+		return n_precioPartida;
 	}
 
 	public void setN_precioPartida(double n_precioPartida) {
@@ -126,7 +126,7 @@ public class TwVentasProducto implements Serializable {
 	}
 
 	public double getN_precioUnitario() {
-		return this.n_precioUnitario;
+		return n_precioUnitario;
 	}
 
 	public void setN_precioUnitario(double n_precioUnitario) {
@@ -134,7 +134,7 @@ public class TwVentasProducto implements Serializable {
 	}
 
 	public double getN_totalPartida() {
-		return this.n_totalPartida;
+		return n_totalPartida;
 	}
 
 	public void setN_totalPartida(double n_totalPartida) {
@@ -142,7 +142,7 @@ public class TwVentasProducto implements Serializable {
 	}
 
 	public double getN_totalUnitario() {
-		return this.n_totalUnitario;
+		return n_totalUnitario;
 	}
 
 	public void setN_totalUnitario(double n_totalUnitario) {
@@ -150,7 +150,7 @@ public class TwVentasProducto implements Serializable {
 	}
 
 	public TcProducto getTcProducto() {
-		return this.tcProducto;
+		return tcProducto;
 	}
 
 	public void setTcProducto(TcProducto tcProducto) {
@@ -158,7 +158,7 @@ public class TwVentasProducto implements Serializable {
 	}
 
 	public TcUsuario getTcUsuario() {
-		return this.tcUsuario;
+		return tcUsuario;
 	}
 
 	public void setTcUsuario(TcUsuario tcUsuario) {
@@ -166,11 +166,12 @@ public class TwVentasProducto implements Serializable {
 	}
 
 	public TwVenta getTwVenta() {
-		return this.twVenta;
+		return twVenta;
 	}
 
 	public void setTwVenta(TwVenta twVenta) {
 		this.twVenta = twVenta;
 	}
 
+	
 }

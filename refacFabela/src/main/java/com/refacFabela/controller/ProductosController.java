@@ -28,7 +28,7 @@ public class ProductosController {
 			return productosService.obtenerProductos();
 		} catch (Exception e) {
 
-			logger.error("Error al obtener Proveedores" + e);
+			logger.error("Error al obtener los Productos" + e);
 		}
 		return null;
 	}

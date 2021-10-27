@@ -46,22 +46,21 @@ public class TwCaja implements Serializable {
 	private TcUsuario tcUsuario;
 
 	//bi-directional many-to-one association to TwVenta
-	@OneToMany(mappedBy="twCaja")
-	private List<TwVenta> twVentas;
+	
 
 	public TwCaja() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
 	public Date getD_fechaApertura() {
-		return this.d_fechaApertura;
+		return d_fechaApertura;
 	}
 
 	public void setD_fechaApertura(Date d_fechaApertura) {
@@ -69,23 +68,23 @@ public class TwCaja implements Serializable {
 	}
 
 	public Date getD_fechaCierre() {
-		return this.d_fechaCierre;
+		return d_fechaCierre;
 	}
 
 	public void setD_fechaCierre(Date d_fechaCierre) {
 		this.d_fechaCierre = d_fechaCierre;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
 	public double getN_pagoEfectivo() {
-		return this.n_pagoEfectivo;
+		return n_pagoEfectivo;
 	}
 
 	public void setN_pagoEfectivo(double n_pagoEfectivo) {
@@ -93,7 +92,7 @@ public class TwCaja implements Serializable {
 	}
 
 	public double getN_pagoElectronico() {
-		return this.n_pagoElectronico;
+		return n_pagoElectronico;
 	}
 
 	public void setN_pagoElectronico(double n_pagoElectronico) {
@@ -101,7 +100,7 @@ public class TwCaja implements Serializable {
 	}
 
 	public double getN_saldoCierre() {
-		return this.n_saldoCierre;
+		return n_saldoCierre;
 	}
 
 	public void setN_saldoCierre(double n_saldoCierre) {
@@ -109,7 +108,7 @@ public class TwCaja implements Serializable {
 	}
 
 	public double getN_saldoFinal() {
-		return this.n_saldoFinal;
+		return n_saldoFinal;
 	}
 
 	public void setN_saldoFinal(double n_saldoFinal) {
@@ -117,7 +116,7 @@ public class TwCaja implements Serializable {
 	}
 
 	public double getN_saldoInicial() {
-		return this.n_saldoInicial;
+		return n_saldoInicial;
 	}
 
 	public void setN_saldoInicial(double n_saldoInicial) {
@@ -125,33 +124,13 @@ public class TwCaja implements Serializable {
 	}
 
 	public TcUsuario getTcUsuario() {
-		return this.tcUsuario;
+		return tcUsuario;
 	}
 
 	public void setTcUsuario(TcUsuario tcUsuario) {
 		this.tcUsuario = tcUsuario;
 	}
 
-	public List<TwVenta> getTwVentas() {
-		return this.twVentas;
-	}
-
-	public void setTwVentas(List<TwVenta> twVentas) {
-		this.twVentas = twVentas;
-	}
-
-	public TwVenta addTwVenta(TwVenta twVenta) {
-		getTwVentas().add(twVenta);
-		twVenta.setTwCaja(this);
-
-		return twVenta;
-	}
-
-	public TwVenta removeTwVenta(TwVenta twVenta) {
-		getTwVentas().remove(twVenta);
-		twVenta.setTwCaja(null);
-
-		return twVenta;
-	}
+	
 
 }

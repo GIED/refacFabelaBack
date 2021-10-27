@@ -29,65 +29,68 @@ public class TcFormapago implements Serializable {
 	@Column(name="s_descripcion")
 	private String sDescripcion;
 
-	//bi-directional many-to-one association to TwAbono
-	@OneToMany(mappedBy="tcFormapago")
-	private List<TwAbono> twAbonos;
+	
+	
 
 	public TcFormapago() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+
+
+
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+
+
+
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+
+
+
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+
+
+
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
-	public String getSClave() {
-		return this.sClave;
+
+
+
+	public String getsClave() {
+		return sClave;
 	}
 
-	public void setSClave(String sClave) {
+
+
+
+	public void setsClave(String sClave) {
 		this.sClave = sClave;
 	}
 
-	public String getSDescripcion() {
-		return this.sDescripcion;
+
+
+
+	public String getsDescripcion() {
+		return sDescripcion;
 	}
 
-	public void setSDescripcion(String sDescripcion) {
+
+
+
+	public void setsDescripcion(String sDescripcion) {
 		this.sDescripcion = sDescripcion;
 	}
 
-	public List<TwAbono> getTwAbonos() {
-		return this.twAbonos;
-	}
-
-	public void setTwAbonos(List<TwAbono> twAbonos) {
-		this.twAbonos = twAbonos;
-	}
-
-	public TwAbono addTwAbono(TwAbono twAbono) {
-		getTwAbonos().add(twAbono);
-		twAbono.setTcFormapago(this);
-
-		return twAbono;
-	}
-
-	public TwAbono removeTwAbono(TwAbono twAbono) {
-		getTwAbonos().remove(twAbono);
-		twAbono.setTcFormapago(null);
-
-		return twAbono;
-	}
+	
 
 }

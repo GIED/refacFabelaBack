@@ -5,10 +5,7 @@ import javax.persistence.*;
 import java.util.List;
 
 
-/**
- * The persistent class for the tw_facturacion database table.
- * 
- */
+
 @Entity
 @Table(name="tw_facturacion")
 @NamedQuery(name="TwFacturacion.findAll", query="SELECT t FROM TwFacturacion t")
@@ -37,47 +34,46 @@ public class TwFacturacion implements Serializable {
 	@Column(name="s_uuid")
 	private String sUuid;
 
-	//bi-directional many-to-one association to TwVenta
-	@OneToMany(mappedBy="twFacturacion")
-	private List<TwVenta> twVentas;
+	
+	
 
 	public TwFacturacion() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
 	public int getN_idVenta() {
-		return this.n_idVenta;
+		return n_idVenta;
 	}
 
 	public void setN_idVenta(int n_idVenta) {
 		this.n_idVenta = n_idVenta;
 	}
 
-	public String getSEstatus() {
-		return this.sEstatus;
+	public String getsEstatus() {
+		return sEstatus;
 	}
 
-	public void setSEstatus(String sEstatus) {
+	public void setsEstatus(String sEstatus) {
 		this.sEstatus = sEstatus;
 	}
 
 	public String getS_noCertificadoSat() {
-		return this.s_noCertificadoSat;
+		return s_noCertificadoSat;
 	}
 
 	public void setS_noCertificadoSat(String s_noCertificadoSat) {
@@ -85,7 +81,7 @@ public class TwFacturacion implements Serializable {
 	}
 
 	public String getS_selloCfd() {
-		return this.s_selloCfd;
+		return s_selloCfd;
 	}
 
 	public void setS_selloCfd(String s_selloCfd) {
@@ -93,41 +89,20 @@ public class TwFacturacion implements Serializable {
 	}
 
 	public String getS_selloSat() {
-		return this.s_selloSat;
+		return s_selloSat;
 	}
 
 	public void setS_selloSat(String s_selloSat) {
 		this.s_selloSat = s_selloSat;
 	}
 
-	public String getSUuid() {
-		return this.sUuid;
+	public String getsUuid() {
+		return sUuid;
 	}
 
-	public void setSUuid(String sUuid) {
+	public void setsUuid(String sUuid) {
 		this.sUuid = sUuid;
 	}
 
-	public List<TwVenta> getTwVentas() {
-		return this.twVentas;
-	}
-
-	public void setTwVentas(List<TwVenta> twVentas) {
-		this.twVentas = twVentas;
-	}
-
-	public TwVenta addTwVenta(TwVenta twVenta) {
-		getTwVentas().add(twVenta);
-		twVenta.setTwFacturacion(this);
-
-		return twVenta;
-	}
-
-	public TwVenta removeTwVenta(TwVenta twVenta) {
-		getTwVentas().remove(twVenta);
-		twVenta.setTwFacturacion(null);
-
-		return twVenta;
-	}
 
 }
