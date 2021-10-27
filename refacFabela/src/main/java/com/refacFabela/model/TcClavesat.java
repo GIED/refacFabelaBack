@@ -29,9 +29,7 @@ public class TcClavesat implements Serializable {
 	@Column(name="s_descripcion")
 	private String sDescripcion;
 
-	//bi-directional many-to-one association to TcProducto
-	@OneToMany(mappedBy="tcClavesat")
-	private List<TcProducto> tcProductos;
+	
 
 	public TcClavesat() {
 	}
@@ -68,26 +66,6 @@ public class TcClavesat implements Serializable {
 		this.sDescripcion = sDescripcion;
 	}
 
-	public List<TcProducto> getTcProductos() {
-		return this.tcProductos;
-	}
-
-	public void setTcProductos(List<TcProducto> tcProductos) {
-		this.tcProductos = tcProductos;
-	}
-
-	public TcProducto addTcProducto(TcProducto tcProducto) {
-		getTcProductos().add(tcProducto);
-		tcProducto.setTcClavesat(this);
-
-		return tcProducto;
-	}
-
-	public TcProducto removeTcProducto(TcProducto tcProducto) {
-		getTcProductos().remove(tcProducto);
-		tcProducto.setTcClavesat(null);
-
-		return tcProducto;
-	}
+	
 
 }

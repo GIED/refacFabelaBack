@@ -1,5 +1,9 @@
 package com.refacFabela.controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +12,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.model.TcCatalogogeneral;
+import com.refacFabela.model.TcCategoria;
+import com.refacFabela.model.TcCategoriaGeneral;
+import com.refacFabela.model.TcClavesat;
+import com.refacFabela.model.TcGanancia;
 import com.refacFabela.service.CatalagosService;
 
 
@@ -46,6 +55,59 @@ public class CatalogosController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/catalogosClaveSat")
+	public List<TcClavesat> consultaClaveSat(){
+		try {			
+			
+			return catalagosService.catalogoClaveSat();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de clave sat " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/catalogoCategoriaGeneral")
+	public List<TcCategoriaGeneral> consultaCategoriaGeneral(){
+		try {			
+			
+			return catalagosService.catalogoCategoriaGeneral();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de categoria General " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/catalogoCategoriaId")
+	public List<TcCategoria> consultaCategoriaId(HttpServletResponse response, @RequestParam() int id){
+		try {			
+			
+			return catalagosService.catalogoCategoriaId(id);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de categoria " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/catalogoGanancia")
+	public List<TcGanancia> consultaCatalogoGanancia(){
+		try {			
+			
+			return catalagosService.catalogoGanancia();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de ganancia " + e);
+		}
+		return null;
+	}
+		
 
 
 }

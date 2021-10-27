@@ -20,74 +20,50 @@ public class TcCategoria implements Serializable {
 	@Column(name="n_id")
 	private Long nId;
 
-	@Column(name="s_categoria")
-	private String sCategoria;
+	@Column(name="n_idCategoriaGeneral")
+	private int nIdCategoriaGeneral;
 
-	@Column(name="s_categoria_genetal")
-	private String sCategoriaGenetal;
+	@Column(name="s_descripcion")
+	private String sDescripcion;
 
-	@Column(name="s_estatus")
-	private int sEstatus;
+	@Column(name="n_estatus")
+	private int nEstatus;
 
-	//bi-directional many-to-one association to TcProducto
-	@OneToMany(mappedBy="tcCategoria")
-	private List<TcProducto> tcProductos;
-
-	public TcCategoria() {
+	public Long getnId() {
+		return nId;
 	}
 
-	public Long getNId() {
-		return this.nId;
-	}
-
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public String getSCategoria() {
-		return this.sCategoria;
+	public int getnIdCategoriaGeneral() {
+		return nIdCategoriaGeneral;
 	}
 
-	public void setSCategoria(String sCategoria) {
-		this.sCategoria = sCategoria;
+	public void setnIdCategoriaGeneral(int nIdCategoriaGeneral) {
+		this.nIdCategoriaGeneral = nIdCategoriaGeneral;
 	}
 
-	public String getSCategoriaGenetal() {
-		return this.sCategoriaGenetal;
+	public String getsDescripcion() {
+		return sDescripcion;
 	}
 
-	public void setSCategoriaGenetal(String sCategoriaGenetal) {
-		this.sCategoriaGenetal = sCategoriaGenetal;
+	public void setsDescripcion(String sDescripcion) {
+		this.sDescripcion = sDescripcion;
 	}
 
-	public int getSEstatus() {
-		return this.sEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setSEstatus(int sEstatus) {
-		this.sEstatus = sEstatus;
+	public void setnEstatus(int nEstatus) {
+		this.nEstatus = nEstatus;
 	}
 
-	public List<TcProducto> getTcProductos() {
-		return this.tcProductos;
-	}
+	
+	
 
-	public void setTcProductos(List<TcProducto> tcProductos) {
-		this.tcProductos = tcProductos;
-	}
-
-	public TcProducto addTcProducto(TcProducto tcProducto) {
-		getTcProductos().add(tcProducto);
-		tcProducto.setTcCategoria(this);
-
-		return tcProducto;
-	}
-
-	public TcProducto removeTcProducto(TcProducto tcProducto) {
-		getTcProductos().remove(tcProducto);
-		tcProducto.setTcCategoria(null);
-
-		return tcProducto;
-	}
+	
 
 }
