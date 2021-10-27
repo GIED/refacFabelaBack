@@ -7,5 +7,7 @@ import com.refacFabela.model.TcProducto;
 
 @Repository
 public interface ProductosRepository extends JpaRepository<TcProducto, Long> {
+	
+	public TcProducto findBysNoParte(String No_parte );
 
 }

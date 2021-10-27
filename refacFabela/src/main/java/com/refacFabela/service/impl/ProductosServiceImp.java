@@ -18,4 +18,10 @@ public class ProductosServiceImp implements ProductosService {
 		return productosRepository.findAll();
 	}
 
+	@Override
+	public TcProducto obtenerProductoNoParte(String No_parte) {
+		
+		return productosRepository.findBysNoParte(No_parte);
+	}
+
 }

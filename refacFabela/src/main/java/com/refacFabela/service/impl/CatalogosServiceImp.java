@@ -42,7 +42,7 @@ public class CatalogosServiceImp implements CatalagosService {
 	@Override
 	public TcCatalogogeneral consultaTipoCambioId(TcCatalogogeneral ccCatalogogeneral) {
 		
-		return catalogosRepository.findBysClave(ccCatalogogeneral.getSClave());
+		return catalogosRepository.findBysClave(ccCatalogogeneral.getsClave());
 	}
 
 	@Override

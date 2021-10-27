@@ -12,7 +12,6 @@ import java.util.List;
  */
 @Entity
 @Table(name="tc_productos")
-@NamedQuery(name="TcProducto.findAll", query="SELECT t FROM TcProducto t")
 public class TcProducto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +29,7 @@ public class TcProducto implements Serializable {
 	@Column(name="n_idCategoriaGeneral")
 	private int n_idCategoriaGeneral;
 	
-	@Column(name="n_idCategoria")
+	@Column(name="n_idcategoria")
 	private int n_idCategoria;
 
 	@Column(name="n_precio")
@@ -50,6 +49,16 @@ public class TcProducto implements Serializable {
 
 	@Column(name="s_producto")
 	private String sProducto;
+	
+	@Column(name="n_idusuario")
+	private Long nIdusuario;
+	
+	@Column(name="n_IdGanancia")
+	private Long nIdGanancia;
+	
+	@Column(name="n_idclavesat")
+	private Long nIdclavesat;
+
 
 	//bi-directional many-to-one association to TcCategoria
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -57,7 +66,7 @@ public class TcProducto implements Serializable {
 	private TcCategoria tcCategoria;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="n_idcategoriaGeneral", referencedColumnName = "n_id", updatable = false, insertable = false)
+	@JoinColumn(name="n_idCategoriaGeneral", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcCategoriaGeneral tcCategoriaGeneral;
 
 	//bi-directional many-to-one association to TcClavesat
@@ -224,6 +233,30 @@ public class TcProducto implements Serializable {
 
 	public void setTcUsuario(TcUsuario tcUsuario) {
 		this.tcUsuario = tcUsuario;
+	}
+
+	public Long getnIdusuario() {
+		return nIdusuario;
+	}
+
+	public void setnIdusuario(Long nIdusuario) {
+		this.nIdusuario = nIdusuario;
+	}
+
+	public Long getnIdGanancia() {
+		return nIdGanancia;
+	}
+
+	public void setnIdGanancia(Long nIdGanancia) {
+		this.nIdGanancia = nIdGanancia;
+	}
+
+	public Long getnIdclavesat() {
+		return nIdclavesat;
+	}
+
+	public void setnIdclavesat(Long nIdclavesat) {
+		this.nIdclavesat = nIdclavesat;
 	}
 
 	
