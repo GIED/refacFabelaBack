@@ -27,7 +27,11 @@ public class TcProducto implements Serializable {
 	@Column(name="n_estatus")
 	private int nEstatus;
 
+	@Column(name="n_idCategoriaGeneral")
 	private int n_idCategoriaGeneral;
+	
+	@Column(name="n_idCategoria")
+	private int n_idCategoria;
 
 	@Column(name="n_precio")
 	private double nPrecio;
@@ -48,138 +52,158 @@ public class TcProducto implements Serializable {
 	private String sProducto;
 
 	//bi-directional many-to-one association to TcCategoria
-	@ManyToOne
-	@JoinColumn(name="n_idcategoria")
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="n_idcategoria", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcCategoria tcCategoria;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="n_idcategoriaGeneral", referencedColumnName = "n_id", updatable = false, insertable = false)
+	private TcCategoriaGeneral tcCategoriaGeneral;
 
 	//bi-directional many-to-one association to TcClavesat
-	@ManyToOne
-	@JoinColumn(name="n_idclavesat")
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="n_idclavesat" , referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcClavesat tcClavesat;
 
 	//bi-directional many-to-one association to TcGanancia
-	@ManyToOne
-	@JoinColumn(name="n_IdGanancia")
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="n_IdGanancia" , referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcGanancia tcGanancia;
 
 	//bi-directional many-to-one association to TcUsuario
-	@ManyToOne
-	@JoinColumn(name="n_idusuario")
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="n_idusuario" , referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcUsuario tcUsuario;
 
 	//bi-directional many-to-one association to TwCotizacionesProducto
-	@OneToMany(mappedBy="tcProducto")
-	private List<TwCotizacionesProducto> twCotizacionesProductos;
-
-	//bi-directional many-to-one association to TwPedido
-	@OneToMany(mappedBy="tcProducto")
-	private List<TwPedido> twPedidos;
-
-	//bi-directional many-to-one association to TwProductobodega
-	@OneToMany(mappedBy="tcProducto")
-	private List<TwProductobodega> twProductobodegas;
-
-	//bi-directional many-to-one association to TwProductosAlternativo
-	@OneToMany(mappedBy="tcProducto")
-	private List<TwProductosAlternativo> twProductosAlternativos;
-
-	//bi-directional many-to-one association to TwVentasProducto
-	@OneToMany(mappedBy="tcProducto")
-	private List<TwVentasProducto> twVentasProductos;
+//	@OneToMany(mappedBy="tcProducto")
+//	private List<TwCotizacionesProducto> twCotizacionesProductos;
+//
+//	//bi-directional many-to-one association to TwPedido
+//	@OneToMany(mappedBy="tcProducto")
+//	private List<TwPedido> twPedidos;
+//
+//	//bi-directional many-to-one association to TwProductobodega
+//	@OneToMany(mappedBy="tcProducto")
+//	private List<TwProductobodega> twProductobodegas;
+//
+//	//bi-directional many-to-one association to TwProductosAlternativo
+//	@OneToMany(mappedBy="tcProducto")
+//	private List<TwProductosAlternativo> twProductosAlternativos;
+//
+//	//bi-directional many-to-one association to TwVentasProducto
+//	@OneToMany(mappedBy="tcProducto")
+//	private List<TwVentasProducto> twVentasProductos;
 
 	public TcProducto() {
 	}
 
-	public Long getNId() {
-		return this.nId;
+	public Long getnId() {
+		return nId;
 	}
 
-	public void setNId(Long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
-	public Timestamp getDFecha() {
-		return this.dFecha;
+	public Timestamp getdFecha() {
+		return dFecha;
 	}
 
-	public void setDFecha(Timestamp dFecha) {
+	public void setdFecha(Timestamp dFecha) {
 		this.dFecha = dFecha;
 	}
 
-	public int getNEstatus() {
-		return this.nEstatus;
+	public int getnEstatus() {
+		return nEstatus;
 	}
 
-	public void setNEstatus(int nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
 	public int getN_idCategoriaGeneral() {
-		return this.n_idCategoriaGeneral;
+		return n_idCategoriaGeneral;
 	}
 
 	public void setN_idCategoriaGeneral(int n_idCategoriaGeneral) {
 		this.n_idCategoriaGeneral = n_idCategoriaGeneral;
 	}
 
-	public double getNPrecio() {
-		return this.nPrecio;
+	public int getN_idCategoria() {
+		return n_idCategoria;
 	}
 
-	public void setNPrecio(double nPrecio) {
+	public void setN_idCategoria(int n_idCategoria) {
+		this.n_idCategoria = n_idCategoria;
+	}
+
+	public double getnPrecio() {
+		return nPrecio;
+	}
+
+	public void setnPrecio(double nPrecio) {
 		this.nPrecio = nPrecio;
 	}
 
-	public String getSDescripcion() {
-		return this.sDescripcion;
+	public String getsDescripcion() {
+		return sDescripcion;
 	}
 
-	public void setSDescripcion(String sDescripcion) {
+	public void setsDescripcion(String sDescripcion) {
 		this.sDescripcion = sDescripcion;
 	}
 
-	public String getSMarca() {
-		return this.sMarca;
+	public String getsMarca() {
+		return sMarca;
 	}
 
-	public void setSMarca(String sMarca) {
+	public void setsMarca(String sMarca) {
 		this.sMarca = sMarca;
 	}
 
-	public String getSMoneda() {
-		return this.sMoneda;
+	public String getsMoneda() {
+		return sMoneda;
 	}
 
-	public void setSMoneda(String sMoneda) {
+	public void setsMoneda(String sMoneda) {
 		this.sMoneda = sMoneda;
 	}
 
-	public String getSNoParte() {
-		return this.sNoParte;
+	public String getsNoParte() {
+		return sNoParte;
 	}
 
-	public void setSNoParte(String sNoParte) {
+	public void setsNoParte(String sNoParte) {
 		this.sNoParte = sNoParte;
 	}
 
-	public String getSProducto() {
-		return this.sProducto;
+	public String getsProducto() {
+		return sProducto;
 	}
 
-	public void setSProducto(String sProducto) {
+	public void setsProducto(String sProducto) {
 		this.sProducto = sProducto;
 	}
 
 	public TcCategoria getTcCategoria() {
-		return this.tcCategoria;
+		return tcCategoria;
 	}
 
 	public void setTcCategoria(TcCategoria tcCategoria) {
 		this.tcCategoria = tcCategoria;
 	}
 
+	public TcCategoriaGeneral getTcCategoriaGeneral() {
+		return tcCategoriaGeneral;
+	}
+
+	public void setTcCategoriaGeneral(TcCategoriaGeneral tcCategoriaGeneral) {
+		this.tcCategoriaGeneral = tcCategoriaGeneral;
+	}
+
 	public TcClavesat getTcClavesat() {
-		return this.tcClavesat;
+		return tcClavesat;
 	}
 
 	public void setTcClavesat(TcClavesat tcClavesat) {
@@ -187,7 +211,7 @@ public class TcProducto implements Serializable {
 	}
 
 	public TcGanancia getTcGanancia() {
-		return this.tcGanancia;
+		return tcGanancia;
 	}
 
 	public void setTcGanancia(TcGanancia tcGanancia) {
@@ -195,121 +219,15 @@ public class TcProducto implements Serializable {
 	}
 
 	public TcUsuario getTcUsuario() {
-		return this.tcUsuario;
+		return tcUsuario;
 	}
 
 	public void setTcUsuario(TcUsuario tcUsuario) {
 		this.tcUsuario = tcUsuario;
 	}
 
-	public List<TwCotizacionesProducto> getTwCotizacionesProductos() {
-		return this.twCotizacionesProductos;
-	}
+	
 
-	public void setTwCotizacionesProductos(List<TwCotizacionesProducto> twCotizacionesProductos) {
-		this.twCotizacionesProductos = twCotizacionesProductos;
-	}
-
-	public TwCotizacionesProducto addTwCotizacionesProducto(TwCotizacionesProducto twCotizacionesProducto) {
-		getTwCotizacionesProductos().add(twCotizacionesProducto);
-		twCotizacionesProducto.setTcProducto(this);
-
-		return twCotizacionesProducto;
-	}
-
-	public TwCotizacionesProducto removeTwCotizacionesProducto(TwCotizacionesProducto twCotizacionesProducto) {
-		getTwCotizacionesProductos().remove(twCotizacionesProducto);
-		twCotizacionesProducto.setTcProducto(null);
-
-		return twCotizacionesProducto;
-	}
-
-	public List<TwPedido> getTwPedidos() {
-		return this.twPedidos;
-	}
-
-	public void setTwPedidos(List<TwPedido> twPedidos) {
-		this.twPedidos = twPedidos;
-	}
-
-	public TwPedido addTwPedido(TwPedido twPedido) {
-		getTwPedidos().add(twPedido);
-		twPedido.setTcProducto(this);
-
-		return twPedido;
-	}
-
-	public TwPedido removeTwPedido(TwPedido twPedido) {
-		getTwPedidos().remove(twPedido);
-		twPedido.setTcProducto(null);
-
-		return twPedido;
-	}
-
-	public List<TwProductobodega> getTwProductobodegas() {
-		return this.twProductobodegas;
-	}
-
-	public void setTwProductobodegas(List<TwProductobodega> twProductobodegas) {
-		this.twProductobodegas = twProductobodegas;
-	}
-
-	public TwProductobodega addTwProductobodega(TwProductobodega twProductobodega) {
-		getTwProductobodegas().add(twProductobodega);
-		twProductobodega.setTcProducto(this);
-
-		return twProductobodega;
-	}
-
-	public TwProductobodega removeTwProductobodega(TwProductobodega twProductobodega) {
-		getTwProductobodegas().remove(twProductobodega);
-		twProductobodega.setTcProducto(null);
-
-		return twProductobodega;
-	}
-
-	public List<TwProductosAlternativo> getTwProductosAlternativos() {
-		return this.twProductosAlternativos;
-	}
-
-	public void setTwProductosAlternativos(List<TwProductosAlternativo> twProductosAlternativos) {
-		this.twProductosAlternativos = twProductosAlternativos;
-	}
-
-	public TwProductosAlternativo addTwProductosAlternativo(TwProductosAlternativo twProductosAlternativo) {
-		getTwProductosAlternativos().add(twProductosAlternativo);
-		twProductosAlternativo.setTcProducto(this);
-
-		return twProductosAlternativo;
-	}
-
-	public TwProductosAlternativo removeTwProductosAlternativo(TwProductosAlternativo twProductosAlternativo) {
-		getTwProductosAlternativos().remove(twProductosAlternativo);
-		twProductosAlternativo.setTcProducto(null);
-
-		return twProductosAlternativo;
-	}
-
-	public List<TwVentasProducto> getTwVentasProductos() {
-		return this.twVentasProductos;
-	}
-
-	public void setTwVentasProductos(List<TwVentasProducto> twVentasProductos) {
-		this.twVentasProductos = twVentasProductos;
-	}
-
-	public TwVentasProducto addTwVentasProducto(TwVentasProducto twVentasProducto) {
-		getTwVentasProductos().add(twVentasProducto);
-		twVentasProducto.setTcProducto(this);
-
-		return twVentasProducto;
-	}
-
-	public TwVentasProducto removeTwVentasProducto(TwVentasProducto twVentasProducto) {
-		getTwVentasProductos().remove(twVentasProducto);
-		twVentasProducto.setTcProducto(null);
-
-		return twVentasProducto;
-	}
+	
 
 }
