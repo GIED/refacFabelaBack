@@ -4,6 +4,8 @@ import java.util.List;
 import com.refacFabela.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.service.ProductosService;
 
@@ -12,6 +14,8 @@ public class ProductosServiceImp implements ProductosService {
 
 	@Autowired
 	private ProductosRepository productosRepository;
+	@Autowired
+	private HistoriaPrecioProductoRepository historiaPrecioProductoRepository;
 
 	@Override
 	public List<TcProducto> obtenerProductos() {
@@ -39,8 +43,24 @@ public class ProductosServiceImp implements ProductosService {
 
 	@Override
 	public TcProducto guardarProducto(TcProducto tcProducto) {
+		
+		
+		TcProducto nuevoProducto=productosRepository.save(tcProducto);
+		
+		TcHistoriaPrecioProducto tcHistoriaPrecioProducto = new TcHistoriaPrecioProducto() ;
+		
+		tcHistoriaPrecioProducto.setnIdProducto(nuevoProducto.getnId());
+		tcHistoriaPrecioProducto.setnPrecio(nuevoProducto.getnPrecio());
+		tcHistoriaPrecioProducto.setsMoneda(nuevoProducto.getsMoneda());
+		tcHistoriaPrecioProducto.setnIdGanancia(nuevoProducto.getnIdGanancia());
+		tcHistoriaPrecioProducto.setnIdusuario(nuevoProducto.getnIdusuario());
+		tcHistoriaPrecioProducto.setdFecha(nuevoProducto.getdFecha());
+		
+		
+		
+		historiaPrecioProductoRepository.save(tcHistoriaPrecioProducto);
 
-		return productosRepository.save(tcProducto);
+		return nuevoProducto;
 	}
 
 }

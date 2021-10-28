@@ -3,6 +3,7 @@ package com.refacFabela.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 
 
@@ -18,7 +19,7 @@ public class TcProducto implements Serializable {
 	private Long nId;
 
 	@Column(name="d_fecha")
-	private Timestamp dFecha;
+	private Date dFecha= new Date();
 
 	@Column(name="n_estatus")
 	private int nEstatus;
@@ -112,11 +113,13 @@ public class TcProducto implements Serializable {
 		this.nId = nId;
 	}
 
-	public Timestamp getdFecha() {
+	
+
+	public Date getdFecha() {
 		return dFecha;
 	}
 
-	public void setdFecha(Timestamp dFecha) {
+	public void setdFecha(Date dFecha) {
 		this.dFecha = dFecha;
 	}
 
