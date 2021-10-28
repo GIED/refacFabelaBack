@@ -1,9 +1,7 @@
 package com.refacFabela.controller;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +44,8 @@ public class ProveedoresController {
 		} catch (Exception e) {
 			logger.error("Error al consultar Proveedor" + e);
 		}
-		return null;	}
+		return null;
+	}
 
 	@PostMapping("/guardarProveedores")
 	public TcProveedore guardarProveedores(@RequestBody TcProveedore tcProveedores) {

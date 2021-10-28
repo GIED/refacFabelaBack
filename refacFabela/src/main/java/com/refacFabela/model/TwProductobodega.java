@@ -3,46 +3,41 @@ package com.refacFabela.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
-/**
- * The persistent class for the tw_productobodega database table.
- * 
- */
 @Entity
-@Table(name="tw_productobodega")
-@NamedQuery(name="TwProductobodega.findAll", query="SELECT t FROM TwProductobodega t")
+@Table(name = "tw_productobodega")
+@NamedQuery(name = "TwProductobodega.findAll", query = "SELECT t FROM TwProductobodega t")
 public class TwProductobodega implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="n_cantidad")
+	@Column(name = "n_cantidad")
 	private int nCantidad;
 
-	@Column(name="n_estatus")
+	@Column(name = "n_estatus")
 	private int nEstatus;
 
-	//bi-directional many-to-one association to TcAnaquel
+	// bi-directional many-to-one association to TcAnaquel
 	@ManyToOne
-	@JoinColumn(name="n_idanaquel")
+	@JoinColumn(name = "n_idanaquel")
 	private TcAnaquel tcAnaquel;
 
-	//bi-directional many-to-one association to TcBodega
+	// bi-directional many-to-one association to TcBodega
 	@ManyToOne
-	@JoinColumn(name="n_idbodega")
+	@JoinColumn(name = "n_idbodega")
 	private TcBodega tcBodega;
 
-	//bi-directional many-to-one association to TcNivel
+	// bi-directional many-to-one association to TcNivel
 	@ManyToOne
-	@JoinColumn(name="n_idnivel")
+	@JoinColumn(name = "n_idnivel")
 	private TcNivel tcNivel;
 
-	//bi-directional many-to-one association to TcProducto
+	// bi-directional many-to-one association to TcProducto
 	@ManyToOne
-	@JoinColumn(name="n_idproducto")
+	@JoinColumn(name = "n_idproducto")
 	private TcProducto tcProducto;
 
 	public TwProductobodega() {
@@ -103,7 +98,5 @@ public class TwProductobodega implements Serializable {
 	public void setTcProducto(TcProducto tcProducto) {
 		this.tcProducto = tcProducto;
 	}
-
-
 
 }

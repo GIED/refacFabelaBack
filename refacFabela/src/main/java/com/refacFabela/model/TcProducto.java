@@ -3,13 +3,10 @@ package com.refacFabela.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 
-/**
- * The persistent class for the tc_productos database table.
- * 
- */
+
+
 @Entity
 @Table(name="tc_productos")
 public class TcProducto implements Serializable {

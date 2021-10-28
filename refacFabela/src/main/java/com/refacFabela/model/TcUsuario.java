@@ -2,42 +2,34 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
-
-/**
- * The persistent class for the tc_usuarios database table.
- * 
- */
 @Entity
-@Table(name="tc_usuarios")
+@Table(name = "tc_usuarios")
 public class TcUsuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="n_perfil")
+	@Column(name = "n_perfil")
 	private int nPerfil;
 
-	@Column(name="s_claveuser")
+	@Column(name = "s_claveuser")
 	private String sClaveuser;
 
-	@Column(name="s_nombreusuario")
+	@Column(name = "s_nombreusuario")
 	private String sNombreusuario;
 
-	@Column(name="s_password")
+	@Column(name = "s_password")
 	private String sPassword;
 
-	@Column(name="s_usuario")
+	@Column(name = "s_usuario")
 	private String sUsuario;
-	
-	@Column(name="n_estatus")
-	private Integer nEstatus;
 
-	
+	@Column(name = "n_estatus")
+	private Integer nEstatus;
 
 	public TcUsuario() {
 	}
@@ -98,6 +90,4 @@ public class TcUsuario implements Serializable {
 		this.nEstatus = nEstatus;
 	}
 
-	
-	
 }

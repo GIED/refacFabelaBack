@@ -2,32 +2,25 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
-
-/**
- * The persistent class for the tc_tipo_venta database table.
- * 
- */
 @Entity
-@Table(name="tc_tipo_venta")
-@NamedQuery(name="TcTipoVenta.findAll", query="SELECT t FROM TcTipoVenta t")
+@Table(name = "tc_tipo_venta")
+@NamedQuery(name = "TcTipoVenta.findAll", query = "SELECT t FROM TcTipoVenta t")
 public class TcTipoVenta implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="s_clave")
+	@Column(name = "s_clave")
 	private String sClave;
 
-	@Column(name="s_descripcion")
+	@Column(name = "s_descripcion")
 	private String sDescripcion;
 
-	//bi-directional many-to-one association to TwVenta
-	
+	// bi-directional many-to-one association to TwVenta
 
 	public TcTipoVenta() {
 	}
@@ -55,7 +48,5 @@ public class TcTipoVenta implements Serializable {
 	public void setsDescripcion(String sDescripcion) {
 		this.sDescripcion = sDescripcion;
 	}
-
-	
 
 }

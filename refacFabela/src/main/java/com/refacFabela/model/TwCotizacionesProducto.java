@@ -3,23 +3,18 @@ package com.refacFabela.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
-/**
- * The persistent class for the tw_cotizaciones_producto database table.
- * 
- */
 @Entity
-@Table(name="tw_cotizaciones_producto")
-@NamedQuery(name="TwCotizacionesProducto.findAll", query="SELECT t FROM TwCotizacionesProducto t")
+@Table(name = "tw_cotizaciones_producto")
+@NamedQuery(name = "TwCotizacionesProducto.findAll", query = "SELECT t FROM TwCotizacionesProducto t")
 public class TwCotizacionesProducto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="n_cantidad")
+	@Column(name = "n_cantidad")
 	private int nCantidad;
 
 	private double n_ivaPartida;
@@ -34,14 +29,14 @@ public class TwCotizacionesProducto implements Serializable {
 
 	private double n_totalUnitario;
 
-	//bi-directional many-to-one association to TcProducto
+	// bi-directional many-to-one association to TcProducto
 	@ManyToOne
-	@JoinColumn(name="n_idProductos")
+	@JoinColumn(name = "n_idProductos")
 	private TcProducto tcProducto;
 
-	//bi-directional many-to-one association to TwCotizacione
+	// bi-directional many-to-one association to TwCotizacione
 	@ManyToOne
-	@JoinColumn(name="n_idCotizaciones")
+	@JoinColumn(name = "n_idCotizaciones")
 	private TwCotizacione twCotizacione;
 
 	public TwCotizacionesProducto() {
@@ -126,7 +121,5 @@ public class TwCotizacionesProducto implements Serializable {
 	public void setTwCotizacione(TwCotizacione twCotizacione) {
 		this.twCotizacione = twCotizacione;
 	}
-
-
 
 }

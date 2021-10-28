@@ -11,13 +11,13 @@ import com.refacFabela.service.ClienteService;
 
 @Service
 public class ClientesServiceImp implements ClienteService {
-	
+
 	@Autowired
 	private ClientesRepository clientesRepository;
-	
+
 	@Override
 	public List<TcCliente> obtenerCliente() {
-		
+
 		return clientesRepository.findBynEstatus(1);
 	}
 

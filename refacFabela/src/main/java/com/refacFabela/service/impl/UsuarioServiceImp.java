@@ -11,25 +11,25 @@ import com.refacFabela.service.UsuarioService;
 
 @Service
 public class UsuarioServiceImp implements UsuarioService {
-	
+
 	@Autowired
 	public UsuariosRepository usuarioRepository;
 
 	@Override
 	public List<TcUsuario> obtenerUsuarios() {
-		
+
 		return usuarioRepository.findAll();
 	}
 
 	@Override
 	public TcUsuario consultaUsuario(Long id) {
-		
+
 		return usuarioRepository.findById(id).get();
 	}
 
 	@Override
 	public TcUsuario guardaUsuario(TcUsuario tcUsuario) {
-		
+
 		return usuarioRepository.save(tcUsuario);
 	}
 

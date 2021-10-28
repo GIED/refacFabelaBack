@@ -2,32 +2,25 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
-
-/**
- * The persistent class for the tc_nivel database table.
- * 
- */
 @Entity
-@Table(name="tc_nivel")
-@NamedQuery(name="TcNivel.findAll", query="SELECT t FROM TcNivel t")
+@Table(name = "tc_nivel")
+@NamedQuery(name = "TcNivel.findAll", query = "SELECT t FROM TcNivel t")
 public class TcNivel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="n_estatus")
+	@Column(name = "n_estatus")
 	private String nEstatus;
 
-	@Column(name="s_nivel")
+	@Column(name = "s_nivel")
 	private String sNivel;
 
-	//bi-directional many-to-one association to TwProductobodega
-	
+	// bi-directional many-to-one association to TwProductobodega
 
 	public TcNivel() {
 	}
@@ -55,7 +48,5 @@ public class TcNivel implements Serializable {
 	public void setsNivel(String sNivel) {
 		this.sNivel = sNivel;
 	}
-
-	
 
 }

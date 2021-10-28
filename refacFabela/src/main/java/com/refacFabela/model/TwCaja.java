@@ -3,22 +3,16 @@ package com.refacFabela.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
-
-/**
- * The persistent class for the tw_caja database table.
- * 
- */
 @Entity
-@Table(name="tw_caja")
-@NamedQuery(name="TwCaja.findAll", query="SELECT t FROM TwCaja t")
+@Table(name = "tw_caja")
+@NamedQuery(name = "TwCaja.findAll", query = "SELECT t FROM TwCaja t")
 public class TwCaja implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -27,7 +21,7 @@ public class TwCaja implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date d_fechaCierre;
 
-	@Column(name="n_estatus")
+	@Column(name = "n_estatus")
 	private int nEstatus;
 
 	private double n_pagoEfectivo;
@@ -40,13 +34,12 @@ public class TwCaja implements Serializable {
 
 	private double n_saldoInicial;
 
-	//bi-directional many-to-one association to TcUsuario
+	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
-	@JoinColumn(name="n_idUsuario")
+	@JoinColumn(name = "n_idUsuario")
 	private TcUsuario tcUsuario;
 
-	//bi-directional many-to-one association to TwVenta
-	
+	// bi-directional many-to-one association to TwVenta
 
 	public TwCaja() {
 	}
@@ -130,7 +123,5 @@ public class TwCaja implements Serializable {
 	public void setTcUsuario(TcUsuario tcUsuario) {
 		this.tcUsuario = tcUsuario;
 	}
-
-	
 
 }

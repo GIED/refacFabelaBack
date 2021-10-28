@@ -2,27 +2,24 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
-
-
 
 @Entity
-@Table(name="tw_facturacion")
-@NamedQuery(name="TwFacturacion.findAll", query="SELECT t FROM TwFacturacion t")
+@Table(name = "tw_facturacion")
+@NamedQuery(name = "TwFacturacion.findAll", query = "SELECT t FROM TwFacturacion t")
 public class TwFacturacion implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="n_estatus")
+	@Column(name = "n_estatus")
 	private int nEstatus;
 
 	private int n_idVenta;
 
-	@Column(name="s_estatus")
+	@Column(name = "s_estatus")
 	private String sEstatus;
 
 	private String s_noCertificadoSat;
@@ -31,11 +28,8 @@ public class TwFacturacion implements Serializable {
 
 	private String s_selloSat;
 
-	@Column(name="s_uuid")
+	@Column(name = "s_uuid")
 	private String sUuid;
-
-	
-	
 
 	public TwFacturacion() {
 	}
@@ -103,6 +97,5 @@ public class TwFacturacion implements Serializable {
 	public void setsUuid(String sUuid) {
 		this.sUuid = sUuid;
 	}
-
 
 }

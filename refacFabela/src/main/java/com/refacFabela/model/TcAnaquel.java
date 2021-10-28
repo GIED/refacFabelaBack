@@ -2,32 +2,25 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
-
-/**
- * The persistent class for the tc_anaquel database table.
- * 
- */
 @Entity
-@Table(name="tc_anaquel")
-@NamedQuery(name="TcAnaquel.findAll", query="SELECT t FROM TcAnaquel t")
+@Table(name = "tc_anaquel")
+@NamedQuery(name = "TcAnaquel.findAll", query = "SELECT t FROM TcAnaquel t")
 public class TcAnaquel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="n_estatus")
+	@Column(name = "n_estatus")
 	private String nEstatus;
 
-	@Column(name="s_anaquel")
+	@Column(name = "s_anaquel")
 	private String sAnaquel;
 
-	//bi-directional many-to-one association to TwProductobodega
-	
+	// bi-directional many-to-one association to TwProductobodega
 
 	public TcAnaquel() {
 	}
@@ -56,5 +49,4 @@ public class TcAnaquel implements Serializable {
 		this.sAnaquel = sAnaquel;
 	}
 
-	
 }

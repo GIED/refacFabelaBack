@@ -4,20 +4,15 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
 
-
-/**
- * The persistent class for the tw_pedidos database table.
- * 
- */
 @Entity
-@Table(name="tw_pedidos")
-@NamedQuery(name="TwPedido.findAll", query="SELECT t FROM TwPedido t")
+@Table(name = "tw_pedidos")
+@NamedQuery(name = "TwPedido.findAll", query = "SELECT t FROM TwPedido t")
 public class TwPedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
 	@Temporal(TemporalType.DATE)
@@ -30,24 +25,24 @@ public class TwPedido implements Serializable {
 
 	private int n_cantidaRecibida;
 
-	@Column(name="n_estatus")
+	@Column(name = "n_estatus")
 	private int nEstatus;
 
 	private int n_MotivoPedido;
 
 	private String s_clavePedido;
 
-	@Column(name="s_observaciones")
+	@Column(name = "s_observaciones")
 	private String sObservaciones;
 
-	//bi-directional many-to-one association to TcProducto
+	// bi-directional many-to-one association to TcProducto
 	@ManyToOne
-	@JoinColumn(name="n_idProducto")
+	@JoinColumn(name = "n_idProducto")
 	private TcProducto tcProducto;
 
-	//bi-directional many-to-one association to TcProveedore
+	// bi-directional many-to-one association to TcProveedore
 	@ManyToOne
-	@JoinColumn(name="n_idProveedor")
+	@JoinColumn(name = "n_idProveedor")
 	private TcProveedore tcProveedore;
 
 	public TwPedido() {
@@ -140,7 +135,5 @@ public class TwPedido implements Serializable {
 	public void setTcProveedore(TcProveedore tcProveedore) {
 		this.tcProveedore = tcProveedore;
 	}
-
-	
 
 }

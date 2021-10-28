@@ -4,20 +4,15 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
 
-
-/**
- * The persistent class for the tw_ventas_producto database table.
- * 
- */
 @Entity
-@Table(name="tw_ventas_producto")
-@NamedQuery(name="TwVentasProducto.findAll", query="SELECT t FROM TwVentasProducto t")
+@Table(name = "tw_ventas_producto")
+@NamedQuery(name = "TwVentasProducto.findAll", query = "SELECT t FROM TwVentasProducto t")
 public class TwVentasProducto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
 	@Temporal(TemporalType.DATE)
@@ -26,7 +21,7 @@ public class TwVentasProducto implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date d_fechaEntregaEstimada;
 
-	@Column(name="n_cantidad")
+	@Column(name = "n_cantidad")
 	private int nCantidad;
 
 	private int n_estatusEntregaAlmacen;
@@ -43,19 +38,19 @@ public class TwVentasProducto implements Serializable {
 
 	private double n_totalUnitario;
 
-	//bi-directional many-to-one association to TcProducto
+	// bi-directional many-to-one association to TcProducto
 	@ManyToOne
-	@JoinColumn(name="n_idProductos")
+	@JoinColumn(name = "n_idProductos")
 	private TcProducto tcProducto;
 
-	//bi-directional many-to-one association to TcUsuario
+	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
-	@JoinColumn(name="n_idUsuario")
+	@JoinColumn(name = "n_idUsuario")
 	private TcUsuario tcUsuario;
 
-	//bi-directional many-to-one association to TwVenta
+	// bi-directional many-to-one association to TwVenta
 	@ManyToOne
-	@JoinColumn(name="n_idVenta")
+	@JoinColumn(name = "n_idVenta")
 	private TwVenta twVenta;
 
 	public TwVentasProducto() {
@@ -173,5 +168,4 @@ public class TwVentasProducto implements Serializable {
 		this.twVenta = twVenta;
 	}
 
-	
 }

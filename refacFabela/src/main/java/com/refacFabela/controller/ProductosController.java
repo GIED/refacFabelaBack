@@ -1,7 +1,6 @@
 package com.refacFabela.controller;
 
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.service.ProductosService;
 
-
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST })
 public class ProductosController {
 	private static final Logger logger = LogManager.getLogger("errorLogger");
-	
-	 @Autowired
-	 private ProductosService productosService;
-	
+
+	@Autowired
+	private ProductosService productosService;
+
 	@GetMapping("/obtenerProductos")
 	public List<TcProducto> obtenerProductos() {
 
@@ -47,7 +45,7 @@ public class ProductosController {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/obtenerProductosLike")
 	public List<TcProducto> obtenerProductosLike(@RequestParam() String Producto) {
 
@@ -59,7 +57,7 @@ public class ProductosController {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/obtenerProductosNoParteLike")
 	public List<TcProducto> obtenerProductosNoParteLike(@RequestParam() String No_Parte) {
 
@@ -71,6 +69,7 @@ public class ProductosController {
 		}
 		return null;
 	}
+
 	@PostMapping("/guardarProducto")
 	public TcProducto obtenerProductosNoParteLike(@RequestBody TcProducto tcProducto) {
 

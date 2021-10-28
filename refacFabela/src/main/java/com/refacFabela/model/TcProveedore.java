@@ -2,44 +2,37 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
-
-/**
- * The persistent class for the tc_proveedores database table.
- * 
- */
 @Entity
-@Table(name="tc_proveedores")
-@NamedQuery(name="TcProveedore.findAll", query="SELECT t FROM TcProveedore t")
+@Table(name = "tc_proveedores")
+@NamedQuery(name = "TcProveedore.findAll", query = "SELECT t FROM TcProveedore t")
 public class TcProveedore implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="n_estatus")
+	@Column(name = "n_estatus")
 	private int nEstatus;
 
-	@Column(name="n_idusuario")
+	@Column(name = "n_idusuario")
 	private int nIdusuario;
 
-	@Column(name="s_direccion")
+	@Column(name = "s_direccion")
 	private String sDireccion;
 
-	@Column(name="s_razon_social")
+	@Column(name = "s_razon_social")
 	private String sRazonSocial;
 
-	@Column(name="s_rfc")
+	@Column(name = "s_rfc")
 	private String sRfc;
 
-	@Column(name="s_telefono")
+	@Column(name = "s_telefono")
 	private String sTelefono;
 
-	//bi-directional many-to-one association to TwPedido
-	
+	// bi-directional many-to-one association to TwPedido
 
 	public TcProveedore() {
 	}
@@ -99,8 +92,5 @@ public class TcProveedore implements Serializable {
 	public void setsTelefono(String sTelefono) {
 		this.sTelefono = sTelefono;
 	}
-
-	
-	
 
 }

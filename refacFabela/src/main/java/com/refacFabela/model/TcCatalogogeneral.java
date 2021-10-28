@@ -1,30 +1,26 @@
 package com.refacFabela.model;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
-
-/**
- * The persistent class for the tc_catalogogeneral database table.
- * 
- */
 @Entity
-@Table(name="tc_catalogogeneral")
-@NamedQuery(name="TcCatalogogeneral.findAll", query="SELECT t FROM TcCatalogogeneral t")
+@Table(name = "tc_catalogogeneral")
+@NamedQuery(name = "TcCatalogogeneral.findAll", query = "SELECT t FROM TcCatalogogeneral t")
 public class TcCatalogogeneral implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="n_valor")
+	@Column(name = "n_valor")
 	private double nValor;
 
-	@Column(name="s_clave")
+	@Column(name = "s_clave")
 	private String sClave;
 
-	@Column(name="s_descripcion")
+	@Column(name = "s_descripcion")
 	private String sDescripcion;
 
 	public TcCatalogogeneral() {
@@ -61,7 +57,5 @@ public class TcCatalogogeneral implements Serializable {
 	public void setsDescripcion(String sDescripcion) {
 		this.sDescripcion = sDescripcion;
 	}
-
-	
 
 }

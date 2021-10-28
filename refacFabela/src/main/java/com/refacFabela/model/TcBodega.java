@@ -2,32 +2,26 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
-/**
- * The persistent class for the tc_bodegas database table.
- * 
- */
 @Entity
-@Table(name="tc_bodegas")
-@NamedQuery(name="TcBodega.findAll", query="SELECT t FROM TcBodega t")
+@Table(name = "tc_bodegas")
+@NamedQuery(name = "TcBodega.findAll", query = "SELECT t FROM TcBodega t")
 public class TcBodega implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="n_estatus")
+	@Column(name = "n_estatus")
 	private int nEstatus;
 
-	@Column(name="s_bodega")
+	@Column(name = "s_bodega")
 	private String sBodega;
 
-	//bi-directional many-to-one association to TwProductobodega
-	
+	// bi-directional many-to-one association to TwProductobodega
 
 	public TcBodega() {
 	}
@@ -55,7 +49,5 @@ public class TcBodega implements Serializable {
 	public void setsBodega(String sBodega) {
 		this.sBodega = sBodega;
 	}
-
-	
 
 }

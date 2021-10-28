@@ -15,18 +15,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.refacFabela.model.TcAnaquel;
+import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcCatalogogeneral;
 import com.refacFabela.model.TcCategoria;
 import com.refacFabela.model.TcCategoriaGeneral;
 import com.refacFabela.model.TcClavesat;
+import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
+import com.refacFabela.model.TcNivel;
+import com.refacFabela.model.TcTipoVenta;
+import com.refacFabela.model.TcUsocfdi;
 import com.refacFabela.service.CatalagosService;
-
 
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST })
 public class CatalogosController {
-	
+
 	private static final Logger logger = LogManager.getLogger("errorLogger");
 
 	@Autowired
@@ -43,7 +48,7 @@ public class CatalogosController {
 		}
 		return null;
 	}
-	
+
 	@PostMapping("/consultaTipoCambioId")
 	public TcCatalogogeneral consultaTipoCambioId(@RequestBody TcCatalogogeneral tcCatalogogeneral) {
 		try {
@@ -55,11 +60,11 @@ public class CatalogosController {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/catalogosClaveSat")
-	public List<TcClavesat> consultaClaveSat(){
-		try {			
-			
+	public List<TcClavesat> consultaClaveSat() {
+		try {
+
 			return catalagosService.catalogoClaveSat();
 
 		} catch (Exception e) {
@@ -68,11 +73,11 @@ public class CatalogosController {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/catalogoCategoriaGeneral")
-	public List<TcCategoriaGeneral> consultaCategoriaGeneral(){
-		try {			
-			
+	public List<TcCategoriaGeneral> consultaCategoriaGeneral() {
+		try {
+
 			return catalagosService.catalogoCategoriaGeneral();
 
 		} catch (Exception e) {
@@ -81,11 +86,11 @@ public class CatalogosController {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/catalogoCategoriaId")
-	public List<TcCategoria> consultaCategoriaId(@RequestParam() int id){
-		try {			
-			
+	public List<TcCategoria> consultaCategoriaId(@RequestParam() int id) {
+		try {
+
 			return catalagosService.catalogoCategoriaId(id);
 
 		} catch (Exception e) {
@@ -94,11 +99,11 @@ public class CatalogosController {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/catalogoGanancia")
-	public List<TcGanancia> consultaCatalogoGanancia(){
-		try {			
-			
+	public List<TcGanancia> consultaCatalogoGanancia() {
+		try {
+
 			return catalagosService.catalogoGanancia();
 
 		} catch (Exception e) {
@@ -107,7 +112,83 @@ public class CatalogosController {
 		}
 		return null;
 	}
-		
 
+	@GetMapping("/catalogoAnaquel")
+	public List<TcAnaquel> consultaCatalogoAnaquel() {
+		try {
+
+			return catalagosService.catalogoAnaquel();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de Anaquel " + e);
+		}
+		return null;
+	}
+
+	@GetMapping("/catalogoNivel")
+	public List<TcNivel> consultaCatalogoNivel() {
+		try {
+
+			return catalagosService.catalogoNivel();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de Nivel " + e);
+		}
+		return null;
+	}
+
+	@GetMapping("/catalogoBodegas")
+	public List<TcBodega> consultaCatalogoBodegas() {
+		try {
+
+			return catalagosService.catalogoBodegas();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de Bodegas " + e);
+		}
+		return null;
+	}
+
+	@GetMapping("/catalogoFormaPago")
+	public List<TcFormapago> consultaCatalogoFormaPago() {
+		try {
+
+			return catalagosService.catalogoFormaPago();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de Forma de Pago " + e);
+		}
+		return null;
+	}
+
+	@GetMapping("/catalogoTipoVenta")
+	public List<TcTipoVenta> consultaCatalogoTipoVenta() {
+		try {
+
+			return catalagosService.catalagoTipoVenta();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de Tipo de Venta " + e);
+		}
+		return null;
+	}
+
+	@GetMapping("/catalogoUsoCfdi")
+	public List<TcUsocfdi> consultaCatalogoUsoCfdi() {
+		try {
+
+			return catalagosService.catalagoUsoCfdi();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de Uso de Cfdi " + e);
+		}
+		return null;
+	}
 
 }

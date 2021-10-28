@@ -3,30 +3,25 @@ package com.refacFabela.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
-/**
- * The persistent class for the tw_productos_alternativos database table.
- * 
- */
 @Entity
-@Table(name="tw_productos_alternativos")
-@NamedQuery(name="TwProductosAlternativo.findAll", query="SELECT t FROM TwProductosAlternativo t")
+@Table(name = "tw_productos_alternativos")
+@NamedQuery(name = "TwProductosAlternativo.findAll", query = "SELECT t FROM TwProductosAlternativo t")
 public class TwProductosAlternativo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="n_estatus")
+	@Column(name = "n_estatus")
 	private int nEstatus;
 
 	private int n_idProductoAlternativo;
 
-	//bi-directional many-to-one association to TcProducto
+	// bi-directional many-to-one association to TcProducto
 	@ManyToOne
-	@JoinColumn(name="n_idProducto")
+	@JoinColumn(name = "n_idProducto")
 	private TcProducto tcProducto;
 
 	public TwProductosAlternativo() {
@@ -63,7 +58,5 @@ public class TwProductosAlternativo implements Serializable {
 	public void setTcProducto(TcProducto tcProducto) {
 		this.tcProducto = tcProducto;
 	}
-
-	
 
 }
