@@ -9,6 +9,7 @@ public interface ProductosService {
 	public TcProducto obtenerProductoNoParte(String No_Parte);
 	public List<TcProducto> obtenerProductoLike(String Producto);
 	public List<TcProducto> obtenerNoParteLike(String No_Parte);
+	public TcProducto guardarProducto(TcProducto tcProducto);
 	
 
 }

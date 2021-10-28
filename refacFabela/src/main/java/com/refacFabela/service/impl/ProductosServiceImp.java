@@ -36,4 +36,10 @@ public class ProductosServiceImp implements ProductosService {
 		return productosRepository.ConsultaNoParteLike(No_Parte);
 	}
 
+	@Override
+	public TcProducto guardarProducto(TcProducto tcProducto) {
+		
+		return productosRepository.save(tcProducto);
+	}
+
 }
