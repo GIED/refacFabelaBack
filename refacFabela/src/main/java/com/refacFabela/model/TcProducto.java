@@ -81,10 +81,6 @@ public class TcProducto implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="n_idusuario" , referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcUsuario tcUsuario;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="n_id" , referencedColumnName = "n_idProducto", updatable = false, insertable = false)
-	private TcHistoriaPrecioProducto TcHistoriaPrecioProducto;
 
 	//bi-directional many-to-one association to TwCotizacionesProducto
 //	@OneToMany(mappedBy="tcProducto")
@@ -262,15 +258,6 @@ public class TcProducto implements Serializable {
 	public void setnIdclavesat(Long nIdclavesat) {
 		this.nIdclavesat = nIdclavesat;
 	}
-
-	public TcHistoriaPrecioProducto getTcHistoriaPrecioProducto() {
-		return TcHistoriaPrecioProducto;
-	}
-
-	public void setTcHistoriaPrecioProducto(TcHistoriaPrecioProducto tcHistoriaPrecioProducto) {
-		TcHistoriaPrecioProducto = tcHistoriaPrecioProducto;
-	}
-	
 
 	
 

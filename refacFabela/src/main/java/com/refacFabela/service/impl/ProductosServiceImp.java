@@ -1,5 +1,6 @@
 package com.refacFabela.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import com.refacFabela.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,8 @@ public class ProductosServiceImp implements ProductosService {
 	@Override
 	public TcProducto guardarProducto(TcProducto tcProducto) {
 		
+		tcProducto.setdFecha(new Date());
+		System.out.println(tcProducto);
 		
 		TcProducto nuevoProducto=productosRepository.save(tcProducto);
 		

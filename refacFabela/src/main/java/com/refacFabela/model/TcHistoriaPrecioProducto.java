@@ -56,7 +56,7 @@ public class TcHistoriaPrecioProducto implements Serializable {
 
 	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "n_idusuario", referencedColumnName = "n_id", updatable = false, insertable = false)
+	@JoinColumn(name = "n_idProducto", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcProducto tcProducto;
 
 	public TcHistoriaPrecioProducto() {
