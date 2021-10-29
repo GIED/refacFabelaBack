@@ -1,9 +1,17 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 
 
@@ -19,16 +27,16 @@ public class TcProducto implements Serializable {
 	private Long nId;
 
 	@Column(name="d_fecha")
-	private Date dFecha= new Date();
+	private Date dFecha;
 
 	@Column(name="n_estatus")
 	private int nEstatus;
 
 	@Column(name="n_idCategoriaGeneral")
-	private int n_idCategoriaGeneral;
+	private int nidCategoriaGeneral;
 	
 	@Column(name="n_idcategoria")
-	private int n_idCategoria;
+	private int nidCategoria;
 
 	@Column(name="n_precio")
 	private double nPrecio;
@@ -82,25 +90,7 @@ public class TcProducto implements Serializable {
 	@JoinColumn(name="n_idusuario" , referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcUsuario tcUsuario;
 
-	//bi-directional many-to-one association to TwCotizacionesProducto
-//	@OneToMany(mappedBy="tcProducto")
-//	private List<TwCotizacionesProducto> twCotizacionesProductos;
-//
-//	//bi-directional many-to-one association to TwPedido
-//	@OneToMany(mappedBy="tcProducto")
-//	private List<TwPedido> twPedidos;
-//
-//	//bi-directional many-to-one association to TwProductobodega
-//	@OneToMany(mappedBy="tcProducto")
-//	private List<TwProductobodega> twProductobodegas;
-//
-//	//bi-directional many-to-one association to TwProductosAlternativo
-//	@OneToMany(mappedBy="tcProducto")
-//	private List<TwProductosAlternativo> twProductosAlternativos;
-//
-//	//bi-directional many-to-one association to TwVentasProducto
-//	@OneToMany(mappedBy="tcProducto")
-//	private List<TwVentasProducto> twVentasProductos;
+	
 
 	public TcProducto() {
 	}
@@ -112,8 +102,6 @@ public class TcProducto implements Serializable {
 	public void setnId(Long nId) {
 		this.nId = nId;
 	}
-
-	
 
 	public Date getdFecha() {
 		return dFecha;
@@ -131,20 +119,20 @@ public class TcProducto implements Serializable {
 		this.nEstatus = nEstatus;
 	}
 
-	public int getN_idCategoriaGeneral() {
-		return n_idCategoriaGeneral;
+	public int getnidCategoriaGeneral() {
+		return nidCategoriaGeneral;
 	}
 
-	public void setN_idCategoriaGeneral(int n_idCategoriaGeneral) {
-		this.n_idCategoriaGeneral = n_idCategoriaGeneral;
+	public void setnidCategoriaGeneral(int nidCategoriaGeneral) {
+		this.nidCategoriaGeneral = nidCategoriaGeneral;
 	}
 
-	public int getN_idCategoria() {
-		return n_idCategoria;
+	public int getNidCategoria() {
+		return nidCategoria;
 	}
 
-	public void setN_idCategoria(int n_idCategoria) {
-		this.n_idCategoria = n_idCategoria;
+	public void setNidCategoria(int nidCategoria) {
+		this.nidCategoria = nidCategoria;
 	}
 
 	public double getnPrecio() {
@@ -195,6 +183,30 @@ public class TcProducto implements Serializable {
 		this.sProducto = sProducto;
 	}
 
+	public Long getnIdusuario() {
+		return nIdusuario;
+	}
+
+	public void setnIdusuario(Long nIdusuario) {
+		this.nIdusuario = nIdusuario;
+	}
+
+	public Long getnIdGanancia() {
+		return nIdGanancia;
+	}
+
+	public void setnIdGanancia(Long nIdGanancia) {
+		this.nIdGanancia = nIdGanancia;
+	}
+
+	public Long getnIdclavesat() {
+		return nIdclavesat;
+	}
+
+	public void setnIdclavesat(Long nIdclavesat) {
+		this.nIdclavesat = nIdclavesat;
+	}
+
 	public TcCategoria getTcCategoria() {
 		return tcCategoria;
 	}
@@ -235,30 +247,19 @@ public class TcProducto implements Serializable {
 		this.tcUsuario = tcUsuario;
 	}
 
-	public Long getnIdusuario() {
-		return nIdusuario;
+	@Override
+	public String toString() {
+		return "TcProducto [nId=" + nId + ", dFecha=" + dFecha + ", nEstatus=" + nEstatus + ", nidCategoriaGeneral="
+				+ nidCategoriaGeneral + ", nidCategoria=" + nidCategoria + ", nPrecio=" + nPrecio + ", sDescripcion="
+				+ sDescripcion + ", sMarca=" + sMarca + ", sMoneda=" + sMoneda + ", sNoParte=" + sNoParte
+				+ ", sProducto=" + sProducto + ", nIdusuario=" + nIdusuario + ", nIdGanancia=" + nIdGanancia
+				+ ", nIdclavesat=" + nIdclavesat + ", tcCategoria=" + tcCategoria + ", tcCategoriaGeneral="
+				+ tcCategoriaGeneral + ", tcClavesat=" + tcClavesat + ", tcGanancia=" + tcGanancia + ", tcUsuario="
+				+ tcUsuario + "]";
 	}
 
-	public void setnIdusuario(Long nIdusuario) {
-		this.nIdusuario = nIdusuario;
-	}
-
-	public Long getnIdGanancia() {
-		return nIdGanancia;
-	}
-
-	public void setnIdGanancia(Long nIdGanancia) {
-		this.nIdGanancia = nIdGanancia;
-	}
-
-	public Long getnIdclavesat() {
-		return nIdclavesat;
-	}
-
-	public void setnIdclavesat(Long nIdclavesat) {
-		this.nIdclavesat = nIdclavesat;
-	}
-
+	
+	
 	
 
 	

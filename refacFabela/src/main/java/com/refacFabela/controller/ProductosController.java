@@ -74,6 +74,7 @@ public class ProductosController {
 	public TcProducto obtenerProductosNoParteLike(@RequestBody TcProducto tcProducto) {
 
 		try {
+			
 			return productosService.guardarProducto(tcProducto);
 		} catch (Exception e) {
 
