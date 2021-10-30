@@ -21,7 +21,7 @@ public class ProductosServiceImp implements ProductosService {
 	@Override
 	public List<TcProducto> obtenerProductos() {
 
-		return productosRepository.findAll();
+		return productosRepository.findBynEstatus(1);
 	}
 
 	@Override

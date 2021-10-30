@@ -13,6 +13,8 @@ public interface ProductosRepository extends JpaRepository<TcProducto, Long> {
 	
 	public TcProducto findBysNoParte(String No_parte );
 	
+	public List<TcProducto> findBynEstatus(int estatus);
+	
 	@Query("Select c from TcProducto c where c.sNoParte like %:producto% or c.sProducto like %:producto% or c.sDescripcion like %:producto%")
 	public List<TcProducto> ConsultaProductoLike(String producto);
 	
