@@ -25,10 +25,10 @@ public class TcProducto implements Serializable {
 	private int nEstatus;
 
 	@Column(name="n_idCategoriaGeneral")
-	private int n_idCategoriaGeneral;
+	private Long nIdCategoriaGeneral;
 	
 	@Column(name="n_idcategoria")
-	private int n_idCategoria;
+	private Long nIdCategoria;
 
 	@Column(name="n_precio")
 	private double nPrecio;
@@ -131,20 +131,22 @@ public class TcProducto implements Serializable {
 		this.nEstatus = nEstatus;
 	}
 
-	public int getN_idCategoriaGeneral() {
-		return n_idCategoriaGeneral;
+	
+
+	public Long getnIdCategoriaGeneral() {
+		return nIdCategoriaGeneral;
 	}
 
-	public void setN_idCategoriaGeneral(int n_idCategoriaGeneral) {
-		this.n_idCategoriaGeneral = n_idCategoriaGeneral;
+	public void setnIdCategoriaGeneral(Long nIdCategoriaGeneral) {
+		this.nIdCategoriaGeneral = nIdCategoriaGeneral;
 	}
 
-	public int getN_idCategoria() {
-		return n_idCategoria;
+	public Long getnIdCategoria() {
+		return nIdCategoria;
 	}
 
-	public void setN_idCategoria(int n_idCategoria) {
-		this.n_idCategoria = n_idCategoria;
+	public void setnIdCategoria(Long nIdCategoria) {
+		this.nIdCategoria = nIdCategoria;
 	}
 
 	public double getnPrecio() {
