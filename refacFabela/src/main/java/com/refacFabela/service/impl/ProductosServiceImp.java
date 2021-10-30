@@ -66,4 +66,10 @@ public class ProductosServiceImp implements ProductosService {
 		return nuevoProducto;
 	}
 
+	@Override
+	public List<TcHistoriaPrecioProducto> historiaPrecioProducto(Long n_id) {
+		
+		return historiaPrecioProductoRepository.findBynIdProducto(n_id);
+	}
+
 }

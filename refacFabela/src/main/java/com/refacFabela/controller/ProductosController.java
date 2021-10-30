@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.service.ProductosService;
 
@@ -79,6 +81,18 @@ public class ProductosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerHistoriaPrecioProducto")
+	public List<TcHistoriaPrecioProducto> obtenerHistoriaPrecioProducto(@RequestParam() Long n_id) {
+
+		try {
+			return productosService.historiaPrecioProducto(n_id);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener Historia precio Priducto" + e);
 		}
 		return null;
 	}
