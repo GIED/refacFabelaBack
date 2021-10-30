@@ -22,6 +22,7 @@ public interface CatalagosService {
 	public List<TcCategoriaGeneral> catalogoCategoriaGeneral();
 	public List<TcCategoria> catalogoCategoriaId(int id);
 	public List<TcGanancia> catalogoGanancia();
+	public TcGanancia catalogoGananciaId(Long nId);
 	public List<TcAnaquel> catalogoAnaquel();
 	public List<TcNivel> catalogoNivel();
 	public List<TcBodega> catalogoBodegas();

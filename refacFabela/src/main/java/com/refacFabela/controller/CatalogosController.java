@@ -112,6 +112,19 @@ public class CatalogosController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/catalogoGananciaId")
+	public TcGanancia consultaCatalogoGanancia(@RequestParam Long nId) {
+		try {
+
+			return catalagosService.catalogoGananciaId(nId);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de ganancia " + e);
+		}
+		return null;
+	}
 
 	@GetMapping("/catalogoAnaquel")
 	public List<TcAnaquel> consultaCatalogoAnaquel() {

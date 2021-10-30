@@ -90,6 +90,12 @@ public class CatalogosServiceImp implements CatalagosService {
 
 		return catalogoGananciaRepository.findAll();
 	}
+	
+	@Override
+	public TcGanancia catalogoGananciaId(Long nId) {
+		
+		return catalogoGananciaRepository.findById(nId).get();
+	}
 
 	@Override
 	public List<TcAnaquel> catalogoAnaquel() {
@@ -126,5 +132,7 @@ public class CatalogosServiceImp implements CatalagosService {
 
 		return catalagoTipoVentaRepository.findAll();
 	}
+
+	
 
 }
