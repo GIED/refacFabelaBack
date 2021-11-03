@@ -6,9 +6,11 @@ import com.refacFabela.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.model.TcCatalogogeneral;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.service.ProductosService;
+import com.refacFabela.utils.utils;
 
 @Service
 public class ProductosServiceImp implements ProductosService {
@@ -16,7 +18,11 @@ public class ProductosServiceImp implements ProductosService {
 	@Autowired
 	private ProductosRepository productosRepository;
 	@Autowired
+	private CatalogosRepository catalogosRepository;
+	@Autowired
 	private HistoriaPrecioProductoRepository historiaPrecioProductoRepository;
+	@Autowired
+	private UtilisServiceImp utilisServiceImp;
 
 	@Override
 	public List<TcProducto> obtenerProductos() {
@@ -44,23 +50,27 @@ public class ProductosServiceImp implements ProductosService {
 
 	@Override
 	public TcProducto guardarProducto(TcProducto tcProducto) {
-		
-		tcProducto.setdFecha(new Date());
-		System.out.println(tcProducto);
-		
-		TcProducto nuevoProducto=productosRepository.save(tcProducto);
-		
-		TcHistoriaPrecioProducto tcHistoriaPrecioProducto = new TcHistoriaPrecioProducto() ;
-		
+
+		// se asigana la fecha de la aplicación
+		tcProducto.setdFecha(utils.fechaSistema);
+
+		// Se manda calcular el precio final, precio sin iva y precio peso del producto
+		tcProducto = utilisServiceImp.calcularPrecio(tcProducto);
+
+		// Guarda o actualiza el producto nuevo o existente
+		TcProducto nuevoProducto = productosRepository.save(tcProducto);
+
+		// Se asiganan los valores al objeto tctcHistoriaPrecioProducto para guardar el
+		// historio de precio de productos
+		TcHistoriaPrecioProducto tcHistoriaPrecioProducto = new TcHistoriaPrecioProducto();
 		tcHistoriaPrecioProducto.setnIdProducto(nuevoProducto.getnId());
 		tcHistoriaPrecioProducto.setnPrecio(nuevoProducto.getnPrecio());
 		tcHistoriaPrecioProducto.setsMoneda(nuevoProducto.getsMoneda());
 		tcHistoriaPrecioProducto.setnIdGanancia(nuevoProducto.getnIdGanancia());
 		tcHistoriaPrecioProducto.setnIdusuario(nuevoProducto.getnIdusuario());
 		tcHistoriaPrecioProducto.setdFecha(nuevoProducto.getdFecha());
-		
-		
-		
+
+		// se guarda el historio de precio de los productos
 		historiaPrecioProductoRepository.save(tcHistoriaPrecioProducto);
 
 		return nuevoProducto;
@@ -68,7 +78,7 @@ public class ProductosServiceImp implements ProductosService {
 
 	@Override
 	public List<TcHistoriaPrecioProducto> historiaPrecioProducto(Long n_id) {
-		
+
 		return historiaPrecioProductoRepository.findBynIdProducto(n_id);
 	}
 

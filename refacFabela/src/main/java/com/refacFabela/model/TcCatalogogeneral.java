@@ -58,4 +58,11 @@ public class TcCatalogogeneral implements Serializable {
 		this.sDescripcion = sDescripcion;
 	}
 
+	@Override
+	public String toString() {
+		return "TcCatalogogeneral [nId=" + nId + ", nValor=" + nValor + ", sClave=" + sClave + ", sDescripcion="
+				+ sDescripcion + "]";
+	}
+	
+
 }

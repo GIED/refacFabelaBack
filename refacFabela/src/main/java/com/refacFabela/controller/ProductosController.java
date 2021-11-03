@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.service.ProductosService;
+import com.refacFabela.service.impl.UtilisServiceImp;
 
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST })
@@ -23,6 +24,8 @@ public class ProductosController {
 
 	@Autowired
 	private ProductosService productosService;
+	@Autowired
+	private UtilisServiceImp utilisServiceImp;
 
 	@GetMapping("/obtenerProductos")
 	public List<TcProducto> obtenerProductos() {
@@ -44,6 +47,18 @@ public class ProductosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
+	
+	@PostMapping("/simuladorPrecioProducto")
+	public TcProducto simuladorPrecioProducto(@RequestBody TcProducto tcProducto) {
+
+		try {
+			return utilisServiceImp.calcularPrecio(tcProducto);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener el precio simulado" + e);
 		}
 		return null;
 	}
