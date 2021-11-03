@@ -56,6 +56,17 @@ public class TcProducto implements Serializable {
 	
 	@Column(name="n_idclavesat")
 	private Long nIdclavesat;
+	
+	@Column(name="n_precio_peso")
+	private double nPrecioPeso;
+	
+	@Column(name="n_precio_sin_iva")
+	private double nPrecioSinIva;
+	
+	@Column(name="n_precio_con_iva")
+	private double nPrecioConIva;
+	
+	
 
 
 	//bi-directional many-to-one association to TcCategoria
@@ -111,9 +122,31 @@ public class TcProducto implements Serializable {
 
 	public void setnId(Long nId) {
 		this.nId = nId;
+	}	
+
+	public double getnPrecioPeso() {
+		return nPrecioPeso;
 	}
 
-	
+	public void setnPrecioPeso(double nPrecioPeso) {
+		this.nPrecioPeso = nPrecioPeso;
+	}
+
+	public double getnPrecioSinIva() {
+		return nPrecioSinIva;
+	}
+
+	public void setnPrecioSinIva(double nPrecioSinIva) {
+		this.nPrecioSinIva = nPrecioSinIva;
+	}
+
+	public double getnPrecioConIva() {
+		return nPrecioConIva;
+	}
+
+	public void setnPrecioConIva(double nPrecioConIva) {
+		this.nPrecioConIva = nPrecioConIva;
+	}
 
 	public Date getdFecha() {
 		return dFecha;
@@ -259,6 +292,18 @@ public class TcProducto implements Serializable {
 
 	public void setnIdclavesat(Long nIdclavesat) {
 		this.nIdclavesat = nIdclavesat;
+	}
+
+	@Override
+	public String toString() {
+		return "TcProducto [nId=" + nId + ", dFecha=" + dFecha + ", nEstatus=" + nEstatus + ", nIdCategoriaGeneral="
+				+ nIdCategoriaGeneral + ", nIdCategoria=" + nIdCategoria + ", nPrecio=" + nPrecio + ", sDescripcion="
+				+ sDescripcion + ", sMarca=" + sMarca + ", sMoneda=" + sMoneda + ", sNoParte=" + sNoParte
+				+ ", sProducto=" + sProducto + ", nIdusuario=" + nIdusuario + ", nIdGanancia=" + nIdGanancia
+				+ ", nIdclavesat=" + nIdclavesat + ", nPrecioPeso=" + nPrecioPeso + ", nPrecioSinIva=" + nPrecioSinIva
+				+ ", nPrecioConIva=" + nPrecioConIva + ", tcCategoria=" + tcCategoria + ", tcCategoriaGeneral="
+				+ tcCategoriaGeneral + ", tcClavesat=" + tcClavesat + ", tcGanancia=" + tcGanancia + ", tcUsuario="
+				+ tcUsuario + "]";
 	}
 
 	

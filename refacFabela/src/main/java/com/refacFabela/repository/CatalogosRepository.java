@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.refacFabela.model.TcCatalogogeneral;
 
 @Repository
-public interface CatalogosRepository extends JpaRepository<TcCatalogogeneral, String> {
+public interface CatalogosRepository extends JpaRepository<TcCatalogogeneral, Long> {
 	
 	public TcCatalogogeneral findBysClave(String s_clave );
 
