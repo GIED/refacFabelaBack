@@ -124,5 +124,16 @@ public class ProductosController {
 		}
 		return null;
 	}
+	@GetMapping("/obtenerInventarioEsp")
+	public List<TwProductobodega> obtenerInventaroEsp(@RequestParam() Long idBodega, @RequestParam() Long idAnaquel, @RequestParam() Long idNivel) {
+
+		try {
+			return productosService.obtenerInventaroEsp(idBodega, idAnaquel, idNivel);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos d el ubicación " + e);
+		}
+		return null;
+	}
 
 }
