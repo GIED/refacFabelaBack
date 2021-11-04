@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.refacFabela.model.TcCatalogogeneral;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
+import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.utils.utils;
 
@@ -23,6 +24,8 @@ public class ProductosServiceImp implements ProductosService {
 	private HistoriaPrecioProductoRepository historiaPrecioProductoRepository;
 	@Autowired
 	private UtilisServiceImp utilisServiceImp;
+	@Autowired
+	private ProductoBodegaRepository productoBodegaRepository;
 
 	@Override
 	public List<TcProducto> obtenerProductos() {
@@ -80,6 +83,12 @@ public class ProductosServiceImp implements ProductosService {
 	public List<TcHistoriaPrecioProducto> historiaPrecioProducto(Long n_id) {
 
 		return historiaPrecioProductoRepository.findBynIdProducto(n_id);
+	}
+
+	@Override
+	public List<TwProductobodega> consultaProductoBodega(Long id) {
+		
+		return productoBodegaRepository.findBynIdProducto(id);
 	}
 
 }

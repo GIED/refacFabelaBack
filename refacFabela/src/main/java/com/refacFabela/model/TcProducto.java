@@ -4,96 +4,96 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
-
-
-
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name="tc_productos")
+@Table(name = "tc_productos")
 public class TcProducto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="n_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
 	private Long nId;
 
-	@Column(name="d_fecha")
-	private Date dFecha= new Date();
+	@Column(name = "d_fecha")
+	private Date dFecha = new Date();
 
-	@Column(name="n_estatus")
+	@Column(name = "n_estatus")
 	private int nEstatus;
 
-	@Column(name="n_idCategoriaGeneral")
+	@Column(name = "n_idCategoriaGeneral")
 	private Long nIdCategoriaGeneral;
-	
-	@Column(name="n_idcategoria")
+
+	@Column(name = "n_idcategoria")
 	private Long nIdCategoria;
 
-	@Column(name="n_precio")
+	@Column(name = "n_precio")
 	private double nPrecio;
 
-	@Column(name="s_descripcion")
+	@Column(name = "s_descripcion")
 	private String sDescripcion;
 
-	@Column(name="s_marca")
+	@Column(name = "s_marca")
 	private String sMarca;
 
-	@Column(name="s_moneda")
+	@Column(name = "s_moneda")
 	private String sMoneda;
 
-	@Column(name="s_no_parte")
+	@Column(name = "s_no_parte")
 	private String sNoParte;
 
-	@Column(name="s_producto")
+	@Column(name = "s_producto")
 	private String sProducto;
-	
-	@Column(name="n_idusuario")
+
+	@Column(name = "n_idusuario")
 	private Long nIdusuario;
-	
-	@Column(name="n_IdGanancia")
+
+	@Column(name = "n_IdGanancia")
 	private Long nIdGanancia;
-	
-	@Column(name="n_idclavesat")
+
+	@Column(name = "n_idclavesat")
 	private Long nIdclavesat;
-	
-	@Column(name="n_precio_peso")
+
+	@Column(name = "n_precio_peso")
 	private double nPrecioPeso;
-	
-	@Column(name="n_precio_sin_iva")
+
+	@Column(name = "n_precio_sin_iva")
 	private double nPrecioSinIva;
-	
-	@Column(name="n_precio_con_iva")
+
+	@Column(name = "n_precio_con_iva")
 	private double nPrecioConIva;
-	
-	
 
-
-	//bi-directional many-to-one association to TcCategoria
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="n_idcategoria", referencedColumnName = "n_id", updatable = false, insertable = false)
+	// bi-directional many-to-one association to TcCategoria
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "n_idcategoria", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcCategoria tcCategoria;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="n_idCategoriaGeneral", referencedColumnName = "n_id", updatable = false, insertable = false)
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "n_idCategoriaGeneral", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcCategoriaGeneral tcCategoriaGeneral;
 
-	//bi-directional many-to-one association to TcClavesat
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="n_idclavesat" , referencedColumnName = "n_id", updatable = false, insertable = false)
+	// bi-directional many-to-one association to TcClavesat
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "n_idclavesat", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcClavesat tcClavesat;
 
-	//bi-directional many-to-one association to TcGanancia
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="n_IdGanancia" , referencedColumnName = "n_id", updatable = false, insertable = false)
+	// bi-directional many-to-one association to TcGanancia
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "n_IdGanancia", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcGanancia tcGanancia;
 
-	//bi-directional many-to-one association to TcUsuario
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="n_idusuario" , referencedColumnName = "n_id", updatable = false, insertable = false)
+	// bi-directional many-to-one association to TcUsuario
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "n_idusuario", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcUsuario tcUsuario;
+	
 
-	//bi-directional many-to-one association to TwCotizacionesProducto
+
+
+	// bi-directional many-to-one association to TwCotizacionesProducto
 //	@OneToMany(mappedBy="tcProducto")
 //	private List<TwCotizacionesProducto> twCotizacionesProductos;
 //
@@ -116,13 +116,14 @@ public class TcProducto implements Serializable {
 	public TcProducto() {
 	}
 
+
 	public Long getnId() {
 		return nId;
 	}
 
 	public void setnId(Long nId) {
 		this.nId = nId;
-	}	
+	}
 
 	public double getnPrecioPeso() {
 		return nPrecioPeso;
@@ -163,8 +164,6 @@ public class TcProducto implements Serializable {
 	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
-
-	
 
 	public Long getnIdCategoriaGeneral() {
 		return nIdCategoriaGeneral;
@@ -305,9 +304,5 @@ public class TcProducto implements Serializable {
 				+ tcCategoriaGeneral + ", tcClavesat=" + tcClavesat + ", tcGanancia=" + tcGanancia + ", tcUsuario="
 				+ tcUsuario + "]";
 	}
-
-	
-
-	
 
 }
