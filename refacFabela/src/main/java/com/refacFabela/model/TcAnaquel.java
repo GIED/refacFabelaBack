@@ -15,7 +15,7 @@ public class TcAnaquel implements Serializable {
 	private Long nId;
 
 	@Column(name = "n_estatus")
-	private String nEstatus;
+	private int nEstatus;
 
 	@Column(name = "s_anaquel")
 	private String sAnaquel;
@@ -33,11 +33,11 @@ public class TcAnaquel implements Serializable {
 		this.nId = nId;
 	}
 
-	public String getnEstatus() {
+	public int getnEstatus() {
 		return nEstatus;
 	}
 
-	public void setnEstatus(String nEstatus) {
+	public void setnEstatus(int nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
@@ -48,5 +48,7 @@ public class TcAnaquel implements Serializable {
 	public void setsAnaquel(String sAnaquel) {
 		this.sAnaquel = sAnaquel;
 	}
+
+	
 
 }
