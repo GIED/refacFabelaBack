@@ -13,31 +13,43 @@ public class TwProductobodega implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_id")
 	private Long nId;
+	
+	@Column(name = "n_idbodega")
+	private Long nIdBodega;
+	
+	@Column(name = "n_idproducto")
+	private Long nIdProducto;	
 
 	@Column(name = "n_cantidad")
-	private int nCantidad;
+	private Long nCantidad;
 
 	@Column(name = "n_estatus")
-	private int nEstatus;
-
+	private Long nEstatus;
+	
+	@Column(name = "n_idnivel")
+	private Long nIdNivel;
+	
+	@Column(name = "n_idanaquel")
+	private Long nIdAnaquel;
+	
 	// bi-directional many-to-one association to TcAnaquel
 	@ManyToOne
-	@JoinColumn(name = "n_idanaquel")
+	@JoinColumn(name = "n_idanaquel", insertable=false, updatable=false)
 	private TcAnaquel tcAnaquel;
 
 	// bi-directional many-to-one association to TcBodega
 	@ManyToOne
-	@JoinColumn(name = "n_idbodega")
+	@JoinColumn(name = "n_idbodega", insertable=false, updatable=false)
 	private TcBodega tcBodega;
 
 	// bi-directional many-to-one association to TcNivel
 	@ManyToOne
-	@JoinColumn(name = "n_idnivel")
+	@JoinColumn(name = "n_idnivel", insertable=false, updatable=false)
 	private TcNivel tcNivel;
 
 	// bi-directional many-to-one association to TcProducto
 	@ManyToOne
-	@JoinColumn(name = "n_idproducto")
+	@JoinColumn(name = "n_idproducto", insertable=false, updatable=false)
 	private TcProducto tcProducto;
 
 	public TwProductobodega() {
@@ -51,20 +63,52 @@ public class TwProductobodega implements Serializable {
 		this.nId = nId;
 	}
 
-	public int getnCantidad() {
+	public Long getnIdBodega() {
+		return nIdBodega;
+	}
+
+	public void setnIdBodega(Long nIdBodega) {
+		this.nIdBodega = nIdBodega;
+	}
+
+	public Long getnIdProducto() {
+		return nIdProducto;
+	}
+
+	public void setnIdProducto(Long nIdProducto) {
+		this.nIdProducto = nIdProducto;
+	}
+
+	public Long getnCantidad() {
 		return nCantidad;
 	}
 
-	public void setnCantidad(int nCantidad) {
+	public void setnCantidad(Long nCantidad) {
 		this.nCantidad = nCantidad;
 	}
 
-	public int getnEstatus() {
+	public Long getnEstatus() {
 		return nEstatus;
 	}
 
-	public void setnEstatus(int nEstatus) {
+	public void setnEstatus(Long nEstatus) {
 		this.nEstatus = nEstatus;
+	}
+
+	public Long getnIdNivel() {
+		return nIdNivel;
+	}
+
+	public void setnIdNivel(Long nIdNivel) {
+		this.nIdNivel = nIdNivel;
+	}
+
+	public Long getnIdAnaquel() {
+		return nIdAnaquel;
+	}
+
+	public void setnIdAnaquel(Long nIdAnaquel) {
+		this.nIdAnaquel = nIdAnaquel;
 	}
 
 	public TcAnaquel getTcAnaquel() {
@@ -99,4 +143,5 @@ public class TwProductobodega implements Serializable {
 		this.tcProducto = tcProducto;
 	}
 
+	
 }

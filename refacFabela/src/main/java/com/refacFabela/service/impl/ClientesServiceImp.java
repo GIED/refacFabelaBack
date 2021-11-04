@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.model.TcCliente;
+import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.service.ClienteService;
 
@@ -39,5 +40,7 @@ public class ClientesServiceImp implements ClienteService {
 		clientesRepository.deleteById(id);
 		return "Cliente Eliminado";
 	}
+
+	
 
 }
