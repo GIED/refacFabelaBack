@@ -2,6 +2,8 @@ package com.refacFabela.service;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TwProductobodega;
@@ -14,5 +16,6 @@ public interface ProductosService {
 	public TcProducto guardarProducto(TcProducto tcProducto);
 	public List<TcHistoriaPrecioProducto> historiaPrecioProducto(Long n_id);
 	public List<TwProductobodega> consultaProductoBodega(Long id);
+	public List<TwProductobodega> obtenerInventaroEsp(Long idBodega,  Long idAnaquel, Long idNivel);
 
 }
