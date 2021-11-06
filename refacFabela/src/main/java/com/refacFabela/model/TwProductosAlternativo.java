@@ -14,7 +14,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tw_productos_alternativos")
-@NamedQuery(name = "TwProductosAlternativo.findAll", query = "SELECT t FROM TwProductosAlternativo t")
 public class TwProductosAlternativo implements Serializable {
 	private static final long serialVersionUID = 1L;
 

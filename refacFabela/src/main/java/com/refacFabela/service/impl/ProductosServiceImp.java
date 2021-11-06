@@ -107,9 +107,10 @@ public class ProductosServiceImp implements ProductosService {
 	}
 
 	@Override
+	@Transactional
 	public List<TwProductosAlternativo> obtenerProductosAlternativos(Long nId) {
 		
-		return productosAlternativosRepository.findBynIdProducto(nId);
+		return productosAlternativosRepository.consultaProductosAlternativos(nId, 1);
 	}
 
 	@Override
