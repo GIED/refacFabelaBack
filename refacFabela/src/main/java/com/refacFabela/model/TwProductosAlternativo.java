@@ -1,7 +1,16 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "tw_productos_alternativos")
@@ -16,13 +25,15 @@ public class TwProductosAlternativo implements Serializable {
 
 	@Column(name = "n_estatus")
 	private int nEstatus;
-
-	private int n_idProductoAlternativo;
+	@Column(name = "n_idProductoAlternativo")
+	private Long nIdProductoAlternativo;
+	@Column(name = "n_idProducto")
+	private Long nIdProducto;
 
 	// bi-directional many-to-one association to TcProducto
-	@ManyToOne
-	@JoinColumn(name = "n_idProducto")
-	private TcProducto tcProducto;
+	@ManyToOne()
+	@JoinColumn(name = "n_idProductoAlternativo", insertable = false, updatable = false)
+	private TcProducto tcProductoAlternativo;
 
 	public TwProductosAlternativo() {
 	}
@@ -43,20 +54,37 @@ public class TwProductosAlternativo implements Serializable {
 		this.nEstatus = nEstatus;
 	}
 
-	public int getN_idProductoAlternativo() {
-		return n_idProductoAlternativo;
+	public Long getnIdProductoAlternativo() {
+		return nIdProductoAlternativo;
 	}
 
-	public void setN_idProductoAlternativo(int n_idProductoAlternativo) {
-		this.n_idProductoAlternativo = n_idProductoAlternativo;
+	public void setnIdProductoAlternativo(Long nIdProductoAlternativo) {
+		this.nIdProductoAlternativo = nIdProductoAlternativo;
 	}
 
-	public TcProducto getTcProducto() {
-		return tcProducto;
+	public Long getnIdProducto() {
+		return nIdProducto;
 	}
 
-	public void setTcProducto(TcProducto tcProducto) {
-		this.tcProducto = tcProducto;
+	public void setnIdProducto(Long nIdProducto) {
+		this.nIdProducto = nIdProducto;
 	}
+
+	public TcProducto getTcProductoAlternativo() {
+		return tcProductoAlternativo;
+	}
+
+	public void setTcProductoAlternativo(TcProducto tcProductoAlternativo) {
+		this.tcProductoAlternativo = tcProductoAlternativo;
+	}
+
+	@Override
+	public String toString() {
+		return "TwProductosAlternativo [nId=" + nId + ", nEstatus=" + nEstatus + ", nIdProductoAlternativo="
+				+ nIdProductoAlternativo + ", nIdProducto=" + nIdProducto + ", tcProductoAlternativo="
+				+ tcProductoAlternativo + "]";
+	}
+	
+	
 
 }

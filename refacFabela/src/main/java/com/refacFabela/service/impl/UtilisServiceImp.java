@@ -31,10 +31,7 @@ public TcProducto calcularPrecio(TcProducto tcProducto){
 		
 		System.out.println("El precio peso es "+precioPeso);
 		System.out.println("El objeto completo es "+tcProducto);
-		
-		
-	
-		
+			
 		
 		return tcProducto;
 	}

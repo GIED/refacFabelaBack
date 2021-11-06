@@ -1,6 +1,7 @@
 package com.refacFabela.controller;
 
 import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TwProductobodega;
+import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.service.impl.UtilisServiceImp;
 
@@ -135,5 +137,34 @@ public class ProductosController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/obtenerProductosAlternativos")
+	public List<TwProductosAlternativo> obtenerProductosAlternativos(@RequestParam() Long nId) {
+
+		try {
+			return productosService.obtenerProductosAlternativos(nId);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los Productos alternativos" + e);
+		}
+		return null;
+	}
+	
+	@PostMapping("/guardarProductoAlternativo")
+	public TwProductosAlternativo obtenerProductosNoParteLike(@RequestBody TwProductosAlternativo twProductosAlternativo) {
+
+		try {
+			
+			System.out.println(twProductosAlternativo);
+			
+			return productosService.guardarProductoAlternativo(twProductosAlternativo);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
+	
+	
 
 }

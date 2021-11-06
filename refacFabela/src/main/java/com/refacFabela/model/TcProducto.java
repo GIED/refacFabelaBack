@@ -1,12 +1,16 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "tc_productos")
@@ -67,29 +71,32 @@ public class TcProducto implements Serializable {
 	private double nPrecioConIva;
 
 	// bi-directional many-to-one association to TcCategoria
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	@JoinColumn(name = "n_idcategoria", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcCategoria tcCategoria;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	@JoinColumn(name = "n_idCategoriaGeneral", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcCategoriaGeneral tcCategoriaGeneral;
 
 	// bi-directional many-to-one association to TcClavesat
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	@JoinColumn(name = "n_idclavesat", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcClavesat tcClavesat;
 
 	// bi-directional many-to-one association to TcGanancia
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	@JoinColumn(name = "n_IdGanancia", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcGanancia tcGanancia;
 
 	// bi-directional many-to-one association to TcUsuario
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	@JoinColumn(name = "n_idusuario", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcUsuario tcUsuario;
 	
+	//bi-directional many-to-one association to TwProductosAlternativo
+	//@OneToMany(mappedBy="tcProducto")
+	//private List<TwProductosAlternativo> twProductosAlternativos;
 
 
 
@@ -105,9 +112,7 @@ public class TcProducto implements Serializable {
 //	@OneToMany(mappedBy="tcProducto")
 //	private List<TwProductobodega> twProductobodegas;
 //
-//	//bi-directional many-to-one association to TwProductosAlternativo
-//	@OneToMany(mappedBy="tcProducto")
-//	private List<TwProductosAlternativo> twProductosAlternativos;
+//	
 //
 //	//bi-directional many-to-one association to TwVentasProducto
 //	@OneToMany(mappedBy="tcProducto")
@@ -292,6 +297,9 @@ public class TcProducto implements Serializable {
 	public void setnIdclavesat(Long nIdclavesat) {
 		this.nIdclavesat = nIdclavesat;
 	}
+	
+	
+
 
 	@Override
 	public String toString() {

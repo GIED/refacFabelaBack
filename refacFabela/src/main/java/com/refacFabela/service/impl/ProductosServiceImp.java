@@ -1,15 +1,20 @@
 package com.refacFabela.service.impl;
 
-import java.util.Date;
 import java.util.List;
-import com.refacFabela.repository.*;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.refacFabela.model.TcCatalogogeneral;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TwProductobodega;
+import com.refacFabela.model.TwProductosAlternativo;
+import com.refacFabela.repository.HistoriaPrecioProductoRepository;
+import com.refacFabela.repository.ProductoBodegaRepository;
+import com.refacFabela.repository.ProductosAlternativosRepository;
+import com.refacFabela.repository.ProductosRepository;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.utils.utils;
 
@@ -19,16 +24,20 @@ public class ProductosServiceImp implements ProductosService {
 	@Autowired
 	private ProductosRepository productosRepository;
 	@Autowired
-	private CatalogosRepository catalogosRepository;
-	@Autowired
 	private HistoriaPrecioProductoRepository historiaPrecioProductoRepository;
 	@Autowired
-	private UtilisServiceImp utilisServiceImp;
-	@Autowired
 	private ProductoBodegaRepository productoBodegaRepository;
+	@Autowired
+	private ProductosAlternativosRepository productosAlternativosRepository;
+	@Autowired
+	private UtilisServiceImp utilisServiceImp;
+	
+	
+	
 
 	@Override
 	public List<TcProducto> obtenerProductos() {
+		
 
 		return productosRepository.findBynEstatus(1);
 	}
@@ -96,5 +105,59 @@ public class ProductosServiceImp implements ProductosService {
 		//
 		return productoBodegaRepository.obtenerInventaroEsp(idBodega, idAnaquel, idNivel);
 	}
+
+	@Override
+	public List<TwProductosAlternativo> obtenerProductosAlternativos(Long nId) {
+		
+		return productosAlternativosRepository.findBynIdProducto(nId);
+	}
+
+	@Override
+	@Transactional
+	public TwProductosAlternativo guardarProductoAlternativo(TwProductosAlternativo twProductosAlternativo) {
+		
+		TcProducto newProducto = new TcProducto();
+		newProducto.setnId(twProductosAlternativo.getTcProductoAlternativo().getnId());
+		newProducto.setsNoParte(twProductosAlternativo.getTcProductoAlternativo().getsNoParte());
+		newProducto.setsProducto(twProductosAlternativo.getTcProductoAlternativo().getsProducto());
+		newProducto.setsDescripcion(twProductosAlternativo.getTcProductoAlternativo().getsDescripcion());
+		newProducto.setsMarca(twProductosAlternativo.getTcProductoAlternativo().getsMarca());
+		newProducto.setnIdCategoria(twProductosAlternativo.getTcProductoAlternativo().getnIdCategoria());
+		newProducto.setnIdCategoriaGeneral(twProductosAlternativo.getTcProductoAlternativo().getnIdCategoriaGeneral());
+		newProducto.setnPrecio(twProductosAlternativo.getTcProductoAlternativo().getnPrecio());
+		newProducto.setsMoneda(twProductosAlternativo.getTcProductoAlternativo().getsMoneda());
+		newProducto.setnIdGanancia(twProductosAlternativo.getTcProductoAlternativo().getnIdGanancia());
+		newProducto.setnIdusuario(twProductosAlternativo.getTcProductoAlternativo().getnIdusuario());
+		newProducto.setnEstatus(twProductosAlternativo.getTcProductoAlternativo().getnEstatus());
+		newProducto.setdFecha(utils.fechaSistema);
+		newProducto.setnIdclavesat(twProductosAlternativo.getTcProductoAlternativo().getnIdclavesat());
+		
+		// Se manda calcular el precio final, precio sin iva y precio peso del producto
+		newProducto = utilisServiceImp.calcularPrecio(newProducto);
+		// Guarda o actualiza el producto nuevo o existente
+		TcProducto productoAlternativo = productosRepository.save(newProducto);
+		
+		System.out.println(productoAlternativo);
+		
+		
+		
+		twProductosAlternativo.setnIdProductoAlternativo(productoAlternativo.getnId());
+		twProductosAlternativo.setTcProductoAlternativo(productoAlternativo);
+		
+		System.out.println("twProductosAlternativo: "+twProductosAlternativo);
+		
+		TwProductosAlternativo newproductoAlternativo = productosAlternativosRepository.save(twProductosAlternativo);
+		
+		return newproductoAlternativo;
+	}
+	
+	
+	/*private ProductoDto convertirAProductoDto(final TcProducto tcProducto) {
+		
+		ModelMapper modelMapper = new ModelMapper();
+		
+		return modelMapper.map(tcProducto, ProductoDto.class);
+		
+	}*/
 
 }
