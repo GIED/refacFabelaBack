@@ -11,6 +11,7 @@ public interface ClienteService {
 	public TcCliente guardarCliente(TcCliente tcCliente);
 	public TcCliente consultaClienteId(Long id);
 	public String eliminarClienteId(Long id);
+	public List<TcCliente> consultaClienteLike(String clienteBuscar);
 	
 
 }

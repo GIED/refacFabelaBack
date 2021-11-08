@@ -24,21 +24,27 @@ public class ClientesServiceImp implements ClienteService {
 
 	@Override
 	public TcCliente guardarCliente(TcCliente tcCliente) {
-		// TODO Auto-generated method stub
+		
 		return clientesRepository.save(tcCliente);
 	}
 
 	@Override
 	public TcCliente consultaClienteId(Long id) {
-		// TODO Auto-generated method stub
+		
 		return clientesRepository.findById(id).get();
 	}
 
 	@Override
 	public String eliminarClienteId(Long id) {
-		// TODO Auto-generated method stub
+	
 		clientesRepository.deleteById(id);
 		return "Cliente Eliminado";
+	}
+
+	@Override
+	public List<TcCliente> consultaClienteLike(String clienteBuscar) {
+		
+		return clientesRepository.buscarClineteLike(clienteBuscar);
 	}
 
 	
