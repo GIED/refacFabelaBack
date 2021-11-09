@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.model.TcCliente;
+import com.refacFabela.model.TvSaldoGeneralCliente;
 import com.refacFabela.service.ClienteService;
 
 
@@ -83,6 +84,18 @@ public class ClientesController {
 
 		} catch (Exception e) {
 			logger.error("Error al eliminar cliente" + e);
+		}
+
+		return null;
+	}
+	@GetMapping("consultaClienteIdSaldo")
+	public TvSaldoGeneralCliente consultaClienteIdSaldo(HttpServletResponse response, @RequestParam() Long id) {
+
+		try {
+			return clienteService.consultaClienteIdSaldo(id);
+
+		} catch (Exception e) {
+			logger.error("Error al consultar cliente" + e);
 		}
 
 		return null;

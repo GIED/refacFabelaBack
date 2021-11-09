@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.model.TcCliente;
+import com.refacFabela.model.TvSaldoGeneralCliente;
 import com.refacFabela.model.TwProductobodega;
+import com.refacFabela.repository.ClienteSaldoRepository;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.service.ClienteService;
 
@@ -15,6 +17,8 @@ public class ClientesServiceImp implements ClienteService {
 
 	@Autowired
 	private ClientesRepository clientesRepository;
+	@Autowired
+	private ClienteSaldoRepository clienteSaldoRepository;
 
 	@Override
 	public List<TcCliente> obtenerCliente() {
@@ -45,6 +49,12 @@ public class ClientesServiceImp implements ClienteService {
 	public List<TcCliente> consultaClienteLike(String clienteBuscar) {
 		
 		return clientesRepository.buscarClineteLike(clienteBuscar);
+	}
+
+	@Override
+	public TvSaldoGeneralCliente consultaClienteIdSaldo(Long id) {
+	
+		return clienteSaldoRepository.findBynIdCliente(id);
 	}
 
 	

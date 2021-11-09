@@ -47,9 +47,17 @@ public class TcCliente implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "n_idUsuario")
 	private TcUsuario tcUsuario;
+	
+	
 
 	public TcCliente() {
 	}
+	
+	
+
+	
+
+
 
 	public Long getnId() {
 		return nId;
