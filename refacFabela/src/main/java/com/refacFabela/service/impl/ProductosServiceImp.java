@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
+import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.repository.HistoriaPrecioProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
+import com.refacFabela.repository.ProductoBodegasIdRepository;
 import com.refacFabela.repository.ProductosAlternativosRepository;
 import com.refacFabela.repository.ProductosRepository;
 import com.refacFabela.service.ProductosService;
@@ -31,6 +33,8 @@ public class ProductosServiceImp implements ProductosService {
 	private ProductosAlternativosRepository productosAlternativosRepository;
 	@Autowired
 	private UtilisServiceImp utilisServiceImp;
+	@Autowired
+	private ProductoBodegasIdRepository productoBodegasIdRepository;
 	
 	
 	
@@ -150,6 +154,12 @@ public class ProductosServiceImp implements ProductosService {
 		TwProductosAlternativo newproductoAlternativo = productosAlternativosRepository.save(twProductosAlternativo);
 		
 		return newproductoAlternativo;
+	}
+
+	@Override
+	public TvStockProducto obtenerStockProductoId(Long id) {
+		
+		return productoBodegasIdRepository.findBynIdProducto(id) ;
 	}
 	
 	

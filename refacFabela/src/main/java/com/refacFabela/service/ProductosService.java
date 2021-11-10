@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
+import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 
@@ -18,5 +19,5 @@ public interface ProductosService {
 	public List<TwProductobodega> obtenerInventaroEsp(Long idBodega,  Long idAnaquel, Long idNivel);
 	public List<TwProductosAlternativo> obtenerProductosAlternativos(Long nId);
 	public TwProductosAlternativo guardarProductoAlternativo(TwProductosAlternativo twProductosAlternativo);
-
+	public TvStockProducto obtenerStockProductoId(Long id);
 }
