@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
+import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.service.ProductosService;
@@ -161,6 +162,18 @@ public class ProductosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerProductoIdBodegas")
+	public TvStockProducto obtenerProductoIdBodegas(@RequestParam() Long id) {
+
+		try {
+			return productosService.obtenerStockProductoId(id);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener el stock de bodegas" + e);
 		}
 		return null;
 	}
