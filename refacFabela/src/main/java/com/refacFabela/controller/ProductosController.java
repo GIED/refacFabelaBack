@@ -67,10 +67,11 @@ public class ProductosController {
 	}
 
 	@GetMapping("/obtenerProductosLike")
-	public List<TcProducto> obtenerProductosLike(@RequestParam() String Producto) {
+	public List<TcProducto> obtenerProductosLike(@RequestParam() String producto) {
 
 		try {
-			return productosService.obtenerProductoLike(Producto);
+			System.out.println("producto: "+producto);
+			return productosService.obtenerProductoLike(producto);
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los Productos" + e);
