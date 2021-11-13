@@ -14,6 +14,12 @@ public class TwCotizacione implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_id")
 	private Long nId;
+	
+	@Column(name = "n_idCliente")
+	private Long nIdCliente;
+	
+	@Column(name = "n_idUsuario")
+	private Long nIdUsuario;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "d_fecha")
@@ -21,17 +27,18 @@ public class TwCotizacione implements Serializable {
 
 	@Column(name = "n_estatus")
 	private int nEstatus;
-
-	private String s_folioCotizacion;
+	
+	@Column(name = "s_folioCotizacion")
+	private String sFolioCotizacion;
 
 	// bi-directional many-to-one association to TcCliente
 	@ManyToOne
-	@JoinColumn(name = "n_idCliente")
+	@JoinColumn(name = "n_idCliente", insertable = false, updatable = false)
 	private TcCliente tcCliente;
 
 	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
-	@JoinColumn(name = "n_idUsuario")
+	@JoinColumn(name = "n_idUsuario", insertable = false, updatable = false)
 	private TcUsuario tcUsuario;
 
 	public TwCotizacione() {
@@ -43,6 +50,22 @@ public class TwCotizacione implements Serializable {
 
 	public void setnId(Long nId) {
 		this.nId = nId;
+	}
+
+	public Long getnIdCliente() {
+		return nIdCliente;
+	}
+
+	public void setnIdCliente(Long nIdCliente) {
+		this.nIdCliente = nIdCliente;
+	}
+
+	public Long getnIdUsuario() {
+		return nIdUsuario;
+	}
+
+	public void setnIdUsuario(Long nIdUsuario) {
+		this.nIdUsuario = nIdUsuario;
 	}
 
 	public Date getdFecha() {
@@ -61,12 +84,12 @@ public class TwCotizacione implements Serializable {
 		this.nEstatus = nEstatus;
 	}
 
-	public String getS_folioCotizacion() {
-		return s_folioCotizacion;
+	public String getsFolioCotizacion() {
+		return sFolioCotizacion;
 	}
 
-	public void setS_folioCotizacion(String s_folioCotizacion) {
-		this.s_folioCotizacion = s_folioCotizacion;
+	public void setsFolioCotizacion(String sFolioCotizacion) {
+		this.sFolioCotizacion = sFolioCotizacion;
 	}
 
 	public TcCliente getTcCliente() {
@@ -85,4 +108,5 @@ public class TwCotizacione implements Serializable {
 		this.tcUsuario = tcUsuario;
 	}
 
+	
 }
