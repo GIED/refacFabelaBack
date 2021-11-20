@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvVentaDetalle;
+import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.service.VentasService;
 
@@ -43,6 +44,17 @@ public class VentasController {
 
 		try {
 			return ventasService.consultaVentaDetalle(nIdCliente, nTipoPago);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
+	@GetMapping("/obtenerAbonosVentaId") 
+	public List<TwAbono> obtenerAbonosVentaId(@RequestParam() Long nId) {
+
+		try {
+			return ventasService.consultaAbonoVentaId(nId);
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los Productos" + e);

@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.model.TvVentaDetalle;
+import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwVenta;
+import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.VentasService;
@@ -17,6 +19,8 @@ public class VentasServiceImpl implements VentasService {
 	VentasRepository ventasRepository;
 	@Autowired
 	TvVentaDetalleRepository tvVentaDetalleRepository;
+	@Autowired
+	AbonoVentaIdRepository abonoVentaIdRepository;
  
 	@Override
 	public List<TwVenta> consltaVentas() {
@@ -28,6 +32,12 @@ public class VentasServiceImpl implements VentasService {
 	public List<TvVentaDetalle> consultaVentaDetalle(Long nIdCliente, Long nTipoPago){
 		
 		return tvVentaDetalleRepository.consultaVentaDetalle(nIdCliente, nTipoPago);
+	}
+
+	@Override
+	public List<TwAbono> consultaAbonoVentaId(Long nId) {
+		//
+		return abonoVentaIdRepository.findBynIdVenta(nId);
 	}
 
 }
