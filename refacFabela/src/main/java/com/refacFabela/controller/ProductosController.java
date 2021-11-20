@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
+import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.service.ProductosService;
@@ -54,7 +55,7 @@ public class ProductosController {
 		}
 		return null;
 	}
-	
+
 	@PostMapping("/simuladorPrecioProducto")
 	public TcProducto simuladorPrecioProducto(@RequestBody TcProducto tcProducto) {
 
@@ -71,7 +72,7 @@ public class ProductosController {
 	public List<TcProducto> obtenerProductosLike(@RequestParam() String producto) {
 
 		try {
-			System.out.println("producto: "+producto);
+			System.out.println("producto: " + producto);
 			return productosService.obtenerProductoLike(producto);
 		} catch (Exception e) {
 
@@ -96,7 +97,7 @@ public class ProductosController {
 	public TcProducto obtenerProductosNoParteLike(@RequestBody TcProducto tcProducto) {
 
 		try {
-			
+
 			return productosService.guardarProducto(tcProducto);
 		} catch (Exception e) {
 
@@ -104,7 +105,7 @@ public class ProductosController {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/obtenerHistoriaPrecioProducto")
 	public List<TcHistoriaPrecioProducto> obtenerHistoriaPrecioProducto(@RequestParam() Long n_id) {
 
@@ -116,7 +117,7 @@ public class ProductosController {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/obtenerProductoBodegas")
 	public List<TwProductobodega> obtenerProductoBodegas(@RequestParam() Long id) {
 
@@ -128,8 +129,10 @@ public class ProductosController {
 		}
 		return null;
 	}
+
 	@GetMapping("/obtenerInventarioEsp")
-	public List<TwProductobodega> obtenerInventaroEsp(@RequestParam() Long idBodega, @RequestParam() Long idAnaquel, @RequestParam() Long idNivel) {
+	public List<TwProductobodega> obtenerInventaroEsp(@RequestParam() Long idBodega, @RequestParam() Long idAnaquel,
+			@RequestParam() Long idNivel) {
 
 		try {
 			return productosService.obtenerInventaroEsp(idBodega, idAnaquel, idNivel);
@@ -139,7 +142,7 @@ public class ProductosController {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/obtenerProductosAlternativos")
 	public List<TwProductosAlternativo> obtenerProductosAlternativos(@RequestParam() Long nId) {
 
@@ -151,14 +154,15 @@ public class ProductosController {
 		}
 		return null;
 	}
-	
+
 	@PostMapping("/guardarProductoAlternativo")
-	public TwProductosAlternativo obtenerProductosNoParteLike(@RequestBody TwProductosAlternativo twProductosAlternativo) {
+	public TwProductosAlternativo obtenerProductosNoParteLike(
+			@RequestBody TwProductosAlternativo twProductosAlternativo) {
 
 		try {
-			
+
 			System.out.println(twProductosAlternativo);
-			
+
 			return productosService.guardarProductoAlternativo(twProductosAlternativo);
 		} catch (Exception e) {
 
@@ -166,7 +170,7 @@ public class ProductosController {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/obtenerProductoIdBodegas")
 	public TvStockProducto obtenerProductoIdBodegas(@RequestParam() Long id) {
 
@@ -178,6 +182,21 @@ public class ProductosController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/obtenerAbonosVentaId")
+	public List<TwAbono> obtenerAbonosVentaId(@RequestParam() Long id) {
+
+		try {
+			return productosService.obtenerAbonoVentaId(id);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los abonos" + e);
+		}
+		return null;
+	}
+	
+	
+	
 	
 	
 

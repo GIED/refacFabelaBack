@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.refacFabela.model.TcCategoria;
+import com.refacFabela.model.TwAbono;
 
 @Repository
-public interface CatalogoCategoriaRepository extends JpaRepository<TcCategoria, Long> {
+public interface AbonoVentaIdRepository extends JpaRepository<TwAbono, Long> {
 	
-	public List<TcCategoria> findBynIdCategoriaGeneral(int id);
+	public List<TwAbono> findBynIdVenta(Long id);
 
 }

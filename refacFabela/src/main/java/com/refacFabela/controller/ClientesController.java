@@ -100,5 +100,18 @@ public class ClientesController {
 
 		return null;
 	}
+	@GetMapping("consultaClienteSaldo")
+	public List<TvSaldoGeneralCliente> consultaClienteIdSaldo() {
+
+		try {
+			return clienteService.consultaClienteSaldo();
+
+		} catch (Exception e) {
+			logger.error("Error al consultar cliente" + e);
+		}
+
+		return null;
+	}
+	
 
 }
