@@ -13,30 +13,42 @@ public class TwCotizacionesProducto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_id")
 	private Long nId;
+	
+	@Column(name= "n_idProductos")
+	private Long nIdProducto;
+	
+	@Column(name = "n_idCotizaciones")
+	private Long nIdCotizacion;
 
 	@Column(name = "n_cantidad")
 	private int nCantidad;
-
-	private double n_ivaPartida;
-
-	private double n_ivaUnitario;
-
-	private double n_precioPartida;
-
-	private double n_precioUnitario;
-
-	private double n_totalPartida;
-
-	private double n_totalUnitario;
+	
+	@Column(name = "n_ivaPartida")
+	private double nIvaPartida;
+	
+	@Column(name = "n_ivaUnitario")
+	private double nIvaUnitario;
+	
+	@Column(name = "n_precioPartida")
+	private double nPrecioPartida;
+	
+	@Column(name = "n_precioUnitario")
+	private double nPrecioUnitario;
+	
+	@Column(name = "n_totalPartida")
+	private double nTotalPartida;
+	
+	@Column(name = "n_totalUnitario")
+	private double nTotalUnitario;
 
 	// bi-directional many-to-one association to TcProducto
 	@ManyToOne
-	@JoinColumn(name = "n_idProductos")
+	@JoinColumn(name = "n_idProductos", insertable = false, updatable = false)
 	private TcProducto tcProducto;
 
 	// bi-directional many-to-one association to TwCotizacione
 	@ManyToOne
-	@JoinColumn(name = "n_idCotizaciones")
+	@JoinColumn(name = "n_idCotizaciones", insertable = false, updatable = false)
 	private TwCotizacione twCotizacione;
 
 	public TwCotizacionesProducto() {
@@ -50,6 +62,22 @@ public class TwCotizacionesProducto implements Serializable {
 		this.nId = nId;
 	}
 
+	public Long getnIdProducto() {
+		return nIdProducto;
+	}
+
+	public void setnIdProducto(Long nIdProducto) {
+		this.nIdProducto = nIdProducto;
+	}
+
+	public Long getnIdCotizacion() {
+		return nIdCotizacion;
+	}
+
+	public void setnIdCotizacion(Long nIdCotizacion) {
+		this.nIdCotizacion = nIdCotizacion;
+	}
+
 	public int getnCantidad() {
 		return nCantidad;
 	}
@@ -58,52 +86,52 @@ public class TwCotizacionesProducto implements Serializable {
 		this.nCantidad = nCantidad;
 	}
 
-	public double getN_ivaPartida() {
-		return n_ivaPartida;
+	public double getnIvaPartida() {
+		return nIvaPartida;
 	}
 
-	public void setN_ivaPartida(double n_ivaPartida) {
-		this.n_ivaPartida = n_ivaPartida;
+	public void setnIvaPartida(double nIvaPartida) {
+		this.nIvaPartida = nIvaPartida;
 	}
 
-	public double getN_ivaUnitario() {
-		return n_ivaUnitario;
+	public double getnIvaUnitario() {
+		return nIvaUnitario;
 	}
 
-	public void setN_ivaUnitario(double n_ivaUnitario) {
-		this.n_ivaUnitario = n_ivaUnitario;
+	public void setnIvaUnitario(double nIvaUnitario) {
+		this.nIvaUnitario = nIvaUnitario;
 	}
 
-	public double getN_precioPartida() {
-		return n_precioPartida;
+	public double getnPrecioPartida() {
+		return nPrecioPartida;
 	}
 
-	public void setN_precioPartida(double n_precioPartida) {
-		this.n_precioPartida = n_precioPartida;
+	public void setnPrecioPartida(double nPrecioPartida) {
+		this.nPrecioPartida = nPrecioPartida;
 	}
 
-	public double getN_precioUnitario() {
-		return n_precioUnitario;
+	public double getnPrecioUnitario() {
+		return nPrecioUnitario;
 	}
 
-	public void setN_precioUnitario(double n_precioUnitario) {
-		this.n_precioUnitario = n_precioUnitario;
+	public void setnPrecioUnitario(double nPrecioUnitario) {
+		this.nPrecioUnitario = nPrecioUnitario;
 	}
 
-	public double getN_totalPartida() {
-		return n_totalPartida;
+	public double getnTotalPartida() {
+		return nTotalPartida;
 	}
 
-	public void setN_totalPartida(double n_totalPartida) {
-		this.n_totalPartida = n_totalPartida;
+	public void setnTotalPartida(double nTotalPartida) {
+		this.nTotalPartida = nTotalPartida;
 	}
 
-	public double getN_totalUnitario() {
-		return n_totalUnitario;
+	public double getnTotalUnitario() {
+		return nTotalUnitario;
 	}
 
-	public void setN_totalUnitario(double n_totalUnitario) {
-		this.n_totalUnitario = n_totalUnitario;
+	public void setnTotalUnitario(double nTotalUnitario) {
+		this.nTotalUnitario = nTotalUnitario;
 	}
 
 	public TcProducto getTcProducto() {
@@ -121,5 +149,7 @@ public class TwCotizacionesProducto implements Serializable {
 	public void setTwCotizacione(TwCotizacione twCotizacione) {
 		this.twCotizacione = twCotizacione;
 	}
+
+	
 
 }
