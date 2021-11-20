@@ -13,123 +13,232 @@ public class TwVenta implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_id")
-	private Long nId;
+	private long nId;
+	
+	@Column(name = "n_idCliente")
+	private long nIdCliente;
+	
+	@Column(name = "n_idUsuario")
+	private long nIdUsuario;
+	
+	@Column(name = "s_folioVenta")
+	private String sFolioVenta;
 
-	@Temporal(TemporalType.DATE)
-	private Date d_fechaVenta;
+	@Column(name = "d_fechaVenta")
+	private Date dFechaVenta;
+	
+	@Column(name = "n_estatusVenta")
+	private int nEstatusVenta;
+	
+	@Column(name = "n_idFacturacion")
+	private long nIdFacturacion;
+	
+	@Column(name = "n_idTipoVenta")
+	private long nIdTipoVenta;
+	
+	@Column(name = "n_tipoPago")
+	private long nTipoPago;
+	
+	@Column(name = "n_idCaja")
+	private long nIdCaja;
+	
+	@Column(name = "d_fechaInicioCredito")
+	private Date dFechaInicioCredito;
+	
+	@Column(name = "d_fechaPagoCredito")
+	private Date dFechaPagoCredito;
+	
 
-	private int n_estatusVenta;
-
-	private int n_tipoPago;
-
-	private String s_folioVenta;
 
 	// bi-directional many-to-one association to TcCliente
 	@ManyToOne
-	@JoinColumn(name = "n_idCliente")
+	@JoinColumn(name = "n_idCliente", updatable = false, insertable = false )
 	private TcCliente tcCliente;
 
 	// bi-directional many-to-one association to TcTipoVenta
 	@ManyToOne
-	@JoinColumn(name = "n_idTipoVenta")
+	@JoinColumn(name = "n_idTipoVenta", updatable = false, insertable = false)
 	private TcTipoVenta tcTipoVenta;
 
 	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
-	@JoinColumn(name = "n_idUsuario")
+	@JoinColumn(name = "n_idUsuario", updatable = false, insertable = false)
 	private TcUsuario tcUsuario;
 
 	// bi-directional many-to-one association to TwCaja
 	@ManyToOne
-	@JoinColumn(name = "n_idCaja")
-	private TwCaja twCaja;
-
-	// bi-directional many-to-one association to TwFacturacion
-	@ManyToOne
-	@JoinColumn(name = "n_idFacturacion")
-	private TwFacturacion twFacturacion;
+	@JoinColumn(name = "n_idCaja", updatable = false, insertable = false)
+	private TwCaja twCaja;	
+	
 
 	public TwVenta() {
 	}
 
-	public Long getnId() {
+
+	public long getnId() {
 		return nId;
 	}
 
-	public void setnId(Long nId) {
+
+	public void setnId(long nId) {
 		this.nId = nId;
 	}
 
-	public Date getD_fechaVenta() {
-		return d_fechaVenta;
+
+	public long getnIdCliente() {
+		return nIdCliente;
 	}
 
-	public void setD_fechaVenta(Date d_fechaVenta) {
-		this.d_fechaVenta = d_fechaVenta;
+
+	public void setnIdCliente(long nIdCliente) {
+		this.nIdCliente = nIdCliente;
 	}
 
-	public int getN_estatusVenta() {
-		return n_estatusVenta;
+
+	public long getnIdUsuario() {
+		return nIdUsuario;
 	}
 
-	public void setN_estatusVenta(int n_estatusVenta) {
-		this.n_estatusVenta = n_estatusVenta;
+
+	public void setnIdUsuario(long nIdUsuario) {
+		this.nIdUsuario = nIdUsuario;
 	}
 
-	public int getN_tipoPago() {
-		return n_tipoPago;
+
+	public String getsFolioVenta() {
+		return sFolioVenta;
 	}
 
-	public void setN_tipoPago(int n_tipoPago) {
-		this.n_tipoPago = n_tipoPago;
+
+	public void setsFolioVenta(String sFolioVenta) {
+		this.sFolioVenta = sFolioVenta;
 	}
 
-	public String getS_folioVenta() {
-		return s_folioVenta;
+
+	
+
+
+	public Date getdFechaVenta() {
+		return dFechaVenta;
 	}
 
-	public void setS_folioVenta(String s_folioVenta) {
-		this.s_folioVenta = s_folioVenta;
+
+	public void setdFechaVenta(Date dFechaVenta) {
+		this.dFechaVenta = dFechaVenta;
 	}
+
+
+	public int getnEstatusVenta() {
+		return nEstatusVenta;
+	}
+
+
+	public void setnEstatusVenta(int nEstatusVenta) {
+		this.nEstatusVenta = nEstatusVenta;
+	}
+
+
+	public long getnIdFacturacion() {
+		return nIdFacturacion;
+	}
+
+
+	public void setnIdFacturacion(long nIdFacturacion) {
+		this.nIdFacturacion = nIdFacturacion;
+	}
+
+
+	public long getnIdTipoVenta() {
+		return nIdTipoVenta;
+	}
+
+
+	public void setnIdTipoVenta(long nIdTipoVenta) {
+		this.nIdTipoVenta = nIdTipoVenta;
+	}
+
+
+	public long getnTipoPago() {
+		return nTipoPago;
+	}
+
+
+	public void setnTipoPago(long nTipoPago) {
+		this.nTipoPago = nTipoPago;
+	}
+
+
+	public long getnIdCaja() {
+		return nIdCaja;
+	}
+
+
+	public void setnIdCaja(long nIdCaja) {
+		this.nIdCaja = nIdCaja;
+	}
+
+
+	public Date getdFechaInicioCredito() {
+		return dFechaInicioCredito;
+	}
+
+
+	public void setdFechaInicioCredito(Date dFechaInicioCredito) {
+		this.dFechaInicioCredito = dFechaInicioCredito;
+	}
+
+
+	public Date getdFechaPagoCredito() {
+		return dFechaPagoCredito;
+	}
+
+
+	public void setdFechaPagoCredito(Date dFechaPagoCredito) {
+		this.dFechaPagoCredito = dFechaPagoCredito;
+	}
+
 
 	public TcCliente getTcCliente() {
 		return tcCliente;
 	}
 
+
 	public void setTcCliente(TcCliente tcCliente) {
 		this.tcCliente = tcCliente;
 	}
+
 
 	public TcTipoVenta getTcTipoVenta() {
 		return tcTipoVenta;
 	}
 
+
 	public void setTcTipoVenta(TcTipoVenta tcTipoVenta) {
 		this.tcTipoVenta = tcTipoVenta;
 	}
+
 
 	public TcUsuario getTcUsuario() {
 		return tcUsuario;
 	}
 
+
 	public void setTcUsuario(TcUsuario tcUsuario) {
 		this.tcUsuario = tcUsuario;
 	}
+
 
 	public TwCaja getTwCaja() {
 		return twCaja;
 	}
 
+
 	public void setTwCaja(TwCaja twCaja) {
 		this.twCaja = twCaja;
 	}
 
-	public TwFacturacion getTwFacturacion() {
-		return twFacturacion;
-	}
+	
+	
 
-	public void setTwFacturacion(TwFacturacion twFacturacion) {
-		this.twFacturacion = twFacturacion;
-	}
-
+	
 }

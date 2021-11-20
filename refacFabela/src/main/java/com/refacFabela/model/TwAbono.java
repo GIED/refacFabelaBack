@@ -14,6 +14,9 @@ public class TwAbono implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_id")
 	private Long nId;
+	
+	@Column(name = "n_idVenta")
+	private Long nIdVenta;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "d_fecha")
@@ -37,11 +40,22 @@ public class TwAbono implements Serializable {
 
 	// bi-directional many-to-one association to TwVenta
 	@ManyToOne
-	@JoinColumn(name = "n_idVenta")
+	@JoinColumn(name = "n_idVenta", updatable = false, insertable = false)
 	private TwVenta twVenta;
 
 	public TwAbono() {
 	}
+	
+
+	public Long getnIdVenta() {
+		return nIdVenta;
+	}
+
+
+	public void setnIdVenta(Long nIdVenta) {
+		this.nIdVenta = nIdVenta;
+	}
+
 
 	public Long getnId() {
 		return nId;

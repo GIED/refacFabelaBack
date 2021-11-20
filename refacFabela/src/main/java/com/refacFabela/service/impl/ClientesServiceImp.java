@@ -57,6 +57,12 @@ public class ClientesServiceImp implements ClienteService {
 		return clienteSaldoRepository.findBynIdCliente(id);
 	}
 
+	@Override
+	public List<TvSaldoGeneralCliente> consultaClienteSaldo() {
+		
+		return clienteSaldoRepository.obtenerClienteSaldo();
+	}
+
 	
 
 }

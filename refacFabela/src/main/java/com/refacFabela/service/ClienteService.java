@@ -14,6 +14,7 @@ public interface ClienteService {
 	public String eliminarClienteId(Long id);
 	public List<TcCliente> consultaClienteLike(String clienteBuscar);
 	public TvSaldoGeneralCliente consultaClienteIdSaldo(Long id);
+	public List<TvSaldoGeneralCliente> consultaClienteSaldo();
 	
 
 }

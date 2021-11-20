@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
+import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
+import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.HistoriaPrecioProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ProductoBodegasIdRepository;
@@ -35,6 +37,8 @@ public class ProductosServiceImp implements ProductosService {
 	private UtilisServiceImp utilisServiceImp;
 	@Autowired
 	private ProductoBodegasIdRepository productoBodegasIdRepository;
+	@Autowired
+	private AbonoVentaIdRepository abonoVentaIdRepository;
 	
 	
 	
@@ -160,6 +164,12 @@ public class ProductosServiceImp implements ProductosService {
 	public TvStockProducto obtenerStockProductoId(Long id) {
 		
 		return productoBodegasIdRepository.findBynIdProducto(id) ;
+	}
+
+	@Override
+	public List<TwAbono> obtenerAbonoVentaId(Long id) {
+	
+		return  abonoVentaIdRepository.findBynIdVenta(id);
 	}
 	
 	
