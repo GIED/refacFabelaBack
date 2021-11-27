@@ -45,6 +45,9 @@ public class TwVenta implements Serializable {
 	@Column(name = "d_fechaInicioCredito")
 	private Date dFechaInicioCredito;
 	
+	@Column(name = "d_fechaTerminoCredito")
+	private Date dFechaTerminoCredito;
+	
 	@Column(name = "d_fechaPagoCredito")
 	private Date dFechaPagoCredito;
 	
@@ -236,6 +239,18 @@ public class TwVenta implements Serializable {
 	public void setTwCaja(TwCaja twCaja) {
 		this.twCaja = twCaja;
 	}
+
+
+	public Date getdFechaTerminoCredito() {
+		return dFechaTerminoCredito;
+	}
+
+
+	public void setdFechaTerminoCredito(Date dFechaTerminoCredito) {
+		this.dFechaTerminoCredito = dFechaTerminoCredito;
+	}
+	
+	
 
 	
 	

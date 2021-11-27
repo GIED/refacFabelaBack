@@ -21,7 +21,7 @@ public class TwProductobodega implements Serializable {
 	private Long nIdProducto;	
 
 	@Column(name = "n_cantidad")
-	private Long nCantidad;
+	private Integer nCantidad;
 
 	@Column(name = "n_estatus")
 	private Long nEstatus;
@@ -79,11 +79,13 @@ public class TwProductobodega implements Serializable {
 		this.nIdProducto = nIdProducto;
 	}
 
-	public Long getnCantidad() {
+	
+
+	public Integer getnCantidad() {
 		return nCantidad;
 	}
 
-	public void setnCantidad(Long nCantidad) {
+	public void setnCantidad(Integer nCantidad) {
 		this.nCantidad = nCantidad;
 	}
 

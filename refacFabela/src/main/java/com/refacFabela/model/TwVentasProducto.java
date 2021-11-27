@@ -14,43 +14,61 @@ public class TwVentasProducto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_id")
 	private Long nId;
-
+	
+	@Column(name = "n_idVenta")
+	private Long nIdVenta;
+	
+	@Column(name = "n_idProductos")
+	private Long nIdProducto;
+	
+	@Column(name = "n_idUsuario")
+	private Long nIdUsuario;
+	
+	@Column(name = "d_fechaEntregaAlmacen")
 	@Temporal(TemporalType.DATE)
-	private Date d_fechaEntregaAlmacen;
+	private Date dFechaEntregaAlmacen;
 
+	@Column(name = "d_fechaEntregaEstimada")
 	@Temporal(TemporalType.DATE)
-	private Date d_fechaEntregaEstimada;
+	private Date dFechaEntregaEstimada;
 
 	@Column(name = "n_cantidad")
 	private int nCantidad;
-
-	private int n_estatusEntregaAlmacen;
-
-	private double n_ivaPartida;
-
-	private double n_ivaUnitario;
-
-	private double n_precioPartida;
-
-	private double n_precioUnitario;
-
-	private double n_totalPartida;
-
-	private double n_totalUnitario;
+	
+	@Column(name = "n_estatusEntregaAlmacen")
+	private int nEstatusEntregaAlmacen;
+	
+	@Column(name = "n_ivaPartida")
+	private double nIvaPartida;
+	
+	@Column(name = "n_ivaUnitario")
+	private double nIvaUnitario;
+	
+	@Column(name = "n_precioPartida")
+	private double nPrecioPartida;
+	
+	@Column(name = "n_precioUnitario")
+	private double nPrecioUnitario;
+	
+	@Column(name = "n_totalPartida")
+	private double nTotalPartida;
+	
+	@Column(name = "n_totalUnitario")
+	private double nTotalUnitario;
 
 	// bi-directional many-to-one association to TcProducto
 	@ManyToOne
-	@JoinColumn(name = "n_idProductos")
+	@JoinColumn(name = "n_idProductos" , insertable = false , updatable = false)
 	private TcProducto tcProducto;
 
 	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
-	@JoinColumn(name = "n_idUsuario")
+	@JoinColumn(name = "n_idUsuario", insertable = false , updatable = false)
 	private TcUsuario tcUsuario;
 
 	// bi-directional many-to-one association to TwVenta
 	@ManyToOne
-	@JoinColumn(name = "n_idVenta")
+	@JoinColumn(name = "n_idVenta", insertable = false , updatable = false)
 	private TwVenta twVenta;
 
 	public TwVentasProducto() {
@@ -64,20 +82,44 @@ public class TwVentasProducto implements Serializable {
 		this.nId = nId;
 	}
 
-	public Date getD_fechaEntregaAlmacen() {
-		return d_fechaEntregaAlmacen;
+	public Long getnIdVenta() {
+		return nIdVenta;
 	}
 
-	public void setD_fechaEntregaAlmacen(Date d_fechaEntregaAlmacen) {
-		this.d_fechaEntregaAlmacen = d_fechaEntregaAlmacen;
+	public void setnIdVenta(Long nIdVenta) {
+		this.nIdVenta = nIdVenta;
 	}
 
-	public Date getD_fechaEntregaEstimada() {
-		return d_fechaEntregaEstimada;
+	public Long getnIdProducto() {
+		return nIdProducto;
 	}
 
-	public void setD_fechaEntregaEstimada(Date d_fechaEntregaEstimada) {
-		this.d_fechaEntregaEstimada = d_fechaEntregaEstimada;
+	public void setnIdProducto(Long nIdProducto) {
+		this.nIdProducto = nIdProducto;
+	}
+
+	public Long getnIdUsuario() {
+		return nIdUsuario;
+	}
+
+	public void setnIdUsuario(Long nIdUsuario) {
+		this.nIdUsuario = nIdUsuario;
+	}
+
+	public Date getdFechaEntregaAlmacen() {
+		return dFechaEntregaAlmacen;
+	}
+
+	public void setdFechaEntregaAlmacen(Date dFechaEntregaAlmacen) {
+		this.dFechaEntregaAlmacen = dFechaEntregaAlmacen;
+	}
+
+	public Date getdFechaEntregaEstimada() {
+		return dFechaEntregaEstimada;
+	}
+
+	public void setdFechaEntregaEstimada(Date dFechaEntregaEstimada) {
+		this.dFechaEntregaEstimada = dFechaEntregaEstimada;
 	}
 
 	public int getnCantidad() {
@@ -88,60 +130,60 @@ public class TwVentasProducto implements Serializable {
 		this.nCantidad = nCantidad;
 	}
 
-	public int getN_estatusEntregaAlmacen() {
-		return n_estatusEntregaAlmacen;
+	public int getnEstatusEntregaAlmacen() {
+		return nEstatusEntregaAlmacen;
 	}
 
-	public void setN_estatusEntregaAlmacen(int n_estatusEntregaAlmacen) {
-		this.n_estatusEntregaAlmacen = n_estatusEntregaAlmacen;
+	public void setnEstatusEntregaAlmacen(int nEstatusEntregaAlmacen) {
+		this.nEstatusEntregaAlmacen = nEstatusEntregaAlmacen;
 	}
 
-	public double getN_ivaPartida() {
-		return n_ivaPartida;
+	public double getnIvaPartida() {
+		return nIvaPartida;
 	}
 
-	public void setN_ivaPartida(double n_ivaPartida) {
-		this.n_ivaPartida = n_ivaPartida;
+	public void setnIvaPartida(double nIvaPartida) {
+		this.nIvaPartida = nIvaPartida;
 	}
 
-	public double getN_ivaUnitario() {
-		return n_ivaUnitario;
+	public double getnIvaUnitario() {
+		return nIvaUnitario;
 	}
 
-	public void setN_ivaUnitario(double n_ivaUnitario) {
-		this.n_ivaUnitario = n_ivaUnitario;
+	public void setnIvaUnitario(double nIvaUnitario) {
+		this.nIvaUnitario = nIvaUnitario;
 	}
 
-	public double getN_precioPartida() {
-		return n_precioPartida;
+	public double getnPrecioPartida() {
+		return nPrecioPartida;
 	}
 
-	public void setN_precioPartida(double n_precioPartida) {
-		this.n_precioPartida = n_precioPartida;
+	public void setnPrecioPartida(double nPrecioPartida) {
+		this.nPrecioPartida = nPrecioPartida;
 	}
 
-	public double getN_precioUnitario() {
-		return n_precioUnitario;
+	public double getnPrecioUnitario() {
+		return nPrecioUnitario;
 	}
 
-	public void setN_precioUnitario(double n_precioUnitario) {
-		this.n_precioUnitario = n_precioUnitario;
+	public void setnPrecioUnitario(double nPrecioUnitario) {
+		this.nPrecioUnitario = nPrecioUnitario;
 	}
 
-	public double getN_totalPartida() {
-		return n_totalPartida;
+	public double getnTotalPartida() {
+		return nTotalPartida;
 	}
 
-	public void setN_totalPartida(double n_totalPartida) {
-		this.n_totalPartida = n_totalPartida;
+	public void setnTotalPartida(double nTotalPartida) {
+		this.nTotalPartida = nTotalPartida;
 	}
 
-	public double getN_totalUnitario() {
-		return n_totalUnitario;
+	public double getnTotalUnitario() {
+		return nTotalUnitario;
 	}
 
-	public void setN_totalUnitario(double n_totalUnitario) {
-		this.n_totalUnitario = n_totalUnitario;
+	public void setnTotalUnitario(double nTotalUnitario) {
+		this.nTotalUnitario = nTotalUnitario;
 	}
 
 	public TcProducto getTcProducto() {
@@ -167,5 +209,12 @@ public class TwVentasProducto implements Serializable {
 	public void setTwVenta(TwVenta twVenta) {
 		this.twVenta = twVenta;
 	}
+	
+	
+
+	
+	
+
+	
 
 }

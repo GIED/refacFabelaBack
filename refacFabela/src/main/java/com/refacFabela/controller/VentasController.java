@@ -7,10 +7,14 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.refacFabela.dto.CotizacionDto;
+import com.refacFabela.dto.VentaDto;
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvVentaDetalle;
@@ -23,7 +27,7 @@ public class VentasController {
 	private static final Logger logger = LogManager.getLogger("errorLogger");
 	
 	@Autowired
-	VentasService ventasService;
+	private VentasService ventasService;
 
 	@GetMapping("/obtenerVentas")
 	public List<TwVenta> consultaVentas() {
@@ -46,6 +50,22 @@ public class VentasController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
+	
+	@PostMapping("/guardarVenta")
+	public String guardarVenta(@RequestBody VentaDto ventaDto) {
+
+		try {
+			
+			
+			ventasService.guardarVenta(ventaDto);
+			
+			return "registrado";
+		} catch (Exception e) {
+
+			logger.error("Error al guardar la venta" + e);
 		}
 		return null;
 	}
