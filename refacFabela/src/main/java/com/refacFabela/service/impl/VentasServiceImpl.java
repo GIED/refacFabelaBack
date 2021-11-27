@@ -102,11 +102,9 @@ public class VentasServiceImpl implements VentasService {
 
 		for (TwVentasProducto twVentasProducto : listaProductos) {
 
-			List<TwProductobodega> listaStock = productoBodegaRepository
-					.findBynIdProducto(twVentasProducto.getnIdProducto());
+			List<TwProductobodega> listaStock = productoBodegaRepository.findBynIdProducto(twVentasProducto.getnIdProducto());
 
 			do {
-
 				for (TwProductobodega twProBod : listaStock) {
 
 					if (twProBod.getnIdBodega() == 1) { // inicia en bodega 1
@@ -176,8 +174,10 @@ public class VentasServiceImpl implements VentasService {
 				}
 
 			} while (twVentasProducto.getnCantidad() != 0);
+		}
 
 		}
+		
 
 	public List<TwAbono> consultaAbonoVentaId(Long nId) {
 		
