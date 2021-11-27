@@ -21,5 +21,4 @@ public interface ProductosService {
 	public List<TwProductosAlternativo> obtenerProductosAlternativos(Long nId);
 	public TwProductosAlternativo guardarProductoAlternativo(TwProductosAlternativo twProductosAlternativo);
 	public TvStockProducto obtenerStockProductoId(Long id);
-	public List<TwAbono> obtenerAbonoVentaId(Long id);
 }

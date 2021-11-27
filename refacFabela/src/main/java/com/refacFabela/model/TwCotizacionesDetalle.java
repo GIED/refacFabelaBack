@@ -5,9 +5,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "tw_cotizaciones")
-@NamedQuery(name = "TwCotizacione.findAll", query = "SELECT t FROM TwCotizacione t")
-public class TwCotizacione implements Serializable {
+@Table(name = "tv_cotizacionDetalle")
+@NamedQuery(name = "TwCotizacionesDetalle.findAll", query = "SELECT t FROM TwCotizacionesDetalle t")
+public class TwCotizacionesDetalle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -30,6 +30,13 @@ public class TwCotizacione implements Serializable {
 	
 	@Column(name = "s_folioCotizacion")
 	private String sFolioCotizacion;
+	
+	@Column(name = "n_totalCotizacion")
+	private double nTotalCotizacion;
+	
+	@Column(name = "n_vigencia")
+	private int nVigencia;
+	
 
 	// bi-directional many-to-one association to TcCliente
 	@ManyToOne
@@ -41,7 +48,7 @@ public class TwCotizacione implements Serializable {
 	@JoinColumn(name = "n_idUsuario", insertable = false, updatable = false)
 	private TcUsuario tcUsuario;
 
-	public TwCotizacione() {
+	public TwCotizacionesDetalle() {
 	}
 
 	public Long getnId() {
@@ -107,6 +114,27 @@ public class TwCotizacione implements Serializable {
 	public void setTcUsuario(TcUsuario tcUsuario) {
 		this.tcUsuario = tcUsuario;
 	}
+
+	
+
+	public double getnTotalCotizacion() {
+		return nTotalCotizacion;
+	}
+
+	public void setnTotalCotizacion(double nTotalCotizacion) {
+		this.nTotalCotizacion = nTotalCotizacion;
+	}
+
+	public int getnVigencia() {
+		return nVigencia;
+	}
+
+	public void setnVigencia(int nVigencia) {
+		this.nVigencia = nVigencia;
+	}
+
+	
+	
 
 	
 }

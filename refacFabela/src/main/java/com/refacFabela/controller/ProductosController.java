@@ -183,17 +183,7 @@ public class ProductosController {
 		return null;
 	}
 	
-	@GetMapping("/obtenerAbonosVentaId")
-	public List<TwAbono> obtenerAbonosVentaId(@RequestParam() Long id) {
 
-		try {
-			return productosService.obtenerAbonoVentaId(id);
-		} catch (Exception e) {
-
-			logger.error("Error al obtener los abonos" + e);
-		}
-		return null;
-	}
 	
 	
 	

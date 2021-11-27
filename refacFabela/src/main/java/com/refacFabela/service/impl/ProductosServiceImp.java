@@ -166,11 +166,7 @@ public class ProductosServiceImp implements ProductosService {
 		return productoBodegasIdRepository.findBynIdProducto(id) ;
 	}
 
-	@Override
-	public List<TwAbono> obtenerAbonoVentaId(Long id) {
 	
-		return  abonoVentaIdRepository.findBynIdVenta(id);
-	}
 	
 	
 	/*private ProductoDto convertirAProductoDto(final TcProducto tcProducto) {

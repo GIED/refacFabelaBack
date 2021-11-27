@@ -6,12 +6,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.dto.CotizacionDto;
+import com.refacFabela.model.TwCotizaciones;
+import com.refacFabela.model.TwCotizacionesDetalle;
+import com.refacFabela.model.TwCotizacionesProducto;
 import com.refacFabela.service.CotizacionService;
 
 @RestController
@@ -29,6 +33,18 @@ public class CotizacionController {
 		try {
 			cotizacionService.guardaCorizacion(listaCotizacion);
 			return "registrado";
+		} catch (Exception e) {
+
+			logger.error("Error al guardar la cotización" + e);
+		}
+		return null;
+	}
+	@GetMapping("/consultaCotizaciones")
+	public List<TwCotizacionesDetalle> consultaCotizaciones() {
+
+		try {
+			//cotizacionService.guardaCorizacion(listaCotizacion);
+			return cotizacionService.consultaCotizaciones();
 		} catch (Exception e) {
 
 			logger.error("Error al guardar la cotización" + e);

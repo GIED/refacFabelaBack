@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.dto.CotizacionDto;
-import com.refacFabela.model.TwCotizacione;
+import com.refacFabela.model.TwCotizaciones;
+import com.refacFabela.model.TwCotizacionesDetalle;
 import com.refacFabela.model.TwCotizacionesProducto;
 import com.refacFabela.repository.CotizacionProductoRepository;
 import com.refacFabela.repository.CotizacionRepository;
+import com.refacFabela.repository.TwCotizacionesRepository;
 import com.refacFabela.service.CotizacionService;
 import com.refacFabela.utils.utils;
 @Service
@@ -22,13 +24,16 @@ public class CotizacionServiceImpl implements CotizacionService {
 	@Autowired
 	private CotizacionProductoRepository cotizacionProductoRepository;
 	
+	@Autowired
+	private TwCotizacionesRepository twCotizacionesRepository;
+	
 
 	
 	@Override
 	public void guardaCorizacion(List<CotizacionDto> listaCotizacion) {
 		
 		//System.out.println(listaCotizacion);
-		TwCotizacione twCotizacion = new TwCotizacione();
+		TwCotizaciones twCotizacion = new TwCotizaciones();
 		
 		twCotizacion.setnIdCliente(listaCotizacion.get(0).getnIdCliente());
 		twCotizacion.setnIdUsuario(1L);
@@ -36,7 +41,7 @@ public class CotizacionServiceImpl implements CotizacionService {
 		twCotizacion.setdFecha(utils.fechaSistema);
 		twCotizacion.setnEstatus(1);
 		
-		TwCotizacione cotizacionRegistrada = cotizacionRepository.save(twCotizacion);
+		TwCotizaciones cotizacionRegistrada = cotizacionRepository.save(twCotizacion);
 		
 		List<TwCotizacionesProducto> listaCotizacionRegistro = new ArrayList<TwCotizacionesProducto>();
 		
@@ -63,6 +68,16 @@ public class CotizacionServiceImpl implements CotizacionService {
 			
 		
 
+	}
+
+
+
+	@Override
+	public List<TwCotizacionesDetalle> consultaCotizaciones() {
+		
+
+		return twCotizacionesRepository.findAll();
+		
 	}
 
 }
