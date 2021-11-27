@@ -11,13 +11,14 @@ import com.refacFabela.dto.VentaDto;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwAbono;
+import com.refacFabela.model.TwCotizaciones;
 import com.refacFabela.model.TwVenta;
 
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.ProductoBodegaRepository;
 
 import com.refacFabela.repository.AbonoVentaIdRepository;
-
+import com.refacFabela.repository.CotizacionRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
@@ -39,7 +40,10 @@ public class VentasServiceImpl implements VentasService {
 	private ProductoBodegaRepository productoBodegaRepository;
 	
 	@Autowired
-	AbonoVentaIdRepository abonoVentaIdRepository;
+	private AbonoVentaIdRepository abonoVentaIdRepository;
+	
+	@Autowired
+	private CotizacionRepository cotizacionRepository;
  
 
 	@Override
@@ -69,6 +73,7 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setdFechaInicioCredito(ventaDto.getFechaIniCredito());
 		twVenta.setdFechaTerminoCredito(ventaDto.getFechaFinCredito());
 		twVenta.setdFechaVenta(utils.fechaSistema);
+		twVenta.setnIdCotizacion(ventaDto.getTwCotizacion().getnId());
 
 		TwVenta ventaRegistrada = ventasRepository.save(twVenta);
 
@@ -82,8 +87,7 @@ public class VentasServiceImpl implements VentasService {
 			twVentaProducto.setnIdProducto(producto.getnIdProducto());
 			twVentaProducto.setnCantidad(producto.getnCantidad());
 			twVentaProducto.setnPrecioUnitario(producto.getTcProducto().getnPrecioSinIva());
-			twVentaProducto.setnIvaUnitario(
-					producto.getTcProducto().getnPrecioConIva() - producto.getTcProducto().getnPrecioSinIva());
+			twVentaProducto.setnIvaUnitario(producto.getTcProducto().getnPrecioConIva() - producto.getTcProducto().getnPrecioSinIva());
 			twVentaProducto.setnTotalUnitario(twVentaProducto.getnPrecioUnitario() + twVentaProducto.getnIvaUnitario());
 			twVentaProducto.setnPrecioPartida(twVentaProducto.getnCantidad() * twVentaProducto.getnTotalUnitario());
 			twVentaProducto.setnIvaPartida(twVentaProducto.getnPrecioPartida() * .16);
@@ -95,6 +99,10 @@ public class VentasServiceImpl implements VentasService {
 		this.ventasProductoRepository.saveAll(listaProductos);
 
 		this.descuentaStock(listaProductos);
+		
+		TwCotizaciones twCotizaciones = ventaDto.getTwCotizacion();
+		twCotizaciones.setnEstatus(2);		
+		this.cotizacionRepository.save(twCotizaciones);
 
 	}
 

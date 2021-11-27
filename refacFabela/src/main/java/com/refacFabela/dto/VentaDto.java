@@ -3,6 +3,8 @@ package com.refacFabela.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.refacFabela.model.TwCotizaciones;
+
 public class VentaDto {
 	
 	   private Long idCliente;
@@ -13,6 +15,7 @@ public class VentaDto {
 	   private Date fechaIniCredito;
 	   private Date fechaFinCredito;
 	   private List<TvStockProductoDto> listaValidada;
+	   private TwCotizaciones twCotizacion;
 	   
 	public Long getIdCliente() {
 		return idCliente;
@@ -62,12 +65,24 @@ public class VentaDto {
 	public void setListaValidada(List<TvStockProductoDto> listaValidada) {
 		this.listaValidada = listaValidada;
 	}
+	
+	public TwCotizaciones getTwCotizacion() {
+		return twCotizacion;
+	}
+	public void setTwCotizacion(TwCotizaciones twCotizacion) {
+		this.twCotizacion = twCotizacion;
+	}
 	@Override
 	public String toString() {
 		return "VentaDto [idCliente=" + idCliente + ", idUsuario=" + idUsuario + ", sFolioVenta=" + sFolioVenta
 				+ ", idTipoVenta=" + idTipoVenta + ", tipoPago=" + tipoPago + ", fechaIniCredito=" + fechaIniCredito
-				+ ", fechaFinCredito=" + fechaFinCredito + ", listaValidada=" + listaValidada + "]";
+				+ ", fechaFinCredito=" + fechaFinCredito + ", listaValidada=" + listaValidada + ", twCotizaciones="
+				+ twCotizacion + "]";
 	}
+	
+	
+	
+	
 	
 	
 	   

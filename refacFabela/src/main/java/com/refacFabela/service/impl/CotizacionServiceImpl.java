@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.dto.CotizacionDto;
+import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.model.TwCotizaciones;
 import com.refacFabela.model.TwCotizacionesDetalle;
 import com.refacFabela.model.TwCotizacionesProducto;
@@ -30,7 +31,7 @@ public class CotizacionServiceImpl implements CotizacionService {
 
 	
 	@Override
-	public void guardaCorizacion(List<CotizacionDto> listaCotizacion) {
+	public TwCotizaciones guardaCorizacion(List<CotizacionDto> listaCotizacion) {
 		
 		//System.out.println(listaCotizacion);
 		TwCotizaciones twCotizacion = new TwCotizaciones();
@@ -64,6 +65,8 @@ public class CotizacionServiceImpl implements CotizacionService {
 		}
 		
 		cotizacionProductoRepository.saveAll(listaCotizacionRegistro);
+		
+		return cotizacionRegistrada;
 			
 			
 		
@@ -79,5 +82,37 @@ public class CotizacionServiceImpl implements CotizacionService {
 		return twCotizacionesRepository.findAll();
 		
 	}
+
+
+
+	@Override
+	public List<TvStockProductoDto> consultaCotizacionId(Long id) {
+		
+		List<TwCotizacionesProducto> listaProductoCotizados = cotizacionProductoRepository.findBynIdCotizacion(id);
+		
+		List<TvStockProductoDto> listaProductos = new ArrayList<TvStockProductoDto>();
+		
+		for (TwCotizacionesProducto twCotizacionesProducto : listaProductoCotizados) {
+			
+			TvStockProductoDto tvStockProducto = new TvStockProductoDto();
+			
+			tvStockProducto.setnIdProducto(twCotizacionesProducto.getnIdProducto());
+			tvStockProducto.setnCantidadTotal(0);
+			tvStockProducto.setnCantidad(twCotizacionesProducto.getnCantidad());
+			tvStockProducto.setTcProducto(twCotizacionesProducto.getTcProducto());
+			tvStockProducto.setnStatus(1);
+			
+			listaProductos.add(tvStockProducto);
+			
+			
+		}
+		
+		
+		return listaProductos;
+	}
+
+
+
+	
 
 }

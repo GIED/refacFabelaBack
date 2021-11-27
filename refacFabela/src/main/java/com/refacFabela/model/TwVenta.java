@@ -51,6 +51,9 @@ public class TwVenta implements Serializable {
 	@Column(name = "d_fechaPagoCredito")
 	private Date dFechaPagoCredito;
 	
+	@Column(name = "n_idCotizacion")
+	private long nIdCotizacion;
+	
 
 
 	// bi-directional many-to-one association to TcCliente
@@ -249,9 +252,19 @@ public class TwVenta implements Serializable {
 	public void setdFechaTerminoCredito(Date dFechaTerminoCredito) {
 		this.dFechaTerminoCredito = dFechaTerminoCredito;
 	}
-	
-	
 
+
+	public long getnIdCotizacion() {
+		return nIdCotizacion;
+	}
+
+
+	public void setnIdCotizacion(long nIdCotizacion) {
+		this.nIdCotizacion = nIdCotizacion;
+	}
+	
+	
+	
 	
 	
 
