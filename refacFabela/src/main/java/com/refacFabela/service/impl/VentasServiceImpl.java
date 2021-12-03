@@ -53,9 +53,9 @@ public class VentasServiceImpl implements VentasService {
 	}
 
 	@Override
-	public List<TvVentaDetalle> consultaVentaDetalle(Long nIdCliente, Long nTipoPago) {
+	public List<TvVentaDetalle> consultaVentaDetalleId(Long nIdCliente, Long nTipoPago) {
 
-		return tvVentaDetalleRepository.consultaVentaDetalle(nIdCliente, nTipoPago);
+		return tvVentaDetalleRepository.consultaVentaDetalleId(nIdCliente, nTipoPago);
 	}
 
 	@Override
@@ -66,10 +66,10 @@ public class VentasServiceImpl implements VentasService {
 		TwVenta twVenta = new TwVenta();
 
 		twVenta.setnIdCliente(ventaDto.getIdCliente());
-		twVenta.setnIdUsuario(1);
+		twVenta.setnIdUsuario(1l);
 		twVenta.setsFolioVenta(ventaDto.getsFolioVenta());
-		twVenta.setnIdTipoVenta(ventaDto.getIdTipoVenta());
-		twVenta.setnTipoPago(ventaDto.getTipoPago());
+		twVenta.setnIdTipoVenta(ventaDto.getIdTipoVenta().longValue());
+		twVenta.setnTipoPago(ventaDto.getTipoPago().longValue());
 		twVenta.setdFechaInicioCredito(ventaDto.getFechaIniCredito());
 		twVenta.setdFechaTerminoCredito(ventaDto.getFechaFinCredito());
 		twVenta.setdFechaVenta(utils.fechaSistema);
@@ -192,5 +192,13 @@ public class VentasServiceImpl implements VentasService {
 		return abonoVentaIdRepository.findBynIdVenta(nId);
 
 	}
+
+	@Override
+	public List<TvVentaDetalle> consultaVentaDetalle() {
+		// TODO Auto-generated method stub
+		return tvVentaDetalleRepository.findAll();
+	}
+
+	
 
 }

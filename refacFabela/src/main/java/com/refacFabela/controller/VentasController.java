@@ -43,11 +43,23 @@ public class VentasController {
 		return null;
 	}
 	
+	@GetMapping("/obtenerVentasDetalle")
+	public List<TvVentaDetalle> consultaVentasDetalle() {
+		try {
+			return ventasService.consultaVentaDetalle();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener todas las ventas " + e);
+		}
+		return null;
+	}
+	
 	@GetMapping("/obtenerVentasClienteDetalleEstatus") 
 	public List<TvVentaDetalle> obtenerVentasClientesDetalleEstatus(@RequestParam() Long nIdCliente, long nTipoPago) {
 
 		try {
-			return ventasService.consultaVentaDetalle(nIdCliente, nTipoPago);
+			return ventasService.consultaVentaDetalleId(nIdCliente, nTipoPago);
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los Productos" + e);

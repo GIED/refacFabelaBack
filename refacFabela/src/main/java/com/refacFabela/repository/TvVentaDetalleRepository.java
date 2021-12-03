@@ -12,7 +12,8 @@ import com.refacFabela.model.TvVentaDetalle;
 public interface TvVentaDetalleRepository extends JpaRepository<TvVentaDetalle, Long> {
 	
 	@Query("Select c from TvVentaDetalle c where c.nIdCliente=:nIdCliente and c.nTipoPago=:nTipoPago")
-	public List<TvVentaDetalle> consultaVentaDetalle(Long nIdCliente, long nTipoPago);
-
+	public List<TvVentaDetalle> consultaVentaDetalleId(Long nIdCliente, long nTipoPago);
+	
+	
 	
 }

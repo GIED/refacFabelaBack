@@ -8,18 +8,18 @@ import java.util.Date;
 @Table(name = "tw_ventas")
 @NamedQuery(name = "TwVenta.findAll", query = "SELECT t FROM TwVenta t")
 public class TwVenta implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final Long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_id")
-	private long nId;
+	private Long nId;
 	
 	@Column(name = "n_idCliente")
-	private long nIdCliente;
+	private Long nIdCliente;
 	
 	@Column(name = "n_idUsuario")
-	private long nIdUsuario;
+	private Long nIdUsuario;
 	
 	@Column(name = "s_folioVenta")
 	private String sFolioVenta;
@@ -31,16 +31,16 @@ public class TwVenta implements Serializable {
 	private int nEstatusVenta;
 	
 	@Column(name = "n_idFacturacion")
-	private long nIdFacturacion;
+	private Long nIdFacturacion;
 	
 	@Column(name = "n_idTipoVenta")
-	private long nIdTipoVenta;
+	private Long nIdTipoVenta;
 	
 	@Column(name = "n_tipoPago")
-	private long nTipoPago;
+	private Long nTipoPago;
 	
 	@Column(name = "n_idCaja")
-	private long nIdCaja;
+	private Long nIdCaja;
 	
 	@Column(name = "d_fechaInicioCredito")
 	private Date dFechaInicioCredito;
@@ -52,7 +52,7 @@ public class TwVenta implements Serializable {
 	private Date dFechaPagoCredito;
 	
 	@Column(name = "n_idCotizacion")
-	private long nIdCotizacion;
+	private Long nIdCotizacion;
 	
 
 
@@ -81,32 +81,32 @@ public class TwVenta implements Serializable {
 	}
 
 
-	public long getnId() {
+	public Long getnId() {
 		return nId;
 	}
 
 
-	public void setnId(long nId) {
+	public void setnId(Long nId) {
 		this.nId = nId;
 	}
 
 
-	public long getnIdCliente() {
+	public Long getnIdCliente() {
 		return nIdCliente;
 	}
 
 
-	public void setnIdCliente(long nIdCliente) {
+	public void setnIdCliente(Long nIdCliente) {
 		this.nIdCliente = nIdCliente;
 	}
 
 
-	public long getnIdUsuario() {
+	public Long getnIdUsuario() {
 		return nIdUsuario;
 	}
 
 
-	public void setnIdUsuario(long nIdUsuario) {
+	public void setnIdUsuario(Long nIdUsuario) {
 		this.nIdUsuario = nIdUsuario;
 	}
 
@@ -144,42 +144,42 @@ public class TwVenta implements Serializable {
 	}
 
 
-	public long getnIdFacturacion() {
+	public Long getnIdFacturacion() {
 		return nIdFacturacion;
 	}
 
 
-	public void setnIdFacturacion(long nIdFacturacion) {
+	public void setnIdFacturacion(Long nIdFacturacion) {
 		this.nIdFacturacion = nIdFacturacion;
 	}
 
 
-	public long getnIdTipoVenta() {
+	public Long getnIdTipoVenta() {
 		return nIdTipoVenta;
 	}
 
 
-	public void setnIdTipoVenta(long nIdTipoVenta) {
+	public void setnIdTipoVenta(Long nIdTipoVenta) {
 		this.nIdTipoVenta = nIdTipoVenta;
 	}
 
 
-	public long getnTipoPago() {
+	public Long getnTipoPago() {
 		return nTipoPago;
 	}
 
 
-	public void setnTipoPago(long nTipoPago) {
+	public void setnTipoPago(Long nTipoPago) {
 		this.nTipoPago = nTipoPago;
 	}
 
 
-	public long getnIdCaja() {
+	public Long getnIdCaja() {
 		return nIdCaja;
 	}
 
 
-	public void setnIdCaja(long nIdCaja) {
+	public void setnIdCaja(Long nIdCaja) {
 		this.nIdCaja = nIdCaja;
 	}
 
@@ -254,14 +254,17 @@ public class TwVenta implements Serializable {
 	}
 
 
-	public long getnIdCotizacion() {
+	public Long getnIdCotizacion() {
 		return nIdCotizacion;
 	}
 
 
-	public void setnIdCotizacion(long nIdCotizacion) {
+	public void setnIdCotizacion(Long nIdCotizacion) {
 		this.nIdCotizacion = nIdCotizacion;
 	}
+
+
+
 	
 	
 	
