@@ -19,6 +19,7 @@ import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
+import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.service.impl.UtilisServiceImp;
 
@@ -171,7 +172,7 @@ public class ProductosController {
 		return null;
 	}
 
-	@GetMapping("/obtenerProductoIdBodegas")
+	@GetMapping("/obtenerTotalBodegasIdProducto")
 	public TvStockProducto obtenerProductoIdBodegas(@RequestParam() Long id) {
 
 		try {
@@ -182,6 +183,8 @@ public class ProductosController {
 		}
 		return null;
 	}
+	
+	
 	
 
 	

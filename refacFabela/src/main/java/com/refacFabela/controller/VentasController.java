@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.dto.CotizacionDto;
 import com.refacFabela.dto.VentaDto;
+import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwVenta;
+import com.refacFabela.model.TwVentasProducto;
+import com.refacFabela.service.ProductosService;
 import com.refacFabela.service.VentasService;
 
 @RestController
@@ -29,6 +32,8 @@ public class VentasController {
 	
 	@Autowired
 	private VentasService ventasService;
+	@Autowired
+	private ProductosService productosService;
 
 	@GetMapping("/obtenerVentas")
 	public List<TwVenta> consultaVentas() {
@@ -90,6 +95,17 @@ public class VentasController {
 		} catch (Exception e) {
 
 			logger.error("Error al guardar la venta" + e);
+		}
+		return null;
+	}
+	@GetMapping("/consultaProductoVentaId")
+	public List<VentaProductoDto> obtenerProductoVendidosIdVenta(@RequestParam() Long id) {
+
+		try {
+			return productosService.obtenerProductosVentaId(id);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener el stock de bodegas" + e);
 		}
 		return null;
 	}

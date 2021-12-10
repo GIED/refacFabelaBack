@@ -7,18 +7,21 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
+import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.HistoriaPrecioProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ProductoBodegasIdRepository;
 import com.refacFabela.repository.ProductosAlternativosRepository;
 import com.refacFabela.repository.ProductosRepository;
+import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.utils.utils;
 
@@ -39,6 +42,8 @@ public class ProductosServiceImp implements ProductosService {
 	private ProductoBodegasIdRepository productoBodegasIdRepository;
 	@Autowired
 	private AbonoVentaIdRepository abonoVentaIdRepository;
+	@Autowired
+	private TwProductosVentaRepository twProductosVentaRepository;
 	
 	
 	
@@ -99,7 +104,7 @@ public class ProductosServiceImp implements ProductosService {
 	@Override
 	public List<TcHistoriaPrecioProducto> historiaPrecioProducto(Long n_id) {
 
-		return historiaPrecioProductoRepository.findBynIdProducto(n_id);
+		return historiaPrecioProductoRepository.productoIdHistoria(n_id);
 	}
 
 	@Override
@@ -164,6 +169,12 @@ public class ProductosServiceImp implements ProductosService {
 	public TvStockProducto obtenerStockProductoId(Long id) {
 		
 		return productoBodegasIdRepository.findBynIdProducto(id) ;
+	}
+
+	@Override
+	public List<VentaProductoDto> obtenerProductosVentaId(Long id) {
+		
+		return twProductosVentaRepository.obtenerPrpductosVentaId(id);
 	}
 
 	

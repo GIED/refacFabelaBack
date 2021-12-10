@@ -72,7 +72,7 @@ public class TwVenta implements Serializable {
 	private TcUsuario tcUsuario;
 
 	// bi-directional many-to-one association to TwCaja
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "n_idCaja", updatable = false, insertable = false)
 	private TwCaja twCaja;	
 	
