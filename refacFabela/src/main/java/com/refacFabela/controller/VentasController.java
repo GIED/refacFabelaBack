@@ -19,6 +19,7 @@ import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvVentaDetalle;
+import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
@@ -106,6 +107,17 @@ public class VentasController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener el stock de bodegas" + e);
+		}
+		return null;
+	}
+	@GetMapping("/consultaProductoVentaMesId")
+	public List<TvVentaProductoMes> obtenerProductoVendidosMesIdVenta(@RequestParam() Long id) {
+
+		try {
+			return productosService.obtenerProductoVentaMesId(id);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos vendidos por mes" + e);
 		}
 		return null;
 	}

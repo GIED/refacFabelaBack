@@ -11,6 +11,7 @@ import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
+import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
@@ -22,6 +23,7 @@ import com.refacFabela.repository.ProductoBodegasIdRepository;
 import com.refacFabela.repository.ProductosAlternativosRepository;
 import com.refacFabela.repository.ProductosRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
+import com.refacFabela.repository.VentaProductoMesRepository;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.utils.utils;
 
@@ -44,6 +46,8 @@ public class ProductosServiceImp implements ProductosService {
 	private AbonoVentaIdRepository abonoVentaIdRepository;
 	@Autowired
 	private TwProductosVentaRepository twProductosVentaRepository;
+	@Autowired
+	private VentaProductoMesRepository ventaProductoMesRepository;
 	
 	
 	
@@ -175,6 +179,20 @@ public class ProductosServiceImp implements ProductosService {
 	public List<VentaProductoDto> obtenerProductosVentaId(Long id) {
 		
 		return twProductosVentaRepository.obtenerPrpductosVentaId(id);
+	}
+
+	@Override
+	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id) {
+		
+		List<TvVentaProductoMes> listaVentas=ventaProductoMesRepository.obtenerVentaProductoMesId(id);
+		 
+		for (int i = 0; i < listaVentas.size(); i++) {
+			
+			System.err.println(listaVentas.get(i));
+			
+		}
+		
+		return ventaProductoMesRepository.obtenerVentaProductoMesId(id);
 	}
 
 	

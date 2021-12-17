@@ -6,6 +6,7 @@ import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
+import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
@@ -24,5 +25,6 @@ public interface ProductosService {
 	public TwProductosAlternativo guardarProductoAlternativo(TwProductosAlternativo twProductosAlternativo);
 	public TvStockProducto obtenerStockProductoId(Long id);
 	public List<VentaProductoDto> obtenerProductosVentaId(Long id);
+	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id);
 	
 }
