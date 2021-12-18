@@ -10,17 +10,20 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.IndexColumn;
+import org.springframework.data.annotation.Immutable;
+
+
 
 @Entity
 @Table(name = "tv_venta_producto_mes")
-@NamedQuery(name = "TvVentaProductoMes.findAll", query = "SELECT t FROM TvVentaProductoMes t")
+@Immutable
 public class TvVentaProductoMes implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 	
-	
-
 	@Id
+	private Long nId;
+	
 	@Column(name = "n_idProductos")
 	private Long idProductos;
 	

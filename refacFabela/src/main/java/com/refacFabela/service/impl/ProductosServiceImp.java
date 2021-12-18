@@ -12,10 +12,8 @@ import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvVentaProductoMes;
-import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
-import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.HistoriaPrecioProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
@@ -183,15 +181,7 @@ public class ProductosServiceImp implements ProductosService {
 
 	@Override
 	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id) {
-		
-		List<TvVentaProductoMes> listaVentas=ventaProductoMesRepository.obtenerVentaProductoMesId(id);
-		 
-		for (int i = 0; i < listaVentas.size(); i++) {
 			
-			System.err.println(listaVentas.get(i));
-			
-		}
-		
 		return ventaProductoMesRepository.obtenerVentaProductoMesId(id);
 	}
 
