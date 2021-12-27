@@ -83,9 +83,7 @@ public class VentasController {
 	@PostMapping("/guardarVenta")
 	public String guardarVenta(@RequestBody VentaDto ventaDto) {
 
-		try {
-			
-			
+		try {		
 			ventasService.guardarVenta(ventaDto);
 			
 			return "registrado";

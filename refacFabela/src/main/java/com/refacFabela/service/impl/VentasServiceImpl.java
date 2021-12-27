@@ -3,6 +3,8 @@ package com.refacFabela.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,9 @@ import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.VentasService;
 import com.refacFabela.utils.utils;
 
+
 @Service
+@Transactional
 public class VentasServiceImpl implements VentasService {
 	@Autowired
 	private VentasRepository ventasRepository;
@@ -38,13 +42,12 @@ public class VentasServiceImpl implements VentasService {
 
 	@Autowired
 	private ProductoBodegaRepository productoBodegaRepository;
-	
+
 	@Autowired
 	private AbonoVentaIdRepository abonoVentaIdRepository;
-	
+
 	@Autowired
 	private CotizacionRepository cotizacionRepository;
- 
 
 	@Override
 	public List<TwVenta> consltaVentas() {
@@ -57,7 +60,7 @@ public class VentasServiceImpl implements VentasService {
 
 		return tvVentaDetalleRepository.consultaVentaDetalleId(nIdCliente, nTipoPago);
 	}
-
+	
 	@Override
 	public void guardarVenta(VentaDto ventaDto) {
 
@@ -79,15 +82,15 @@ public class VentasServiceImpl implements VentasService {
 
 		List<TwVentasProducto> listaProductos = new ArrayList<TwVentasProducto>();
 
-		for (TvStockProductoDto producto : ventaDto.getListaValidada()) {
+		for (int i= 0 ; i < ventaDto.getListaValidada().size(); i++) {
 
 			TwVentasProducto twVentaProducto = new TwVentasProducto();
 
 			twVentaProducto.setnIdVenta(ventaRegistrada.getnId());
-			twVentaProducto.setnIdProducto(producto.getnIdProducto());
-			twVentaProducto.setnCantidad(producto.getnCantidad());
-			twVentaProducto.setnPrecioUnitario(producto.getTcProducto().getnPrecioSinIva());
-			twVentaProducto.setnIvaUnitario(producto.getTcProducto().getnPrecioConIva() - producto.getTcProducto().getnPrecioSinIva());
+			twVentaProducto.setnIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
+			twVentaProducto.setnCantidad(ventaDto.getListaValidada().get(i).getnCantidad());
+			twVentaProducto.setnPrecioUnitario(ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioSinIva());
+			twVentaProducto.setnIvaUnitario(ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioConIva() - ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioSinIva());
 			twVentaProducto.setnTotalUnitario(twVentaProducto.getnPrecioUnitario() + twVentaProducto.getnIvaUnitario());
 			twVentaProducto.setnPrecioPartida(twVentaProducto.getnCantidad() * twVentaProducto.getnTotalUnitario());
 			twVentaProducto.setnIvaPartida(twVentaProducto.getnPrecioPartida() * .16);
@@ -97,63 +100,68 @@ public class VentasServiceImpl implements VentasService {
 		}
 
 		this.ventasProductoRepository.saveAll(listaProductos);
-
-		this.descuentaStock(listaProductos);
 		
+
 		TwCotizaciones twCotizaciones = ventaDto.getTwCotizacion();
-		twCotizaciones.setnEstatus(2);		
+		twCotizaciones.setnEstatus(2);
 		this.cotizacionRepository.save(twCotizaciones);
+		this.descuentaStock(listaProductos);
 
 	}
 
 	private void descuentaStock(List<TwVentasProducto> listaProductos) {
 
-		for (TwVentasProducto twVentasProducto : listaProductos) {
+		for (TwVentasProducto listaProducto : listaProductos) {
 
-			List<TwProductobodega> listaStock = productoBodegaRepository.findBynIdProducto(twVentasProducto.getnIdProducto());
+			List<TwProductobodega> listaStock = new ArrayList<TwProductobodega>();
+			
+			listaStock = productoBodegaRepository
+					.findBynIdProducto(listaProducto.getnIdProducto());
 
-			do {
-				for (TwProductobodega twProBod : listaStock) {
+			while (listaProducto.getnCantidad() != 0) {
+				
+				for (TwProductobodega listaStockBodega : listaStock) {
 
-					if (twProBod.getnIdBodega() == 1) { // inicia en bodega 1
+					if (listaStockBodega.getnIdBodega() == 1) { // inicia en bodega 1
 
-						if (twProBod.getnCantidad() > 0) {// valida si hay stock en bodega 1
+						if (listaStockBodega.getnCantidad() > 0) {// valida si hay stock en bodega 1
 
-							if (twProBod.getnCantidad() >= twVentasProducto.getnCantidad()) {
+							if (listaStockBodega.getnCantidad() >= listaProducto.getnCantidad()) {
 
-								twProBod.setnCantidad(twProBod.getnCantidad() - twVentasProducto.getnCantidad());
+								listaStockBodega.setnCantidad(listaStockBodega.getnCantidad() - listaProducto.getnCantidad());
 
-								productoBodegaRepository.save(twProBod);// actualizamos stock
-								twVentasProducto.setnCantidad(0);
+								productoBodegaRepository.save(listaStockBodega);// actualizamos stock
+								
+								listaProducto.setnCantidad(0);
 
 							} else {
 
-								twVentasProducto
-										.setnCantidad(twVentasProducto.getnCantidad() - twProBod.getnCantidad());
-								twProBod.setnCantidad(0);
-								productoBodegaRepository.save(twProBod); // actualizamos stock
+								listaProducto
+										.setnCantidad(listaProducto.getnCantidad() - listaStockBodega.getnCantidad());
+								listaStockBodega.setnCantidad(0);
+								productoBodegaRepository.save(listaStockBodega); // actualizamos stock
 
 							}
 
 						}
 
-					} else if (twProBod.getnIdBodega() == 2) { // si no hay stock en bodega 1 entra a bodega 2
+					} else if (listaStockBodega.getnIdBodega() == 2) { // si no hay stock en bodega 1 entra a bodega 2
 
-						if (twProBod.getnCantidad() > 0) {// valida si hay stock en bodega 1
+						if (listaStockBodega.getnCantidad() > 0) {// valida si hay stock en bodega 2
 
-							if (twProBod.getnCantidad() >= twVentasProducto.getnCantidad()) {
+							if (listaStockBodega.getnCantidad() >= listaProducto.getnCantidad()) {
 
-								twProBod.setnCantidad(twProBod.getnCantidad() - twVentasProducto.getnCantidad());
+								listaStockBodega.setnCantidad(listaStockBodega.getnCantidad() - listaProducto.getnCantidad());
 
-								productoBodegaRepository.save(twProBod);// actualizamos stock
-								twVentasProducto.setnCantidad(0);
+								productoBodegaRepository.save(listaStockBodega);// actualizamos stock
+								listaProducto.setnCantidad(0);
 
 							} else {
 
-								twVentasProducto
-										.setnCantidad(twVentasProducto.getnCantidad() - twProBod.getnCantidad());
-								twProBod.setnCantidad(0);
-								productoBodegaRepository.save(twProBod); // actualizamos stock
+								listaProducto
+										.setnCantidad(listaProducto.getnCantidad() - listaStockBodega.getnCantidad());
+								listaStockBodega.setnCantidad(0);
+								productoBodegaRepository.save(listaStockBodega); // actualizamos stock
 
 							}
 
@@ -162,33 +170,36 @@ public class VentasServiceImpl implements VentasService {
 
 					else { // entra a la bodega 3
 
-						if (twProBod.getnCantidad() >= twVentasProducto.getnCantidad()) {
+						if (listaStockBodega.getnCantidad() > 0) {// valida si hay stock en bodega 3
 
-							twProBod.setnCantidad(twProBod.getnCantidad() - twVentasProducto.getnCantidad());
+							if (listaStockBodega.getnCantidad() >= listaProducto.getnCantidad()) {
 
-							productoBodegaRepository.save(twProBod);// actualizamos stock
-							twVentasProducto.setnCantidad(0);
+								listaStockBodega.setnCantidad(listaStockBodega.getnCantidad() - listaProducto.getnCantidad());
 
-						} else {
+								productoBodegaRepository.save(listaStockBodega);// actualizamos stock
+								listaProducto.setnCantidad(0);
 
-							twVentasProducto.setnCantidad(twVentasProducto.getnCantidad() - twProBod.getnCantidad());
-							twProBod.setnCantidad(0);
-							productoBodegaRepository.save(twProBod); // actualizamos stock
+							} else {
 
+								listaProducto
+										.setnCantidad(listaProducto.getnCantidad() - listaStockBodega.getnCantidad());
+								listaStockBodega.setnCantidad(0);
+								productoBodegaRepository.save(listaStockBodega); // actualizamos stock
+
+							}
 						}
 
 					}
 
 				}
 
-			} while (twVentasProducto.getnCantidad() != 0);
+			} 
 		}
 
-		}
-		
+	}
 
 	public List<TwAbono> consultaAbonoVentaId(Long nId) {
-		
+
 		return abonoVentaIdRepository.findBynIdVenta(nId);
 
 	}
@@ -198,7 +209,5 @@ public class VentasServiceImpl implements VentasService {
 		// TODO Auto-generated method stub
 		return tvVentaDetalleRepository.findAll();
 	}
-
-	
 
 }

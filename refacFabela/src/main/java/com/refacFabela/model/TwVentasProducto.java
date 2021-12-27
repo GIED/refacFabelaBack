@@ -6,7 +6,6 @@ import java.util.Date;
 
 @Entity
 @Table(name = "tw_ventas_producto")
-@NamedQuery(name = "TwVentasProducto.findAll", query = "SELECT t FROM TwVentasProducto t")
 public class TwVentasProducto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
