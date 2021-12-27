@@ -72,6 +72,10 @@ public class TvVentaDetalle implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "n_idUsuario", updatable = false, insertable = false)
 	private TcUsuario tcUsuario;
+	
+	@ManyToOne
+	@JoinColumn(name = "n_estatusVenta", referencedColumnName =  "n_clave", updatable = false, insertable = false)
+	private TcEstatusVenta tcEstatusVenta;
 
 	
 	
@@ -211,6 +215,14 @@ public class TvVentaDetalle implements Serializable {
 
 	public void setTcUsuario(TcUsuario tcUsuario) {
 		this.tcUsuario = tcUsuario;
+	}
+
+	public TcEstatusVenta getTcEstatusVenta() {
+		return tcEstatusVenta;
+	}
+
+	public void setTcEstatusVenta(TcEstatusVenta tcEstatusVenta) {
+		this.tcEstatusVenta = tcEstatusVenta;
 	}
 	
 	

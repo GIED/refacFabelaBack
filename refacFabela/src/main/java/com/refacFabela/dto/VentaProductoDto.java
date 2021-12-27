@@ -18,6 +18,7 @@ public class VentaProductoDto implements  Serializable {
 	private double nTotalUnitario;
 	private double nTotalPartida;
 	private Date dFechaVenta;
+	private Boolean nEstatusEntregaAlmacen;
 	
 	public VentaProductoDto(TwVentasProducto twVentasProducto ) {
 		super();
@@ -30,6 +31,7 @@ public class VentaProductoDto implements  Serializable {
 		this.nTotalUnitario =twVentasProducto.getnTotalUnitario();
 		this.nTotalPartida = twVentasProducto.getnTotalPartida();
 		this.dFechaVenta = twVentasProducto.getTwVenta().getdFechaVenta();
+		this.nEstatusEntregaAlmacen = twVentasProducto.getnEstatusEntregaAlmacen();
 	}
 
 	public Long getnId() {
@@ -103,6 +105,25 @@ public class VentaProductoDto implements  Serializable {
 	public void setdFechaVenta(Date dFechaVenta) {
 		this.dFechaVenta = dFechaVenta;
 	}
+
+	public Boolean getnEstatusEntregaAlmacen() {
+		return nEstatusEntregaAlmacen;
+	}
+
+	public void setnEstatusEntregaAlmacen(Boolean nEstatusEntregaAlmacen) {
+		this.nEstatusEntregaAlmacen = nEstatusEntregaAlmacen;
+	}
+
+	@Override
+	public String toString() {
+		return "VentaProductoDto [nId=" + nId + ", sNoParte=" + sNoParte + ", sProducto=" + sProducto
+				+ ", sDescripcion=" + sDescripcion + ", sMarca=" + sMarca + ", nCantidad=" + nCantidad
+				+ ", nTotalUnitario=" + nTotalUnitario + ", nTotalPartida=" + nTotalPartida + ", dFechaVenta="
+				+ dFechaVenta + ", nEstatusEntregaAlmacen=" + nEstatusEntregaAlmacen + "]";
+	}
+
+	
+	
 
 	
 	

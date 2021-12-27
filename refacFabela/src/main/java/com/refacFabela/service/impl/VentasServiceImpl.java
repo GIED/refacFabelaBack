@@ -195,8 +195,14 @@ public class VentasServiceImpl implements VentasService {
 
 	@Override
 	public List<TvVentaDetalle> consultaVentaDetalle() {
-		// TODO Auto-generated method stub
+	
 		return tvVentaDetalleRepository.findAll();
+	}
+
+	@Override
+	public List<TvVentaDetalle> consultaVentaDetalleEntrega() {
+		
+		return tvVentaDetalleRepository.consultaVentaDetalleEntrega();
 	}
 
 	

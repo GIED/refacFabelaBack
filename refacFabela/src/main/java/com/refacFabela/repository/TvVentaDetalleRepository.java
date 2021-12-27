@@ -14,6 +14,10 @@ public interface TvVentaDetalleRepository extends JpaRepository<TvVentaDetalle, 
 	@Query("Select c from TvVentaDetalle c where c.nIdCliente=:nIdCliente and c.nTipoPago=:nTipoPago")
 	public List<TvVentaDetalle> consultaVentaDetalleId(Long nIdCliente, long nTipoPago);
 	
+	@Query(value = "select de.* from tv_ventadetalle de join (\n" + 
+			"select distinct(n_idVenta), count(n_idVenta) as total_no_entregados from  tw_ventas_producto where n_estatusEntregaAlmacen=0 group by n_idVenta)tot on de.n_id=tot.n_idVenta where tot.total_no_entregados>0 and de.n_estatusVenta>0 and de.n_estatusVenta<>3",   nativeQuery = true)
+	public List<TvVentaDetalle> consultaVentaDetalleEntrega();
+	
 	
 	
 }

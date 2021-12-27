@@ -26,5 +26,6 @@ public interface ProductosService {
 	public TvStockProducto obtenerStockProductoId(Long id);
 	public List<VentaProductoDto> obtenerProductosVentaId(Long id);
 	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id);
+	public String consultaVentaProductoId(TwVentasProducto ventaProductoDto);
 	
 }

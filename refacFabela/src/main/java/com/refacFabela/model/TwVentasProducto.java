@@ -36,7 +36,7 @@ public class TwVentasProducto implements Serializable {
 	private int nCantidad;
 	
 	@Column(name = "n_estatusEntregaAlmacen")
-	private int nEstatusEntregaAlmacen;
+	private Boolean nEstatusEntregaAlmacen;
 	
 	@Column(name = "n_ivaPartida")
 	private double nIvaPartida;
@@ -130,11 +130,11 @@ public class TwVentasProducto implements Serializable {
 		this.nCantidad = nCantidad;
 	}
 
-	public int getnEstatusEntregaAlmacen() {
+	public Boolean getnEstatusEntregaAlmacen() {
 		return nEstatusEntregaAlmacen;
 	}
 
-	public void setnEstatusEntregaAlmacen(int nEstatusEntregaAlmacen) {
+	public void setnEstatusEntregaAlmacen(Boolean nEstatusEntregaAlmacen) {
 		this.nEstatusEntregaAlmacen = nEstatusEntregaAlmacen;
 	}
 
@@ -208,6 +208,17 @@ public class TwVentasProducto implements Serializable {
 
 	public void setTwVenta(TwVenta twVenta) {
 		this.twVenta = twVenta;
+	}
+
+	@Override
+	public String toString() {
+		return "TwVentasProducto [nId=" + nId + ", nIdVenta=" + nIdVenta + ", nIdProducto=" + nIdProducto
+				+ ", nIdUsuario=" + nIdUsuario + ", dFechaEntregaAlmacen=" + dFechaEntregaAlmacen
+				+ ", dFechaEntregaEstimada=" + dFechaEntregaEstimada + ", nCantidad=" + nCantidad
+				+ ", nEstatusEntregaAlmacen=" + nEstatusEntregaAlmacen + ", nIvaPartida=" + nIvaPartida
+				+ ", nIvaUnitario=" + nIvaUnitario + ", nPrecioPartida=" + nPrecioPartida + ", nPrecioUnitario="
+				+ nPrecioUnitario + ", nTotalPartida=" + nTotalPartida + ", nTotalUnitario=" + nTotalUnitario
+				+ ", tcProducto=" + tcProducto + ", tcUsuario=" + tcUsuario + ", twVenta=" + twVenta + "]";
 	}
 	
 	

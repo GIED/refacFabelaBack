@@ -27,8 +27,7 @@ public class TwVenta implements Serializable {
 	@Column(name = "d_fechaVenta")
 	private Date dFechaVenta;
 	
-	@Column(name = "n_estatusVenta")
-	private int nEstatusVenta;
+
 	
 	@Column(name = "n_idFacturacion")
 	private Long nIdFacturacion;
@@ -70,11 +69,18 @@ public class TwVenta implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "n_idUsuario", updatable = false, insertable = false)
 	private TcUsuario tcUsuario;
+	
+	@ManyToOne
+	@JoinColumn(name = "n_estatusVenta", updatable = false, insertable = false)
+	private TcEstatusVenta tcEstatusVenta;
 
 	// bi-directional many-to-one association to TwCaja
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "n_idCaja", updatable = false, insertable = false)
 	private TwCaja twCaja;	
+	
+	
+	
 	
 
 	public TwVenta() {
@@ -134,13 +140,16 @@ public class TwVenta implements Serializable {
 	}
 
 
-	public int getnEstatusVenta() {
-		return nEstatusVenta;
+	
+
+
+	public TcEstatusVenta getTcEstatusVenta() {
+		return tcEstatusVenta;
 	}
 
 
-	public void setnEstatusVenta(int nEstatusVenta) {
-		this.nEstatusVenta = nEstatusVenta;
+	public void setTcEstatusVenta(TcEstatusVenta tcEstatusVenta) {
+		this.tcEstatusVenta = tcEstatusVenta;
 	}
 
 
