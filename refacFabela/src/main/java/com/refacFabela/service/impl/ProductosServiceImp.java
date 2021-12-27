@@ -14,6 +14,7 @@ import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
+import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.HistoriaPrecioProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
@@ -183,6 +184,25 @@ public class ProductosServiceImp implements ProductosService {
 	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id) {
 			
 		return ventaProductoMesRepository.obtenerVentaProductoMesId(id);
+	}
+
+	@Override
+	public String consultaVentaProductoId(TwVentasProducto ventaProductoDto) {
+		
+	
+		
+		TwVentasProducto twVentasProductoDTO=new TwVentasProducto();
+		
+		System.err.println(ventaProductoDto.getnId());
+		
+		twVentasProductoDTO=twProductosVentaRepository.obtenerPrpductosId(ventaProductoDto.getnId());
+		twVentasProductoDTO.setdFechaEntregaAlmacen(utils.fechaSistema);
+		twVentasProductoDTO.setnEstatusEntregaAlmacen(ventaProductoDto.getnEstatusEntregaAlmacen());
+		
+		twProductosVentaRepository.save(twVentasProductoDTO); 
+		
+		 String mensaje="Se guardo el estatus de entrega";
+		return mensaje ;
 	}
 
 	

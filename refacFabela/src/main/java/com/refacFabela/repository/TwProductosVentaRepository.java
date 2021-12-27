@@ -15,5 +15,8 @@ public interface TwProductosVentaRepository extends JpaRepository<TwVentasProduc
 	@Query("Select new com.refacFabela.dto.VentaProductoDto (e) from TwVentasProducto e where twVenta.nId=:id")	
 	public List<VentaProductoDto> obtenerPrpductosVentaId(Long id);
 	public List<TwVentasProducto> findBynIdVenta(Long id);
+	@Query("Select e from TwVentasProducto e where nId=:id")	
+	public TwVentasProducto obtenerPrpductosId(Long id);
+
 
 }

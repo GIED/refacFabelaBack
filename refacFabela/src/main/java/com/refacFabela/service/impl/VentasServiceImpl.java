@@ -8,19 +8,16 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.model.TvVentaDetalle;
-import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCotizaciones;
+import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwVenta;
-
 import com.refacFabela.model.TwVentasProducto;
-import com.refacFabela.repository.ProductoBodegaRepository;
-
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CotizacionRepository;
+import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
@@ -206,8 +203,16 @@ public class VentasServiceImpl implements VentasService {
 
 	@Override
 	public List<TvVentaDetalle> consultaVentaDetalle() {
-		// TODO Auto-generated method stub
+	
 		return tvVentaDetalleRepository.findAll();
 	}
 
+
+	@Override
+	public List<TvVentaDetalle> consultaVentaDetalleEntrega() {
+		
+		return tvVentaDetalleRepository.consultaVentaDetalleEntrega();
+	}
+
+	
 }

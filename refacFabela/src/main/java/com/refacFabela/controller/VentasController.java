@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.dto.VentaProductoDto;
+import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwVenta;
+import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.service.VentasService;
 
@@ -49,6 +51,18 @@ public class VentasController {
 	public List<TvVentaDetalle> consultaVentasDetalle() {
 		try {
 			return ventasService.consultaVentaDetalle();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener todas las ventas " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerVentasDetalleEntrega")
+	public List<TvVentaDetalle> consultaVentasDetalleEntrega() {
+		try {
+			return ventasService.consultaVentaDetalleEntrega();
 
 		} catch (Exception e) {
 
@@ -112,6 +126,19 @@ public class VentasController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los productos vendidos por mes" + e);
+		}
+		return null;
+	}
+	
+	@PostMapping("/guardaVentaProductoId")
+	public String obtenerProductoVendidoId(@RequestBody TwVentasProducto ventaProductoDto) {
+
+		try {
+		
+			return productosService.consultaVentaProductoId(ventaProductoDto);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos vendidos por id" + e);
 		}
 		return null;
 	}
