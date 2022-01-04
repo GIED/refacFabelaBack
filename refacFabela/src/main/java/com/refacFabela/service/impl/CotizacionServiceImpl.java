@@ -37,7 +37,7 @@ public class CotizacionServiceImpl implements CotizacionService {
 		TwCotizaciones twCotizacion = new TwCotizaciones();
 		
 		twCotizacion.setnIdCliente(listaCotizacion.get(0).getnIdCliente());
-		twCotizacion.setnIdUsuario(1L);
+		twCotizacion.setnIdUsuario(listaCotizacion.get(0).getnIdUsuario());
 		twCotizacion.setsFolioCotizacion(listaCotizacion.get(0).getsFolio());
 		twCotizacion.setdFecha(utils.fechaSistema);
 		twCotizacion.setnEstatus(1);

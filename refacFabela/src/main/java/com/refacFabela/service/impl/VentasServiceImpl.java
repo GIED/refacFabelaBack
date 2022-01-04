@@ -66,7 +66,7 @@ public class VentasServiceImpl implements VentasService {
 		TwVenta twVenta = new TwVenta();
 
 		twVenta.setnIdCliente(ventaDto.getIdCliente());
-		twVenta.setnIdUsuario(1l);
+		twVenta.setnIdUsuario(ventaDto.getIdUsuario());
 		twVenta.setsFolioVenta(ventaDto.getsFolioVenta());
 		twVenta.setnIdTipoVenta(ventaDto.getIdTipoVenta().longValue());
 		twVenta.setnTipoPago(ventaDto.getTipoPago().longValue());
@@ -89,33 +89,37 @@ public class VentasServiceImpl implements VentasService {
 			twVentaProducto.setnPrecioUnitario(ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioSinIva());
 			twVentaProducto.setnIvaUnitario(ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioConIva() - ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioSinIva());
 			twVentaProducto.setnTotalUnitario(twVentaProducto.getnPrecioUnitario() + twVentaProducto.getnIvaUnitario());
-			twVentaProducto.setnPrecioPartida(twVentaProducto.getnCantidad() * twVentaProducto.getnTotalUnitario());
+			twVentaProducto.setnPrecioPartida(twVentaProducto.getnCantidad() * twVentaProducto.getnPrecioUnitario());
 			twVentaProducto.setnIvaPartida(twVentaProducto.getnPrecioPartida() * .16);
 			twVentaProducto.setnTotalPartida(twVentaProducto.getnPrecioPartida() + twVentaProducto.getnIvaPartida());
+			twVentaProducto.setnIdUsuario(ventaDto.getIdUsuario());
 
 			listaProductos.add(twVentaProducto);
 		}
 
 		this.ventasProductoRepository.saveAll(listaProductos);
 		
-
-		TwCotizaciones twCotizaciones = ventaDto.getTwCotizacion();
-		twCotizaciones.setnEstatus(2);
-		this.cotizacionRepository.save(twCotizaciones);
-		this.descuentaStock(listaProductos);
+		if (twVenta.getnIdTipoVenta()== 1L) {
+			TwCotizaciones twCotizaciones = ventaDto.getTwCotizacion();
+			twCotizaciones.setnEstatus(2);
+			this.cotizacionRepository.save(twCotizaciones);			
+			this.descuentaStock(listaProductos);
+		}
 
 	}
 
 	private void descuentaStock(List<TwVentasProducto> listaProductos) {
 
-		for (TwVentasProducto listaProducto : listaProductos) {
+		for (int i=0; i < listaProductos.size(); i++) {
 
 			List<TwProductobodega> listaStock = new ArrayList<TwProductobodega>();
 			
 			listaStock = productoBodegaRepository
-					.findBynIdProducto(listaProducto.getnIdProducto());
+					.findBynIdProducto(listaProductos.get(i).getnIdProducto());
+			
+			int cantidad = listaProductos.get(i).getnCantidad();
 
-			while (listaProducto.getnCantidad() != 0) {
+			while (cantidad != 0) {
 				
 				for (TwProductobodega listaStockBodega : listaStock) {
 
@@ -123,18 +127,17 @@ public class VentasServiceImpl implements VentasService {
 
 						if (listaStockBodega.getnCantidad() > 0) {// valida si hay stock en bodega 1
 
-							if (listaStockBodega.getnCantidad() >= listaProducto.getnCantidad()) {
+							if (listaStockBodega.getnCantidad() >= cantidad) {
 
-								listaStockBodega.setnCantidad(listaStockBodega.getnCantidad() - listaProducto.getnCantidad());
+								listaStockBodega.setnCantidad(listaStockBodega.getnCantidad() - cantidad);
 
 								productoBodegaRepository.save(listaStockBodega);// actualizamos stock
 								
-								listaProducto.setnCantidad(0);
+								cantidad = 0;
 
 							} else {
 
-								listaProducto
-										.setnCantidad(listaProducto.getnCantidad() - listaStockBodega.getnCantidad());
+								cantidad = cantidad - listaStockBodega.getnCantidad();
 								listaStockBodega.setnCantidad(0);
 								productoBodegaRepository.save(listaStockBodega); // actualizamos stock
 
@@ -146,17 +149,16 @@ public class VentasServiceImpl implements VentasService {
 
 						if (listaStockBodega.getnCantidad() > 0) {// valida si hay stock en bodega 2
 
-							if (listaStockBodega.getnCantidad() >= listaProducto.getnCantidad()) {
+							if (listaStockBodega.getnCantidad() >= cantidad) {
 
-								listaStockBodega.setnCantidad(listaStockBodega.getnCantidad() - listaProducto.getnCantidad());
+								listaStockBodega.setnCantidad(listaStockBodega.getnCantidad() - cantidad);
 
 								productoBodegaRepository.save(listaStockBodega);// actualizamos stock
-								listaProducto.setnCantidad(0);
+								cantidad = 0;
 
 							} else {
 
-								listaProducto
-										.setnCantidad(listaProducto.getnCantidad() - listaStockBodega.getnCantidad());
+								cantidad = cantidad - listaStockBodega.getnCantidad();
 								listaStockBodega.setnCantidad(0);
 								productoBodegaRepository.save(listaStockBodega); // actualizamos stock
 
@@ -169,17 +171,16 @@ public class VentasServiceImpl implements VentasService {
 
 						if (listaStockBodega.getnCantidad() > 0) {// valida si hay stock en bodega 3
 
-							if (listaStockBodega.getnCantidad() >= listaProducto.getnCantidad()) {
+							if (listaStockBodega.getnCantidad() >= cantidad) {
 
-								listaStockBodega.setnCantidad(listaStockBodega.getnCantidad() - listaProducto.getnCantidad());
+								listaStockBodega.setnCantidad(listaStockBodega.getnCantidad() - cantidad);
 
 								productoBodegaRepository.save(listaStockBodega);// actualizamos stock
-								listaProducto.setnCantidad(0);
+								cantidad = 0;
 
 							} else {
 
-								listaProducto
-										.setnCantidad(listaProducto.getnCantidad() - listaStockBodega.getnCantidad());
+								cantidad = cantidad - listaStockBodega.getnCantidad();
 								listaStockBodega.setnCantidad(0);
 								productoBodegaRepository.save(listaStockBodega); // actualizamos stock
 
