@@ -27,7 +27,8 @@ public class TwVenta implements Serializable {
 	@Column(name = "d_fechaVenta")
 	private Date dFechaVenta;
 	
-
+	@Column(name = "n_estatusVenta")
+	private Long nIdEstatusVenta;
 	
 	@Column(name = "n_idFacturacion")
 	private Long nIdFacturacion;
@@ -52,6 +53,9 @@ public class TwVenta implements Serializable {
 	
 	@Column(name = "n_idCotizacion")
 	private Long nIdCotizacion;
+	
+	@Column(name = "nAnticipo")
+	private Double anticipo;
 	
 
 
@@ -139,8 +143,19 @@ public class TwVenta implements Serializable {
 		this.dFechaVenta = dFechaVenta;
 	}
 
-
 	
+	
+	
+
+
+	public Long getnIdEstatusVenta() {
+		return nIdEstatusVenta;
+	}
+
+
+	public void setnIdEstatusVenta(Long nIdEstatusVenta) {
+		this.nIdEstatusVenta = nIdEstatusVenta;
+	}
 
 
 	public TcEstatusVenta getTcEstatusVenta() {
@@ -271,6 +286,18 @@ public class TwVenta implements Serializable {
 	public void setnIdCotizacion(Long nIdCotizacion) {
 		this.nIdCotizacion = nIdCotizacion;
 	}
+
+
+	public Double getAnticipo() {
+		return anticipo;
+	}
+
+
+	public void setAnticipo(Double anticipo) {
+		this.anticipo = anticipo;
+	}
+	
+	
 
 
 

@@ -59,7 +59,7 @@ public class VentasServiceImpl implements VentasService {
 	}
 	
 	@Override
-	public void guardarVenta(VentaDto ventaDto) {
+	public TwVenta guardarVenta(VentaDto ventaDto) {
 
 		System.out.println(ventaDto);
 
@@ -73,11 +73,15 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setdFechaInicioCredito(ventaDto.getFechaIniCredito());
 		twVenta.setdFechaTerminoCredito(ventaDto.getFechaFinCredito());
 		twVenta.setdFechaVenta(utils.fechaSistema);
+		twVenta.setnIdEstatusVenta(1L);
+		twVenta.setnIdFacturacion(0L);
+		twVenta.setnIdCaja(0L);
 		twVenta.setnIdCotizacion(ventaDto.getTwCotizacion().getnId());
+		twVenta.setAnticipo(ventaDto.getAnticipo());
 
-		TwVenta ventaRegistrada = ventasRepository.save(twVenta);
+		TwVenta ventaRegistrada = new TwVenta();
+		ventaRegistrada = ventasRepository.save(twVenta);
 
-		List<TwVentasProducto> listaProductos = new ArrayList<TwVentasProducto>();
 
 		for (int i= 0 ; i < ventaDto.getListaValidada().size(); i++) {
 
@@ -92,32 +96,38 @@ public class VentasServiceImpl implements VentasService {
 			twVentaProducto.setnPrecioPartida(twVentaProducto.getnCantidad() * twVentaProducto.getnPrecioUnitario());
 			twVentaProducto.setnIvaPartida(twVentaProducto.getnPrecioPartida() * .16);
 			twVentaProducto.setnTotalPartida(twVentaProducto.getnPrecioPartida() + twVentaProducto.getnIvaPartida());
+			twVentaProducto.setnEstatusEntregaAlmacen(0);
 			twVentaProducto.setnIdUsuario(ventaDto.getIdUsuario());
+			
+			TwVentasProducto twVentaProductoNew = new TwVentasProducto();
 
-			listaProductos.add(twVentaProducto);
+			twVentaProductoNew = this.ventasProductoRepository.save(twVentaProducto);
+			
+			if (twVenta.getnIdTipoVenta()== 1L) {
+				this.descuentaStock(twVentaProductoNew);
+			}
 		}
 
-		this.ventasProductoRepository.saveAll(listaProductos);
 		
 		if (twVenta.getnIdTipoVenta()== 1L) {
 			TwCotizaciones twCotizaciones = ventaDto.getTwCotizacion();
 			twCotizaciones.setnEstatus(2);
 			this.cotizacionRepository.save(twCotizaciones);			
-			this.descuentaStock(listaProductos);
 		}
+		
+		return ventaRegistrada;
 
 	}
 
-	private void descuentaStock(List<TwVentasProducto> listaProductos) {
+	private void descuentaStock(TwVentasProducto twVentaProducto) {
 
-		for (int i=0; i < listaProductos.size(); i++) {
+		
 
 			List<TwProductobodega> listaStock = new ArrayList<TwProductobodega>();
 			
-			listaStock = productoBodegaRepository
-					.findBynIdProducto(listaProductos.get(i).getnIdProducto());
+			listaStock = productoBodegaRepository.findBynIdProducto(twVentaProducto.getnIdProducto());
 			
-			int cantidad = listaProductos.get(i).getnCantidad();
+			int cantidad = twVentaProducto.getnCantidad();
 
 			while (cantidad != 0) {
 				
@@ -134,12 +144,16 @@ public class VentasServiceImpl implements VentasService {
 								productoBodegaRepository.save(listaStockBodega);// actualizamos stock
 								
 								cantidad = 0;
+								twVentaProducto.setdFechaEntregaEstimada(utils.today);
+								this.ventasProductoRepository.save(twVentaProducto);
 
 							} else {
 
 								cantidad = cantidad - listaStockBodega.getnCantidad();
 								listaStockBodega.setnCantidad(0);
 								productoBodegaRepository.save(listaStockBodega); // actualizamos stock
+								twVentaProducto.setdFechaEntregaEstimada(utils.tomorrow);
+								this.ventasProductoRepository.save(twVentaProducto);
 
 							}
 
@@ -155,12 +169,16 @@ public class VentasServiceImpl implements VentasService {
 
 								productoBodegaRepository.save(listaStockBodega);// actualizamos stock
 								cantidad = 0;
+								twVentaProducto.setdFechaEntregaEstimada(utils.tomorrow);
+								this.ventasProductoRepository.save(twVentaProducto);
 
 							} else {
 
 								cantidad = cantidad - listaStockBodega.getnCantidad();
 								listaStockBodega.setnCantidad(0);
 								productoBodegaRepository.save(listaStockBodega); // actualizamos stock
+								twVentaProducto.setdFechaEntregaEstimada(utils.tomorrow);
+								this.ventasProductoRepository.save(twVentaProducto);
 
 							}
 
@@ -177,12 +195,16 @@ public class VentasServiceImpl implements VentasService {
 
 								productoBodegaRepository.save(listaStockBodega);// actualizamos stock
 								cantidad = 0;
+								twVentaProducto.setdFechaEntregaEstimada(utils.tomorrow);
+								this.ventasProductoRepository.save(twVentaProducto);
 
 							} else {
 
 								cantidad = cantidad - listaStockBodega.getnCantidad();
 								listaStockBodega.setnCantidad(0);
 								productoBodegaRepository.save(listaStockBodega); // actualizamos stock
+								twVentaProducto.setdFechaEntregaEstimada(utils.tomorrow);
+								this.ventasProductoRepository.save(twVentaProducto);
 
 							}
 						}
@@ -192,7 +214,7 @@ public class VentasServiceImpl implements VentasService {
 				}
 
 			} 
-		}
+		
 
 	}
 

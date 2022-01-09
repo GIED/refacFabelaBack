@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.dto.VentaProductoDto;
-import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TwAbono;
@@ -95,12 +94,12 @@ public class VentasController {
 	}
 	
 	@PostMapping("/guardarVenta")
-	public String guardarVenta(@RequestBody VentaDto ventaDto) {
+	public TwVenta guardarVenta(@RequestBody VentaDto ventaDto) {
 
 		try {		
-			ventasService.guardarVenta(ventaDto);
 			
-			return "registrado";
+			
+			return ventasService.guardarVenta(ventaDto);
 		} catch (Exception e) {
 
 			logger.error("Error al guardar la venta" + e);

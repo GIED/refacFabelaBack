@@ -42,7 +42,8 @@ public class CotizacionServiceImpl implements CotizacionService {
 		twCotizacion.setdFecha(utils.fechaSistema);
 		twCotizacion.setnEstatus(1);
 		
-		TwCotizaciones cotizacionRegistrada = cotizacionRepository.save(twCotizacion);
+		TwCotizaciones cotizacionRegistrada = new TwCotizaciones();
+		cotizacionRegistrada = cotizacionRepository.save(twCotizacion);
 		
 		List<TwCotizacionesProducto> listaCotizacionRegistro = new ArrayList<TwCotizacionesProducto>();
 		
@@ -109,6 +110,14 @@ public class CotizacionServiceImpl implements CotizacionService {
 		
 		
 		return listaProductos;
+	}
+
+
+
+	@Override
+	public List<TwCotizacionesProducto> consultaCotizacionIdCotizacion(Long id) {
+		// TODO Auto-generated method stub
+		return cotizacionProductoRepository.findBynIdCotizacion(id);
 	}
 
 

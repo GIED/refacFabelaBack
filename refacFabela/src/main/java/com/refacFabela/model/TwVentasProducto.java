@@ -1,6 +1,8 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -28,14 +30,13 @@ public class TwVentasProducto implements Serializable {
 	private Date dFechaEntregaAlmacen;
 
 	@Column(name = "d_fechaEntregaEstimada")
-	@Temporal(TemporalType.DATE)
-	private Date dFechaEntregaEstimada;
+	private LocalDateTime dFechaEntregaEstimada;
 
 	@Column(name = "n_cantidad")
 	private int nCantidad;
 	
 	@Column(name = "n_estatusEntregaAlmacen")
-	private Boolean nEstatusEntregaAlmacen;
+	private int nEstatusEntregaAlmacen;
 	
 	@Column(name = "n_ivaPartida")
 	private double nIvaPartida;
@@ -113,11 +114,13 @@ public class TwVentasProducto implements Serializable {
 		this.dFechaEntregaAlmacen = dFechaEntregaAlmacen;
 	}
 
-	public Date getdFechaEntregaEstimada() {
+	
+
+	public LocalDateTime getdFechaEntregaEstimada() {
 		return dFechaEntregaEstimada;
 	}
 
-	public void setdFechaEntregaEstimada(Date dFechaEntregaEstimada) {
+	public void setdFechaEntregaEstimada(LocalDateTime dFechaEntregaEstimada) {
 		this.dFechaEntregaEstimada = dFechaEntregaEstimada;
 	}
 
@@ -129,11 +132,13 @@ public class TwVentasProducto implements Serializable {
 		this.nCantidad = nCantidad;
 	}
 
-	public Boolean getnEstatusEntregaAlmacen() {
+	
+
+	public int getnEstatusEntregaAlmacen() {
 		return nEstatusEntregaAlmacen;
 	}
 
-	public void setnEstatusEntregaAlmacen(Boolean nEstatusEntregaAlmacen) {
+	public void setnEstatusEntregaAlmacen(int nEstatusEntregaAlmacen) {
 		this.nEstatusEntregaAlmacen = nEstatusEntregaAlmacen;
 	}
 

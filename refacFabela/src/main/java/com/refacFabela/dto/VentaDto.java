@@ -14,6 +14,7 @@ public class VentaDto {
 	   private Integer tipoPago;
 	   private Date fechaIniCredito;
 	   private Date fechaFinCredito;
+	   private Double anticipo;
 	   private List<TvStockProductoDto> listaValidada;
 	   private TwCotizaciones twCotizacion;
 	   
@@ -72,13 +73,23 @@ public class VentaDto {
 	public void setTwCotizacion(TwCotizaciones twCotizacion) {
 		this.twCotizacion = twCotizacion;
 	}
+	
+	
+	public Double getAnticipo() {
+		return anticipo;
+	}
+	public void setAnticipo(Double anticipo) {
+		this.anticipo = anticipo;
+	}
 	@Override
 	public String toString() {
 		return "VentaDto [idCliente=" + idCliente + ", idUsuario=" + idUsuario + ", sFolioVenta=" + sFolioVenta
 				+ ", idTipoVenta=" + idTipoVenta + ", tipoPago=" + tipoPago + ", fechaIniCredito=" + fechaIniCredito
-				+ ", fechaFinCredito=" + fechaFinCredito + ", listaValidada=" + listaValidada + ", twCotizaciones="
-				+ twCotizacion + "]";
+				+ ", fechaFinCredito=" + fechaFinCredito + ", anticipo=" + anticipo + ", listaValidada=" + listaValidada
+				+ ", twCotizacion=" + twCotizacion + "]";
 	}
+	
+	
 	
 	
 	

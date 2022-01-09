@@ -18,7 +18,7 @@ public class VentaProductoDto implements  Serializable {
 	private double nTotalUnitario;
 	private double nTotalPartida;
 	private Date dFechaVenta;
-	private Boolean nEstatusEntregaAlmacen;
+	private int nEstatusEntregaAlmacen;
 	
 	public VentaProductoDto(TwVentasProducto twVentasProducto ) {
 		super();
@@ -106,11 +106,11 @@ public class VentaProductoDto implements  Serializable {
 		this.dFechaVenta = dFechaVenta;
 	}
 
-	public Boolean getnEstatusEntregaAlmacen() {
+	public int getnEstatusEntregaAlmacen() {
 		return nEstatusEntregaAlmacen;
 	}
 
-	public void setnEstatusEntregaAlmacen(Boolean nEstatusEntregaAlmacen) {
+	public void setnEstatusEntregaAlmacen(int nEstatusEntregaAlmacen) {
 		this.nEstatusEntregaAlmacen = nEstatusEntregaAlmacen;
 	}
 
