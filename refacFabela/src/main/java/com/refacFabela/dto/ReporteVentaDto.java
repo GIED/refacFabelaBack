@@ -26,6 +26,9 @@ public class ReporteVentaDto implements Serializable{
 	private Double ivaTotal;
 	private Double total;
 	private Double anticipo;
+	private String descripcionCatSat;
+	private Double saldoFinal;
+	private Long tipoPago;
 	
 	
 	
@@ -33,9 +36,16 @@ public class ReporteVentaDto implements Serializable{
 	
 	
 	public ReporteVentaDto() {
+	}	
+	
+	public Long getTipoPago() {
+		return tipoPago;
 	}
-	
-	
+
+	public void setTipoPago(Long tipoPago) {
+		this.tipoPago = tipoPago;
+	}
+
 	public String getNombreEmpresa() {
 		return nombreEmpresa;
 	}
@@ -141,6 +151,26 @@ public class ReporteVentaDto implements Serializable{
 
 	public void setAnticipo(Double anticipo) {
 		this.anticipo = anticipo;
+	}
+
+
+	public String getDescripcionCatSat() {
+		return descripcionCatSat;
+	}
+
+
+	public void setDescripcionCatSat(String descripcionCatSat) {
+		this.descripcionCatSat = descripcionCatSat;
+	}
+
+
+	public Double getSaldoFinal() {
+		return saldoFinal;
+	}
+
+
+	public void setSaldoFinal(Double saldoFinal) {
+		this.saldoFinal = saldoFinal;
 	}
 	
 		
