@@ -26,6 +26,7 @@ public class ReporteCotizacionDto implements Serializable{
 	private Double ivaTotal;
 	private Double total;
 	private String descripcionCatSat;
+	private String correo;
 	
 	
 	
@@ -146,6 +147,15 @@ public class ReporteCotizacionDto implements Serializable{
 	public void setDescripcionCatSat(String descripcionCatSat) {
 		this.descripcionCatSat = descripcionCatSat;
 	}
+
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+	
 		
 
 }

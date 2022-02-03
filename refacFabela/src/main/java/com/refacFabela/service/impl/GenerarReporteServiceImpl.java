@@ -40,6 +40,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteCotizacion.setRfcCliente(listaProductos.get(0).getTwCotizacione().getTcCliente().getsRfc());
 		reporteCotizacion.setFolioCotizacion(listaProductos.get(0).getTwCotizacione().getnId());
 		reporteCotizacion.setFecha(listaProductos.get(0).getTwCotizacione().getdFecha());
+		reporteCotizacion.setCorreo(listaProductos.get(0).getTwCotizacione().getTcCliente().getsCorreo());
 
 		List<ReporteCotizacionDto> listaProducto = new ArrayList<ReporteCotizacionDto>();
 
@@ -58,6 +59,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			reporte.setPrecioUnitario(twCotizacionesProducto.getnPrecioUnitario());
 			reporte.setImporte(twCotizacionesProducto.getnPrecioPartida());
 			reporte.setDescripcionCatSat(twCotizacionesProducto.getTcProducto().getTcClavesat().getsDescripcion());
+		
 
 			listaProducto.add(reporte);
 

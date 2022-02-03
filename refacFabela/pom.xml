@@ -96,6 +96,13 @@
          <artifactId>jasperreports-fonts</artifactId>
          <version>6.0.0</version>
       </dependency>
+		<!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
+		<dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>javax.mail</artifactId>
+		    <version>1.6.0</version>
+		</dependency>
+      
 		
 	</dependencies>
 

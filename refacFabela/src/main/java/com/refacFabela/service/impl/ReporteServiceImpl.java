@@ -34,8 +34,10 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
 import com.refacFabela.service.ReporteService;
+import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
 
+import antlr.Utils;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -45,6 +47,8 @@ public class ReporteServiceImpl implements ReporteService {
 	 private static final Logger logger = LogManager.getLogger("errorLogger");
 
 	   private BufferedImage imagenHeader;
+	   
+	
 	
 	public ReporteServiceImpl() {
 		try {
@@ -61,8 +65,9 @@ public class ReporteServiceImpl implements ReporteService {
 	         final Map<String, Object> params = new HashMap<>();
 	         File pdfFile = null;
 	         String nombreArchivo = "cotizacion_"+reporteCotizacion.getFolioCotizacion();
+	         String ruta="/opt/webserver/backEnd/refacFabela/";
 	        
-	         pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + ".pdf");
+	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
 	         
 	         //aqui van los parametros
 	         params.put("logo", this.imagenHeader);
@@ -91,11 +96,24 @@ public class ReporteServiceImpl implements ReporteService {
 	         // Cierre de output stream
 	         pos.flush();
 	         pos.close();
-
+	         
+	         envioMail enviar=new envioMail();
+				enviar.enviarCorreo(reporteCotizacion.getCorreo(), 
+						"Cotización_"+reporteCotizacion.getFolioCotizacion(),
+						"<p>Adjunto al presente cotizaci&oacute;n No. "+reporteCotizacion.getFolioCotizacion()+"</p><p>No omito mencionar que estar&aacute; vigente durante 3 d&iacute;as h&aacute;biles. </p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
+						ruta,
+						nombreArchivo,
+						1
+						);			
 	         // Se recuperan los bytes correspondientes al reporte
 	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
 
-	         //Eliminar el archivo generado
+	         
+	        
+	         
+	         
+	         
+	         //Eliminar el archivo generado 	         
 	        
 	        	 pdfFile.delete();
 	         
