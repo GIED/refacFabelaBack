@@ -60,7 +60,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         File pdfFile = null;
 	         String nombreArchivo = "cotizacion_"+reporteCotizacion.getFolioCotizacion();
 	        
-	         pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + ".pdf");
+	         pdfFile = new File("/opt/webServer/backEnd/refac/" + nombreArchivo + ".pdf");
 	         
 	         //aqui van los parametros
 	         params.put("logo", this.imagenHeader);
@@ -116,7 +116,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         File pdfFile = null;
 	         String nombreArchivo = "venta_"+reporteVenta.getFolioVenta();
 	        
-	         pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + ".pdf");
+	         pdfFile = new File("/opt/webServer/backEnd/refac/" + nombreArchivo + ".pdf");
 	         
 	         //aqui van los parametros
 	         params.put("logo", this.imagenHeader);
@@ -171,7 +171,7 @@ public class ReporteServiceImpl implements ReporteService {
 			File pdfFile = null;
 			String nombreArchivo = "venta_pedido_"+reporteVenta.getFolioVenta();
 			
-			pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + ".pdf");
+			pdfFile = new File("/opt/webServer/backEnd/refac/" + nombreArchivo + ".pdf");
 			
 			//aqui van los parametros
 			params.put("logo", this.imagenHeader);
