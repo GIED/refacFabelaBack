@@ -28,6 +28,7 @@ public class ClientesController {
 	public List<TcCliente> obtenerClientes() {
 
 		try {
+			
 			return clienteService.obtenerCliente();
 
 		} catch (Exception e) {

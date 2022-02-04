@@ -34,12 +34,13 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		ReporteCotizacionDto reporteCotizacion = new ReporteCotizacionDto();
 
-		reporteCotizacion.setNombreEmpresa("Refaccionaria Fabela");
-		reporteCotizacion.setRfcEmpresa("TES030201001");
+		reporteCotizacion.setNombreEmpresa("Refacciones Fabela");
+		reporteCotizacion.setRfcEmpresa("FAMJ810312FY6");
 		reporteCotizacion.setNombreCliente(listaProductos.get(0).getTwCotizacione().getTcCliente().getsRazonSocial());
 		reporteCotizacion.setRfcCliente(listaProductos.get(0).getTwCotizacione().getTcCliente().getsRfc());
 		reporteCotizacion.setFolioCotizacion(listaProductos.get(0).getTwCotizacione().getnId());
 		reporteCotizacion.setFecha(listaProductos.get(0).getTwCotizacione().getdFecha());
+		reporteCotizacion.setCorreo(listaProductos.get(0).getTwCotizacione().getTcCliente().getsCorreo());
 
 		List<ReporteCotizacionDto> listaProducto = new ArrayList<ReporteCotizacionDto>();
 
@@ -57,6 +58,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			reporte.setClaveSat(twCotizacionesProducto.getTcProducto().getTcClavesat().getsClavesat());
 			reporte.setPrecioUnitario(twCotizacionesProducto.getnPrecioUnitario());
 			reporte.setImporte(twCotizacionesProducto.getnPrecioPartida());
+			reporte.setDescripcionCatSat(twCotizacionesProducto.getTcProducto().getTcClavesat().getsDescripcion());
+		
 
 			listaProducto.add(reporte);
 
@@ -85,6 +88,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
 		reporteVenta.setFecha(listaProductos.get(0).getTwVenta().getdFechaVenta());
+		reporteVenta.setTipoPago(listaProductos.get(0).getTwVenta().getnTipoPago());
+		
 
 		List<ReporteVentaDto> listaProducto = new ArrayList<ReporteVentaDto>();
 
@@ -102,6 +107,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
 			reporte.setPrecioUnitario(twVentaProducto.getnPrecioUnitario());
 			reporte.setImporte(twVentaProducto.getnPrecioPartida());
+			reporte.setDescripcionCatSat(twVentaProducto.getTcProducto().getTcClavesat().getsDescripcion());
 
 			listaProducto.add(reporte);
 

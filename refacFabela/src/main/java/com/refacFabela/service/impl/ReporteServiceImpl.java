@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +34,10 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
 import com.refacFabela.service.ReporteService;
+import com.refacFabela.utils.envioMail;
+import com.refacFabela.utils.utils;
 
+import antlr.Utils;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -43,6 +47,8 @@ public class ReporteServiceImpl implements ReporteService {
 	 private static final Logger logger = LogManager.getLogger("errorLogger");
 
 	   private BufferedImage imagenHeader;
+	   
+	
 	
 	public ReporteServiceImpl() {
 		try {
@@ -59,8 +65,8 @@ public class ReporteServiceImpl implements ReporteService {
 	         final Map<String, Object> params = new HashMap<>();
 	         File pdfFile = null;
 	         String nombreArchivo = "cotizacion_"+reporteCotizacion.getFolioCotizacion();
-	        
-	         pdfFile = new File("/opt/webServer/backEnd/refac/" + nombreArchivo + ".pdf");
+	         String ruta="/opt/webserver/backEnd/refacFabela/";
+	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
 	         
 	         //aqui van los parametros
 	         params.put("logo", this.imagenHeader);
@@ -74,7 +80,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("ivaTotal", reporteCotizacion.getIvaTotal());
 	         params.put("total", reporteCotizacion.getTotal());
 	         params.put("listaProductos", listaProducto);
-	         params.put("qr", getQR(reporteCotizacion.getTotal().toString()));
+	         params.put("qr", getQR(("Folio de cotización: C-"+reporteCotizacion.getFolioCotizacion()+"\nRFC cliente: "+reporteCotizacion.getRfcCliente()+"\nRazón Social: "+reporteCotizacion.getNombreCliente()+"\nTotal: "+reporteCotizacion.getTotal().toString()+"\nTotal de productos: "+ listaProducto.size()).toString()));
 	         
 	         
 	         
@@ -89,11 +95,24 @@ public class ReporteServiceImpl implements ReporteService {
 	         // Cierre de output stream
 	         pos.flush();
 	         pos.close();
-
+	         
+	         envioMail enviar=new envioMail();
+				enviar.enviarCorreo(reporteCotizacion.getCorreo(), 
+						"Cotización_"+reporteCotizacion.getFolioCotizacion(),
+						"<p>Adjunto al presente cotizaci&oacute;n No. "+reporteCotizacion.getFolioCotizacion()+"</p><p>No omito mencionar que estar&aacute; vigente durante 3 d&iacute;as h&aacute;biles. </p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
+						ruta,
+						nombreArchivo,
+						1
+						);			
 	         // Se recuperan los bytes correspondientes al reporte
 	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
 
-	         //Eliminar el archivo generado
+	         
+	        
+	         
+	         
+	         
+	         //Eliminar el archivo generado 	         
 	        
 	        	 pdfFile.delete();
 	         
@@ -111,12 +130,26 @@ public class ReporteServiceImpl implements ReporteService {
 	@Override
 	public byte[] generaVentaPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto) {
 		try {
-	         Resource resource = new ClassPathResource("/reports/plantillas/venta.jrxml");
+			String ruta="";
+			if(reporteVenta.getTipoPago()==1) {
+				ruta="/reports/plantillas/ventaCredito.jrxml";
+			}
+			if(reporteVenta.getTipoPago()==0) {
+				ruta="/reports/plantillas/venta.jrxml";
+			}
+			
+			utils util= new utils();
+			
+			
+			
+	         Resource resource = new ClassPathResource(ruta);
 	         final Map<String, Object> params = new HashMap<>();
 	         File pdfFile = null;
 	         String nombreArchivo = "venta_"+reporteVenta.getFolioVenta();
+	         pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + ".pdf");
 	        
-	         pdfFile = new File("/opt/webServer/backEnd/refac/" + nombreArchivo + ".pdf");
+	         String fechaVencimiento=util.sumarRestarDiasFecha(reporteVenta.getFecha(), 30);
+
 	         
 	         //aqui van los parametros
 	         params.put("logo", this.imagenHeader);
@@ -129,8 +162,9 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("subTotal", reporteVenta.getSubTotal());
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
 	         params.put("total", reporteVenta.getTotal());
-	         params.put("listaProductos", listaProducto);
-	         params.put("qr", getQR(reporteVenta.getTotal().toString()));
+	         params.put("listaProductos", listaProducto);	    
+	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal().toString()+"\nTotal de productos: "+ listaProducto.size()).toString()));
+	         params.put("fechaVencimiento", fechaVencimiento);
 	         
 	         
 	         
@@ -185,8 +219,11 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("ivaTotal", reporteVenta.getIvaTotal());
 			params.put("total", reporteVenta.getTotal());
 			params.put("listaProductos", listaProducto);
-			params.put("qr", getQR(reporteVenta.getTotal().toString()));
-			
+			params.put("anticipo", reporteVenta.getAnticipo());			
+	        params.put("qr", getQR(("Folio de venta por pedido: VP-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal().toString()+"\nTotal de productos: "+ listaProducto.size()).toString()));
+	        params.put("saldoFinal", reporteVenta.getTotal()-reporteVenta.getAnticipo());
+	        
+			System.err.println("El saldo final es de:"+(reporteVenta.getTotal()-reporteVenta.getAnticipo()));
 			
 			
 			
