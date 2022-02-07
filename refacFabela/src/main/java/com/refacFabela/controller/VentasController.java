@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TvVentaDetalle;
@@ -45,6 +46,20 @@ public class VentasController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/obtenerVentaId")
+	public TwVenta consultaVentasId(@RequestParam() Long nIdVenta) {
+		try {
+
+			return ventasService.consltaVentasId(nIdVenta);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener la venta por id " + e);
+		}
+		return null;
+	}
+	
 	
 	@GetMapping("/obtenerVentasDetalle")
 	public List<TvVentaDetalle> consultaVentasDetalle() {
@@ -135,6 +150,19 @@ public class VentasController {
 		try {
 		
 			return productosService.consultaVentaProductoId(ventaProductoDto);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos vendidos por id" + e);
+		}
+		return null;
+	}
+	
+	@PostMapping("/guardarAbono")
+	public TwAbono obtenerProductoVendidoId(@RequestBody TwAbono abonoDto) {
+
+		try {
+		
+			return productosService.guardarAbono(abonoDto);
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los productos vendidos por id" + e);

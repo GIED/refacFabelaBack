@@ -30,10 +30,14 @@ public class TwAbono implements Serializable {
 
 	// bi-directional many-to-one association to TcFormapago
 	@ManyToOne
-	@JoinColumn(name = "n_idFormaPago")
+	@JoinColumn(name = "n_idFormaPago" )
 	private TcFormapago tcFormapago;
 
 	// bi-directional many-to-one association to TcUsuario
+	@ManyToOne
+	@JoinColumn(name = "n_idCaja")
+	private TwCaja twCaja;
+	
 	@ManyToOne
 	@JoinColumn(name = "n_idUsuario")
 	private TcUsuario tcUsuario;
@@ -112,5 +116,27 @@ public class TwAbono implements Serializable {
 	public void setTwVenta(TwVenta twVenta) {
 		this.twVenta = twVenta;
 	}
+	
+	
+
+
+	public TwCaja getTwCaja() {
+		return twCaja;
+	}
+
+
+	public void setTwCaja(TwCaja twCaja) {
+		this.twCaja = twCaja;
+	}
+
+
+	@Override
+	public String toString() {
+		return "TwAbono [nId=" + nId + ", nIdVenta=" + nIdVenta + ", dFecha=" + dFecha + ", nAbono=" + nAbono
+				+ ", nEstatus=" + nEstatus + ", tcFormapago=" + tcFormapago + ", twCaja=" + twCaja + ", tcUsuario="
+				+ tcUsuario + ", twVenta=" + twVenta + "]";
+	}
+	
+	
 
 }

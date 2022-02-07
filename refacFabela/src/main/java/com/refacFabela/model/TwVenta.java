@@ -296,6 +296,18 @@ public class TwVenta implements Serializable {
 	public void setAnticipo(Double anticipo) {
 		this.anticipo = anticipo;
 	}
+
+
+	@Override
+	public String toString() {
+		return "TwVenta [nId=" + nId + ", nIdCliente=" + nIdCliente + ", nIdUsuario=" + nIdUsuario + ", sFolioVenta="
+				+ sFolioVenta + ", dFechaVenta=" + dFechaVenta + ", nIdEstatusVenta=" + nIdEstatusVenta
+				+ ", nIdFacturacion=" + nIdFacturacion + ", nIdTipoVenta=" + nIdTipoVenta + ", nTipoPago=" + nTipoPago
+				+ ", nIdCaja=" + nIdCaja + ", dFechaInicioCredito=" + dFechaInicioCredito + ", dFechaTerminoCredito="
+				+ dFechaTerminoCredito + ", dFechaPagoCredito=" + dFechaPagoCredito + ", nIdCotizacion=" + nIdCotizacion
+				+ ", anticipo=" + anticipo + ", tcCliente=" + tcCliente + ", tcTipoVenta=" + tcTipoVenta
+				+ ", tcUsuario=" + tcUsuario + ", tcEstatusVenta=" + tcEstatusVenta + ", twCaja=" + twCaja + "]";
+	}
 	
 	
 

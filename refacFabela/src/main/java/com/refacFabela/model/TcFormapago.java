@@ -58,4 +58,13 @@ public class TcFormapago implements Serializable {
 		this.sDescripcion = sDescripcion;
 	}
 
+	@Override
+	public String toString() {
+		return "TcFormapago [nId=" + nId + ", nEstatus=" + nEstatus + ", sClave=" + sClave + ", sDescripcion="
+				+ sDescripcion + "]";
+	}
+	
+	
+	
+
 }

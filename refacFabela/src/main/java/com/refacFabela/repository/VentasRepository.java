@@ -8,4 +8,6 @@ import com.refacFabela.model.TwVenta;
 @Repository
 public interface VentasRepository extends JpaRepository<TwVenta, Long> {
 
+	public TwVenta findBynId(Long nIdVenta);
+	
 }

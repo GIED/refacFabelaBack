@@ -26,6 +26,8 @@ import com.refacFabela.model.TcGanancia;
 import com.refacFabela.model.TcNivel;
 import com.refacFabela.model.TcTipoVenta;
 import com.refacFabela.model.TcUsocfdi;
+import com.refacFabela.model.TwCaja;
+import com.refacFabela.service.CajaService;
 import com.refacFabela.service.CatalagosService;
 
 @RestController
@@ -36,6 +38,8 @@ public class CatalogosController {
 
 	@Autowired
 	private CatalagosService catalagosService;
+	@Autowired
+	private CajaService cajaService;
 
 	@PostMapping("/actualizarTipoCambio")
 	public TcCatalogogeneral actualizaTipoCambio(@RequestBody TcCatalogogeneral tcCatalogogeneral) {
@@ -177,6 +181,19 @@ public class CatalogosController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/catalogoFormaPagoId")
+	public TcFormapago consultaCatalogoFormaPagoId(@RequestParam Long nId) {
+		try {
+
+			return catalagosService.catalogoFormaPagoId(nId);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de Forma de Pago " + e);
+		}
+		return null;
+	}
 
 	@GetMapping("/catalogoTipoVenta")
 	public List<TcTipoVenta> consultaCatalogoTipoVenta() {
@@ -200,6 +217,19 @@ public class CatalogosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener catalogo de Uso de Cfdi " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/cajaActiva")
+	public TwCaja consultaCajaActiva() {
+		try {
+
+			return cajaService.obtenerCajaActiva();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener la caja activa " + e);
 		}
 		return null;
 	}

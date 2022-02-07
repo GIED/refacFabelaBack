@@ -10,6 +10,7 @@ import com.refacFabela.model.TwVenta;
 public interface VentasService {
 
 	public List<TwVenta> consltaVentas();
+	public TwVenta consltaVentasId(Long nIdVenta);
 	public List<TvVentaDetalle> consultaVentaDetalle();
 	public List<TvVentaDetalle> consultaVentaDetalleEntrega();
 	public List<TvVentaDetalle> consultaVentaDetalleId(Long n_idCliente, Long nTipoPago);

@@ -11,5 +11,6 @@ import com.refacFabela.model.TwAbono;
 public interface AbonoVentaIdRepository extends JpaRepository<TwAbono, Long> {
 	
 	public List<TwAbono> findBynIdVenta(Long id);
+	
 
 }

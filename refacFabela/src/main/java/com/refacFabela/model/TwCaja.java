@@ -124,4 +124,14 @@ public class TwCaja implements Serializable {
 		this.tcUsuario = tcUsuario;
 	}
 
+	@Override
+	public String toString() {
+		return "TwCaja [nId=" + nId + ", d_fechaApertura=" + d_fechaApertura + ", d_fechaCierre=" + d_fechaCierre
+				+ ", nEstatus=" + nEstatus + ", n_pagoEfectivo=" + n_pagoEfectivo + ", n_pagoElectronico="
+				+ n_pagoElectronico + ", n_saldoCierre=" + n_saldoCierre + ", n_saldoFinal=" + n_saldoFinal
+				+ ", n_saldoInicial=" + n_saldoInicial + ", tcUsuario=" + tcUsuario + "]";
+	}
+	
+	
+
 }

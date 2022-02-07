@@ -13,6 +13,7 @@ import com.refacFabela.model.TcGanancia;
 import com.refacFabela.model.TcNivel;
 import com.refacFabela.model.TcTipoVenta;
 import com.refacFabela.model.TcUsocfdi;
+import com.refacFabela.model.TwCaja;
 
 public interface CatalagosService {
 	
@@ -27,6 +28,8 @@ public interface CatalagosService {
 	public List<TcNivel> catalogoNivel();
 	public List<TcBodega> catalogoBodegas();
 	public List<TcFormapago> catalogoFormaPago();
+	public TcFormapago catalogoFormaPagoId(Long nId);
 	public List<TcUsocfdi> catalagoUsoCfdi();
+	public TwCaja cajaActiva();
 	public List<TcTipoVenta> catalagoTipoVenta();
 }

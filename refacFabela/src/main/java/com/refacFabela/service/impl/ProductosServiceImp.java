@@ -7,22 +7,27 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvVentaProductoMes;
+import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
+import com.refacFabela.repository.CatalagoFormaPagoRepository;
 import com.refacFabela.repository.HistoriaPrecioProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ProductoBodegasIdRepository;
 import com.refacFabela.repository.ProductosAlternativosRepository;
 import com.refacFabela.repository.ProductosRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
+import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentaProductoMesRepository;
+import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.utils.utils;
 
@@ -47,6 +52,12 @@ public class ProductosServiceImp implements ProductosService {
 	private TwProductosVentaRepository twProductosVentaRepository;
 	@Autowired
 	private VentaProductoMesRepository ventaProductoMesRepository;
+	@Autowired
+	private VentasRepository ventasRepository;
+	@Autowired
+	private CatalagoFormaPagoRepository catalagoFormaPagoRepository;
+	@Autowired
+	private UsuariosRepository usuariosRepository;
 	
 	
 	
@@ -203,6 +214,21 @@ public class ProductosServiceImp implements ProductosService {
 		
 		 String mensaje="Se guardo el estatus de entrega";
 		return mensaje ;
+	}
+
+	@Override
+	public TwAbono guardarAbono(TwAbono abonoDto) {
+		
+		
+	
+		abonoDto.setdFecha(utils.fechaSistema);
+	
+		
+		System.err.println(abonoDto);
+		
+		abonoVentaIdRepository.save(abonoDto);
+	
+		return abonoDto ;
 	}
 
 	

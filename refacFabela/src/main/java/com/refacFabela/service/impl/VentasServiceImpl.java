@@ -16,13 +16,17 @@ import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
+import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.CotizacionRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
+import com.refacFabela.service.CajaService;
 import com.refacFabela.service.VentasService;
 import com.refacFabela.utils.utils;
+
+import antlr.Utils;
 
 
 @Service
@@ -45,6 +49,10 @@ public class VentasServiceImpl implements VentasService {
 
 	@Autowired
 	private CotizacionRepository cotizacionRepository;
+	
+	@Autowired
+	
+	private CajaRepository cajaRepository;
 
 	@Override
 	public List<TwVenta> consltaVentas() {
@@ -64,6 +72,7 @@ public class VentasServiceImpl implements VentasService {
 		System.out.println(ventaDto);
 
 		TwVenta twVenta = new TwVenta();
+		utils utils=new utils();
 
 		twVenta.setnIdCliente(ventaDto.getIdCliente());
 		twVenta.setnIdUsuario(ventaDto.getIdUsuario());
@@ -75,9 +84,10 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setdFechaVenta(utils.fechaSistema);
 		twVenta.setnIdEstatusVenta(1L);
 		twVenta.setnIdFacturacion(0L);
-		twVenta.setnIdCaja(0L);
+		twVenta.setnIdCaja(utils.cajaActivaId(cajaRepository.obtenerCajaVigente()));
 		twVenta.setnIdCotizacion(ventaDto.getTwCotizacion().getnId());
 		twVenta.setAnticipo(ventaDto.getAnticipo());
+		System.err.println(twVenta);
 
 		TwVenta ventaRegistrada = new TwVenta();
 		ventaRegistrada = ventasRepository.save(twVenta);
@@ -235,6 +245,12 @@ public class VentasServiceImpl implements VentasService {
 	public List<TvVentaDetalle> consultaVentaDetalleEntrega() {
 		
 		return tvVentaDetalleRepository.consultaVentaDetalleEntrega();
+	}
+
+
+	public TwVenta consltaVentasId(Long nIdVenta) {
+		
+		return ventasRepository.findBynId(nIdVenta);
 	}
 
 	
