@@ -6,5 +6,10 @@
         <normal><![CDATA[fonts/Helvetica.ttf]]></normal>
         <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
     </fontFamily>
+    
+    <fontFamily name="Georgia">
+        <normal><![CDATA[fonts/Georgia.ttf]]></normal>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+    </fontFamily>
 
 </fontFamilies>

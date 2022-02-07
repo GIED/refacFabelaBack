@@ -66,7 +66,6 @@ public class ReporteServiceImpl implements ReporteService {
 	         File pdfFile = null;
 	         String nombreArchivo = "cotizacion_"+reporteCotizacion.getFolioCotizacion();
 	         String ruta="/opt/webserver/backEnd/refacFabela/";
-	        
 	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
 	         
 	         //aqui van los parametros
@@ -147,10 +146,10 @@ public class ReporteServiceImpl implements ReporteService {
 	         final Map<String, Object> params = new HashMap<>();
 	         File pdfFile = null;
 	         String nombreArchivo = "venta_"+reporteVenta.getFolioVenta();
-	        
 	         pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + ".pdf");
 	        
 	         String fechaVencimiento=util.sumarRestarDiasFecha(reporteVenta.getFecha(), 30);
+
 	         
 	         //aqui van los parametros
 	         params.put("logo", this.imagenHeader);
@@ -206,7 +205,7 @@ public class ReporteServiceImpl implements ReporteService {
 			File pdfFile = null;
 			String nombreArchivo = "venta_pedido_"+reporteVenta.getFolioVenta();
 			
-			pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + ".pdf");
+			pdfFile = new File("/opt/webServer/backEnd/refac/" + nombreArchivo + ".pdf");
 			
 			//aqui van los parametros
 			params.put("logo", this.imagenHeader);
