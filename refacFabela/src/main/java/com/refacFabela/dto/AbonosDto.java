@@ -5,6 +5,10 @@ import java.util.Date;
 
 public class AbonosDto implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Long id;	
 	private Double abono;
 	private String usuario;
