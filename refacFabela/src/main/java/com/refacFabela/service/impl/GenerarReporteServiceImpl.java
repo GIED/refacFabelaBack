@@ -339,7 +339,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		
 		
 		
-		
+		System.err.println(listaReporteVentaAbomo);
 		
 		
 
