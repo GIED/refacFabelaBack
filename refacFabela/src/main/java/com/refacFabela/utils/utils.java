@@ -37,5 +37,12 @@ public  class utils {
 		
 		return noCaja;
 	}
+	
+	public String formatoFecha(Date fecha) {
+		 SimpleDateFormat objSDF = new SimpleDateFormat("dd-MM-yyyy"); 	
+		 String fechaS= objSDF.format(fecha);
+		
+		return fechaS;
+	}
 
 }

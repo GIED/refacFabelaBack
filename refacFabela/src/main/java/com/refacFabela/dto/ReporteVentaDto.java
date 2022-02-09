@@ -29,12 +29,21 @@ public class ReporteVentaDto implements Serializable{
 	private String descripcionCatSat;
 	private Double saldoFinal;
 	private Long tipoPago;
+	private String correo;
 	
 	
 	
 	
 	
 	
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+
 	public ReporteVentaDto() {
 	}	
 	

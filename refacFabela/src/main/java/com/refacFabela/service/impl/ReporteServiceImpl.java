@@ -23,6 +23,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.jasperreports.JasperReportsUtils;
+import org.w3c.dom.ls.LSInput;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -31,8 +32,11 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
 import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
+import com.refacFabela.model.TcCliente;
 import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
@@ -182,6 +186,9 @@ public class ReporteServiceImpl implements ReporteService {
 
 	         // Se recuperan los bytes correspondientes al reporte
 	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+	         
+	         //envió de correo
+	        
 
 	         //Eliminar el archivo generado
 	        
@@ -192,6 +199,87 @@ public class ReporteServiceImpl implements ReporteService {
 	         return bytesReporte;
 	      } catch (Exception e) {
 	         logger.error("Error en metodo generaVentaPDF(). Error al generar la venta con id: " + reporteVenta.getFolioVenta(), e);
+	      }
+
+	      return null;
+	}
+	
+	public byte[] generaAbonoVentaPDF(ReporteVentaDto reporteVenta, List<AbonosDto> listaAbono, double abonos) {
+		try {
+			String ruta="";
+			
+				ruta="/reports/plantillas/abonoVenta.jrxml";
+			
+		
+			
+			utils util= new utils();
+			
+			
+			
+	         Resource resource = new ClassPathResource(ruta);
+	         final Map<String, Object> params = new HashMap<>();
+	         File pdfFile = null;
+	         String nombreArchivo = "abono_"+reporteVenta.getFolioVenta();
+	          ruta="/opt/webserver/backEnd/refacFabela/";
+	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+	        
+	         String fechaVencimiento=util.sumarRestarDiasFecha(reporteVenta.getFecha(), 30);
+
+	         
+	         //aqui van los parametros
+	         params.put("logo", this.imagenHeader);
+	         params.put("nombreEmpresa", reporteVenta.getNombreEmpresa());
+	         params.put("rfcEmpresa", reporteVenta.getRfcEmpresa());
+	         params.put("nombreCliente", reporteVenta.getNombreCliente());
+	         params.put("rfcCliente", reporteVenta.getRfcCliente());
+	         params.put("folioVenta", reporteVenta.getFolioVenta());
+	         params.put("fecha", reporteVenta.getFecha());
+	         params.put("subTotal", reporteVenta.getSubTotal());
+	         params.put("ivaTotal", reporteVenta.getIvaTotal());
+	         params.put("total", reporteVenta.getTotal());
+	         params.put("listaAbonos", listaAbono);	    
+	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal().toString()+"\nTotal de Abonos: "+ listaAbono.size()).toString()));
+	         params.put("fechaVencimiento", fechaVencimiento);
+	         params.put("totalAbonos", abonos);
+	         params.put("saldoFinal", reporteVenta.getTotal()-abonos);
+	         
+	         
+	         
+	         
+	         
+	         // InputStream ligado al reporte
+	         InputStream inputStreamReport = resource.getInputStream();
+	         FileOutputStream pos = new FileOutputStream(pdfFile);
+	         JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
+	         JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reporteVenta)), pos);
+
+	         // Cierre de output stream
+	         pos.flush();
+	         pos.close();
+
+	         // Se recuperan los bytes correspondientes al reporte
+	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+
+	         //Eliminar el archivo generado
+	         
+	         envioMail enviar=new envioMail();
+				enviar.enviarCorreo(reporteVenta.getCorreo(), 
+						"Venta a crédito "+reporteVenta.getFolioVenta(),
+						"<p>Adjunto al presente el historial de abonos del la venta a cr&eacute;dito "+reporteVenta.getFolioVenta()+"</p><p>No omito mencionar que la fecha limite para cubrir la totalidad de la nota es:"+fechaVencimiento+"  </p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
+						ruta,
+						nombreArchivo,
+						1
+						);		
+	         
+	         
+	        
+	        	 pdfFile.delete();
+	         
+	         
+
+	         return bytesReporte;
+	      } catch (Exception e) {
+	         logger.error("Error en metodo generaAbonoVentaPDF(). Error al generar la venta con id: " + reporteVenta.getFolioVenta(), e);
 	      }
 
 	      return null;
@@ -256,6 +344,8 @@ public class ReporteServiceImpl implements ReporteService {
 	}
 	
 	
+	
+	
 	private Image getQR(String total) throws IOException, WriterException {
 	      
 	         int size = 100;
@@ -274,6 +364,64 @@ public class ReporteServiceImpl implements ReporteService {
 	      
 	      
 	   }
+
+	@Override
+	public byte[] generaAbonoVentaClientePDF(TcCliente cliente, List<ReporteAbonoVentaCreditoDto> listaAbomoVenta, ReporteVentaDto reporteVenta) {
+		
+		try {
+			String ruta="";
+			Resource resource = new ClassPathResource("/reports/plantillas/historialAbonosVentas.jrxml");
+			final Map<String, Object> params = new HashMap<>();
+			File pdfFile = null;
+			String nombreArchivo = "historal_clinete_"+cliente.getsRfc();
+			
+			 ruta="/opt/webserver/backEnd/refacFabela/";
+	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+			utils util= new utils();
+			
+			//aqui van los parametros
+			params.put("logo", this.imagenHeader);
+			params.put("nombreEmpresa", reporteVenta.getNombreEmpresa());
+			params.put("rfcEmpresa", reporteVenta.getRfcEmpresa());
+			params.put("nombreCliente", cliente.getsRazonSocial());
+			params.put("rfcCliente", cliente.getsRfc());		
+			params.put("fecha", util.formatoFecha(util.fechaSistema));
+			//params.put("subTotal", reporteVenta.getSubTotal());
+			//params.put("ivaTotal", reporteVenta.getIvaTotal());
+			params.put("total", reporteVenta.getTotal());
+			params.put("listaVenta", listaAbomoVenta);
+			//params.put("anticipo", reporteVenta.getAnticipo());			
+	        params.put("qr", getQR(("\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+cliente.getsRazonSocial()+"\nTotal: "+reporteVenta.getTotal().toString()+"\nTotal de Ventas a crédito: "+ listaAbomoVenta.size()).toString()));
+	        //params.put("saldoFinal", reporteVenta.getTotal()-reporteVenta.getAnticipo());
+	        		
+			
+			
+			// InputStream ligado al reporte
+			InputStream inputStreamReport = resource.getInputStream();
+			FileOutputStream pos = new FileOutputStream(pdfFile);
+			JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
+			JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reporteVenta)), pos);
+			
+			// Cierre de output stream
+			pos.flush();
+			pos.close();
+			
+			// Se recuperan los bytes correspondientes al reporte
+			byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+			
+			//Eliminar el archivo generado
+			
+			//pdfFile.delete();
+			
+			
+			
+			return bytesReporte;
+		} catch (Exception e) {
+			logger.error("Error en metodo generaVentaPDF(). Error al generar la venta con id: ", e);
+		}
+		
+		return null;
+	}
 
 
 	

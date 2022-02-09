@@ -76,11 +76,9 @@ public class TvVentaDetalle implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "n_estatusVenta", referencedColumnName =  "n_clave", updatable = false, insertable = false)
 	private TcEstatusVenta tcEstatusVenta;
+	
+	
 
-	
-	
-	
-	
 	public TvVentaDetalle() {
 		
 	}

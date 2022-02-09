@@ -59,6 +59,30 @@ public class ReportesController {
 		}
 	}
 	
+	@GetMapping(value = "/getAbonoVentaId")
+	public @ResponseBody byte[] getAbonoVentaId(HttpServletResponse response, @RequestParam(required = false) Long nIdVenta) {
+		
+		// genera el pdf con la venta guardada
+		try {
+			return generaReporteService.getAbonoVentaIdPDF(nIdVenta);
+		} catch (Exception e) {
+			logger.error("Error al generar la venta ", e);
+			return null;
+		}
+	}
+	
+	@GetMapping(value = "/getAbonoVentaIdCliente")
+	public @ResponseBody byte[] getAbonoVentaIdCliente(HttpServletResponse response, @RequestParam(required = false) Long nIdCliente) {
+		
+		// genera el pdf con la venta guardada
+		try {
+			return generaReporteService.getAbonoVentaIdClientePDF(nIdCliente);
+		} catch (Exception e) {
+			logger.error("Error al generar la venta ", e);
+			return null;
+		}
+	}
+	
 
 
 }

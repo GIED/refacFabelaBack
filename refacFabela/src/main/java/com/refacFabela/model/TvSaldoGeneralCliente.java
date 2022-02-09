@@ -44,6 +44,8 @@ public class TvSaldoGeneralCliente implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "n_idCliente", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcCliente tcCliente;
+	
+	
 
 	public TvSaldoGeneralCliente() {
 	}

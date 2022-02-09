@@ -1,25 +1,20 @@
 package com.refacFabela.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class AbonosDto implements Serializable {
 
-	private Long id;
-	private Long idVenta;
+	private Long id;	
 	private Double abono;
-	private Long usuario;
-	private Long formaPago;
+	private String usuario;
+	private String fecha;
+	private String formaPago;
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public Long getIdVenta() {
-		return idVenta;
-	}
-	public void setIdVenta(Long idVenta) {
-		this.idVenta = idVenta;
 	}
 	public Double getAbono() {
 		return abono;
@@ -27,18 +22,33 @@ public class AbonosDto implements Serializable {
 	public void setAbono(Double abono) {
 		this.abono = abono;
 	}
-	public Long getUsuario() {
+	public String getUsuario() {
 		return usuario;
 	}
-	public void setUsuario(Long usuario) {
+	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
-	public Long getFormaPago() {
+	
+	public String getFecha() {
+		return fecha;
+	}
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
+	public String getFormaPago() {
 		return formaPago;
 	}
-	public void setFormaPago(Long formaPago) {
+	public void setFormaPago(String formaPago) {
 		this.formaPago = formaPago;
 	}
+	@Override
+	public String toString() {
+		return "AbonosDto [id=" + id + ", abono=" + abono + ", usuario=" + usuario + ", fecha=" + fecha + ", formaPago="
+				+ formaPago + "]";
+	}
+	
+	
+	
 	
 	
 	
