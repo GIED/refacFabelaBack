@@ -42,10 +42,13 @@ public class TcCliente implements Serializable {
 
 	@Column(name = "s_clave")
 	private String sClave;
+	
+	@Column(name="n_idUsuario")
+	private Long nIdUsuario;
 
 	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
-	@JoinColumn(name = "n_idUsuario")
+	@JoinColumn(name = "n_idUsuario", insertable=false, updatable=false)
 	private TcUsuario tcUsuario;
 	
 	
@@ -54,11 +57,6 @@ public class TcCliente implements Serializable {
 	}
 	
 	
-
-	
-
-
-
 	public Long getnId() {
 		return nId;
 	}
@@ -154,5 +152,17 @@ public class TcCliente implements Serializable {
 	public void setTcUsuario(TcUsuario tcUsuario) {
 		this.tcUsuario = tcUsuario;
 	}
+
+
+	public Long getnIdUsuario() {
+		return nIdUsuario;
+	}
+
+
+	public void setnIdUsuario(Long nIdUsuario) {
+		this.nIdUsuario = nIdUsuario;
+	}
+	
+	
 
 }

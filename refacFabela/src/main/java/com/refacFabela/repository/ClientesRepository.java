@@ -14,4 +14,8 @@ public interface ClientesRepository extends JpaRepository<TcCliente, Long> {
 	
     @Query("Select c from TcCliente c where c.sRfc like %:clienteBuscar% or c.sRazonSocial like %:clienteBuscar%")
 	public List<TcCliente> buscarClineteLike(String clienteBuscar);
+    
+    public TcCliente findBysRfc(String rfc);
+    
+    public TcCliente findBynIdUsuario(Long id);
 }

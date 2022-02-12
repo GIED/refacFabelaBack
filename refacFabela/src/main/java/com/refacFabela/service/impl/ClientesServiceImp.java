@@ -37,6 +37,18 @@ public class ClientesServiceImp implements ClienteService {
 		
 		return clientesRepository.findById(id).get();
 	}
+	
+	@Override
+	public TcCliente consultaClienteIdUsuario(Long id) {
+		
+		 return clientesRepository.findBynIdUsuario(id);
+	}
+	
+	@Override
+	public TcCliente consultaClienteRfc(String rfc) {
+		
+		return clientesRepository.findBysRfc(rfc);
+	}
 
 	@Override
 	public String eliminarClienteId(Long id) {
@@ -62,6 +74,8 @@ public class ClientesServiceImp implements ClienteService {
 		
 		return clienteSaldoRepository.obtenerClienteSaldo();
 	}
+
+	
 
 	
 

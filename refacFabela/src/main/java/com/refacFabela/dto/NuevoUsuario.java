@@ -13,6 +13,7 @@ public class NuevoUsuario {
 	private String sNombreUsuario;
 	private Integer nEstatus;
 	private Set<String> roles = new HashSet();
+	private String rfcDistribuidor;
 	
 	
 	
@@ -53,11 +54,22 @@ public class NuevoUsuario {
 	public void setRoles(Set<String> roles) {
 		this.roles = roles;
 	}
+	
+	public String getRfcDistribuidor() {
+		return rfcDistribuidor;
+	}
+	public void setRfcDistribuidor(String rfcDistribuidor) {
+		this.rfcDistribuidor = rfcDistribuidor;
+	}
+	
 	@Override
 	public String toString() {
 		return "NuevoUsuario [sClaveUser=" + sClaveUser + ", sUsuario=" + sUsuario + ", sPassword=" + sPassword
-				+ ", sNombreUsuario=" + sNombreUsuario + ", nEstatus=" + nEstatus + ", roles=" + roles + "]";
+				+ ", sNombreUsuario=" + sNombreUsuario + ", nEstatus=" + nEstatus + ", roles=" + roles
+				+ ", rfcDistribuidor=" + rfcDistribuidor + "]";
 	}
+	
+	
 	
 	
 	

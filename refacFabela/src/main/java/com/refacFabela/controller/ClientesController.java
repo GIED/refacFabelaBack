@@ -64,6 +64,19 @@ public class ClientesController {
 		return null;
 	}
 	
+	@GetMapping("consultaClienteIdUsuario")
+	public TcCliente consultaClienteIdUsuario(HttpServletResponse response, @RequestParam() Long id) {
+
+		try {
+			return clienteService.consultaClienteIdUsuario(id);
+
+		} catch (Exception e) {
+			logger.error("Error al consultar cliente" + e);
+		}
+
+		return null;
+	}
+	
 	@GetMapping("consultaClienteLike")
 	public List<TcCliente> consultaClienteLike(HttpServletResponse response, @RequestParam() String clienteBuscar) {
 

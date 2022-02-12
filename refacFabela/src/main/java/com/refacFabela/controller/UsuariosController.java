@@ -34,14 +34,12 @@ public class UsuariosController {
 
 	private static final Logger logger = LogManager.getLogger("errorLogger");
 	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	
 
 	@Autowired
 	private UsuarioService usuarioService;
 	
-	@Autowired
-	private RolService rolService;
+	
 
 	@GetMapping("/obtenerUsuarios")
 	public List<TcUsuario> obtenerUsuarios() {
@@ -85,24 +83,7 @@ public class UsuariosController {
 		}
 		
 		
-		
-		
-		TcUsuario usuario = new TcUsuario(nuevoUsuario.getsClaveUser(), nuevoUsuario.getsUsuario(), passwordEncoder.encode(nuevoUsuario.getsPassword()), nuevoUsuario.getsNombreUsuario(), nuevoUsuario.getnEstatus() );
-		
-		Set<TcRol> roles = new HashSet<>();
-		
-		roles.add(rolService.getByRolNombre(RolNombre.ROLE_USER).get());
-		
-		if (nuevoUsuario.getRoles().contains("admin")){
-			roles.add(rolService.getByRolNombre(RolNombre.ROLE_ADMIN).get());
-		}
-		if (nuevoUsuario.getRoles().contains("venta")){
-			roles.add(rolService.getByRolNombre(RolNombre.ROLE_VENTA).get());
-		}
-		
-		
-		usuario.setRoles(roles);
-		usuarioService.save(usuario);
+		usuarioService.save(nuevoUsuario);
 		
 		return new ResponseEntity<>(new Mensaje("usuario guardado"), HttpStatus.CREATED);
 		
