@@ -30,6 +30,8 @@ public class ReporteVentaDto implements Serializable{
 	private Double saldoFinal;
 	private Long tipoPago;
 	private String correo;
+	private Double descuento;
+	private Double abonos;
 	
 	
 	
@@ -181,6 +183,24 @@ public class ReporteVentaDto implements Serializable{
 	public void setSaldoFinal(Double saldoFinal) {
 		this.saldoFinal = saldoFinal;
 	}
+
+	public Double getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(Double descuento) {
+		this.descuento = descuento;
+	}
+
+	public Double getAbonos() {
+		return abonos;
+	}
+
+	public void setAbonos(Double abonos) {
+		this.abonos = abonos;
+	}
+	
+	
 	
 		
 

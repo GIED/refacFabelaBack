@@ -14,9 +14,16 @@ public class ReporteAbonoVentaCreditoDto {
 	public double totalAbono;
 	public double saldoTotal;
 	public double avancePago;
+	public double descuento;
 	public List<AbonosDto> abonoDto;
 	
 	
+	public double getDescuento() {
+		return descuento;
+	}
+	public void setDescuento(double descuento) {
+		this.descuento = descuento;
+	}
 	public Long getIdCliente() {
 		return idCliente;
 	}

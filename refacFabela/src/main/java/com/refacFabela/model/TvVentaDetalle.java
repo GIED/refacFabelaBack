@@ -62,6 +62,9 @@ public class TvVentaDetalle implements Serializable {
 	@Column(name = "s_estatus")
 	private String sEstatus;
 	
+	@Column(name = "nDescuento")
+	private double descuento;
+	
 	
 	
 	@ManyToOne
@@ -74,14 +77,54 @@ public class TvVentaDetalle implements Serializable {
 	private TcUsuario tcUsuario;
 	
 	@ManyToOne
-	@JoinColumn(name = "n_estatusVenta", referencedColumnName =  "n_clave", updatable = false, insertable = false)
+	@JoinColumn(name = "n_estatusVenta", updatable = false, insertable = false)
 	private TcEstatusVenta tcEstatusVenta;
+	
+	@ManyToOne
+	@JoinColumn(name = "n_idFormaPago", updatable = false, insertable = false , nullable = false)
+	private TcFormapago tcFormapago ;
+	
+	@ManyToOne
+	@JoinColumn(name = "n_idCaja", updatable = false, insertable = false , nullable = false)
+	private TwCaja twCaja ;
 	
 	
 
 	public TvVentaDetalle() {
 		
+	}	
+	
+	public TcFormapago getTcFormapago() {
+		return tcFormapago;
 	}
+
+
+
+
+
+	public void setTcFormapago(TcFormapago tcFormapago) {
+		this.tcFormapago = tcFormapago;
+	}
+
+
+
+	public TwCaja getTwCaja() {
+		return twCaja;
+	}
+
+	public void setTwCaja(TwCaja twCaja) {
+		this.twCaja = twCaja;
+	}
+
+	public double getDescuento() {
+		return descuento;
+	}
+
+
+	public void setDescuento(double descuento) {
+		this.descuento = descuento;
+	}
+
 
 	public Long getnId() {
 		return nId;

@@ -102,6 +102,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	public byte[] getVentaPDF(Long nIdVenta) {
 
 		List<TwVentasProducto> listaProductos = ventasProductoRepository.findBynIdVenta(nIdVenta);
+		List<TwAbono> listaAbonos=abonoVentaIdRepository.findBynIdVenta(nIdVenta);
 
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
 
@@ -112,12 +113,20 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
 		reporteVenta.setFecha(listaProductos.get(0).getTwVenta().getdFechaVenta());
 		reporteVenta.setTipoPago(listaProductos.get(0).getTwVenta().getnTipoPago());
+		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
 		
 
 		List<ReporteVentaDto> listaProducto = new ArrayList<ReporteVentaDto>();
 
 		double subtotal = 0.0;
 		double iva = 0.0;
+		double totalAbonos=0.0;
+		
+		for(TwAbono twAbono: listaAbonos) {
+			
+			totalAbonos= totalAbonos+twAbono.getnAbono();
+			
+		}
 		
 
 		for (TwVentasProducto twVentaProducto : listaProductos) {
@@ -143,7 +152,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setIvaTotal(iva);
 		reporteVenta.setTotal(subtotal + iva);
 
-		return reporteService.generaVentaPDF(reporteVenta, listaProducto);
+		return reporteService.generaVentaPDF(reporteVenta, listaProducto, totalAbonos);
 	}
 	@Override
 	public byte[] getVentaPedidoPDF(Long nIdVentaPedido) {
@@ -159,6 +168,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
 		reporteVenta.setFecha(listaProductos.get(0).getTwVenta().getdFechaVenta());
 		reporteVenta.setAnticipo(listaProductos.get(0).getTwVenta().getAnticipo());
+		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
 		
 		
 		List<ReporteVentaDto> listaProducto = new ArrayList<ReporteVentaDto>();
@@ -210,6 +220,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setFecha(listaProductos.get(0).getTwVenta().getdFechaVenta());
 		reporteVenta.setTipoPago(listaProductos.get(0).getTwVenta().getnTipoPago());
 		reporteVenta.setCorreo(listaProductos.get(0).getTwVenta().getTcCliente().getsCorreo());
+		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
 		
 		
 
@@ -271,23 +282,13 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		
 		utils util=new utils();
 		
-		System.err.println();
-		
-		 
-		
 		 List<TvVentaDetalle> listaVentaDetalleCredito =tvVentaDetalleRepository.consultaVentaDetalleId(nIdCliente, 1);
 		List<ReporteAbonoVentaCreditoDto> listaReporteVentaAbomo = new ArrayList<ReporteAbonoVentaCreditoDto>();
 	
-		
-		
-	
-		
 	           double totalGeneral=0.0;
+	           double descuento=0.0;
+	           double totalAbonos=0.0;
 		
-		
-
-					
-
 			for (TvVentaDetalle listaVentaDetalle : listaVentaDetalleCredito) {
 				ReporteAbonoVentaCreditoDto ventaAbomo = new ReporteAbonoVentaCreditoDto();
 
@@ -300,8 +301,10 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				ventaAbomo.setTotalVenta(listaVentaDetalle.getnTotalVenta());
 				ventaAbomo.setTotalAbono(listaVentaDetalle.getnTotalAbono());
 				ventaAbomo.setSaldoTotal(listaVentaDetalle.getnSaldoTotal());
-				ventaAbomo.setAvancePago(listaVentaDetalle.getnAvancePago());	
-				totalGeneral=totalGeneral+listaVentaDetalle.getnSaldoTotal();
+				ventaAbomo.setAvancePago(listaVentaDetalle.getnAvancePago());
+				ventaAbomo.setDescuento(listaVentaDetalle.getDescuento());
+				totalGeneral=totalGeneral+listaVentaDetalle.getnTotalVenta();
+				descuento=descuento+listaVentaDetalle.getDescuento();
 
 				List<TwAbono> listaAbonos = new ArrayList<TwAbono>();
 				listaAbonos = abonoVentaIdRepository.findBynIdVenta(listaVentaDetalle.getnId());
@@ -316,6 +319,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 					abono.setFecha(util.formatoFecha(abonosDto.getdFecha()));
 					abono.setUsuario(abonosDto.getTcUsuario().getsNombreUsuario());
 					listaAbonosDto.add(abono);
+					totalAbonos=totalAbonos+abonosDto.getnAbono();
 
 				}
 				ventaAbomo.setAbonoDto(listaAbonosDto);
@@ -324,25 +328,14 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 			}
 		
-
-		
-		
-		
-
-		
-
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
 
 		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
 		reporteVenta.setRfcEmpresa("TES030201001");
 		reporteVenta.setTotal(totalGeneral);
-		
-		
-		
-		System.err.println(listaReporteVentaAbomo);
-		
-		
-
+		reporteVenta.setDescuento(descuento);
+		reporteVenta.setAbonos(totalAbonos);
+				
 		return reporteService.generaAbonoVentaClientePDF(cliente, listaReporteVentaAbomo,reporteVenta);
 	
 	}

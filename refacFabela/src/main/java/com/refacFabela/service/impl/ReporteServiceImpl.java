@@ -132,7 +132,7 @@ public class ReporteServiceImpl implements ReporteService {
 	
 	
 	@Override
-	public byte[] generaVentaPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto) {
+	public byte[] generaVentaPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto, double totalAbono) {
 		try {
 			String ruta="";
 			if(reporteVenta.getTipoPago()==1) {
@@ -165,10 +165,14 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("fecha", reporteVenta.getFecha());
 	         params.put("subTotal", reporteVenta.getSubTotal());
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
-	         params.put("total", reporteVenta.getTotal());
-	         params.put("listaProductos", listaProducto);	    
-	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal().toString()+"\nTotal de productos: "+ listaProducto.size()).toString()));
+	         params.put("total", reporteVenta.getTotal() - reporteVenta.getDescuento()-totalAbono);
+	         params.put("listaProductos", listaProducto);
+	         params.put("descuento", reporteVenta.getDescuento());
+	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal()+"\nTotal de productos: "+ listaProducto.size()).toString()));
 	         params.put("fechaVencimiento", fechaVencimiento);
+	     	if(reporteVenta.getTipoPago()==1) {
+	         params.put("totalAbono", totalAbono);
+	     	}
 	         
 	         
 	         
@@ -238,10 +242,11 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
 	         params.put("total", reporteVenta.getTotal());
 	         params.put("listaAbonos", listaAbono);	    
-	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal().toString()+"\nTotal de Abonos: "+ listaAbono.size()).toString()));
+	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+(reporteVenta.getTotal()-reporteVenta.getDescuento())+"\nTotal de Abonos: "+ listaAbono.size()).toString()));
 	         params.put("fechaVencimiento", fechaVencimiento);
 	         params.put("totalAbonos", abonos);
-	         params.put("saldoFinal", reporteVenta.getTotal()-abonos);
+	         params.put("descuento", reporteVenta.getDescuento());
+	         params.put("saldoFinal", reporteVenta.getTotal()-abonos - reporteVenta.getDescuento());
 	         
 	         
 	         
@@ -291,9 +296,10 @@ public class ReporteServiceImpl implements ReporteService {
 			Resource resource = new ClassPathResource("/reports/plantillas/ventaPedido.jrxml");
 			final Map<String, Object> params = new HashMap<>();
 			File pdfFile = null;
-			String nombreArchivo = "venta_pedido_"+reporteVenta.getFolioVenta();
-			
-			pdfFile = new File("/opt/webServer/backEnd/refac/" + nombreArchivo + ".pdf");
+			String ruta="";			
+			  String nombreArchivo = "venta_pedido_"+reporteVenta.getFolioVenta();
+	          ruta="/opt/webserver/backEnd/refacFabela/";
+	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
 			
 			//aqui van los parametros
 			params.put("logo", this.imagenHeader);
@@ -307,11 +313,12 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("ivaTotal", reporteVenta.getIvaTotal());
 			params.put("total", reporteVenta.getTotal());
 			params.put("listaProductos", listaProducto);
-			params.put("anticipo", reporteVenta.getAnticipo());			
-	        params.put("qr", getQR(("Folio de venta por pedido: VP-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal().toString()+"\nTotal de productos: "+ listaProducto.size()).toString()));
+			params.put("anticipo", reporteVenta.getAnticipo());	
+			params.put("descuento", reporteVenta.getDescuento());
+	        params.put("qr", getQR(("Folio de venta por pedido: VP-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+(reporteVenta.getTotal()-reporteVenta.getAnticipo()-reporteVenta.getDescuento())+"\nTotal de productos: "+ listaProducto.size()).toString()));
 	        params.put("saldoFinal", reporteVenta.getTotal()-reporteVenta.getAnticipo());
 	        
-			System.err.println("El saldo final es de:"+(reporteVenta.getTotal()-reporteVenta.getAnticipo()));
+			System.err.println("El saldo final es de:"+(reporteVenta.getTotal()-reporteVenta.getAnticipo()-reporteVenta.getDescuento()));
 			
 			
 			
@@ -389,10 +396,11 @@ public class ReporteServiceImpl implements ReporteService {
 			//params.put("subTotal", reporteVenta.getSubTotal());
 			//params.put("ivaTotal", reporteVenta.getIvaTotal());
 			params.put("total", reporteVenta.getTotal());
+			params.put("descuento", reporteVenta.getDescuento());
 			params.put("listaVenta", listaAbomoVenta);
-			//params.put("anticipo", reporteVenta.getAnticipo());			
+			params.put("abonos", reporteVenta.getAbonos());			
 	        params.put("qr", getQR(("\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+cliente.getsRazonSocial()+"\nTotal: "+reporteVenta.getTotal().toString()+"\nTotal de Ventas a crédito: "+ listaAbomoVenta.size()).toString()));
-	        //params.put("saldoFinal", reporteVenta.getTotal()-reporteVenta.getAnticipo());
+	        params.put("saldoFinal", (reporteVenta.getTotal()-reporteVenta.getAbonos()-reporteVenta.getDescuento()));
 	        		
 			
 			

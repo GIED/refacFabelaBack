@@ -57,6 +57,9 @@ public class TwVenta implements Serializable {
 	@Column(name = "nAnticipo")
 	private Double anticipo;
 	
+	@Column(name = "nDescuento")
+	private Double descuento;
+	
 
 
 	// bi-directional many-to-one association to TcCliente
@@ -80,12 +83,36 @@ public class TwVenta implements Serializable {
 
 	// bi-directional many-to-one association to TwCaja
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "n_idCaja", updatable = false, insertable = false)
+	@JoinColumn(name = "n_idCaja", updatable = false, insertable = false, nullable = false)
 	private TwCaja twCaja;	
 	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "n_idFormaPago", updatable = false, insertable = false, nullable = false)
+	private TcFormapago tcFormapago = new TcFormapago() ;	
 	
 	
 	
+	
+
+	public TcFormapago getTcFormapago() {
+		return tcFormapago;
+	}
+
+
+	public void setTcFormapago(TcFormapago tcFormapago) {
+		this.tcFormapago = tcFormapago;
+	}
+
+
+	public Double getDescuento() {
+		return descuento;
+	}
+
+
+	public void setDescuento(Double descuento) {
+		this.descuento = descuento;
+	}
+
 
 	public TwVenta() {
 	}

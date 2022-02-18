@@ -87,7 +87,8 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setnIdCaja(utils.cajaActivaId(cajaRepository.obtenerCajaVigente()));
 		twVenta.setnIdCotizacion(ventaDto.getTwCotizacion().getnId());
 		twVenta.setAnticipo(ventaDto.getAnticipo());
-		System.err.println(twVenta);
+		twVenta.setDescuento(0.0);
+	
 
 		TwVenta ventaRegistrada = new TwVenta();
 		ventaRegistrada = ventasRepository.save(twVenta);
@@ -251,6 +252,25 @@ public class VentasServiceImpl implements VentasService {
 	public TwVenta consltaVentasId(Long nIdVenta) {
 		
 		return ventasRepository.findBynId(nIdVenta);
+	}
+
+	@Override
+	public List<TvVentaDetalle> consultaVentaDetalleIdEstatusVenta( Long nEstatusVenta) {
+		
+		return tvVentaDetalleRepository.consultaVentaDetalleIdEstatusVenta( nEstatusVenta);
+	}
+
+	@Override
+	public TvVentaDetalle guardarVentaDescuento(TvVentaDetalle tvVentaDetalle) {
+		
+		TwVenta venta= new TwVenta();
+		
+		venta=ventasRepository.getById(tvVentaDetalle.getnId());
+		venta.setDescuento(tvVentaDetalle.getDescuento());
+		ventasRepository.save(venta);
+		
+		
+		return tvVentaDetalle;
 	}
 
 	

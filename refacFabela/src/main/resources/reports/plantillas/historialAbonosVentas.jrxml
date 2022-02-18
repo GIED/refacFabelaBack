@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="55"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -79,6 +79,7 @@
 		<field name="saldoTotal" class="java.lang.Double"/>
 		<field name="avancePago" class="java.lang.Double"/>
 		<field name="abonoDto" class="java.util.List"/>
+		<field name="descuento" class="java.lang.Double"/>
 	</subDataset>
 	<subDataset name="dataset1" uuid="c4ff5998-c412-4ef5-ac33-aebdc78515da">
 		<field name="abono" class="java.lang.Double"/>
@@ -96,11 +97,14 @@
 	<parameter name="fecha" class="java.lang.String"/>
 	<parameter name="total" class="java.lang.Double"/>
 	<parameter name="qr" class="java.lang.Object"/>
+	<parameter name="descuento" class="java.lang.Double"/>
+	<parameter name="abonos" class="java.lang.Double"/>
+	<parameter name="saldoFinal" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="124" splitType="Stretch">
+		<band height="114" splitType="Stretch">
 			<textField>
 				<reportElement x="129" y="94" width="272" height="20" uuid="b68e4c90-83ec-4929-b421-708e5f4491c6"/>
 				<textElement textAlignment="Center">
@@ -148,44 +152,30 @@
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="419" y="74" width="132" height="16" uuid="51934318-e94d-40ac-8804-58e0f62879a0"/>
+				<reportElement x="422" y="62" width="132" height="16" uuid="51934318-e94d-40ac-8804-58e0f62879a0"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[LUGAR DE EXPEDISIÓN]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="419" y="58" width="132" height="16" uuid="56f27b58-bb8b-464c-8865-53c231982582"/>
+				<reportElement x="422" y="46" width="132" height="16" uuid="56f27b58-bb8b-464c-8865-53c231982582"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="419" y="105" width="132" height="16" uuid="9889a011-90c2-4a42-a10c-138742bd719d"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Vencimiento]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="420" y="90" width="132" height="16" uuid="f23e8d6c-a9dd-4052-a95a-35f6f6ebb183"/>
+				<reportElement x="423" y="78" width="132" height="16" uuid="f23e8d6c-a9dd-4052-a95a-35f6f6ebb183"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Toluca de Lerdo, México]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="419" y="42" width="132" height="16" uuid="5132774c-e159-47b4-a91d-5685b51c87f6"/>
+				<reportElement x="422" y="30" width="132" height="16" uuid="5132774c-e159-47b4-a91d-5685b51c87f6"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[FECHA DE EMISIÓN]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="419" y="10" width="132" height="16" uuid="7031f559-ceed-481a-bbbd-228168ea1d32"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[NO. VENTA]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -196,124 +186,124 @@
 		<band height="4" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="201" splitType="Stretch">
+		<band height="191" splitType="Stretch">
 			<componentElement>
-				<reportElement x="0" y="0" width="555" height="179" uuid="3aac5f86-73ff-4c83-8971-334795e08c64"/>
+				<reportElement x="-1" y="0" width="555" height="182" uuid="3aac5f86-73ff-4c83-8971-334795e08c64"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="listaVenta" uuid="a206f221-4436-46c5-b9cd-4b2376822fa5">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaVenta})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="179" width="555">
+					<jr:listContents height="182" width="555">
 						<rectangle>
-							<reportElement x="0" y="40" width="62" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="288133bb-de6e-4a09-b3b4-8721b7001169"/>
+							<reportElement x="0" y="50" width="60" height="30" forecolor="#04115F" backcolor="#FEFEFE" uuid="288133bb-de6e-4a09-b3b4-8721b7001169"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<rectangle>
-							<reportElement x="64" y="40" width="82" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="a3cdcaa0-c985-43a6-9957-1b670c29b1cb"/>
+							<reportElement x="60" y="50" width="80" height="30" forecolor="#04115F" backcolor="#FEFEFE" uuid="a3cdcaa0-c985-43a6-9957-1b670c29b1cb"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<rectangle>
-							<reportElement x="147" y="40" width="76" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="8f623e0b-164c-47d7-bad9-8551502c8366"/>
+							<reportElement x="140" y="50" width="80" height="30" forecolor="#04115F" backcolor="#FEFEFE" uuid="8f623e0b-164c-47d7-bad9-8551502c8366"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<rectangle>
-							<reportElement x="223" y="40" width="100" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="9171b3cd-9296-4641-82f2-0147c9c3a952"/>
+							<reportElement x="220" y="50" width="80" height="30" forecolor="#04115F" backcolor="#FEFEFE" uuid="9171b3cd-9296-4641-82f2-0147c9c3a952"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<rectangle>
-							<reportElement x="323" y="40" width="106" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="95cf0443-a146-42ba-a8c7-89b4cd62a12d"/>
+							<reportElement x="300" y="50" width="80" height="30" forecolor="#04115F" backcolor="#FEFEFE" uuid="95cf0443-a146-42ba-a8c7-89b4cd62a12d"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<textField>
-							<reportElement x="0" y="40" width="63" height="34" uuid="9f6097fd-74a2-4590-bbcf-e652abf73266"/>
+							<reportElement x="0" y="50" width="60" height="30" uuid="9f6097fd-74a2-4590-bbcf-e652abf73266"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{folioVenta}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$F{idVenta}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="64" y="40" width="82" height="34" uuid="9ff4c602-25e7-45b6-95fb-13fbeba7f167"/>
+							<reportElement x="60" y="50" width="80" height="30" uuid="9ff4c602-25e7-45b6-95fb-13fbeba7f167"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{fechaVenta}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
-							<reportElement x="147" y="40" width="76" height="34" uuid="e13e8216-a05c-49c7-947b-929036de4766"/>
-							<textElement textAlignment="Justified" verticalAlignment="Middle">
+							<reportElement x="140" y="50" width="80" height="30" uuid="e13e8216-a05c-49c7-947b-929036de4766"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{fechaTerminoCredito}]]></textFieldExpression>
 						</textField>
 						<textField pattern="#,##0.00">
-							<reportElement x="223" y="40" width="100" height="34" uuid="9cb1d605-8167-4934-976b-990f1663fa76"/>
+							<reportElement x="220" y="50" width="80" height="30" uuid="9cb1d605-8167-4934-976b-990f1663fa76"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{totalVenta}]]></textFieldExpression>
 						</textField>
 						<textField pattern="#,##0.00">
-							<reportElement x="323" y="40" width="106" height="34" uuid="75512337-d642-4256-a170-87d2011e0137"/>
+							<reportElement x="300" y="50" width="80" height="30" uuid="75512337-d642-4256-a170-87d2011e0137"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{totalAbono}]]></textFieldExpression>
 						</textField>
 						<rectangle>
-							<reportElement x="429" y="40" width="126" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="8e1deefd-395f-4852-bc1d-5db79b5c7ae3"/>
+							<reportElement x="380" y="50" width="80" height="30" forecolor="#04115F" backcolor="#FEFEFE" uuid="8e1deefd-395f-4852-bc1d-5db79b5c7ae3"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<textField pattern="#,##0.00">
-							<reportElement x="429" y="40" width="126" height="34" uuid="8d1ed887-ac6c-4783-afb6-ac4a67e46900"/>
+							<reportElement x="380" y="50" width="80" height="30" uuid="8d1ed887-ac6c-4783-afb6-ac4a67e46900"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{saldoTotal}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
 						</textField>
 						<rectangle>
-							<reportElement x="64" y="27" width="82" height="19" forecolor="#04115F" backcolor="#010101" uuid="c9eae81c-3691-4fca-b3c5-149b7c6ddc9f"/>
+							<reportElement x="60" y="30" width="80" height="20" forecolor="#04115F" backcolor="#010101" uuid="c9eae81c-3691-4fca-b3c5-149b7c6ddc9f"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<rectangle>
-							<reportElement x="0" y="27" width="62" height="19" forecolor="#04115F" backcolor="#010101" uuid="0b894acc-8805-4bf3-a21c-aae779253071"/>
+							<reportElement x="0" y="30" width="60" height="20" forecolor="#04115F" backcolor="#010101" uuid="0b894acc-8805-4bf3-a21c-aae779253071"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<rectangle>
-							<reportElement x="147" y="27" width="76" height="19" forecolor="#04115F" backcolor="#010101" uuid="b2af300c-e622-46a3-bf3f-ab47e9d1f361"/>
+							<reportElement x="140" y="30" width="80" height="20" forecolor="#04115F" backcolor="#010101" uuid="b2af300c-e622-46a3-bf3f-ab47e9d1f361"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<rectangle>
-							<reportElement x="223" y="27" width="100" height="19" forecolor="#04115F" backcolor="#010101" uuid="1608b785-fd46-43e8-ab2e-b46faecfbbdc"/>
+							<reportElement x="220" y="30" width="80" height="20" forecolor="#04115F" backcolor="#010101" uuid="1608b785-fd46-43e8-ab2e-b46faecfbbdc"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<rectangle>
-							<reportElement x="323" y="27" width="106" height="19" forecolor="#04115F" backcolor="#010101" uuid="e3313a06-64c6-4d17-ae1f-decccfa0bdc1"/>
+							<reportElement x="300" y="30" width="80" height="20" forecolor="#04115F" backcolor="#010101" uuid="e3313a06-64c6-4d17-ae1f-decccfa0bdc1"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<staticText>
-							<reportElement x="0" y="27" width="63" height="19" forecolor="#FEFEFE" uuid="d3bc7096-6391-4ecb-98ff-ff3622e153cd"/>
+							<reportElement x="0" y="30" width="60" height="20" forecolor="#FEFEFE" uuid="d3bc7096-6391-4ecb-98ff-ff3622e153cd"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8" isBold="false"/>
 								<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
@@ -321,53 +311,48 @@
 							<text><![CDATA[Folio]]></text>
 						</staticText>
 						<staticText>
-							<reportElement x="65" y="27" width="82" height="19" forecolor="#FFFFFF" uuid="c7d4f91a-5ad1-4401-8333-774a9b422f56"/>
+							<reportElement x="60" y="30" width="80" height="20" forecolor="#FFFFFF" uuid="c7d4f91a-5ad1-4401-8333-774a9b422f56"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8" isBold="false"/>
 							</textElement>
 							<text><![CDATA[Fecha Venta]]></text>
 						</staticText>
 						<staticText>
-							<reportElement x="322" y="26" width="106" height="20" forecolor="#FFFFFF" uuid="2340b28c-c49f-45e2-9ce8-485bd7b306b5"/>
+							<reportElement x="300" y="30" width="80" height="20" forecolor="#FFFFFF" uuid="2340b28c-c49f-45e2-9ce8-485bd7b306b5"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8" isBold="false"/>
 							</textElement>
 							<text><![CDATA[Total Abonos]]></text>
 						</staticText>
 						<staticText>
-							<reportElement x="222" y="25" width="100" height="20" forecolor="#FFFFFF" uuid="9ac63be5-9787-4cc3-ac63-4d70da905aea"/>
+							<reportElement x="220" y="30" width="80" height="20" forecolor="#FFFFFF" uuid="9ac63be5-9787-4cc3-ac63-4d70da905aea"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8" isBold="false"/>
 							</textElement>
 							<text><![CDATA[Total Venta]]></text>
 						</staticText>
 						<staticText>
-							<reportElement x="146" y="26" width="76" height="20" forecolor="#FFFFFF" uuid="b8d448db-2748-4323-ac46-dec37d1f7cf0"/>
+							<reportElement x="140" y="30" width="80" height="20" forecolor="#FFFFFF" uuid="b8d448db-2748-4323-ac46-dec37d1f7cf0"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8" isBold="false"/>
 							</textElement>
 							<text><![CDATA[Fecha Vencimiento]]></text>
 						</staticText>
 						<rectangle>
-							<reportElement x="428" y="27" width="126" height="19" forecolor="#04115F" backcolor="#010101" uuid="a3235c7b-c4f9-4d4a-8661-3ab3b8999628"/>
+							<reportElement x="380" y="30" width="80" height="20" forecolor="#04115F" backcolor="#010101" uuid="a3235c7b-c4f9-4d4a-8661-3ab3b8999628"/>
 							<graphicElement>
 								<pen lineColor="#C7C7C7"/>
 							</graphicElement>
 						</rectangle>
 						<staticText>
-							<reportElement x="428" y="26" width="126" height="20" forecolor="#FFFFFF" uuid="d53de59e-c438-4d39-8970-6691ed508ba2"/>
+							<reportElement x="380" y="30" width="80" height="20" forecolor="#FFFFFF" uuid="d53de59e-c438-4d39-8970-6691ed508ba2"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8" isBold="false"/>
 							</textElement>
-							<text><![CDATA[Saldo Final]]></text>
-						</staticText>
-						<staticText>
-							<reportElement x="0" y="9" width="555" height="15" uuid="0b741756-fb3e-4515-bcac-caec98599d26"/>
-							<textElement textAlignment="Center"/>
-							<text><![CDATA[ABONOS DE LA VENTA]]></text>
+							<text><![CDATA[Descuentos]]></text>
 						</staticText>
 						<componentElement>
-							<reportElement key="table 2" style="table 2" x="0" y="89" width="555" height="52" backcolor="#FEFEFE" uuid="bda68512-7cd9-4bde-885e-fd606240d0cb"/>
+							<reportElement key="table 2" style="table 2" x="0" y="119" width="555" height="52" backcolor="#FEFEFE" uuid="bda68512-7cd9-4bde-885e-fd606240d0cb"/>
 							<jr:table>
 								<datasetRun subDataset="dataset1" uuid="62844012-b1ce-4747-a360-1b539935c850">
 									<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{abonoDto})]]></dataSourceExpression>
@@ -474,13 +459,54 @@
 								</jr:column>
 							</jr:table>
 						</componentElement>
+						<rectangle>
+							<reportElement x="460" y="30" width="95" height="20" forecolor="#04115F" backcolor="#010101" uuid="1cdee36e-9e19-4a74-b5a0-88e593c2b1bd"/>
+							<graphicElement>
+								<pen lineColor="#C7C7C7"/>
+							</graphicElement>
+						</rectangle>
+						<staticText>
+							<reportElement x="460" y="30" width="95" height="20" forecolor="#FEFEFE" uuid="d2a91500-0a94-4a34-a192-fcaf38a755ed"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8" isBold="false" isUnderline="true"/>
+								<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
+							</textElement>
+							<text><![CDATA[Saldo Final]]></text>
+						</staticText>
+						<rectangle>
+							<reportElement x="460" y="50" width="95" height="30" forecolor="#04115F" backcolor="#FEFEFE" uuid="c9b8c7fc-d119-464b-8450-85e3551ac465"/>
+							<graphicElement>
+								<pen lineColor="#C7C7C7"/>
+							</graphicElement>
+						</rectangle>
+						<textField pattern="#,##0.00">
+							<reportElement x="460" y="50" width="95" height="30" uuid="e63397a7-f42f-4dcf-b140-12921410e375"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{saldoTotal}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="0" y="10" width="555" height="20" uuid="60ca189c-b663-4525-856d-d8c685b2c872"/>
+							<textElement textAlignment="Center">
+								<font isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA["BALANCE DE LA VENTA NO. "+$F{idVenta}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="0" y="95" width="555" height="20" uuid="028a5109-44cf-4e12-ac4b-95641bb1b736"/>
+							<textElement textAlignment="Center">
+								<font isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA["ABONOS DE LA VENTA NO. "+$F{idVenta}]]></textFieldExpression>
+						</textField>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="13" splitType="Stretch"/>
+		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="33" splitType="Stretch">
@@ -497,90 +523,104 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="207">
+		<band height="183">
 			<staticText>
-				<reportElement x="210" y="42" width="179" height="20" uuid="85d05d8c-4bfc-408a-8724-cfcc498a71d4"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SUBTOTAL]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="210" y="81" width="179" height="20" uuid="3124ffee-f70c-4de6-9fed-761e0c3c45c7"/>
+				<reportElement x="210" y="61" width="180" height="20" uuid="3124ffee-f70c-4de6-9fed-761e0c3c45c7"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="210" y="61" width="178" height="20" uuid="826c7741-d29f-4902-842a-0b2cd373fcd9"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[TRASLADO IVA TASA 0.16000]]></text>
 			</staticText>
 			<image>
 				<reportElement x="0" y="0" width="259" height="147" uuid="f46844c0-a280-4cad-8e25-9583ed2395aa"/>
 				<imageExpression><![CDATA[$P{qr}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="209" y="22" width="179" height="20" uuid="df1be9d4-31c9-4d33-8ec2-2a9cdb3f20c1"/>
+				<reportElement x="210" y="40" width="180" height="20" uuid="df1be9d4-31c9-4d33-8ec2-2a9cdb3f20c1"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MONEDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="22" width="132" height="20" uuid="cb55f2fd-d077-49d0-be00-ae143ab9d1a3"/>
+				<reportElement x="411" y="40" width="135" height="20" uuid="cb55f2fd-d077-49d0-be00-ae143ab9d1a3"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[MXN - PESO MEXICANO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="2" width="132" height="20" uuid="69c30589-4991-452e-a851-09b31f73a2c6"/>
+				<reportElement x="411" y="20" width="135" height="20" uuid="69c30589-4991-452e-a851-09b31f73a2c6"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
-				<text><![CDATA[CONTADO]]></text>
+				<text><![CDATA[CRÉDITO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="209" y="2" width="179" height="20" uuid="99cd8618-ed3d-4194-a66b-aad482e11b19"/>
+				<reportElement x="210" y="20" width="180" height="20" uuid="99cd8618-ed3d-4194-a66b-aad482e11b19"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CONDICIONES DE PAGO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="210" y="101" width="179" height="20" uuid="1728a626-1f4a-4e95-9544-c4f83f7e5b3d"/>
+				<reportElement x="210" y="81" width="180" height="20" uuid="1728a626-1f4a-4e95-9544-c4f83f7e5b3d"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL ABONOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="209" y="121" width="179" height="20" uuid="6875db1e-f781-4031-9c22-c3f345ffbb7f"/>
+				<reportElement x="210" y="101" width="180" height="20" uuid="6875db1e-f781-4031-9c22-c3f345ffbb7f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL DESCUENTOS]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement x="410" y="101" width="135" height="20" uuid="437615c9-1f56-4661-b190-1ad1943d4be8"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$ "+$P{descuento}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="157" width="555" height="20" backcolor="#010101" uuid="e1ed1eaf-d4a4-4510-be85-362626007541"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="157" width="555" height="20" forecolor="#FEFEFE" uuid="c80f4abc-31c3-43c2-ba09-cd1ecbd38eb1"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="210" y="121" width="180" height="20" uuid="1761aefe-0a37-4b0d-9df7-2802c08c2c23"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SALDO FINAL]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
-				<reportElement x="410" y="121" width="132" height="20" uuid="437615c9-1f56-4661-b190-1ad1943d4be8"/>
+				<reportElement x="410" y="81" width="135" height="20" uuid="6a40f3be-ead3-4eb6-8dfb-3c3a543d9545"/>
 				<textElement verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$ "+$P{abonos}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement x="411" y="121" width="135" height="20" uuid="2792046b-ab75-4390-bf94-786da841a175"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$ "+$P{saldoFinal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement x="411" y="60" width="135" height="20" uuid="0044e014-8b2f-4daa-8e44-b8c14977f9b5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ "+$P{total}]]></textFieldExpression>
-			</textField>
-			<rectangle>
-				<reportElement x="1" y="187" width="555" height="20" backcolor="#010101" uuid="e1ed1eaf-d4a4-4510-be85-362626007541"/>
-			</rectangle>
-			<textField>
-				<reportElement x="1" y="187" width="555" height="20" forecolor="#FEFEFE" uuid="c80f4abc-31c3-43c2-ba09-cd1ecbd38eb1"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</lastPageFooter>

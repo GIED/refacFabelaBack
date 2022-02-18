@@ -96,6 +96,18 @@ public class VentasController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/obtenerVentasClienteDetalleEstatusVenta") 
+	public List<TvVentaDetalle> obtenerVentasClientesDetalleEstatusVenta(@RequestParam()  long nEstatusVenta) {
+
+		try {
+			return ventasService.consultaVentaDetalleIdEstatusVenta( nEstatusVenta);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
 	@GetMapping("/obtenerAbonosVentaId") 
 	public List<TwAbono> obtenerAbonosVentaId(@RequestParam() Long nId) {
 
@@ -115,6 +127,20 @@ public class VentasController {
 			
 			
 			return ventasService.guardarVenta(ventaDto);
+		} catch (Exception e) {
+
+			logger.error("Error al guardar la venta" + e);
+		}
+		return null;
+	}
+	
+	@PostMapping("/guardarVentaDescuento")
+	public TvVentaDetalle guardarVentaDescuento(@RequestBody TvVentaDetalle tvVentaDetalle) {
+
+		try {		
+			
+			
+			return ventasService.guardarVentaDescuento(tvVentaDetalle);
 		} catch (Exception e) {
 
 			logger.error("Error al guardar la venta" + e);
