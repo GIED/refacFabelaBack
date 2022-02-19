@@ -134,13 +134,13 @@ public class VentasController {
 		return null;
 	}
 	
-	@PostMapping("/guardarVentaDescuento")
+	@PostMapping("/guardarVentaDetalle")
 	public TvVentaDetalle guardarVentaDescuento(@RequestBody TvVentaDetalle tvVentaDetalle) {
 
 		try {		
 			
 			
-			return ventasService.guardarVentaDescuento(tvVentaDetalle);
+			return ventasService.guardarVentaDetalle(tvVentaDetalle);
 		} catch (Exception e) {
 
 			logger.error("Error al guardar la venta" + e);

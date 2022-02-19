@@ -8,6 +8,7 @@ import com.refacFabela.model.TcCatalogogeneral;
 import com.refacFabela.model.TcCategoria;
 import com.refacFabela.model.TcCategoriaGeneral;
 import com.refacFabela.model.TcClavesat;
+import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
 import com.refacFabela.model.TcNivel;
@@ -32,4 +33,5 @@ public interface CatalagosService {
 	public List<TcUsocfdi> catalagoUsoCfdi();
 	public TwCaja cajaActiva();
 	public List<TcTipoVenta> catalagoTipoVenta();
+	public TcEstatusVenta catalagoEstatusVentaId(Long nId);
 }

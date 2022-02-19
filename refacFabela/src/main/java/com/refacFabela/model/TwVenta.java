@@ -60,6 +60,9 @@ public class TwVenta implements Serializable {
 	@Column(name = "nDescuento")
 	private Double descuento;
 	
+	@Column(name = "n_idFormaPago")
+	private Long  nIdFormaPago;
+	
 
 
 	// bi-directional many-to-one association to TcCliente
@@ -88,11 +91,21 @@ public class TwVenta implements Serializable {
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "n_idFormaPago", updatable = false, insertable = false, nullable = false)
-	private TcFormapago tcFormapago = new TcFormapago() ;	
+	private TcFormapago tcFormapago ;	
 	
 	
 	
 	
+
+	public Long getnIdFormaPago() {
+		return nIdFormaPago;
+	}
+
+
+	public void setnIdFormaPago(Long nIdFormaPago) {
+		this.nIdFormaPago = nIdFormaPago;
+	}
+
 
 	public TcFormapago getTcFormapago() {
 		return tcFormapago;
@@ -332,9 +345,13 @@ public class TwVenta implements Serializable {
 				+ ", nIdFacturacion=" + nIdFacturacion + ", nIdTipoVenta=" + nIdTipoVenta + ", nTipoPago=" + nTipoPago
 				+ ", nIdCaja=" + nIdCaja + ", dFechaInicioCredito=" + dFechaInicioCredito + ", dFechaTerminoCredito="
 				+ dFechaTerminoCredito + ", dFechaPagoCredito=" + dFechaPagoCredito + ", nIdCotizacion=" + nIdCotizacion
-				+ ", anticipo=" + anticipo + ", tcCliente=" + tcCliente + ", tcTipoVenta=" + tcTipoVenta
-				+ ", tcUsuario=" + tcUsuario + ", tcEstatusVenta=" + tcEstatusVenta + ", twCaja=" + twCaja + "]";
+				+ ", anticipo=" + anticipo + ", descuento=" + descuento + ", nIdFormaPago=" + nIdFormaPago
+				+ ", tcCliente=" + tcCliente + ", tcTipoVenta=" + tcTipoVenta + ", tcUsuario=" + tcUsuario
+				+ ", tcEstatusVenta=" + tcEstatusVenta + ", twCaja=" + twCaja + ", tcFormapago=" + tcFormapago + "]";
 	}
+
+
+	
 	
 	
 

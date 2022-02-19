@@ -21,6 +21,7 @@ import com.refacFabela.model.TcCatalogogeneral;
 import com.refacFabela.model.TcCategoria;
 import com.refacFabela.model.TcCategoriaGeneral;
 import com.refacFabela.model.TcClavesat;
+import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
 import com.refacFabela.model.TcNivel;
@@ -226,6 +227,19 @@ public class CatalogosController {
 		try {
 
 			return cajaService.obtenerCajaActiva();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener la caja activa " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/catalogoEstatusId")
+	public TcEstatusVenta consultaCajaActiva(@RequestParam Long nId) {
+		try {
+
+			return catalagosService.catalagoEstatusVentaId(nId);
 
 		} catch (Exception e) {
 

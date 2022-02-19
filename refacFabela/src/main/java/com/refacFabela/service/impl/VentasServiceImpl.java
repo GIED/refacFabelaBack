@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.dto.VentaDto;
+import com.refacFabela.model.TcEstatusVenta;
+import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCotizaciones;
@@ -261,12 +263,27 @@ public class VentasServiceImpl implements VentasService {
 	}
 
 	@Override
-	public TvVentaDetalle guardarVentaDescuento(TvVentaDetalle tvVentaDetalle) {
+	public TvVentaDetalle guardarVentaDetalle(TvVentaDetalle tvVentaDetalle) {
 		
 		TwVenta venta= new TwVenta();
 		
+		
 		venta=ventasRepository.getById(tvVentaDetalle.getnId());
+		
 		venta.setDescuento(tvVentaDetalle.getDescuento());
+		if(tvVentaDetalle.getTcFormapago().getnId()!=null) {
+						
+		venta.setTcFormapago(tvVentaDetalle.getTcFormapago());
+		venta.setnIdEstatusVenta(2L);
+		
+		}
+		else {
+			venta.setTcFormapago(new TcFormapago());
+			venta.setTcEstatusVenta(new TcEstatusVenta());
+		}
+		
+		System.err.println(venta);
+		
 		ventasRepository.save(venta);
 		
 		

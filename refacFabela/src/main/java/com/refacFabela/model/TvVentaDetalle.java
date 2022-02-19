@@ -81,11 +81,11 @@ public class TvVentaDetalle implements Serializable {
 	private TcEstatusVenta tcEstatusVenta;
 	
 	@ManyToOne
-	@JoinColumn(name = "n_idFormaPago", updatable = false, insertable = false , nullable = false)
+	@JoinColumn(name = "n_idFormaPago", updatable = false, insertable = false )
 	private TcFormapago tcFormapago ;
 	
 	@ManyToOne
-	@JoinColumn(name = "n_idCaja", updatable = false, insertable = false , nullable = false)
+	@JoinColumn(name = "n_idCaja", updatable = false, insertable = false )
 	private TwCaja twCaja ;
 	
 	
@@ -105,6 +105,8 @@ public class TvVentaDetalle implements Serializable {
 	public void setTcFormapago(TcFormapago tcFormapago) {
 		this.tcFormapago = tcFormapago;
 	}
+
+
 
 
 
@@ -264,6 +266,17 @@ public class TvVentaDetalle implements Serializable {
 
 	public void setTcEstatusVenta(TcEstatusVenta tcEstatusVenta) {
 		this.tcEstatusVenta = tcEstatusVenta;
+	}
+
+	@Override
+	public String toString() {
+		return "TvVentaDetalle [nId=" + nId + ", nIdCliente=" + nIdCliente + ", nIdUsuario=" + nIdUsuario
+				+ ", sFolioVenta=" + sFolioVenta + ", dFechaVenta=" + dFechaVenta + ", nTipoPago=" + nTipoPago
+				+ ", dFechaInicioCredito=" + dFechaInicioCredito + ", dFechaTerminoCredito=" + dFechaTerminoCredito
+				+ ", dFechaPagoCredito=" + dFechaPagoCredito + ", nTotalVenta=" + nTotalVenta + ", nTotalAbono="
+				+ nTotalAbono + ", nSaldoTotal=" + nSaldoTotal + ", nAvancePago=" + nAvancePago + ", sEstatus="
+				+ sEstatus + ", descuento=" + descuento + ", tcCliente=" + tcCliente + ", tcUsuario=" + tcUsuario
+				+ ", tcEstatusVenta=" + tcEstatusVenta + ", tcFormapago=" + tcFormapago + ", twCaja=" + twCaja + "]";
 	}
 	
 	
