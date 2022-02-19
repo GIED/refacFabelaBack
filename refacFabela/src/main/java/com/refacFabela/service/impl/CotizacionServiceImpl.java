@@ -83,6 +83,18 @@ public class CotizacionServiceImpl implements CotizacionService {
 		return twCotizacionesRepository.findAll();
 		
 	}
+	
+	@Override
+	public List<TwCotizacionesDetalle> consultaCotizacionDistribuidor(Long idUsuario) {
+		
+		return twCotizacionesRepository.findBynIdUsuario(idUsuario);
+	}
+	
+	@Override
+	public TwCotizacionesDetalle consultaCotizacionById(Long idCotizacion) {
+		
+		return this.twCotizacionesRepository.findById(idCotizacion).get();
+	}
 
 
 
@@ -119,6 +131,14 @@ public class CotizacionServiceImpl implements CotizacionService {
 		// TODO Auto-generated method stub
 		return cotizacionProductoRepository.findBynIdCotizacion(id);
 	}
+
+
+
+	
+
+
+
+	
 
 
 

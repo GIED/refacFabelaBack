@@ -54,6 +54,18 @@ public class CotizacionController {
 		return null;
 	}
 	
+	@GetMapping("/consultaCotizacionDistribuidor")
+	public List<TwCotizacionesDetalle> consultaCotizacionDistribuidor(@RequestParam Long idUsuario) {
+
+		try {
+			return cotizacionService.consultaCotizacionDistribuidor(idUsuario);
+		} catch (Exception e) {
+
+			logger.error("Error al guardar la cotización" + e);
+		}
+		return null;
+	}
+	
 	@GetMapping("/consultaCotizacionId")
 	public List<TvStockProductoDto> consultaCotizacionId(@RequestParam Long id) {
 
