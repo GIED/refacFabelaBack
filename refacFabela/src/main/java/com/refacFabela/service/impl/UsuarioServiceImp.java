@@ -85,7 +85,7 @@ public class UsuarioServiceImp implements UsuarioService {
 		if (nuevoUsuario.getRfcDistribuidor() != null) {
 			
 			TcCliente tcCliente= this.clienteService.consultaClienteRfc(nuevoUsuario.getRfcDistribuidor());
-			tcCliente.setTcUsuario(newUsuario);
+			tcCliente.setnIdUsuario(newUsuario.getnId());
 			this.clienteService.guardarCliente(tcCliente);
 		}
 		
