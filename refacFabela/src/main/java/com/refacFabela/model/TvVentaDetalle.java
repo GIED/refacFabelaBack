@@ -278,6 +278,8 @@ public class TvVentaDetalle implements Serializable {
 				+ sEstatus + ", descuento=" + descuento + ", tcCliente=" + tcCliente + ", tcUsuario=" + tcUsuario
 				+ ", tcEstatusVenta=" + tcEstatusVenta + ", tcFormapago=" + tcFormapago + ", twCaja=" + twCaja + "]";
 	}
+
+	
 	
 	
 	

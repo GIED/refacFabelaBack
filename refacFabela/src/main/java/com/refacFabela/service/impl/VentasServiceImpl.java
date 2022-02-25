@@ -265,25 +265,22 @@ public class VentasServiceImpl implements VentasService {
 	@Override
 	public TvVentaDetalle guardarVentaDetalle(TvVentaDetalle tvVentaDetalle) {
 		
-		TwVenta venta= new TwVenta();
 		
 		
-		venta=ventasRepository.getById(tvVentaDetalle.getnId());
+		TwVenta venta = ventasRepository.getById(tvVentaDetalle.getnId());
+		
+		System.err.println(tvVentaDetalle);
+		System.err.println(venta);
 		
 		venta.setDescuento(tvVentaDetalle.getDescuento());
-		if(tvVentaDetalle.getTcFormapago().getnId()!=null) {
+		
+		if(tvVentaDetalle.getTcFormapago() != null) {
 						
-		venta.setTcFormapago(tvVentaDetalle.getTcFormapago());
+		venta.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
 		venta.setnIdEstatusVenta(2L);
 		
 		}
-		else {
-			venta.setTcFormapago(new TcFormapago());
-			venta.setTcEstatusVenta(new TcEstatusVenta());
-		}
-		
-		System.err.println(venta);
-		
+				
 		ventasRepository.save(venta);
 		
 		
