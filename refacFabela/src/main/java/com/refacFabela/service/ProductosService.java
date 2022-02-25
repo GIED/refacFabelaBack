@@ -26,6 +26,7 @@ public interface ProductosService {
 	public TwProductosAlternativo guardarProductoAlternativo(TwProductosAlternativo twProductosAlternativo);
 	public TvStockProducto obtenerStockProductoId(Long id);
 	public List<VentaProductoDto> obtenerProductosVentaId(Long id);
+	public String guardaVentaProducto(VentaProductoDto ventaProductoDto);
 	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id);
 	public String consultaVentaProductoId(TwVentasProducto ventaProductoDto);
 	public TwAbono guardarAbono(TwAbono abonoDto);

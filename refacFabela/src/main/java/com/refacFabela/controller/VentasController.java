@@ -158,6 +158,18 @@ public class VentasController {
 		}
 		return null;
 	}
+	
+	@PostMapping("/guardaVentasProducto")
+	public String obtenerVentaProducto(@RequestBody VentaProductoDto ventaProductoDto) {
+
+		try {
+			return productosService.guardaVentaProducto(ventaProductoDto);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener el stock de bodegas" + e);
+		}
+		return null;
+	}
 	@GetMapping("/consultaProductoVentaMesId")
 	public List<TvVentaProductoMes> obtenerProductoVendidosMesIdVenta(@RequestParam() Long id) {
 
