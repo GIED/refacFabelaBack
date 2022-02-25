@@ -231,6 +231,20 @@ public class ProductosServiceImp implements ProductosService {
 		return abonoDto ;
 	}
 
+	@Override
+	public String guardaVentaProducto(VentaProductoDto ventaProductoDto) {
+		TwVentasProducto twVentasProducto;
+		
+		twVentasProducto=twProductosVentaRepository.getById(ventaProductoDto.getnId());
+		twVentasProducto.setnEstatusEntregaAlmacen(ventaProductoDto.getnEstatusEntregaAlmacen());
+		
+		System.err.println(twVentasProducto);
+		 
+		twProductosVentaRepository.save(twVentasProducto);
+		
+			return "Se guardo con éxito";
+	}
+
 	
 	
 	
