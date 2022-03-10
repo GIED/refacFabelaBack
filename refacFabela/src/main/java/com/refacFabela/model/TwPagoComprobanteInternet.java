@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +33,17 @@ public class TwPagoComprobanteInternet implements Serializable {
 
 	@Column(name = "n_status")
 	private int nStatus;
+	
+	@Column(name="s_observaciones")
+	private String sObservaciones;
+	
+	@Column(name="s_fechaCarga")
+	private Date dFechaCarga;
+	
+	@Column(name="s_fechaValidacion")
+	private Date dFechaValidacion;
+	
+	
 	
 	
 
@@ -134,6 +146,56 @@ public class TwPagoComprobanteInternet implements Serializable {
 		this.tcCliente = tcCliente;
 	}
 
+
+
+	public String getsObservaciones() {
+		return sObservaciones;
+	}
+
+
+
+	public void setsObservaciones(String sObservaciones) {
+		this.sObservaciones = sObservaciones;
+	}
+
+
+
+	public Date getdFechaCarga() {
+		return dFechaCarga;
+	}
+
+
+
+	public void setdFechaCarga(Date dFechaCarga) {
+		this.dFechaCarga = dFechaCarga;
+	}
+
+
+
+	public Date getdFechaValidacion() {
+		return dFechaValidacion;
+	}
+
+
+
+	public void setdFechaValidacion(Date dFechaValidacion) {
+		this.dFechaValidacion = dFechaValidacion;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "TwPagoComprobanteInternet [nId=" + nId + ", nIdCotizacion=" + nIdCotizacion + ", nIdCliente="
+				+ nIdCliente + ", sComprobante=" + sComprobante + ", nStatus=" + nStatus + ", sObservaciones="
+				+ sObservaciones + ", dFechaCarga=" + dFechaCarga + ", dFechaValidacion=" + dFechaValidacion
+				+ ", twCotizacionesDetalle=" + twCotizacionesDetalle + ", tcCliente=" + tcCliente + "]";
+	}
+	
+	
+
+	
+	
 	
 	
 }

@@ -1,7 +1,6 @@
 package com.refacFabela.service;
 
 import java.util.List;
-
 import com.refacFabela.model.TwPagoComprobanteInternet;
 
 public interface VentaInternetService {
@@ -11,5 +10,7 @@ public interface VentaInternetService {
 	public TwPagoComprobanteInternet consultarSiComprobanteExiste(Long idCotizacion, Long idCliente);
 	
 	public List<TwPagoComprobanteInternet> consultaRegistros(Integer estatus);
+	
+	public List<TwPagoComprobanteInternet> consultaCotizacionDistribuidor(Long idCliente);
 
 }

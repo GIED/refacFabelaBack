@@ -74,21 +74,13 @@ public class CotizacionServiceImpl implements CotizacionService {
 
 	}
 
-
-
 	@Override
 	public List<TwCotizacionesDetalle> consultaCotizaciones() {
 		
-
 		return twCotizacionesRepository.findAll();
 		
 	}
 	
-	@Override
-	public List<TwCotizacionesDetalle> consultaCotizacionDistribuidor(Long idUsuario) {
-		
-		return twCotizacionesRepository.findBynIdUsuario(idUsuario);
-	}
 	
 	@Override
 	public TwCotizacionesDetalle consultaCotizacionById(Long idCotizacion) {

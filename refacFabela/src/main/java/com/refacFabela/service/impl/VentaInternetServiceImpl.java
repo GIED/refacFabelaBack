@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.model.TwCotizacionesDetalle;
 import com.refacFabela.model.TwPagoComprobanteInternet;
 import com.refacFabela.repository.PagoComprobanteRepository;
 import com.refacFabela.service.VentaInternetService;
@@ -25,11 +26,17 @@ public class VentaInternetServiceImpl implements VentaInternetService {
 		
 		return this.pagoComprobanteRepository.consultaSiComprobanteExiste(idCotizacion, idCliente);
 	}
+	
+	@Override
+	public List<TwPagoComprobanteInternet> consultaCotizacionDistribuidor(Long idCliente) {
+		
+		return pagoComprobanteRepository.findBynIdCliente(idCliente);
+	}
 
 	@Override
 	public List<TwPagoComprobanteInternet> consultaRegistros(Integer estatus) {
 		
-		return this.pagoComprobanteRepository.findBynStatus(estatus);
+		return this.pagoComprobanteRepository.findAll();
 	}
 
 }

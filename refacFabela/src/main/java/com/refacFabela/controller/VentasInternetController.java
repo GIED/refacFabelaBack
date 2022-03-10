@@ -21,16 +21,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.refacFabela.dto.TvStockProductoDto;
+import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TwCotizacionesDetalle;
 import com.refacFabela.model.TwPagoComprobanteInternet;
+import com.refacFabela.service.ClienteService;
 import com.refacFabela.service.CotizacionService;
 import com.refacFabela.service.VentaInternetService;
+import com.refacFabela.utils.utils;
 
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST })
@@ -44,7 +50,33 @@ public class VentasInternetController {
 	@Autowired
 	private CotizacionService cotizacionService;
 	
+	@Autowired
+	private ClienteService clienteService;
 	
+	
+	@PostMapping("/guardaRegistroCotizacionInternet")
+	public ResponseEntity<?> guardar(@RequestBody() TwPagoComprobanteInternet twPagoComprobanteInternet){
+		
+		Map<String, Object>  response = new HashMap<>();
+		System.out.println(twPagoComprobanteInternet);
+		response.put("twPagoComprobanteInternet", this.ventaInternetService.guardarComprobante(twPagoComprobanteInternet));
+				
+		return new ResponseEntity<Map<String , Object>>(response, HttpStatus.ACCEPTED);
+		
+	}
+	
+	@GetMapping("/consultaCotizacionDistribuidor")
+	public List<TwPagoComprobanteInternet> consultaCotizacionDistribuidor(@RequestParam Long idUsuario) {
+
+		try {
+			TcCliente tcCliente = this.clienteService.consultaClienteIdUsuario(idUsuario);
+			return ventaInternetService.consultaCotizacionDistribuidor(tcCliente.getnId());
+		} catch (Exception e) {
+
+			logger.error("Error al guardar la cotización" + e);
+		}
+		return null;
+	}
 	
 	@PostMapping("/guardaComprobante")
 	public ResponseEntity<?> guardaComprobante(@RequestParam MultipartFile archivo, @RequestParam Long id){
@@ -92,6 +124,7 @@ public class VentasInternetController {
 				comprobantePagoNew.setnIdCotizacion(cotizacion.getnId());
 				comprobantePagoNew.setsComprobante(nombreArchivo);
 				comprobantePagoNew.setnStatus(1);
+				comprobantePagoNew.setdFechaCarga(utils.fechaSistema);
 				
 				response.put("TwPagoComprobanteInternet", this.ventaInternetService.guardarComprobante(comprobantePagoNew));
 				response.put("mensaje", "comprobante subido correctamente: "+nombreArchivo);
@@ -104,8 +137,8 @@ public class VentasInternetController {
 		
 	}
 	
-	@GetMapping("verComprobante")
-	public ResponseEntity<Resource> mostrarComprobante(@RequestParam String nombreComprobante){
+	@GetMapping("verComprobante/{nombreComprobante:.+}")
+	public ResponseEntity<Resource> mostrarComprobante(@PathVariable String nombreComprobante){
 		Path rutaArchivo = Paths.get("/opt/webserver/backEnd/refacFabela/comprobantesInternet").resolve(nombreComprobante).toAbsolutePath();
 		Resource recurso= null;
 		try {
@@ -127,6 +160,32 @@ public class VentasInternetController {
 	@GetMapping("consultaPagoComprobante")
 	public List<TwPagoComprobanteInternet> consultarPagoComprobanteInternet(@RequestParam() Integer status){
 		return this.ventaInternetService.consultaRegistros(status);
+	}
+	
+	
+	@PostMapping("actualizarEstatusComprobante")
+	public ResponseEntity<?> ActualizaEstatusComprobante(@RequestBody() TwPagoComprobanteInternet twPagoComprobanteInternet){
+		
+		Map<String, Object>  response = new HashMap<>();
+		TwPagoComprobanteInternet pagoActualizado= new TwPagoComprobanteInternet();
+		List<TvStockProductoDto> Listacotizacion = null;
+		
+			//Pago Aceptado
+		if (twPagoComprobanteInternet.getnStatus() == 2) {
+			twPagoComprobanteInternet.setdFechaValidacion(utils.fechaSistema);
+			pagoActualizado = this.ventaInternetService.guardarComprobante(twPagoComprobanteInternet);
+			Listacotizacion=cotizacionService.consultaCotizacionId(pagoActualizado.getnIdCotizacion());
+			
+		}else {
+			pagoActualizado = this.ventaInternetService.guardarComprobante(twPagoComprobanteInternet);
+		}
+		
+		
+		
+		response.put("twPagoComprobanteInternet", pagoActualizado);
+		response.put("listacotizacion", Listacotizacion);
+		response.put("mensaje", "Estatus del comprobante, Actualizado Correctamente");
+		return new ResponseEntity<Map<String , Object>>(response, HttpStatus.ACCEPTED);
 	}
 	
 	

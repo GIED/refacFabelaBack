@@ -15,5 +15,7 @@ public interface PagoComprobanteRepository extends JpaRepository<TwPagoComproban
 	public TwPagoComprobanteInternet consultaSiComprobanteExiste(Long idCotizacion, Long idCliente);
 	
 	public List<TwPagoComprobanteInternet> findBynStatus(Integer estatus);
+	
+	public List<TwPagoComprobanteInternet> findBynIdCliente(Long idCliente);
 
 }

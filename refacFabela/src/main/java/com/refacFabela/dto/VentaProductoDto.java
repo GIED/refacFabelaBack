@@ -20,8 +20,13 @@ public class VentaProductoDto implements  Serializable {
 	private Date dFechaVenta;
 	private int nEstatusEntregaAlmacen;
 	
+	
+	
+	public VentaProductoDto() {
+		
+	}
+
 	public VentaProductoDto(TwVentasProducto twVentasProducto ) {
-		super();
 		this.nId = twVentasProducto.getnId();
 		this.sNoParte = twVentasProducto.getTcProducto().getsNoParte();
 		this.sProducto = twVentasProducto.getTcProducto().getsProducto();

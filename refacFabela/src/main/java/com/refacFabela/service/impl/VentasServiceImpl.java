@@ -84,7 +84,11 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setdFechaInicioCredito(ventaDto.getFechaIniCredito());
 		twVenta.setdFechaTerminoCredito(ventaDto.getFechaFinCredito());
 		twVenta.setdFechaVenta(utils.fechaSistema);
-		twVenta.setnIdEstatusVenta(1L);
+		if (twVenta.getnIdTipoVenta() == 2L) {
+			twVenta.setnIdEstatusVenta(2L);
+		}else {
+			twVenta.setnIdEstatusVenta(1L);			
+		}
 		twVenta.setnIdFacturacion(0L);
 		twVenta.setnIdCaja(utils.cajaActivaId(cajaRepository.obtenerCajaVigente()));
 		twVenta.setnIdCotizacion(ventaDto.getTwCotizacion().getnId());
