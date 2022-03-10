@@ -1,5 +1,6 @@
 package com.refacFabela.service.impl;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import com.refacFabela.dto.PedidoDto;
 import com.refacFabela.model.TvPedidoDetalle;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
+import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.repository.PedidosProductoRepository;
+import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TvPedidoDetalleRepository;
 import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
@@ -29,6 +32,8 @@ public class PedidosServiceImpl implements PedidosService {
 	private TvPedidoDetalleRepository tvPedidoDetalleRepository;
 	@Autowired
 	private TwPedidoRepository  twPedidoRepository;
+	@Autowired 
+	private ProductoBodegaRepository productoBodegaRepository;
 	
 	@Override
 	public List<TwPedidoProducto> obtenerPedidosRegistrados(Long nIdPedido) {
@@ -88,6 +93,60 @@ public class PedidosServiceImpl implements PedidosService {
 		
 		
 		return pedidoDto;
+	}
+
+	@Override
+	public TwPedidoProducto ingresoProducto(TwPedidoProducto twPedidoProducto) {
+		//DECRARACIÓN DE VARIABLES
+		utils util= new utils();
+		TwPedidoProducto pedidioProducto=new TwPedidoProducto();
+		TwPedido twPedido=new TwPedido();		
+		int totalProductosIngreso=0;
+		List<TwPedidoProducto> listaTwPedidoProducto=new ArrayList<TwPedidoProducto>();
+		TwProductobodega productoBodega =new TwProductobodega();
+		
+		//GUARDA EL ESTATUS DEL ASPIRANTE
+		twPedidoProducto.setdFechaRecibida(util.fechaSistema);		
+		pedidioProducto=pedidosProductoRepository.save(twPedidoProducto);
+		
+		productoBodega=productoBodegaRepository.obtenerProductoBodega(pedidioProducto.getnIdProducto(), "LOCAL");
+		
+		productoBodega.setnCantidad(productoBodega.getnCantidad()+pedidioProducto.getnCantidadPedida());
+		
+		productoBodegaRepository.save(productoBodega);
+		
+		//CONSULTA EL NUMERO DE PARTIDAS ENTREGADAS
+		listaTwPedidoProducto=pedidosProductoRepository.obtenerPedidosRegistrados(twPedidoProducto.getnIdPedido());
+		
+		
+		for (int i = 0; i < listaTwPedidoProducto.size(); i++) {
+			
+			if(listaTwPedidoProducto.get(i).getnEstatus()==true) {				
+				totalProductosIngreso=totalProductosIngreso+1;				
+			}
+			
+		}
+	
+		//CAMBIA EL ESTATUS DEL PEDIDO GENERAL SI YA SE RECIBIERON TODOS LOS PRODUCTOS
+		
+		if(listaTwPedidoProducto.size()==totalProductosIngreso) {
+			
+			twPedido=twPedidoRepository.getById(twPedidoProducto.getnIdPedido());
+			twPedido.setnEstatus(1L);
+			twPedido.setdFechaPedidoCierre(util.fechaSistema);
+			
+			twPedidoRepository.save(twPedido);			
+			
+			
+		}
+		
+		
+		
+		
+		
+	
+		
+		return pedidioProducto;
 	}
 
 }

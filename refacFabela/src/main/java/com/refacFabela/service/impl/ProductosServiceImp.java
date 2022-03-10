@@ -16,6 +16,7 @@ import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
+import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CatalagoFormaPagoRepository;
@@ -234,11 +235,18 @@ public class ProductosServiceImp implements ProductosService {
 	@Override
 	public String guardaVentaProducto(VentaProductoDto ventaProductoDto) {
 		TwVentasProducto twVentasProducto;
+		TwVenta twVenta;
 		
 		twVentasProducto=twProductosVentaRepository.getById(ventaProductoDto.getnId());
 		twVentasProducto.setnEstatusEntregaAlmacen(ventaProductoDto.getnEstatusEntregaAlmacen());
 		
-		System.err.println(twVentasProducto);
+		twVenta=ventasRepository.findBynId(ventaProductoDto.getnId());
+		
+		twVenta.setnIdEstatusVenta(3L);
+		
+		ventasRepository.save(twVenta);
+		
+		
 		 
 		twProductosVentaRepository.save(twVentasProducto);
 		

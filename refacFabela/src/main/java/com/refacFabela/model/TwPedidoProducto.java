@@ -40,7 +40,7 @@ public class TwPedidoProducto implements Serializable {
 	private Date dFechaRecibida;
 	
 	@Column(name = "n_estatus")
-	private Long nEstatus;	
+	private Boolean nEstatus;	
 	
 	@Column(name = "s_observaciones")
 	private String sObservaciones;	
@@ -164,12 +164,15 @@ public class TwPedidoProducto implements Serializable {
 	}
 
 
-	public Long getnEstatus() {
+	
+
+
+	public Boolean getnEstatus() {
 		return nEstatus;
 	}
 
 
-	public void setnEstatus(Long nEstatus) {
+	public void setnEstatus(Boolean nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 

@@ -33,6 +33,10 @@ public class VentaProductoDto implements  Serializable {
 		this.dFechaVenta = twVentasProducto.getTwVenta().getdFechaVenta();
 		this.nEstatusEntregaAlmacen = twVentasProducto.getnEstatusEntregaAlmacen();
 	}
+	
+	public VentaProductoDto() {
+		
+	}
 
 	public Long getnId() {
 		return nId;

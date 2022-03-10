@@ -358,7 +358,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 	utils util=new utils();		
 	String estatus="";
-	PedidoProductoDto pedidoProductoDto= new PedidoProductoDto();
+
 	//CONSULTA DE OBJETOS Y LISTAS DEL PEDIDO
 	TwPedido twPedido=twPedidoRepository.getById(nIdPedido);
 	List<TwPedidoProducto> listaPedioPedidoProducto = pedidosProductoRepository.obtenerPedidosRegistrados(nIdPedido);	
@@ -367,6 +367,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	         
 		
 			for (TwPedidoProducto twPedidoProducto : listaPedioPedidoProducto) {
+				PedidoProductoDto pedidoProductoDto= new PedidoProductoDto();
 				
 
 				pedidoProductoDto.setNoParte(twPedidoProducto.getTcProducto().getsNoParte());
@@ -397,6 +398,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				
 				pedidoProductoDto.setEstatus(estatus);				
 				// SE AGREGA EL OBJETO A LA LISTA 
+				System.err.println(pedidoProductoDto);
 				
 				listaPedidoProducto.add(pedidoProductoDto);
 

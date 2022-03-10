@@ -67,5 +67,18 @@ public class PedidosController {
 		return null;
 	}
 	
+	@PostMapping("/ingresoProductoPedido")
+	public TwPedidoProducto ingresoProductoPedido(@RequestBody TwPedidoProducto twPedidoProducto) {
+
+		try {
+			return pedidosService.ingresoProducto(twPedidoProducto);
+
+		} catch (Exception e) {
+			logger.error("Error al guardar el pedido" + e);
+		}
+
+		return null;
+	}
+	
 
 }
