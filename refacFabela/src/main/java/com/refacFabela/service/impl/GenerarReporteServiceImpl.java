@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.ls.LSInput;
 
 import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.PedidoDto;
+import com.refacFabela.dto.PedidoProductoDto;
 import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
 import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
@@ -16,11 +18,15 @@ import com.refacFabela.model.TcUsuario;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCotizacionesProducto;
+import com.refacFabela.model.TwPedido;
+import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.CotizacionProductoRepository;
+import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
+import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.service.GeneraReporteService;
@@ -47,6 +53,12 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	
 	@Autowired
 	private TvVentaDetalleRepository tvVentaDetalleRepository;
+	
+	@Autowired
+	private TwPedidoRepository  twPedidoRepository;
+	
+	@Autowired	
+	private PedidosProductoRepository pedidosProductoRepository;
 	
 	
 
@@ -338,6 +350,64 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				
 		return reporteService.generaAbonoVentaClientePDF(cliente, listaReporteVentaAbomo,reporteVenta);
 	
+	}
+
+	@Override
+	public byte[] getPedidoIdPDF(Long nIdPedido) {
+		
+
+	utils util=new utils();		
+	String estatus="";
+
+	//CONSULTA DE OBJETOS Y LISTAS DEL PEDIDO
+	TwPedido twPedido=twPedidoRepository.getById(nIdPedido);
+	List<TwPedidoProducto> listaPedioPedidoProducto = pedidosProductoRepository.obtenerPedidosRegistrados(nIdPedido);	
+	List<PedidoProductoDto> listaPedidoProducto= new ArrayList<PedidoProductoDto>();	
+	System.err.println();
+	         
+		
+			for (TwPedidoProducto twPedidoProducto : listaPedioPedidoProducto) {
+				PedidoProductoDto pedidoProductoDto= new PedidoProductoDto();
+				
+
+				pedidoProductoDto.setNoParte(twPedidoProducto.getTcProducto().getsNoParte());
+				pedidoProductoDto.setProducto(twPedidoProducto.getTcProducto().getsProducto());
+				pedidoProductoDto.setCantidad(twPedidoProducto.getnCantidadPedida());
+				pedidoProductoDto.setFechaPedido(util.formatoFecha(twPedidoProducto.getdFechaPedido()));
+				pedidoProductoDto.setProveedor(twPedidoProducto.getTcProveedore().getsRazonSocial());
+				
+				if(twPedidoProducto.getdFechaPedido()!=null) {
+					pedidoProductoDto.setFechaRecibida(util.formatoFecha(twPedidoProducto.getdFechaPedido()));
+				}
+				else
+				{
+					pedidoProductoDto.setFechaRecibida(null);
+				}
+				pedidoProductoDto.setPrecio(twPedidoProducto.getTcProducto().getnPrecio());
+				
+				 switch (twPedidoProducto.getTcProducto().getnEstatus()) 
+			        {   
+				        case 0:  estatus = "PEDIDO REALIZADO";
+	                    break;	                    
+			            case 1:  estatus = "PEDIDO RECIBIDO";
+			                     break;
+			            case 2:  estatus = "PEDIDO CANCELADO";
+			                     break;			          
+			           
+			        }
+				
+				pedidoProductoDto.setEstatus(estatus);				
+				// SE AGREGA EL OBJETO A LA LISTA 
+				System.err.println(pedidoProductoDto);
+				
+				listaPedidoProducto.add(pedidoProductoDto);
+
+			}
+		
+			System.err.println(listaPedidoProducto);
+		
+				
+		return reporteService.generaPedidoPDF(twPedido, listaPedidoProducto);
 	}
 	
 	

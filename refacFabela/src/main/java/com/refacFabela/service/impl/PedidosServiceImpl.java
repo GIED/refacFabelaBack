@@ -1,0 +1,152 @@
+package com.refacFabela.service.impl;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.refacFabela.dto.PedidoDto;
+import com.refacFabela.model.TvPedidoDetalle;
+import com.refacFabela.model.TwPedido;
+import com.refacFabela.model.TwPedidoProducto;
+import com.refacFabela.model.TwProductobodega;
+import com.refacFabela.repository.PedidosProductoRepository;
+import com.refacFabela.repository.ProductoBodegaRepository;
+import com.refacFabela.repository.TvPedidoDetalleRepository;
+import com.refacFabela.repository.TwPedidoRepository;
+import com.refacFabela.repository.TwProductosVentaRepository;
+import com.refacFabela.service.PedidosService;
+import com.refacFabela.utils.utils;
+
+import antlr.Utils;
+import ch.qos.logback.classic.pattern.Util;
+
+@Service
+public class PedidosServiceImpl implements PedidosService {
+
+	@Autowired
+	private PedidosProductoRepository pedidosProductoRepository;
+	@Autowired
+	private TvPedidoDetalleRepository tvPedidoDetalleRepository;
+	@Autowired
+	private TwPedidoRepository  twPedidoRepository;
+	@Autowired 
+	private ProductoBodegaRepository productoBodegaRepository;
+	
+	@Override
+	public List<TwPedidoProducto> obtenerPedidosRegistrados(Long nIdPedido) {
+		
+		return pedidosProductoRepository.obtenerPedidosRegistrados(nIdPedido);
+	}
+
+	@Override
+	public List<TvPedidoDetalle> obtenerPedidosEstatus(Long nEstatus) {
+		
+		return tvPedidoDetalleRepository.obtenerPedidosDetalleEstatus(nEstatus);
+	}
+
+	@Override
+	public PedidoDto guaradarPedido(PedidoDto pedidoDto) {
+		
+		TwPedido twPedido=new TwPedido();
+		TwPedidoProducto twPedidoProducto=new TwPedidoProducto();
+		
+		TwPedido res=null;
+		utils util= new utils();
+		
+		twPedido.setdFechaPedido(util.fechaSistema);
+		twPedido.setdFechaPedidoCierre(null);
+		twPedido.setnIdUsuario(pedidoDto.getnIdUsuario());
+		twPedido.setnEstatus(pedidoDto.getnEstatus());
+		twPedido.setsCvePedido(pedidoDto.getsCvePedido());
+		twPedido.setsObservaciones(pedidoDto.getsObservaciones());		
+		
+		res=twPedidoRepository.save(twPedido);
+		
+		for (int i = 0; i < pedidoDto.getTwPedidoProducto().size(); i++) {
+			
+			twPedidoProducto=null;
+			
+			twPedidoProducto=pedidoDto.getTwPedidoProducto().get(i);
+			
+			twPedidoProducto.setdFechaPedido(util.fechaSistema);
+			twPedidoProducto.setnIdPedido(res.getnId());
+			twPedidoProducto.setsClavePedido(pedidoDto.getsCvePedido());
+			
+			pedidosProductoRepository.save(twPedidoProducto);
+			
+			
+		}
+		
+		pedidoDto.setnId(res.getnId());
+		
+		
+	
+		
+		
+		
+		System.err.println(res);
+		
+		
+		
+		
+		return pedidoDto;
+	}
+
+	@Override
+	public TwPedidoProducto ingresoProducto(TwPedidoProducto twPedidoProducto) {
+		//DECRARACIÓN DE VARIABLES
+		utils util= new utils();
+		TwPedidoProducto pedidioProducto=new TwPedidoProducto();
+		TwPedido twPedido=new TwPedido();		
+		int totalProductosIngreso=0;
+		List<TwPedidoProducto> listaTwPedidoProducto=new ArrayList<TwPedidoProducto>();
+		TwProductobodega productoBodega =new TwProductobodega();
+		
+		//GUARDA EL ESTATUS DEL ASPIRANTE
+		twPedidoProducto.setdFechaRecibida(util.fechaSistema);		
+		pedidioProducto=pedidosProductoRepository.save(twPedidoProducto);
+		
+		productoBodega=productoBodegaRepository.obtenerProductoBodega(pedidioProducto.getnIdProducto(), "LOCAL");
+		
+		productoBodega.setnCantidad(productoBodega.getnCantidad()+pedidioProducto.getnCantidadPedida());
+		
+		productoBodegaRepository.save(productoBodega);
+		
+		//CONSULTA EL NUMERO DE PARTIDAS ENTREGADAS
+		listaTwPedidoProducto=pedidosProductoRepository.obtenerPedidosRegistrados(twPedidoProducto.getnIdPedido());
+		
+		
+		for (int i = 0; i < listaTwPedidoProducto.size(); i++) {
+			
+			if(listaTwPedidoProducto.get(i).getnEstatus()==true) {				
+				totalProductosIngreso=totalProductosIngreso+1;				
+			}
+			
+		}
+	
+		//CAMBIA EL ESTATUS DEL PEDIDO GENERAL SI YA SE RECIBIERON TODOS LOS PRODUCTOS
+		
+		if(listaTwPedidoProducto.size()==totalProductosIngreso) {
+			
+			twPedido=twPedidoRepository.getById(twPedidoProducto.getnIdPedido());
+			twPedido.setnEstatus(1L);
+			twPedido.setdFechaPedidoCierre(util.fechaSistema);
+			
+			twPedidoRepository.save(twPedido);			
+			
+			
+		}
+		
+		
+		
+		
+		
+	
+		
+		return pedidioProducto;
+	}
+
+}

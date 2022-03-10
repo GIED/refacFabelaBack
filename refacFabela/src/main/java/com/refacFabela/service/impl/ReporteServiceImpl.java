@@ -33,10 +33,12 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.PedidoProductoDto;
 import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
 import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
 import com.refacFabela.model.TcCliente;
+import com.refacFabela.model.TwPedido;
 import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
@@ -426,6 +428,61 @@ public class ReporteServiceImpl implements ReporteService {
 			return bytesReporte;
 		} catch (Exception e) {
 			logger.error("Error en metodo generaVentaPDF(). Error al generar la venta con id: ", e);
+		}
+		
+		return null;
+	}
+
+	@Override
+	public byte[] generaPedidoPDF(TwPedido twPedido, List<PedidoProductoDto> listaPedidoProducto) {
+	
+		try {
+			String ruta="";
+			Resource resource = new ClassPathResource("/reports/plantillas/pedido.jrxml");
+			final Map<String, Object> params = new HashMap<>();
+			File pdfFile = null;
+			String nombreArchivo = "pedido_"+twPedido.getsCvePedido();
+			
+			 ruta="/opt/webserver/backEnd/refacFabela/";
+	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+			utils util= new utils();
+			
+			//aqui van los parametros
+			params.put("logo", this.imagenHeader);
+			params.put("nombreEmpresa", "REFACCIONES FABELLA");
+			params.put("rfcEmpresa", "TES030201001");
+			params.put("id", twPedido.getnId());
+			params.put("clave", twPedido.getsCvePedido());		
+			params.put("fecha", util.formatoFecha(twPedido.getdFechaPedido()));			
+			params.put("listaPedidoProducto", listaPedidoProducto);		
+			params.put("usuario", twPedido.getTcUsuario().getsNombreUsuario());
+	        params.put("qr", getQR(("\nUsuario: "+twPedido.getTcUsuario().getsNombreUsuario())));
+	       
+	        System.err.println("El tamaño de la lista es:"+listaPedidoProducto.size());
+			
+			
+			// InputStream ligado al reporte
+			InputStream inputStreamReport = resource.getInputStream();
+			FileOutputStream pos = new FileOutputStream(pdfFile);
+			JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
+			JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(twPedido)), pos);
+			
+			// Cierre de output stream
+			pos.flush();
+			pos.close();
+			
+			// Se recuperan los bytes correspondientes al reporte
+			byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+			
+			//Eliminar el archivo generado
+			
+			//pdfFile.delete();
+			
+			
+			
+			return bytesReporte;
+		} catch (Exception e) {
+			logger.error("Error en metodo generaPDF(). Error al generar el pedido ", e);
 		}
 		
 		return null;

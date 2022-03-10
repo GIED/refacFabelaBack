@@ -82,6 +82,17 @@ public class ReportesController {
 			return null;
 		}
 	}
+	@GetMapping(value = "/getPedidoId")
+	public @ResponseBody byte[] getPedidoId(HttpServletResponse response, @RequestParam(required = false) Long nIdPedido) {
+		
+		// genera el pdf con la venta guardada
+		try {
+			return generaReporteService.getPedidoIdPDF(nIdPedido);
+		} catch (Exception e) {
+			logger.error("Error al generar el pdf del pedido ", e);
+			return null;
+		}
+	}
 	
 
 
