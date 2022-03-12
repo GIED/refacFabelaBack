@@ -65,6 +65,9 @@ public class TvVentaDetalle implements Serializable {
 	@Column(name = "nDescuento")
 	private double descuento;
 	
+	@Column(name = "n_idTipoVenta")
+	private Long nIdTipoVenta;
+	
 	
 	
 	@ManyToOne
@@ -87,6 +90,10 @@ public class TvVentaDetalle implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "n_idCaja", updatable = false, insertable = false )
 	private TwCaja twCaja ;
+	
+	@ManyToOne
+	@JoinColumn(name = "n_idTipoVenta", updatable = false, insertable = false )
+	private TcTipoVenta tcTipoVenta ;
 	
 	
 
@@ -266,6 +273,24 @@ public class TvVentaDetalle implements Serializable {
 
 	public void setTcEstatusVenta(TcEstatusVenta tcEstatusVenta) {
 		this.tcEstatusVenta = tcEstatusVenta;
+	}
+	
+	
+
+	public Long getnIdTipoVenta() {
+		return nIdTipoVenta;
+	}
+
+	public void setnIdTipoVenta(Long nIdTipoVenta) {
+		this.nIdTipoVenta = nIdTipoVenta;
+	}
+
+	public TcTipoVenta getTcTipoVenta() {
+		return tcTipoVenta;
+	}
+
+	public void setTcTipoVenta(TcTipoVenta tcTipoVenta) {
+		this.tcTipoVenta = tcTipoVenta;
 	}
 
 	@Override

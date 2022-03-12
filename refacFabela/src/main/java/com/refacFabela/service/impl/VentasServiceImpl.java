@@ -13,6 +13,7 @@ import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TwAbono;
+import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwCotizaciones;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwVenta;
@@ -289,6 +290,13 @@ public class VentasServiceImpl implements VentasService {
 		
 		
 		return tvVentaDetalle;
+	}
+
+	@Override
+	public List<TvVentaDetalle> consultaVentaDetalleCajaVigente() {
+		TwCaja caja =new TwCaja();				
+		caja=cajaRepository.obtenerCajaVigente();		
+		return tvVentaDetalleRepository.consultaVentaDetalleCajaVigente(caja.getnId());
 	}
 
 	

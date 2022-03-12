@@ -14,6 +14,9 @@ public interface TvVentaDetalleRepository extends JpaRepository<TvVentaDetalle, 
 	@Query("Select c from TvVentaDetalle c where c.nIdCliente=:nIdCliente and c.nTipoPago=:nTipoPago")
 	public List<TvVentaDetalle> consultaVentaDetalleId(Long nIdCliente, long nTipoPago);
 	
+	@Query("Select c from TvVentaDetalle c where c.twCaja.nId=:idCaja order by c.tcUsuario.nId asc")
+	public List<TvVentaDetalle> consultaVentaDetalleCajaVigente(Long idCaja);
+	
 	@Query("Select c from TvVentaDetalle c where c.tcEstatusVenta.nId=:nEstatusVenta")
 	public List<TvVentaDetalle> consultaVentaDetalleIdEstatusVenta( long nEstatusVenta);
 	

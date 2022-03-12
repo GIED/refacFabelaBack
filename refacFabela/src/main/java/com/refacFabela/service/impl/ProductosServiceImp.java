@@ -1,5 +1,6 @@
 package com.refacFabela.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -234,21 +235,38 @@ public class ProductosServiceImp implements ProductosService {
 
 	@Override
 	public String guardaVentaProducto(VentaProductoDto ventaProductoDto) {
-		TwVentasProducto twVentasProducto;
-		TwVenta twVenta;
+		TwVentasProducto twVentasProducto=new TwVentasProducto() ;
+		TwVenta twVenta=new TwVenta() ;
+		List<TwVentasProducto> listaVentasProducto=new ArrayList<TwVentasProducto>();
+		
+		int totalEntregados=0;
 		
 		twVentasProducto=twProductosVentaRepository.getById(ventaProductoDto.getnId());
 		twVentasProducto.setnEstatusEntregaAlmacen(ventaProductoDto.getnEstatusEntregaAlmacen());
+		System.err.println(twVentasProducto );
+				 
+		twVentasProducto=twProductosVentaRepository.save(twVentasProducto);
+		twVenta=ventasRepository.findBynId(twVentasProducto.getnIdVenta());
 		
-		twVenta=ventasRepository.findBynId(ventaProductoDto.getnId());
+		listaVentasProducto=twProductosVentaRepository.findBynIdVenta(twVentasProducto.getnIdVenta());
 		
-		twVenta.setnIdEstatusVenta(3L);
+		for (int i = 0; i < listaVentasProducto.size(); i++) {
+			
+			if(listaVentasProducto.get(i).getnEstatusEntregaAlmacen()==1) {
+				totalEntregados=totalEntregados+1;
+			}
+			
+		}
 		
-		ventasRepository.save(twVenta);
+		if(totalEntregados==listaVentasProducto.size()) {
+			
+			twVenta.setnIdEstatusVenta(3L);			
+			ventasRepository.save(twVenta);
+			
+		}
 		
 		
-		 
-		twProductosVentaRepository.save(twVentasProducto);
+
 		
 			return "Se guardo con éxito";
 	}

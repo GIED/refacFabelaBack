@@ -15,6 +15,7 @@ public interface VentasService {
 	public List<TvVentaDetalle> consultaVentaDetalleEntrega();
 	public List<TvVentaDetalle> consultaVentaDetalleId(Long n_idCliente, Long nTipoPago);
 	public List<TvVentaDetalle> consultaVentaDetalleIdEstatusVenta( Long nEstatusVenta);
+	public List<TvVentaDetalle> consultaVentaDetalleCajaVigente();
 	public TwVenta guardarVenta(VentaDto ventaDto);
 	public TvVentaDetalle guardarVentaDetalle(TvVentaDetalle tvVentaDetalle);
 	public List<TwAbono> consultaAbonoVentaId(Long nId);

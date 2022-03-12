@@ -108,6 +108,17 @@ public class VentasController {
 		}
 		return null;
 	}
+	@GetMapping("/obtenerVentasCajaVigente") 
+	public List<TvVentaDetalle> obtenerVentasCajaVigente() {
+
+		try {
+			return ventasService.consultaVentaDetalleCajaVigente( );
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los Productos de la caja vigente" + e);
+		}
+		return null;
+	}
 	@GetMapping("/obtenerAbonosVentaId") 
 	public List<TwAbono> obtenerAbonosVentaId(@RequestParam() Long nId) {
 
@@ -166,7 +177,7 @@ public class VentasController {
 			return productosService.guardaVentaProducto(ventaProductoDto);
 		} catch (Exception e) {
 
-			logger.error("Error al obtener el stock de bodegas" + e);
+			logger.error("Error al oguardar la entrega del producto" + e);
 		}
 		return null;
 	}
