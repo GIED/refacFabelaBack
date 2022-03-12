@@ -82,26 +82,43 @@ public class VentasInternetController {
 	public ResponseEntity<?> guardaComprobante(@RequestParam MultipartFile archivo, @RequestParam Long id){
 		
 		Map<String, Object>  response = new HashMap<>();
+		String nombreArchivo="";
 		
-		TwCotizacionesDetalle cotizacion = cotizacionService.consultaCotizacionById(id);
+		System.err.println(archivo);
+		System.err.println(id);
 		
+		TwCotizacionesDetalle cotizacion = cotizacionService.consultaCotizacionById(id);	
 		TwPagoComprobanteInternet comprobantePago = this.ventaInternetService.consultarSiComprobanteExiste(cotizacion.getnId(), cotizacion.getnIdCliente());
 		
 		
 		
 		if (!archivo.isEmpty()) {
-			String nombreArchivo= UUID.randomUUID().toString() +"_"+ archivo.getOriginalFilename();
-			Path rutaArchivo = Paths.get("/opt/webserver/backEnd/refacFabela/comprobantesInternet").resolve(nombreArchivo).toAbsolutePath();
 			
-			try {
-				Files.copy(archivo.getInputStream(), rutaArchivo);
-			} catch (IOException e) {
-				response.put("mensaje", "Error al subir el comprobante:  "+nombreArchivo);
-				return new ResponseEntity<Map<String , Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			
-			
-			if (comprobantePago != null) {
+			if (comprobantePago.getsComprobante() == null) {
+				
+				nombreArchivo= UUID.randomUUID().toString() +"_"+ archivo.getOriginalFilename();
+				Path rutaArchivo = Paths.get("/opt/webserver/backEnd/refacFabela/comprobantesInternet").resolve(nombreArchivo).toAbsolutePath();	
+				try {
+					
+					Files.copy(archivo.getInputStream(), rutaArchivo);
+					
+					
+					
+					comprobantePago.setsComprobante(nombreArchivo);
+					comprobantePago.setnStatus(1);
+					comprobantePago.setdFechaCarga(utils.fechaSistema);
+					
+					response.put("twPagoComprobanteInternet", this.ventaInternetService.guardarComprobante(comprobantePago));
+					response.put("mensaje", "comprobante subido correctamente: "+nombreArchivo);
+					
+					
+				} catch (IOException e) {
+					response.put("mensaje", "Error al subir el comprobante:  "+nombreArchivo);
+					return new ResponseEntity<Map<String , Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+				
+				
+			}else  {
 				
 				String nombreComprobanteAnterior = comprobantePago.getsComprobante();
 				
@@ -115,19 +132,9 @@ public class VentasInternetController {
 				comprobantePago.setsComprobante(nombreArchivo);
 				
 				
-				response.put("TwPagoComprobanteInternet", this.ventaInternetService.guardarComprobante(comprobantePago));
+				response.put("twPagoComprobanteInternet", this.ventaInternetService.guardarComprobante(comprobantePago));
 				response.put("mensaje", "comprobante subido correctamente: "+nombreArchivo);
 				
-			}else {
-				TwPagoComprobanteInternet comprobantePagoNew= new TwPagoComprobanteInternet();
-				comprobantePagoNew.setnIdCliente(cotizacion.getnIdCliente());
-				comprobantePagoNew.setnIdCotizacion(cotizacion.getnId());
-				comprobantePagoNew.setsComprobante(nombreArchivo);
-				comprobantePagoNew.setnStatus(1);
-				comprobantePagoNew.setdFechaCarga(utils.fechaSistema);
-				
-				response.put("TwPagoComprobanteInternet", this.ventaInternetService.guardarComprobante(comprobantePagoNew));
-				response.put("mensaje", "comprobante subido correctamente: "+nombreArchivo);
 			}
 			
 				
