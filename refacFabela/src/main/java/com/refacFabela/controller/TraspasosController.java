@@ -1,6 +1,7 @@
 package com.refacFabela.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -34,6 +35,17 @@ public class TraspasosController {
 		
 		response.put("twProductobodega", this.traspasoService.guardar(twProductobodega));
 				
+		return new ResponseEntity<Map<String , Object>>(response, HttpStatus.ACCEPTED);
+		
+	}
+	
+	@PostMapping("/movimientoExterno")
+	public ResponseEntity<?> guardarExterno(@RequestBody() List<TwProductobodega> twProductoBodega){
+		
+		Map<String, Object>  response = new HashMap<>();
+		
+		response.put("listaProductoBodega", this.traspasoService.guardarExterno(twProductoBodega));
+		
 		return new ResponseEntity<Map<String , Object>>(response, HttpStatus.ACCEPTED);
 		
 	}
