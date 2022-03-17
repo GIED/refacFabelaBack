@@ -69,6 +69,9 @@ public class TcProducto implements Serializable {
 
 	@Column(name = "n_precio_con_iva")
 	private double nPrecioConIva;
+	
+	@Column(name = "s_id_bar")
+	private String sIdBar;
 
 	// bi-directional many-to-one association to TcCategoria
 	@ManyToOne()
@@ -298,7 +301,15 @@ public class TcProducto implements Serializable {
 		this.nIdclavesat = nIdclavesat;
 	}
 	
-	
+
+	public String getsIdBar() {
+		return sIdBar;
+	}
+
+
+	public void setsIdBar(String sIdBar) {
+		this.sIdBar = sIdBar;
+	}
 
 
 	@Override

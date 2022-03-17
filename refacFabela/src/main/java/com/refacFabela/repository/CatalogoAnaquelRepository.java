@@ -6,5 +6,10 @@ import com.refacFabela.model.TcAnaquel;
 
 @Repository
 public interface CatalogoAnaquelRepository extends JpaRepository<TcAnaquel, Long> {
+	
+	
+	
+	public TcAnaquel findBynId(Long nId);
+	
 
 }

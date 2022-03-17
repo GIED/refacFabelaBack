@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.refacFabela.dto.ProductoDto;
+import com.refacFabela.model.TcNivel;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TwProductobodega;
 
@@ -23,6 +24,8 @@ public interface ProductosRepository extends JpaRepository<TcProducto, Long> {
 	
 	@Query("Select c from TcProducto c where c.sNoParte like %:No_Parte%")
 	public List<TcProducto> ConsultaNoParteLike(String No_Parte);
+	
+	public TcProducto findBynId(Long nId);
 	
 	
 	

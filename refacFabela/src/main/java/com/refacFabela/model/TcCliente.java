@@ -45,6 +45,9 @@ public class TcCliente implements Serializable {
 	
 	@Column(name="n_idUsuario")
 	private Long nIdUsuario;
+	
+	@Column(name="n_cp")
+	private Integer nCp;
 
 	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
@@ -162,6 +165,21 @@ public class TcCliente implements Serializable {
 	public void setnIdUsuario(Long nIdUsuario) {
 		this.nIdUsuario = nIdUsuario;
 	}
+
+
+	public Integer getnCp() {
+		return nCp;
+	}
+
+
+	public void setnCp(Integer nCp) {
+		this.nCp = nCp;
+	}
+
+
+	
+	
+	
 	
 	
 

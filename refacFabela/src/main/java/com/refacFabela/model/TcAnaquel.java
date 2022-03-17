@@ -49,6 +49,13 @@ public class TcAnaquel implements Serializable {
 		this.sAnaquel = sAnaquel;
 	}
 
+	@Override
+	public String toString() {
+		return "TcAnaquel [nId=" + nId + ", nEstatus=" + nEstatus + ", sAnaquel=" + sAnaquel + "]";
+	}
+	
+	
+
 	
 
 }

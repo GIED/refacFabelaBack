@@ -145,5 +145,15 @@ public class TwProductobodega implements Serializable {
 		this.tcProducto = tcProducto;
 	}
 
+	@Override
+	public String toString() {
+		return "TwProductobodega [nId=" + nId + ", nIdBodega=" + nIdBodega + ", nIdProducto=" + nIdProducto
+				+ ", nCantidad=" + nCantidad + ", nEstatus=" + nEstatus + ", nIdNivel=" + nIdNivel + ", nIdAnaquel="
+				+ nIdAnaquel + ", tcAnaquel=" + tcAnaquel + ", tcBodega=" + tcBodega + ", tcNivel=" + tcNivel
+				+ ", tcProducto=" + tcProducto + "]";
+	}
+	
+	
+
 	
 }

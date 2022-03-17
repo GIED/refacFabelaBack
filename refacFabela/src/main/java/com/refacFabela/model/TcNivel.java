@@ -49,4 +49,11 @@ public class TcNivel implements Serializable {
 		this.sNivel = sNivel;
 	}
 
+	@Override
+	public String toString() {
+		return "TcNivel [nId=" + nId + ", nEstatus=" + nEstatus + ", sNivel=" + sNivel + "]";
+	}
+	
+	
+
 }

@@ -11,6 +11,7 @@ import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.repository.ClienteSaldoRepository;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.service.ClienteService;
+import com.refacFabela.utils.utils;
 
 @Service
 public class ClientesServiceImp implements ClienteService {
@@ -28,6 +29,11 @@ public class ClientesServiceImp implements ClienteService {
 
 	@Override
 	public TcCliente guardarCliente(TcCliente tcCliente) {
+		utils util=new utils();
+		if(tcCliente.getN_limiteCredito()>0 && tcCliente.getD_fechaCredito()==null) {
+			tcCliente.setD_fechaCredito(utils.fechaSistema);			
+			
+		}
 		
 		return clientesRepository.save(tcCliente);
 	}

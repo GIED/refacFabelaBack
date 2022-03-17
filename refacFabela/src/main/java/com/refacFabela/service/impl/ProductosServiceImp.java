@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.VentaProductoDto;
+import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
@@ -21,6 +22,9 @@ import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CatalagoFormaPagoRepository;
+import com.refacFabela.repository.CatalogoAnaquelRepository;
+import com.refacFabela.repository.CatalogoBodegasRepository;
+import com.refacFabela.repository.CatalogoNivelesRepository;
 import com.refacFabela.repository.HistoriaPrecioProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ProductoBodegasIdRepository;
@@ -60,6 +64,12 @@ public class ProductosServiceImp implements ProductosService {
 	private CatalagoFormaPagoRepository catalagoFormaPagoRepository;
 	@Autowired
 	private UsuariosRepository usuariosRepository;
+	@Autowired
+	private CatalogoBodegasRepository catalogoBodegasRepository;
+	@Autowired 
+	private CatalogoAnaquelRepository catalogoAnaquelRepository;
+	@Autowired 
+	private CatalogoNivelesRepository catalogoNivelesRepository;
 	
 	
 	
@@ -100,6 +110,38 @@ public class ProductosServiceImp implements ProductosService {
 
 		// Guarda o actualiza el producto nuevo o existente
 		TcProducto nuevoProducto = productosRepository.save(tcProducto);
+		List<TcBodega> bodegas= new ArrayList<TcBodega>();
+		System.err.println(nuevoProducto);
+		TwProductobodega bodegaExiste= new TwProductobodega();
+		
+		
+		bodegas=catalogoBodegasRepository.findAll();
+		
+		for (int i = 0; i < bodegas.size(); i++) {
+		
+			
+			bodegaExiste=productoBodegaRepository.obtenerProductoBodega(nuevoProducto.getnId(), bodegas.get(i).getsBodega());
+			System.err.println(bodegaExiste);
+			if(bodegaExiste==null) {
+				TwProductobodega bodegaNuevo= new TwProductobodega();				
+			
+				bodegaNuevo.setnId(null);
+				bodegaNuevo.setnIdBodega(bodegas.get(i).getnId());
+				bodegaNuevo.setnIdProducto(nuevoProducto.getnId());
+				bodegaNuevo.setnEstatus(1L);
+				bodegaNuevo.setnCantidad(0);
+				bodegaNuevo.setnIdNivel(1L);
+				bodegaNuevo.setnIdAnaquel(1L);
+				bodegaNuevo.setTcAnaquel(catalogoAnaquelRepository.findBynId(1L));
+				bodegaNuevo.setTcBodega(catalogoBodegasRepository.findBynId(bodegas.get(i).getnId()));
+				bodegaNuevo.setTcNivel(catalogoNivelesRepository.findBynId(1L));
+				bodegaNuevo.setTcProducto(productosRepository.findBynId(nuevoProducto.getnId()));		
+				
+				productoBodegaRepository.save(bodegaNuevo);
+				
+			}
+			
+		}
 
 		// Se asiganan los valores al objeto tctcHistoriaPrecioProducto para guardar el
 		// historio de precio de productos
