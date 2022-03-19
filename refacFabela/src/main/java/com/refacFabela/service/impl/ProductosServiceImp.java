@@ -16,6 +16,7 @@ import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TwAbono;
+import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwVenta;
@@ -30,6 +31,7 @@ import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ProductoBodegasIdRepository;
 import com.refacFabela.repository.ProductosAlternativosRepository;
 import com.refacFabela.repository.ProductosRepository;
+import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentaProductoMesRepository;
@@ -70,6 +72,8 @@ public class ProductosServiceImp implements ProductosService {
 	private CatalogoAnaquelRepository catalogoAnaquelRepository;
 	@Autowired 
 	private CatalogoNivelesRepository catalogoNivelesRepository;
+	@Autowired 
+	private TwHistoriaIngresoProductoRepository twHistoriaIngresoProductoRepository;
 	
 	
 	
@@ -311,6 +315,14 @@ public class ProductosServiceImp implements ProductosService {
 
 		
 			return "Se guardo con éxito";
+	}
+
+	@Override
+	public List<TwHistoriaIngresoProducto> historiaIngresoProducto(Long n_id) {
+		
+		
+		
+		return twHistoriaIngresoProductoRepository.obtenerIngresoProductos(n_id);
 	}
 
 	

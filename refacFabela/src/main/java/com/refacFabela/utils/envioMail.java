@@ -104,6 +104,8 @@ public class envioMail  {
 	                  + "</p></center></html>", "text/html");
 	          
 	          System.err.println(ruta+nombreArchivo);
+	          
+	          if(tipo!=2) {
 
 	         BodyPart adjuntoPDF = new MimeBodyPart();
 	          adjuntoPDF.setDataHandler(new DataHandler(new FileDataSource(ruta+nombreArchivo+".pdf")));
@@ -113,9 +115,12 @@ public class envioMail  {
 	          adjuntoXML.setDataHandler(new DataHandler(new FileDataSource(ConstantesGenerales.rutaxmlTimbrado+cabecera.getFolio()+".xml")));
 	          adjuntoXML.setFileName(cabecera.getFolio()+".xml");    */
 	          
-	          multipart.addBodyPart(htmlPart);
+	        
 	          multipart.addBodyPart(adjuntoPDF); 
 	         //   multipart.addBodyPart(adjuntoXML); 
+	        
+	          } 
+	          multipart.addBodyPart(htmlPart);
 	          msg.setContent(multipart);
 
 	          javax.mail.Transport.send(msg, msg.getAllRecipients());

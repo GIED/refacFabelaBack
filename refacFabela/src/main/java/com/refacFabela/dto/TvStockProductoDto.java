@@ -16,6 +16,7 @@ private Integer nCantidadTotal;
 private Integer nCantidad;
 private TcProducto tcProducto;
 private Integer nStatus;
+private Long nIdProveedor;
 
 public Long getnIdProducto() {
 	return nIdProducto;
@@ -46,6 +47,13 @@ public Integer getnStatus() {
 }
 public void setnStatus(Integer nStatus) {
 	this.nStatus = nStatus;
+}
+
+public Long getnIdProveedor() {
+	return nIdProveedor;
+}
+public void setnIdProveedor(Long nIdProveedor) {
+	this.nIdProveedor = nIdProveedor;
 }
 @Override
 public String toString() {

@@ -2,6 +2,7 @@ package com.refacFabela.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -15,14 +16,18 @@ import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwCotizaciones;
+import com.refacFabela.model.TwPedido;
+import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.CotizacionRepository;
+import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
+import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.CajaService;
@@ -56,6 +61,12 @@ public class VentasServiceImpl implements VentasService {
 	@Autowired
 	
 	private CajaRepository cajaRepository;
+	
+	@Autowired
+	private TwPedidoRepository twPedidoRepository;
+	
+	@Autowired
+	private PedidosProductoRepository pedidosProductoRepository;
 
 	@Override
 	public List<TwVenta> consltaVentas() {
@@ -76,6 +87,9 @@ public class VentasServiceImpl implements VentasService {
 
 		TwVenta twVenta = new TwVenta();
 		utils utils=new utils();
+		TwPedido twPedido=new TwPedido();
+		TwPedido respuesta=new TwPedido();
+		TwPedidoProducto twPedidoProducto=new TwPedidoProducto();
 
 		twVenta.setnIdCliente(ventaDto.getIdCliente());
 		twVenta.setnIdUsuario(ventaDto.getIdUsuario());
@@ -131,6 +145,36 @@ public class VentasServiceImpl implements VentasService {
 			TwCotizaciones twCotizaciones = ventaDto.getTwCotizacion();
 			twCotizaciones.setnEstatus(2);
 			this.cotizacionRepository.save(twCotizaciones);			
+		}
+		
+		if(ventaDto.getIdTipoVenta()==3L) {
+			twPedido.setsCvePedido("VP-"+utils.formatoFecha(utils.fechaSistema)+Math.random()*1000000+1);
+			twPedido.setdFechaPedido(utils.fechaSistema);
+			twPedido.setnIdUsuario(ventaDto.getIdUsuario());
+			twPedido.setnEstatus(0L);
+			twPedido.setnIdVenta(ventaRegistrada.getnId());
+			respuesta=twPedidoRepository.save(twPedido);		
+		
+			
+			for (int i = 0; i < ventaDto.getListaValidada().size(); i++) {
+				
+			    twPedidoProducto.setsClavePedido(respuesta.getsCvePedido());
+				twPedidoProducto.setdFechaPedido(utils.fechaSistema);
+				twPedidoProducto.setnMotivoPedido(2L);
+				twPedidoProducto.setnIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
+				twPedidoProducto.setnCantidadPedida(ventaDto.getListaValidada().get(i).getnCantidad());
+				twPedidoProducto.setnIdProveedor(ventaDto.getListaValidada().get(i).getnIdProveedor());
+				twPedidoProducto.setnIdUsuario(ventaDto.getIdUsuario());
+				twPedidoProducto.setnIdPedido(respuesta.getnId());	
+				twPedidoProducto.setnEstatus(false);
+				
+				pedidosProductoRepository.save(twPedidoProducto);
+				
+				
+			}
+			
+			
+			
 		}
 		
 		return ventaRegistrada;

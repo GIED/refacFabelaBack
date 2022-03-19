@@ -41,7 +41,10 @@ public class TwPedido  implements Serializable {
 	private Long nEstatus;	
 	
 	@Column(name = "d_fecha_pedido_cierre")
-	private Date dFechaPedidoCierre;	
+	private Date dFechaPedidoCierre;
+	
+	@Column(name = "n_idVenta")
+	private Long nIdVenta;	
 	
 	
 	// bi-directional many-to-one association to TcProducto
@@ -49,6 +52,10 @@ public class TwPedido  implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "n_idUsuario",  insertable = false, updatable = false)
 	private TcUsuario tcUsuario;
+	
+	@ManyToOne
+	@JoinColumn(name = "n_idVenta", insertable = false , updatable = false)
+	private TwVenta twVenta;
 	
 	
 	
@@ -155,6 +162,32 @@ public class TwPedido  implements Serializable {
 
 	public void setTcUsuario(TcUsuario tcUsuario) {
 		this.tcUsuario = tcUsuario;
+	}
+	
+	
+
+
+
+	public Long getnIdVenta() {
+		return nIdVenta;
+	}
+
+
+
+	public void setnIdVenta(Long nIdVenta) {
+		this.nIdVenta = nIdVenta;
+	}
+
+
+
+	public TwVenta getTwVenta() {
+		return twVenta;
+	}
+
+
+
+	public void setTwVenta(TwVenta twVenta) {
+		this.twVenta = twVenta;
 	}
 
 

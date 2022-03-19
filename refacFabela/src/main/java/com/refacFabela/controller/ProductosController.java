@@ -17,9 +17,11 @@ import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TwAbono;
+import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwVentasProducto;
+import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.service.impl.UtilisServiceImp;
 
@@ -115,6 +117,18 @@ public class ProductosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener Historia precio Priducto" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerHistoriaIngresoProducto")
+	public List<TwHistoriaIngresoProducto> obtenerHistoriaIngresoProducto(@RequestParam() Long n_id) {
+
+		try {
+			return productosService.historiaIngresoProducto(n_id);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener Historia ingreso Producto" + e);
 		}
 		return null;
 	}

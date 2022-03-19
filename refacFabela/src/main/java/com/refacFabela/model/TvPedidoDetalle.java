@@ -38,6 +38,9 @@ public class TvPedidoDetalle implements Serializable {
 	private Long nTotalSinEntregar;
 	@Column(name = "n_total_entregados")
 	private Long nTotalEntregados;
+	@Column(name = "n_idVenta")
+	private Long nIdVenta;
+	
 	
 		
 	public TvPedidoDetalle() {
@@ -142,6 +145,16 @@ public class TvPedidoDetalle implements Serializable {
 
 	public void setnTotalEntregados(Long nTotalEntregados) {
 		this.nTotalEntregados = nTotalEntregados;
+	}
+
+
+	public Long getnIdVenta() {
+		return nIdVenta;
+	}
+
+
+	public void setnIdVenta(Long nIdVenta) {
+		this.nIdVenta = nIdVenta;
 	}
 
 
