@@ -48,22 +48,22 @@ public class TvVentaDetalle implements Serializable {
 	private Date dFechaPagoCredito;
 	
 	@Column(name = "n_totalVenta")
-	private double nTotalVenta;
+	private Double nTotalVenta;
 	
 	@Column(name = "n_totalAbono")
-	private double nTotalAbono;
+	private Double nTotalAbono;
 	
 	@Column(name = "n_saldoTotal")
-	private double nSaldoTotal;
+	private Double nSaldoTotal;
 	
 	@Column(name = "n_avancePago")
-	private double nAvancePago;
+	private Double nAvancePago;
 	
 	@Column(name = "s_estatus")
 	private String sEstatus;
 	
 	@Column(name = "nDescuento")
-	private double descuento;
+	private Double descuento;
 	
 	@Column(name = "n_idTipoVenta")
 	private Long nIdTipoVenta;
@@ -211,34 +211,38 @@ public class TvVentaDetalle implements Serializable {
 		return nTotalVenta;
 	}
 
-	public void setnTotalVenta(double nTotalVenta) {
-		this.nTotalVenta = nTotalVenta;
-	}
 
-	
 
-	public double getnTotalAbono() {
+	public Double getnTotalAbono() {
 		return nTotalAbono;
 	}
 
-	public void setnTotalAbono(double nTotalAbono) {
+	public void setnTotalAbono(Double nTotalAbono) {
 		this.nTotalAbono = nTotalAbono;
 	}
 
-	public double getnSaldoTotal() {
+	public Double getnSaldoTotal() {
 		return nSaldoTotal;
 	}
 
-	public void setnSaldoTotal(double nSaldoTotal) {
+	public void setnSaldoTotal(Double nSaldoTotal) {
 		this.nSaldoTotal = nSaldoTotal;
 	}
 
-	public double getnAvancePago() {
+	public Double getnAvancePago() {
 		return nAvancePago;
 	}
 
-	public void setnAvancePago(double nAvancePago) {
+	public void setnAvancePago(Double nAvancePago) {
 		this.nAvancePago = nAvancePago;
+	}
+
+	public void setnTotalVenta(Double nTotalVenta) {
+		this.nTotalVenta = nTotalVenta;
+	}
+
+	public void setDescuento(Double descuento) {
+		this.descuento = descuento;
 	}
 
 	public String getsEstatus() {
