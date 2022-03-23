@@ -12,7 +12,7 @@ public class NuevoUsuario {
 	private String sPassword;
 	private String sNombreUsuario;
 	private Integer nEstatus;
-	private Set<String> roles = new HashSet();
+	private Set<String> roles = new HashSet<>();
 	private String rfcDistribuidor;
 	
 	

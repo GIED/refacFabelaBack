@@ -34,8 +34,6 @@ public class UsuariosController {
 
 	private static final Logger logger = LogManager.getLogger("errorLogger");
 	
-	
-
 	@Autowired
 	private UsuarioService usuarioService;
 	

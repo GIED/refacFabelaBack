@@ -13,12 +13,15 @@ public class JwtDto implements Serializable{
 	
 	
 	
-	public JwtDto() {
+	
+	
+	
+	public JwtDto(String token) {
+		this.token = token;
 		
 	}
 
-	public JwtDto(String token) {
-		this.token = token;
+	public JwtDto() {
 		
 	}
 
@@ -31,11 +34,4 @@ public class JwtDto implements Serializable{
 	}
 
 	
-
-	
-	
-	
-	
-	
-
 }
