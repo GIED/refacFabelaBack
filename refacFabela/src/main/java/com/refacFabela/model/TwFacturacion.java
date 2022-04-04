@@ -17,10 +17,10 @@ public class TwFacturacion implements Serializable {
 	@Column(name = "n_estatus")
 	private int nEstatus;
 
-	private int n_idVenta;
+	private Long n_idVenta;
 
-	@Column(name = "s_estatus")
-	private String sEstatus;
+	@Column(name = "s_estado")
+	private String sEstado;
 
 	private String s_noCertificadoSat;
 
@@ -50,20 +50,24 @@ public class TwFacturacion implements Serializable {
 		this.nEstatus = nEstatus;
 	}
 
-	public int getN_idVenta() {
+	
+
+	public Long getN_idVenta() {
 		return n_idVenta;
 	}
 
-	public void setN_idVenta(int n_idVenta) {
+	public void setN_idVenta(Long n_idVenta) {
 		this.n_idVenta = n_idVenta;
 	}
 
-	public String getsEstatus() {
-		return sEstatus;
+	
+
+	public String getsEstado() {
+		return sEstado;
 	}
 
-	public void setsEstatus(String sEstatus) {
-		this.sEstatus = sEstatus;
+	public void setsEstado(String sEstado) {
+		this.sEstado = sEstado;
 	}
 
 	public String getS_noCertificadoSat() {
