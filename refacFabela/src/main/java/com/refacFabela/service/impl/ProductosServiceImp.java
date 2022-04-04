@@ -235,8 +235,22 @@ public class ProductosServiceImp implements ProductosService {
 
 	@Override
 	public List<VentaProductoDto> obtenerProductosVentaId(Long id) {
+		List<VentaProductoDto> ventaProductoDto= new ArrayList<VentaProductoDto>();
+		TwProductobodega productoBodega = new TwProductobodega();
 		
-		return twProductosVentaRepository.obtenerPrpductosVentaId(id);
+		ventaProductoDto=twProductosVentaRepository.obtenerPrpductosVentaId(id);
+		
+		for (int i = 0; i < ventaProductoDto.size(); i++) {
+			productoBodega=productoBodegaRepository.obtenerProductoBodega(ventaProductoDto.get(i).getnIdProducto(),"LOCAL");
+			ventaProductoDto.get(i).setsBodega(productoBodega.getTcBodega().getsBodega());
+			ventaProductoDto.get(i).setsAnaquel(productoBodega.getTcAnaquel().getsAnaquel());
+			ventaProductoDto.get(i).setsNivel(productoBodega.getTcNivel().getsNivel());
+			
+		}
+	
+		System.err.println(ventaProductoDto);
+		
+		return ventaProductoDto;
 	}
 
 	@Override

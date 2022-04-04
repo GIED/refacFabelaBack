@@ -11,6 +11,7 @@ public class VentaProductoDto implements  Serializable {
 	
 	private Long nId;
 	private String sNoParte;
+	private Long nIdProducto;
 	private String sProducto;
 	private String sDescripcion;
 	private String sMarca;
@@ -19,6 +20,9 @@ public class VentaProductoDto implements  Serializable {
 	private double nTotalPartida;
 	private Date dFechaVenta;
 	private int nEstatusEntregaAlmacen;
+	private String sBodega;
+	private String sNivel;
+	private String sAnaquel;
 	
 	
 	
@@ -28,6 +32,7 @@ public class VentaProductoDto implements  Serializable {
 
 	public VentaProductoDto(TwVentasProducto twVentasProducto ) {
 		this.nId = twVentasProducto.getnId();
+		this.nIdProducto=twVentasProducto.getTcProducto().getnId();
 		this.sNoParte = twVentasProducto.getTcProducto().getsNoParte();
 		this.sProducto = twVentasProducto.getTcProducto().getsProducto();
 		this.sDescripcion = twVentasProducto.getTcProducto().getsDescripcion();
@@ -40,6 +45,30 @@ public class VentaProductoDto implements  Serializable {
 	}
 	
 
+
+	public String getsBodega() {
+		return sBodega;
+	}
+
+	public void setsBodega(String sBodega) {
+		this.sBodega = sBodega;
+	}
+
+	public String getsNivel() {
+		return sNivel;
+	}
+
+	public void setsNivel(String sNivel) {
+		this.sNivel = sNivel;
+	}
+
+	public String getsAnaquel() {
+		return sAnaquel;
+	}
+
+	public void setsAnaquel(String sAnaquel) {
+		this.sAnaquel = sAnaquel;
+	}
 
 	public Long getnId() {
 		return nId;
@@ -120,14 +149,27 @@ public class VentaProductoDto implements  Serializable {
 	public void setnEstatusEntregaAlmacen(int nEstatusEntregaAlmacen) {
 		this.nEstatusEntregaAlmacen = nEstatusEntregaAlmacen;
 	}
+	
+	
+
+	public Long getnIdProducto() {
+		return nIdProducto;
+	}
+
+	public void setnIdProducto(Long nIdProducto) {
+		this.nIdProducto = nIdProducto;
+	}
 
 	@Override
 	public String toString() {
-		return "VentaProductoDto [nId=" + nId + ", sNoParte=" + sNoParte + ", sProducto=" + sProducto
-				+ ", sDescripcion=" + sDescripcion + ", sMarca=" + sMarca + ", nCantidad=" + nCantidad
-				+ ", nTotalUnitario=" + nTotalUnitario + ", nTotalPartida=" + nTotalPartida + ", dFechaVenta="
-				+ dFechaVenta + ", nEstatusEntregaAlmacen=" + nEstatusEntregaAlmacen + "]";
+		return "VentaProductoDto [nId=" + nId + ", sNoParte=" + sNoParte + ", nIdProducto=" + nIdProducto
+				+ ", sProducto=" + sProducto + ", sDescripcion=" + sDescripcion + ", sMarca=" + sMarca + ", nCantidad="
+				+ nCantidad + ", nTotalUnitario=" + nTotalUnitario + ", nTotalPartida=" + nTotalPartida
+				+ ", dFechaVenta=" + dFechaVenta + ", nEstatusEntregaAlmacen=" + nEstatusEntregaAlmacen + ", sBodega="
+				+ sBodega + ", sNivel=" + sNivel + ", sAnaquel=" + sAnaquel + "]";
 	}
+
+	
 
 	
 	
