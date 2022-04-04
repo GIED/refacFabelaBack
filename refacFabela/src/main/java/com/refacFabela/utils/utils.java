@@ -44,5 +44,19 @@ public  class utils {
 		
 		return fechaS;
 	}
+	
+	public Double truncarDecimales(Double value) {
+		int decimalpoint=2;
+		
+		 value = value * Math.pow(10, decimalpoint);
+	        value = Math.floor(value);
+	        value = value / Math.pow(10, decimalpoint);
+	  
+	        System.out.println(value);
+	  
+	        return value;
+		
+	
+	}
 
 }

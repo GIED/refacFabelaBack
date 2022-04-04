@@ -11,6 +11,7 @@ import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.model.factura.CabeceraXml;
 import com.refacFabela.model.factura.ConceptoXml;
 import com.refacFabela.model.factura.Impuesto;
+import com.refacFabela.utils.utils;
 @Component
 public class Transformar {
 	
@@ -20,16 +21,16 @@ public class Transformar {
 
 	        CabeceraXml cabeceraXmlBean = new CabeceraXml();
 	        
-
+                utils util =new utils();
 	        
 	            cabeceraXmlBean.setVersion(ConstantesFactura.version);
 	            cabeceraXmlBean.setSerie(ConstantesFactura.serie);
 	            cabeceraXmlBean.setFolio(twVenta.getsFolioVenta());
 	            cabeceraXmlBean.setFormaPago(twVenta.getTcFormapago().getsClave());
 	            cabeceraXmlBean.setCondicionesPago(ConstantesFactura.condicionesPago);
-	            cabeceraXmlBean.setSubTotal(String.valueOf(calculaSubTotal(productosVendidos)));
+	            cabeceraXmlBean.setSubTotal(String.valueOf(util.truncarDecimales(calculaSubTotal(productosVendidos))));
 	            cabeceraXmlBean.setMoneda(ConstantesFactura.moneda);
-	            cabeceraXmlBean.setTotal(String.valueOf(calcularTotal(productosVendidos)));
+	            cabeceraXmlBean.setTotal(String.valueOf(util.truncarDecimales(calcularTotal(productosVendidos))));
 	            cabeceraXmlBean.setTipoComprobante(ConstantesFactura.tipoComprobante);
 	            cabeceraXmlBean.setMetodoPago(ConstantesFactura.MetodoPago);
 	            cabeceraXmlBean.setLugarExpedicion(ConstantesFactura.lugarExpedicion);
@@ -56,19 +57,20 @@ public class Transformar {
 
 	        for (int i = 0; i < lista.size(); i++) {
 	            ConceptoXml conceptoXmlBean = new ConceptoXml();
+	            utils util=new utils();
 	            conceptoXmlBean.setClaveUnidad(ConstantesFactura.claveUnidad);
 	            conceptoXmlBean.setClaveProdServ(lista.get(i).getTcProducto().getTcClavesat().getsClavesat());
 	            conceptoXmlBean.setNoIdentificacion(String.valueOf(noIdentificador()));
 	            conceptoXmlBean.setCantidad(String.valueOf(lista.get(i).getnCantidad()));
 	            conceptoXmlBean.setUnidad("PZA");//checar no se tiene
 	            conceptoXmlBean.setDescripcion(lista.get(i).getTcProducto().getsDescripcion());
-	            conceptoXmlBean.setValorUnitario(String.valueOf(lista.get(i).getnTotalUnitario()));
-	            conceptoXmlBean.setImporte(String.valueOf(lista.get(i).getnTotalPartida()));
-	            conceptoXmlBean.setBase(String.valueOf(lista.get(i).getnTotalPartida()));
+	            conceptoXmlBean.setValorUnitario(String.valueOf(util.truncarDecimales(lista.get(i).getnPrecioUnitario())));
+	            conceptoXmlBean.setImporte(String.valueOf(util.truncarDecimales(lista.get(i).getnPrecioPartida())));
+	            conceptoXmlBean.setBase(String.valueOf(util.truncarDecimales(lista.get(i).getnPrecioPartida())));
 	            conceptoXmlBean.setImpuesto(ConstantesFactura.impuesto);
 	            conceptoXmlBean.setTipoFactor(ConstantesFactura.TipoFactor);
 	            conceptoXmlBean.setTasaOCuota(ConstantesFactura.TasaOCuota);
-	            conceptoXmlBean.setImporteImpuesto(String.valueOf(lista.get(i).getnIvaPartida()));
+	            conceptoXmlBean.setImporteImpuesto(String.valueOf(util.truncarDecimales(lista.get(i).getnIvaPartida())));
 	            listaConcepto.add(conceptoXmlBean);
 	        }
 
@@ -85,11 +87,12 @@ public class Transformar {
 
 	    public Impuesto obtenerImpuestoTotal(List<TwVentasProducto> lista) {
 	        Impuesto impuesto = new Impuesto();
-	        impuesto.setTotalImpuestosTraslados(String.valueOf(calculaIvaTotal(lista)));
+	        utils util =new utils();
+	        impuesto.setTotalImpuestosTraslados(String.valueOf(util.truncarDecimales(calculaIvaTotal(lista))));
 	        impuesto.setImpuesto(ConstantesFactura.impuesto);
 	        impuesto.setTipoFactor(ConstantesFactura.TipoFactor);
 	        impuesto.setTasaOCuota(ConstantesFactura.TasaOCuota);
-	        impuesto.setImporte(String.valueOf(calculaIvaTotal(lista)));
+	        impuesto.setImporte(String.valueOf(util.truncarDecimales(calculaIvaTotal(lista))));
 
 	        return impuesto;
 	    }
