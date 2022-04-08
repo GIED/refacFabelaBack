@@ -21,6 +21,7 @@ import com.refacFabela.model.TcCatalogogeneral;
 import com.refacFabela.model.TcCategoria;
 import com.refacFabela.model.TcCategoriaGeneral;
 import com.refacFabela.model.TcClavesat;
+import com.refacFabela.model.TcCp;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
@@ -244,6 +245,19 @@ public class CatalogosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener la caja activa " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/catalogoCp")
+	public List<TcCp> consultaCp(@RequestParam String cp) {
+		try {
+
+			return catalagosService.catalagoCp(cp);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener la lista de cp " + e);
 		}
 		return null;
 	}

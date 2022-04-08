@@ -11,6 +11,7 @@ import com.refacFabela.model.TcCatalogogeneral;
 import com.refacFabela.model.TcCategoria;
 import com.refacFabela.model.TcCategoriaGeneral;
 import com.refacFabela.model.TcClavesat;
+import com.refacFabela.model.TcCp;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
@@ -31,6 +32,7 @@ import com.refacFabela.repository.CatalogoGananciaRepository;
 import com.refacFabela.repository.CatalogoNivelesRepository;
 import com.refacFabela.repository.CatalogosRepository;
 import com.refacFabela.repository.CategoriaGeneralRepository;
+import com.refacFabela.repository.TcCpRepository;
 import com.refacFabela.service.CatalagosService;
 
 @Service
@@ -62,6 +64,8 @@ public class CatalogosServiceImp implements CatalagosService {
 	private CajaRepository cajaRepository;
 	@Autowired
 	private CatalogoEstatusVentaRepository catalogoEstatusVentaRepository;
+	@Autowired
+	private TcCpRepository tcCpRepository;
 
 	@Override
 	public TcCatalogogeneral actualizarTipoCambio(TcCatalogogeneral ccCatalogogeneral) {
@@ -157,6 +161,12 @@ public class CatalogosServiceImp implements CatalagosService {
 	public TcEstatusVenta catalagoEstatusVentaId(Long nId) {
 		
 		return catalogoEstatusVentaRepository.findBynId(nId);
+	}
+
+	@Override
+	public List<TcCp> catalagoCp(String cp) {
+		
+		return tcCpRepository.obtenerCp(cp);
 	}
 
 	
