@@ -26,6 +26,7 @@ import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
 import com.refacFabela.model.TcNivel;
+import com.refacFabela.model.TcRegimenFiscal;
 import com.refacFabela.model.TcTipoVenta;
 import com.refacFabela.model.TcUsocfdi;
 import com.refacFabela.model.TwCaja;
@@ -258,6 +259,19 @@ public class CatalogosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener la lista de cp " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/catalogoRegimenFiscal")
+	public List<TcRegimenFiscal> consultaRegimenFiscal() {
+		try {
+
+			return catalagosService.catalagoRegimenFiscal();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener la lista de Regimen Fiscal " + e);
 		}
 		return null;
 	}

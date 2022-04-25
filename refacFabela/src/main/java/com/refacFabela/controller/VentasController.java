@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.dto.VentaProductoDto;
+import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TwAbono;
@@ -193,6 +195,8 @@ public class VentasController {
 		return null;
 	}
 	
+	
+	
 	@PostMapping("/guardaVentaProductoId")
 	public String obtenerProductoVendidoId(@RequestBody TwVentasProducto ventaProductoDto) {
 
@@ -205,6 +209,7 @@ public class VentasController {
 		}
 		return null;
 	}
+	
 	
 	@PostMapping("/guardarAbono")
 	public TwAbono obtenerProductoVendidoId(@RequestBody TwAbono abonoDto) {
@@ -219,6 +224,18 @@ public class VentasController {
 		return null;
 	}
 	
+	@PostMapping("/calcularNuevoPrecio")
+	public TcProducto calcularNuevoPrecio(@RequestBody TcProducto tcProducto) {
+
+		try {
+		
+			return productosService.calcularNuevoPrecio(tcProducto);
+		} catch (Exception e) {
+
+			logger.error("Error al calcular el nuevo precio" + e);
+		}
+		return null;
+	}
 	
 
 }

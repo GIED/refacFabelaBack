@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
@@ -337,6 +338,17 @@ public class ProductosServiceImp implements ProductosService {
 		
 		
 		return twHistoriaIngresoProductoRepository.obtenerIngresoProductos(n_id);
+	}
+
+	@Override
+	public TcProducto calcularNuevoPrecio(TcProducto tcProducto) {
+		
+		utils util= new utils();
+		
+		tcProducto=util.calcularPrecio(tcProducto);
+		
+		
+		return tcProducto;
 	}
 
 	

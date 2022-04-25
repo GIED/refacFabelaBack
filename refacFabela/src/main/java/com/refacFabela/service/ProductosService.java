@@ -3,6 +3,7 @@ package com.refacFabela.service;
 import java.util.List;
 
 import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
@@ -33,5 +34,6 @@ public interface ProductosService {
 	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id);
 	public String consultaVentaProductoId(TwVentasProducto ventaProductoDto);
 	public TwAbono guardarAbono(TwAbono abonoDto);
+	public TcProducto calcularNuevoPrecio(TcProducto tcProducto);
 	
 }

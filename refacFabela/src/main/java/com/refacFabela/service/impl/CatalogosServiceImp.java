@@ -3,6 +3,7 @@ package com.refacFabela.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.model.TcAnaquel;
@@ -16,6 +17,7 @@ import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
 import com.refacFabela.model.TcNivel;
+import com.refacFabela.model.TcRegimenFiscal;
 import com.refacFabela.model.TcTipoVenta;
 import com.refacFabela.model.TcUsocfdi;
 import com.refacFabela.model.TwCaja;
@@ -33,6 +35,7 @@ import com.refacFabela.repository.CatalogoNivelesRepository;
 import com.refacFabela.repository.CatalogosRepository;
 import com.refacFabela.repository.CategoriaGeneralRepository;
 import com.refacFabela.repository.TcCpRepository;
+import com.refacFabela.repository.TcRegimenFiscalRepository;
 import com.refacFabela.service.CatalagosService;
 
 @Service
@@ -66,6 +69,8 @@ public class CatalogosServiceImp implements CatalagosService {
 	private CatalogoEstatusVentaRepository catalogoEstatusVentaRepository;
 	@Autowired
 	private TcCpRepository tcCpRepository;
+	@Autowired
+	private TcRegimenFiscalRepository tcRegimenFiscalRepository;
 
 	@Override
 	public TcCatalogogeneral actualizarTipoCambio(TcCatalogogeneral ccCatalogogeneral) {
@@ -167,6 +172,12 @@ public class CatalogosServiceImp implements CatalagosService {
 	public List<TcCp> catalagoCp(String cp) {
 		
 		return tcCpRepository.obtenerCp(cp);
+	}
+
+	@Override
+	public List<TcRegimenFiscal> catalagoRegimenFiscal() {
+		// TODO Auto-generated method stub
+		return tcRegimenFiscalRepository.findAll(Sort.by(Sort.Direction.ASC, "sDescripcion"));
 	}
 
 	

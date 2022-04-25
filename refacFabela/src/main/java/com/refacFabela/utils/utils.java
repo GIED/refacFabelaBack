@@ -8,6 +8,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TwCaja;
 import com.refacFabela.repository.CajaRepository;
 
@@ -55,6 +56,23 @@ public  class utils {
 	        System.out.println(value);
 	  
 	        return value;
+		
+	
+	}
+	
+	public TcProducto calcularPrecio(TcProducto tcProducto) {
+		
+		
+		
+		tcProducto.setnPrecioSinIva(truncarDecimales (tcProducto.getnPrecioPeso())+(tcProducto.getnPrecioPeso()*tcProducto.getTcGanancia().getnGanancia()));
+		tcProducto.setnPrecioConIva(truncarDecimales(tcProducto.getnPrecioSinIva()+(tcProducto.getnPrecioSinIva()*0.16)));
+		
+		
+		
+		
+		
+		
+	        return tcProducto;
 		
 	
 	}

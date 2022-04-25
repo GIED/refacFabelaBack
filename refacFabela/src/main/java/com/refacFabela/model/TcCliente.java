@@ -48,18 +48,64 @@ public class TcCliente implements Serializable {
 	
 	@Column(name="n_cp")
 	private Integer nCp;
+	
+	@Column(name="n_idRegimenFiscal")
+	private Integer nIdRegimenFiscal;
 
 	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
 	@JoinColumn(name = "n_idUsuario", insertable=false, updatable=false)
 	private TcUsuario tcUsuario;
+	@ManyToOne
+	@JoinColumn(name = "n_idRegimenFiscal", insertable=false, updatable=false)
+	private TcRegimenFiscal tcRegimenFiscal;
 	
 	
 
 	public TcCliente() {
 	}
 	
+		
 	
+	
+
+
+	public Integer getnIdRegimenFiscal() {
+		return nIdRegimenFiscal;
+	}
+
+
+
+
+
+
+	public void setnIdRegimenFiscal(Integer nIdRegimenFiscal) {
+		this.nIdRegimenFiscal = nIdRegimenFiscal;
+	}
+
+
+
+
+
+
+	public TcRegimenFiscal getTcRegimenFiscal() {
+		return tcRegimenFiscal;
+	}
+
+
+
+
+
+
+	public void setTcRegimenFiscal(TcRegimenFiscal tcRegimenFiscal) {
+		this.tcRegimenFiscal = tcRegimenFiscal;
+	}
+
+
+
+
+
+
 	public Long getnId() {
 		return nId;
 	}
