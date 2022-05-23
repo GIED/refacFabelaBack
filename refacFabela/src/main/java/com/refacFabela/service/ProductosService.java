@@ -34,7 +34,7 @@ public interface ProductosService {
 	public List<VentaProductoDto> obtenerProductosVentaId(Long id);
 	public String guardaVentaProducto(VentaProductoDto ventaProductoDto);
 	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id);
-	public List<TvVentaStock> obtenerVentasStockFecha(Date  dFechaInicio, Date dFechaFinal);
+	public List<TvVentaStock> obtenerVentasStockFecha(String  dFechaInicio, String dFechaFinal);
 	public String consultaVentaProductoId(TwVentasProducto ventaProductoDto);
 	public TwAbono guardarAbono(TwAbono abonoDto);
 	public TcProducto calcularNuevoPrecio(TcProducto tcProducto);

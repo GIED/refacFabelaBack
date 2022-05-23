@@ -241,7 +241,7 @@ public class VentasController {
 	}
 	
 	@GetMapping("/obtenerVentasStockFecha")
-	public List<TvVentaStock> obtenerVentasStockFecha(@DateTimeFormat(pattern = "yyyy-MM-dd") Date dFechaInicio, @DateTimeFormat(pattern = "yyyy-MM-dd") Date dFechaFinal) {
+	public List<TvVentaStock> obtenerVentasStockFecha(@RequestParam()  String dFechaInicio, @RequestParam()  String  dFechaFinal) {
 
 		try {
 			return productosService.obtenerVentasStockFecha(dFechaInicio,dFechaFinal);
