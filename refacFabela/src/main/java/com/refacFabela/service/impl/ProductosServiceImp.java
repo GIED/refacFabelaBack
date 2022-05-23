@@ -1,6 +1,8 @@
 package com.refacFabela.service.impl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -8,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ibm.icu.text.SimpleDateFormat;
 import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.VentaProductoDto;
@@ -16,6 +19,7 @@ import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvVentaProductoMes;
+import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwProductobodega;
@@ -32,6 +36,7 @@ import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ProductoBodegasIdRepository;
 import com.refacFabela.repository.ProductosAlternativosRepository;
 import com.refacFabela.repository.ProductosRepository;
+import com.refacFabela.repository.TvVentasStockRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.UsuariosRepository;
@@ -75,6 +80,8 @@ public class ProductosServiceImp implements ProductosService {
 	private CatalogoNivelesRepository catalogoNivelesRepository;
 	@Autowired 
 	private TwHistoriaIngresoProductoRepository twHistoriaIngresoProductoRepository;
+	@Autowired
+	private TvVentasStockRepository tvVentasStockRepository;
 	
 	
 	
@@ -349,6 +356,16 @@ public class ProductosServiceImp implements ProductosService {
 		
 		
 		return tcProducto;
+	}
+
+	@Override
+	public List<TvVentaStock> obtenerVentasStockFecha(Date dFechaInicio, Date dFechaFinal) {
+		
+		
+		
+
+		
+		return tvVentasStockRepository.obtenerVentasStock(dFechaInicio, dFechaFinal);
 	}
 
 	

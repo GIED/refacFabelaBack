@@ -35,6 +35,7 @@ public class CotizacionServiceImpl implements CotizacionService {
 		
 		//System.out.println(listaCotizacion);
 		TwCotizaciones twCotizacion = new TwCotizaciones();
+		utils utils=new utils();
 		
 		twCotizacion.setnIdCliente(listaCotizacion.get(0).getnIdCliente());
 		twCotizacion.setnIdUsuario(listaCotizacion.get(0).getnIdUsuario());

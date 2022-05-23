@@ -1,5 +1,6 @@
 package com.refacFabela.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.refacFabela.dto.AbonosDto;
@@ -9,6 +10,7 @@ import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvVentaProductoMes;
+import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwProductobodega;
@@ -32,6 +34,7 @@ public interface ProductosService {
 	public List<VentaProductoDto> obtenerProductosVentaId(Long id);
 	public String guardaVentaProducto(VentaProductoDto ventaProductoDto);
 	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id);
+	public List<TvVentaStock> obtenerVentasStockFecha(Date  dFechaInicio, Date dFechaFinal);
 	public String consultaVentaProductoId(TwVentasProducto ventaProductoDto);
 	public TwAbono guardarAbono(TwAbono abonoDto);
 	public TcProducto calcularNuevoPrecio(TcProducto tcProducto);
