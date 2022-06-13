@@ -50,6 +50,9 @@ public class TvVentaDetalle implements Serializable {
 	@Column(name = "n_totalVenta")
 	private Double nTotalVenta;
 	
+	@Column(name = "n_anticipo")
+	private Double nAnticipo;
+	
 	@Column(name = "n_totalAbono")
 	private Double nTotalAbono;
 	
@@ -295,6 +298,16 @@ public class TvVentaDetalle implements Serializable {
 
 	public void setTcTipoVenta(TcTipoVenta tcTipoVenta) {
 		this.tcTipoVenta = tcTipoVenta;
+	}
+	
+	
+
+	public Double getnAnticipo() {
+		return nAnticipo;
+	}
+
+	public void setnAnticipo(Double nAnticipo) {
+		this.nAnticipo = nAnticipo;
 	}
 
 	@Override

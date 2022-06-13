@@ -1,6 +1,7 @@
 package com.refacFabela.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
+import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCaja;
@@ -26,6 +28,7 @@ import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.CotizacionRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
+import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.VentasProductoRepository;
@@ -67,6 +70,9 @@ public class VentasServiceImpl implements VentasService {
 	
 	@Autowired
 	private PedidosProductoRepository pedidosProductoRepository;
+	
+	@Autowired
+	private TrVentaCobroRepository trVentaCobroRepository;
 
 	@Override
 	public List<TwVenta> consltaVentas() {
@@ -304,6 +310,10 @@ public class VentasServiceImpl implements VentasService {
 		
 		return ventasRepository.findBynId(nIdVenta);
 	}
+   public TwVenta consltaVentasIdCotizacion(Long nIdCotizacion) {
+		
+		return ventasRepository.obtnerVentaIdCotizacion(nIdCotizacion);
+	}
 
 	@Override
 	public List<TvVentaDetalle> consultaVentaDetalleIdEstatusVenta( Long nEstatusVenta) {
@@ -317,20 +327,78 @@ public class VentasServiceImpl implements VentasService {
 		
 		
 		TwVenta venta = ventasRepository.getById(tvVentaDetalle.getnId());
+		TwCaja caja =cajaRepository.obtenerCajaVigente();
+		TrVentaCobro ventaCobro =new TrVentaCobro();
+		List<TrVentaCobro> listaVentaCobro;
+		utils util =new utils();
+		Double totalPagos=0.0;
+		boolean cambio=false;
 		
-		System.err.println(tvVentaDetalle);
-		System.err.println(venta);
+	
+		
+		listaVentaCobro=trVentaCobroRepository.obtenerPagosParciales(tvVentaDetalle.getnId());
+		
+		
+		for (int i = 0; i < listaVentaCobro.size(); i++) {
+			
+			totalPagos=totalPagos+listaVentaCobro.get(i).getnMonto();
+		}
+		
+		if(tvVentaDetalle.getnSaldoTotal()==totalPagos) {
+			
+			cambio=true;
+			
+		}
+		else {
+			cambio=false;
+		}
+		
 		
 		venta.setDescuento(tvVentaDetalle.getDescuento());
 		
-		if(tvVentaDetalle.getTcFormapago() != null) {
+		if(tvVentaDetalle.getTcFormapago() != null && tvVentaDetalle.getTcEstatusVenta().getnId()!=3) {
 						
 		venta.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
 		venta.setnIdEstatusVenta(2L);
 		
 		}
+		
+		if(tvVentaDetalle.getTcFormapago() != null && tvVentaDetalle.getTcEstatusVenta().getnId()==3) {
+			venta.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
+			if(cambio) {
+				venta.setnIdEstatusVenta(2L);
+			}
+			else {
+				venta.setnIdEstatusVenta(1L);
 				
+			}
+			
+		}
+		
+		
+		
+		ventaCobro.setnIdVenta(venta.getnId());
+		ventaCobro.setnIdCaja(venta.getnIdCaja());
+	
+		if(venta.getTcTipoVenta().getnId()!=3) {
+			ventaCobro.setnMonto(tvVentaDetalle.getnTotalVenta());
+			
+		}
+		else {
+			ventaCobro.setnMonto(tvVentaDetalle.getnAnticipo());
+		}
+		
+	
+		ventaCobro.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
+		ventaCobro.setdFecha(util.fechaSistema);
+		ventaCobro.setnIdCaja(caja.getnId());
+		ventaCobro.setTwVenta(venta);
+		ventaCobro.setTwCaja(venta.getTwCaja());
+				
+		System.err.println(ventaCobro);
+		
 		ventasRepository.save(venta);
+		trVentaCobroRepository.save(ventaCobro);
 		
 		
 		return tvVentaDetalle;

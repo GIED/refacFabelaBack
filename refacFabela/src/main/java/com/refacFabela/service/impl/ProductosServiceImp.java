@@ -17,6 +17,7 @@ import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
+import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
@@ -36,6 +37,7 @@ import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ProductoBodegasIdRepository;
 import com.refacFabela.repository.ProductosAlternativosRepository;
 import com.refacFabela.repository.ProductosRepository;
+import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvVentasStockRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
@@ -82,6 +84,8 @@ public class ProductosServiceImp implements ProductosService {
 	private TwHistoriaIngresoProductoRepository twHistoriaIngresoProductoRepository;
 	@Autowired
 	private TvVentasStockRepository tvVentasStockRepository;
+	@Autowired
+	private TrVentaCobroRepository trVentaCobroRepository;
 	
 	
 	
@@ -386,6 +390,12 @@ public class ProductosServiceImp implements ProductosService {
 
 		
 		
+	}
+
+	@Override
+	public List<TrVentaCobro> obtenerPägosParciales(Long nIdVenta) {
+		
+		return trVentaCobroRepository.obtenerPagosParciales(nIdVenta);
 	}
 
 	

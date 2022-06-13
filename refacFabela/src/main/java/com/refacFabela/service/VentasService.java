@@ -11,6 +11,7 @@ public interface VentasService {
 
 	public List<TwVenta> consltaVentas();
 	public TwVenta consltaVentasId(Long nIdVenta);
+	public TwVenta consltaVentasIdCotizacion(Long nIdCotizacion);
 	public List<TvVentaDetalle> consultaVentaDetalle();
 	public List<TvVentaDetalle> consultaVentaDetalleEntrega();
 	public List<TvVentaDetalle> consultaVentaDetalleId(Long n_idCliente, Long nTipoPago);

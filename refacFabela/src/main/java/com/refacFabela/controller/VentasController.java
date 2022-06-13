@@ -20,6 +20,7 @@ import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcProducto;
+import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
@@ -57,6 +58,19 @@ public class VentasController {
 		try {
 
 			return ventasService.consltaVentasId(nIdVenta);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener la venta por id " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerVentaIdCotizacion")
+	public TwVenta consultaVentasIdCotizacion(@RequestParam() Long nIdCotizacion) {
+		try {
+
+			return ventasService.consltaVentasIdCotizacion(nIdCotizacion);
 
 		} catch (Exception e) {
 
@@ -248,6 +262,18 @@ public class VentasController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los productos vendidos en el periodo y su stock" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerPagosParciales")
+	public List<TrVentaCobro> obtenerPägosParciales(@RequestParam()  Long nIdVenta) {
+
+		try {
+			return productosService.obtenerPägosParciales(nIdVenta);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los pagos parciales" + e);
 		}
 		return null;
 	}

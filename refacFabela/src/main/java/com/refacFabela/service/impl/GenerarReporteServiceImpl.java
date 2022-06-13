@@ -33,6 +33,8 @@ import com.refacFabela.service.GeneraReporteService;
 import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.utils;
 
+import antlr.Utils;
+
 @Service
 public class GenerarReporteServiceImpl implements GeneraReporteService {
 
@@ -68,6 +70,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		List<TwCotizacionesProducto> listaProductos = cotizacionProductoRepository.findBynIdCotizacion(nIdCotizacion);
 
 		ReporteCotizacionDto reporteCotizacion = new ReporteCotizacionDto();
+		utils util=new utils();
 
 		reporteCotizacion.setNombreEmpresa("Refacciones Fabela");
 		reporteCotizacion.setRfcEmpresa("FAMJ810312FY6");
@@ -86,13 +89,14 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		for (TwCotizacionesProducto twCotizacionesProducto : listaProductos) {
 
 			ReporteCotizacionDto reporte = new ReporteCotizacionDto();
+		
 
 			reporte.setCantidad(twCotizacionesProducto.getnCantidad());
 			reporte.setNoIdentificacion(twCotizacionesProducto.getTcProducto().getnId());
 			reporte.setNombreProducto(twCotizacionesProducto.getTcProducto().getsDescripcion());
 			reporte.setClaveSat(twCotizacionesProducto.getTcProducto().getTcClavesat().getsClavesat());
-			reporte.setPrecioUnitario(twCotizacionesProducto.getnPrecioUnitario());
-			reporte.setImporte(twCotizacionesProducto.getnPrecioPartida());
+			reporte.setPrecioUnitario(util.truncarDecimales(twCotizacionesProducto.getnPrecioUnitario()));
+			reporte.setImporte(util.truncarDecimales(twCotizacionesProducto.getnPrecioPartida()));
 			reporte.setDescripcionCatSat(twCotizacionesProducto.getTcProducto().getTcClavesat().getsDescripcion());
 		
 
@@ -103,9 +107,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		}
 
-		reporteCotizacion.setSubTotal(subtotal);
-		reporteCotizacion.setIvaTotal(iva);
-		reporteCotizacion.setTotal(subtotal + iva);
+		reporteCotizacion.setSubTotal(util.truncarDecimales(subtotal));
+		reporteCotizacion.setIvaTotal(util.truncarDecimales(iva));
+		reporteCotizacion.setTotal(util.truncarDecimales(subtotal+iva) );
 
 		return reporteService.generaCotizacionPDF(reporteCotizacion, listaProducto);
 	}
@@ -115,6 +119,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		List<TwVentasProducto> listaProductos = ventasProductoRepository.findBynIdVenta(nIdVenta);
 		List<TwAbono> listaAbonos=abonoVentaIdRepository.findBynIdVenta(nIdVenta);
+		utils util=new utils();
 
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
 
@@ -149,8 +154,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
 			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsDescripcion());
 			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
-			reporte.setPrecioUnitario(twVentaProducto.getnPrecioUnitario());
-			reporte.setImporte(twVentaProducto.getnPrecioPartida());
+			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnPrecioUnitario()));
+			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnPrecioPartida()));
 			reporte.setDescripcionCatSat(twVentaProducto.getTcProducto().getTcClavesat().getsDescripcion());
 
 			listaProducto.add(reporte);
@@ -160,9 +165,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		}
 
-		reporteVenta.setSubTotal(subtotal);
-		reporteVenta.setIvaTotal(iva);
-		reporteVenta.setTotal(subtotal + iva);
+		reporteVenta.setSubTotal(util.truncarDecimales(subtotal));
+		reporteVenta.setIvaTotal(util.truncarDecimales(iva));
+		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva));
 
 		return reporteService.generaVentaPDF(reporteVenta, listaProducto, totalAbonos);
 	}
@@ -172,6 +177,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		List<TwVentasProducto> listaProductos = ventasProductoRepository.findBynIdVenta(nIdVentaPedido);
 		
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
+		utils util=new utils();
 		
 		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
 		reporteVenta.setRfcEmpresa("TES030201001");
@@ -197,8 +203,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
 			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsDescripcion());
 			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
-			reporte.setPrecioUnitario(twVentaProducto.getnPrecioUnitario());
-			reporte.setImporte(twVentaProducto.getnPrecioPartida());
+			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnPrecioUnitario()));
+			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnPrecioPartida()));
 			
 			listaProducto.add(reporte);
 			
@@ -207,9 +213,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			
 		}
 		
-		reporteVenta.setSubTotal(subtotal);
-		reporteVenta.setIvaTotal(iva);
-		reporteVenta.setTotal(subtotal + iva);
+		reporteVenta.setSubTotal(util.truncarDecimales(subtotal));
+		reporteVenta.setIvaTotal(util.truncarDecimales(iva));
+		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva));
 		
 		return reporteService.generaVentaPedidoPDF(reporteVenta, listaProducto);
 	}
@@ -223,6 +229,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		List<TwVentasProducto> listaProductos = ventasProductoRepository.findBynIdVenta(nIdVenta);
 
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
+		utils util=new utils();
 
 		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
 		reporteVenta.setRfcEmpresa("TES030201001");
@@ -250,15 +257,15 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		}
 
-		reporteVenta.setSubTotal(subtotal);
-		reporteVenta.setIvaTotal(iva);
-		reporteVenta.setTotal(subtotal + iva);
+		reporteVenta.setSubTotal(util.truncarDecimales(subtotal));
+		reporteVenta.setIvaTotal(util.truncarDecimales(iva));
+		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva));
 		
 		List<TwAbono> listaAbonos =abonoVentaIdRepository.findBynIdVenta(nIdVenta);
 		
 		List<AbonosDto> listaAbonosDto=new ArrayList<AbonosDto>();
 		
-		utils util = new utils();
+	
 		
 		double abonos=0.0;
 		
@@ -269,7 +276,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			AbonosDto abono = new AbonosDto();
 			
 			abono.setId(twAbono.getnId());
-			abono.setAbono(twAbono.getnAbono());
+			abono.setAbono(util.truncarDecimales(twAbono.getnAbono()));
 			abono.setFecha(util.formatoFecha(twAbono.getdFecha()));
 			abono.setFormaPago(twAbono.getTcFormapago().getsDescripcion());
 			abono.setUsuario(twAbono.getTcUsuario().getsNombreUsuario());
@@ -280,7 +287,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			
 		}
 		
-		
+		abonos=util.truncarDecimales(abonos);
 		
 
 		return reporteService.generaAbonoVentaPDF(reporteVenta, listaAbonosDto,abonos);
@@ -310,11 +317,11 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				ventaAbomo.setFechaVenta(util.formatoFecha(listaVentaDetalle.getdFechaVenta()));
 				ventaAbomo.setFechaInicioCredito(util.formatoFecha(listaVentaDetalle.getdFechaInicioCredito()));
 				ventaAbomo.setFechaTerminoCredito(util.formatoFecha(listaVentaDetalle.getdFechaTerminoCredito()));
-				ventaAbomo.setTotalVenta(listaVentaDetalle.getnTotalVenta());
-				ventaAbomo.setTotalAbono(listaVentaDetalle.getnTotalAbono());
-				ventaAbomo.setSaldoTotal(listaVentaDetalle.getnSaldoTotal());
+				ventaAbomo.setTotalVenta(util.truncarDecimales(listaVentaDetalle.getnTotalVenta()));
+				ventaAbomo.setTotalAbono(util.truncarDecimales(listaVentaDetalle.getnTotalAbono()));
+				ventaAbomo.setSaldoTotal(util.truncarDecimales(listaVentaDetalle.getnSaldoTotal()));
 				ventaAbomo.setAvancePago(listaVentaDetalle.getnAvancePago());
-				ventaAbomo.setDescuento(listaVentaDetalle.getDescuento());
+				ventaAbomo.setDescuento(util.truncarDecimales(listaVentaDetalle.getDescuento()));
 				totalGeneral=totalGeneral+listaVentaDetalle.getnTotalVenta();
 				descuento=descuento+listaVentaDetalle.getDescuento();
 
@@ -326,7 +333,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 					AbonosDto abono = new AbonosDto();
 					
 					abono.setId(abonosDto.getnId());
-					abono.setAbono(abonosDto.getnAbono());
+					abono.setAbono(util.truncarDecimales(abonosDto.getnAbono()));
 					abono.setFormaPago(abonosDto.getTcFormapago().getsDescripcion());
 					abono.setFecha(util.formatoFecha(abonosDto.getdFecha()));
 					abono.setUsuario(abonosDto.getTcUsuario().getsNombreUsuario());
@@ -334,6 +341,11 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 					totalAbonos=totalAbonos+abonosDto.getnAbono();
 
 				}
+				
+				totalGeneral=util.truncarDecimales(totalGeneral);
+				descuento=util.truncarDecimales(descuento);
+				totalAbonos=util.truncarDecimales(totalAbonos);
+				
 				ventaAbomo.setAbonoDto(listaAbonosDto);
 
 				listaReporteVentaAbomo.add(ventaAbomo);
@@ -344,9 +356,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
 		reporteVenta.setRfcEmpresa("TES030201001");
-		reporteVenta.setTotal(totalGeneral);
-		reporteVenta.setDescuento(descuento);
-		reporteVenta.setAbonos(totalAbonos);
+		reporteVenta.setTotal(util.truncarDecimales(totalGeneral));
+		reporteVenta.setDescuento(util.truncarDecimales(descuento));
+		reporteVenta.setAbonos(util.truncarDecimales(totalAbonos));
 				
 		return reporteService.generaAbonoVentaClientePDF(cliente, listaReporteVentaAbomo,reporteVenta);
 	
