@@ -23,6 +23,7 @@ import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
+import com.refacFabela.model.TwMaquinaCliente;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwVenta;
@@ -40,6 +41,7 @@ import com.refacFabela.repository.ProductosRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvVentasStockRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
+import com.refacFabela.repository.TwMaquinaClienteRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentaProductoMesRepository;
@@ -86,6 +88,8 @@ public class ProductosServiceImp implements ProductosService {
 	private TvVentasStockRepository tvVentasStockRepository;
 	@Autowired
 	private TrVentaCobroRepository trVentaCobroRepository;
+	@Autowired 
+	private TwMaquinaClienteRepository twMaquinaClienteRepository;
 	
 	
 	
@@ -351,7 +355,7 @@ public class ProductosServiceImp implements ProductosService {
 		return twHistoriaIngresoProductoRepository.obtenerIngresoProductos(n_id);
 	}
 
-	@Override
+
 	public TcProducto calcularNuevoPrecio(TcProducto tcProducto) {
 		
 		utils util= new utils();
@@ -396,6 +400,18 @@ public class ProductosServiceImp implements ProductosService {
 	public List<TrVentaCobro> obtenerPägosParciales(Long nIdVenta) {
 		
 		return trVentaCobroRepository.obtenerPagosParciales(nIdVenta);
+	}
+
+	@Override
+	public List<TwMaquinaCliente> obtenerMaquinasCliente(Long nIdClinete) {
+		// TODO Auto-generated method stub
+		return twMaquinaClienteRepository.buscarMaquinasCliente(nIdClinete);
+	}
+
+	@Override
+	public TwMaquinaCliente guardarMaquina(TwMaquinaCliente twMaquinaCliente) {
+		// TODO Auto-generated method stub
+		return twMaquinaClienteRepository.save(twMaquinaCliente);
 	}
 
 	
