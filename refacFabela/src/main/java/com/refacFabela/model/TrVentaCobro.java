@@ -47,6 +47,10 @@ public class TrVentaCobro implements Serializable {
 	@JoinColumn(name = "n_id_venta", updatable = false, insertable = false, nullable = false)
 	private TwVenta twVenta;	
 	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "n_id_forma_pago", updatable = false, insertable = false, nullable = false)
+	private TcFormapago tcFormapago;
+	
 	
 		
 	
@@ -178,6 +182,20 @@ public class TrVentaCobro implements Serializable {
 
 	public void setnIdFormaPago(Long nIdFormaPago) {
 		this.nIdFormaPago = nIdFormaPago;
+	}
+
+
+
+
+	public TcFormapago getTcFormapago() {
+		return tcFormapago;
+	}
+
+
+
+
+	public void setTcFormapago(TcFormapago tcFormapago) {
+		this.tcFormapago = tcFormapago;
 	}
 
 
