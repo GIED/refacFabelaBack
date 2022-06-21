@@ -19,6 +19,7 @@ import com.refacFabela.service.ClienteService;
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST })
 public class ClientesController {
+	
 	private static final Logger logger = LogManager.getLogger("errorLogger");
 
 	@Autowired

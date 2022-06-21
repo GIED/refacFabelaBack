@@ -4,7 +4,7 @@ import com.refacFabela.model.TwFacturacion;
 
 public interface FacturacionService {
 	
-	public byte[] venta(Long idVenta) throws Exception;
+	public String venta(Long idVenta, String cveCfdi) throws Exception;
 	
 	public TwFacturacion guardar(TwFacturacion twFacturacion);
 

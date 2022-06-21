@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumMap;
@@ -52,8 +54,8 @@ public class ReporteServiceImpl implements ReporteService {
 	
 	 private static final Logger logger = LogManager.getLogger("errorLogger");
 
-	   private BufferedImage imagenHeader;
-	   
+	 private BufferedImage imagenHeader;
+	 
 	
 	
 	public ReporteServiceImpl() {

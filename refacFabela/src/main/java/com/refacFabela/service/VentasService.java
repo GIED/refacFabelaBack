@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.model.TvVentaDetalle;
+import com.refacFabela.model.TvVentasFactura;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwVenta;
 
@@ -17,8 +18,10 @@ public interface VentasService {
 	public List<TvVentaDetalle> consultaVentaDetalleIdEstatusVenta( Long nEstatusVenta);
 	public List<TvVentaDetalle> consultaVentaDetalleCajaVigente();
 	public TwVenta guardarVenta(VentaDto ventaDto);
+	public TwVenta updateStatusVenta(TwVenta twVenta);
 	public TvVentaDetalle guardarVentaDetalle(TvVentaDetalle tvVentaDetalle);
 	public List<TwAbono> consultaAbonoVentaId(Long nId);
+	public List<TvVentasFactura> consultaVentasParaFactura();
 
 	
 	

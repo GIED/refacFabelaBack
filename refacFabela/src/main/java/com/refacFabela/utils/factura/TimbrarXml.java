@@ -40,8 +40,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.refacFabela.model.TwFacturacion;
+import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.factura.CabeceraXml;
 import com.refacFabela.service.FacturacionService;
+import com.refacFabela.service.VentasService;
 import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.RespuestaCreditos;
 import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.RespuestaTFD33;
 import com.refacFabela.ws.org.tempuri.IWSCFDI33;
@@ -53,6 +55,9 @@ public class TimbrarXml {
 	
 	@Autowired 
 	private FacturacionService facturacionService;
+	
+	@Autowired 
+	private VentasService ventasService;
 
 	public String timbrarXml(Comprobante xml, Long idVenta, CabeceraXml cabecera)
 			throws GeneralSecurityException, IOException, ParserConfigurationException, SAXException, Exception {
@@ -89,7 +94,7 @@ public class TimbrarXml {
 			// mandamos xml a timbrar al webservice
 			if (consultaFolio() > 0) {
 				System.out.println("ENTRE A TIMBRAR");
-				procesarXml(consello, idVenta, cabecera);
+				procesarXml(consello, idVenta, cabecera, cadenaOriginal);
 			} else {
 				System.err.println("creditos insuficientes");
 			}
@@ -157,7 +162,7 @@ public class TimbrarXml {
 	}
 	
 	
-	private  void procesarXml(final String xml, Long idVenta, CabeceraXml cabecera) throws ParserConfigurationException, SAXException, IOException, TransformerException, Exception {
+	private  void procesarXml(final String xml, Long idVenta, CabeceraXml cabecera, String cadenaOriginal) throws ParserConfigurationException, SAXException, IOException, TransformerException, Exception {
         RespuestaTFD33 Respuesta;
 
         Respuesta = timbrarCFDI(ConstantesFactura.usuarioFolios, ConstantesFactura.passwordFolios, xml, "TIMBRADO33");
@@ -184,8 +189,16 @@ public class TimbrarXml {
             twFacturacion.setS_noCertificadoSat(Respuesta.getTimbre().getValue().getNumeroCertificadoSAT().getValue());
             twFacturacion.setS_selloCfd(Respuesta.getTimbre().getValue().getSelloCFD().getValue());
             twFacturacion.setS_selloSat(Respuesta.getTimbre().getValue().getSelloSAT().getValue()); 
+            twFacturacion.setS_cadenaOriginal(cadenaOriginal);
+            twFacturacion.setnEstatus(1);
             
-            facturacionService.guardar(twFacturacion);
+            twFacturacion = facturacionService.guardar(twFacturacion);
+            
+            TwVenta twVenta = this.ventasService.consltaVentasId(idVenta);
+            
+            twVenta.setnIdFacturacion(twFacturacion.getnId());
+            
+            this.ventasService.updateStatusVenta(twVenta);
             
             generarPdf(Respuesta.getTimbre().getValue().getUUID().getValue(), idVenta);
             //enviarMail(cabecera);

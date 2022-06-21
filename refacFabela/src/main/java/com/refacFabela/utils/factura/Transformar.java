@@ -15,7 +15,7 @@ import com.refacFabela.utils.utils;
 @Component
 public class Transformar {
 	
-	   public CabeceraXml objCabecera(List<TwVentasProducto> productosVendidos, TwVenta twVenta) {
+	   public CabeceraXml objCabecera(List<TwVentasProducto> productosVendidos, TwVenta twVenta, String cveCfdi) {
 
 	      
 
@@ -40,7 +40,7 @@ public class Transformar {
 	            cabeceraXmlBean.setNombreEmisor(ConstantesFactura.nombreEmisor);
 	            cabeceraXmlBean.setRfcEmisor(ConstantesFactura.rfcEmisor);
 	            cabeceraXmlBean.setRegimenFiscal(ConstantesFactura.regimenFiscal);
-	            cabeceraXmlBean.setUsoCFDI("G01");//valor que recibe del front
+	            cabeceraXmlBean.setUsoCFDI(cveCfdi);//valor que recibe del front
 	            cabeceraXmlBean.setNombreReceptor(twVenta.getTcCliente().getsRazonSocial());
 	            cabeceraXmlBean.setRfcReceptor(twVenta.getTcCliente().getsRfc());// cambiar por rfc de camp 
 	            cabeceraXmlBean.setEmailReceptor(twVenta.getTcCliente().getsCorreo());// cambiar por email camp

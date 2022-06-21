@@ -2,7 +2,6 @@ package com.refacFabela.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -10,9 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.dto.VentaDto;
-import com.refacFabela.model.TcEstatusVenta;
-import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TvVentaDetalle;
+import com.refacFabela.model.TvVentasFactura;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwCotizaciones;
@@ -28,13 +26,11 @@ import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.TwPedidoRepository;
+import com.refacFabela.repository.VentasFacturaRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
-import com.refacFabela.service.CajaService;
 import com.refacFabela.service.VentasService;
 import com.refacFabela.utils.utils;
-
-import antlr.Utils;
 
 
 @Service
@@ -67,6 +63,9 @@ public class VentasServiceImpl implements VentasService {
 	
 	@Autowired
 	private PedidosProductoRepository pedidosProductoRepository;
+	
+	@Autowired
+	private VentasFacturaRepository VentasFacturaRepository;
 
 	@Override
 	public List<TwVenta> consltaVentas() {
@@ -335,12 +334,24 @@ public class VentasServiceImpl implements VentasService {
 		
 		return tvVentaDetalle;
 	}
+	
+	
 
 	@Override
 	public List<TvVentaDetalle> consultaVentaDetalleCajaVigente() {
 		TwCaja caja =new TwCaja();				
 		caja=cajaRepository.obtenerCajaVigente();		
 		return tvVentaDetalleRepository.consultaVentaDetalleCajaVigente(caja.getnId());
+	}
+
+	@Override
+	public TwVenta updateStatusVenta(TwVenta twVenta) {	
+		return this.ventasRepository.save(twVenta);
+	}
+
+	@Override
+	public List<TvVentasFactura> consultaVentasParaFactura() {
+				return this.VentasFacturaRepository.findAll();
 	}
 
 	

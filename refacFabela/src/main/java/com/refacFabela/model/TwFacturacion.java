@@ -27,6 +27,8 @@ public class TwFacturacion implements Serializable {
 	private String s_selloCfd;
 
 	private String s_selloSat;
+	
+	private String s_cadenaOriginal;
 
 	@Column(name = "s_uuid")
 	private String sUuid;
@@ -101,5 +103,15 @@ public class TwFacturacion implements Serializable {
 	public void setsUuid(String sUuid) {
 		this.sUuid = sUuid;
 	}
+
+	public String getS_cadenaOriginal() {
+		return s_cadenaOriginal;
+	}
+
+	public void setS_cadenaOriginal(String s_cadenaOriginal) {
+		this.s_cadenaOriginal = s_cadenaOriginal;
+	}
+	
+	
 
 }

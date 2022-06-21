@@ -42,25 +42,31 @@ public class FacturacionServiceImpl implements FacturacionService {
 	
 
 	@Override
-	public byte[] venta(Long idVenta) throws Exception {
+	public String venta(Long idVenta, String cveCfdi) throws Exception {
 		
-		System.out.println("llego");
+		try {
+			
+			System.out.println("llego");
+			
+			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);
+			List<TwVentasProducto> productosVendidos = this.ventasProductoRepository.findBynIdVenta(idVenta);
+			
+			
+			CabeceraXml cabeceraXml = transformar.objCabecera(productosVendidos, twVenta, cveCfdi);
+			List<ConceptoXml> listaConceptos = transformar.listaConceptos(productosVendidos);
+			Impuesto impuesto = transformar.obtenerImpuestoTotal(productosVendidos);
+			
+			Comprobante xml = generarXml.createComprobante(cabeceraXml, listaConceptos, impuesto);
+			
+			//timbramos xml
+	        timbrarXml.timbrarXml(xml, idVenta, cabeceraXml);
+	        
+	        return "ok";
+			
+		}catch (Exception e) {
+			return null;
+		}
 		
-		TwVenta twVenta = this.ventaRepository.findBynId(idVenta);
-		List<TwVentasProducto> productosVendidos = this.ventasProductoRepository.findBynIdVenta(idVenta);
-		
-		
-		CabeceraXml cabeceraXml = transformar.objCabecera(productosVendidos, twVenta);
-		List<ConceptoXml> listaConceptos = transformar.listaConceptos(productosVendidos);
-		Impuesto impuesto = transformar.obtenerImpuestoTotal(productosVendidos);
-		
-		Comprobante xml = generarXml.createComprobante(cabeceraXml, listaConceptos, impuesto);
-		
-		//timbramos xml
-        timbrarXml.timbrarXml(xml, idVenta, cabeceraXml);
-		
-		
-		return null;
 	}
 	
 	@Override
