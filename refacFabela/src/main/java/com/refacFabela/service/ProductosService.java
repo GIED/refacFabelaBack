@@ -8,11 +8,13 @@ import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
+import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
+import com.refacFabela.model.TwMaquinaCliente;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwVentasProducto;
@@ -35,8 +37,11 @@ public interface ProductosService {
 	public String guardaVentaProducto(VentaProductoDto ventaProductoDto);
 	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id);
 	public List<TvVentaStock> obtenerVentasStockFecha(String  dFechaInicio, String dFechaFinal);
+	public List<TrVentaCobro> obtenerPägosParciales(Long nIdVenta);
+	public List<TwMaquinaCliente> obtenerMaquinasCliente(Long nIdClinete);
 	public String consultaVentaProductoId(TwVentasProducto ventaProductoDto);
 	public TwAbono guardarAbono(TwAbono abonoDto);
 	public TcProducto calcularNuevoPrecio(TcProducto tcProducto);
+	public TwMaquinaCliente guardarMaquina(TwMaquinaCliente twMaquinaCliente);
 	
 }

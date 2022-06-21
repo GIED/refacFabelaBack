@@ -20,10 +20,12 @@ import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcProducto;
+import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
+import com.refacFabela.model.TwMaquinaCliente;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.service.ProductosService;
@@ -57,6 +59,19 @@ public class VentasController {
 		try {
 
 			return ventasService.consltaVentasId(nIdVenta);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener la venta por id " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerVentaIdCotizacion")
+	public TwVenta consultaVentasIdCotizacion(@RequestParam() Long nIdCotizacion) {
+		try {
+
+			return ventasService.consltaVentasIdCotizacion(nIdCotizacion);
 
 		} catch (Exception e) {
 
@@ -248,6 +263,43 @@ public class VentasController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los productos vendidos en el periodo y su stock" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerPagosParciales")
+	public List<TrVentaCobro> obtenerPagosParciales(@RequestParam()  Long nIdVenta) {
+
+		try {
+			return productosService.obtenerPägosParciales(nIdVenta);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los pagos parciales" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerMaquinasCliente")
+	public List<TwMaquinaCliente> obtenerMaquinasCliente(@RequestParam()  Long nIdCliente) {
+
+		try {
+			return productosService.obtenerMaquinasCliente(nIdCliente);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener las maquinas del cliente" + e);
+		}
+		return null;
+	}
+	
+	@PostMapping("/guardarMaquina")
+	public TwMaquinaCliente guardarMaquina(@RequestBody TwMaquinaCliente twMaquinaCliente) {
+
+		try {
+		
+			return productosService.guardarMaquina(twMaquinaCliente);
+		} catch (Exception e) {
+
+			logger.error("Error al guardar la maquina" + e);
 		}
 		return null;
 	}

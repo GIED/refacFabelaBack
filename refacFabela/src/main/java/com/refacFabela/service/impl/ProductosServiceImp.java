@@ -17,11 +17,13 @@ import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
+import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
+import com.refacFabela.model.TwMaquinaCliente;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwVenta;
@@ -36,8 +38,10 @@ import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ProductoBodegasIdRepository;
 import com.refacFabela.repository.ProductosAlternativosRepository;
 import com.refacFabela.repository.ProductosRepository;
+import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvVentasStockRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
+import com.refacFabela.repository.TwMaquinaClienteRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentaProductoMesRepository;
@@ -82,6 +86,10 @@ public class ProductosServiceImp implements ProductosService {
 	private TwHistoriaIngresoProductoRepository twHistoriaIngresoProductoRepository;
 	@Autowired
 	private TvVentasStockRepository tvVentasStockRepository;
+	@Autowired
+	private TrVentaCobroRepository trVentaCobroRepository;
+	@Autowired 
+	private TwMaquinaClienteRepository twMaquinaClienteRepository;
 	
 	
 	
@@ -347,7 +355,7 @@ public class ProductosServiceImp implements ProductosService {
 		return twHistoriaIngresoProductoRepository.obtenerIngresoProductos(n_id);
 	}
 
-	@Override
+
 	public TcProducto calcularNuevoPrecio(TcProducto tcProducto) {
 		
 		utils util= new utils();
@@ -386,6 +394,24 @@ public class ProductosServiceImp implements ProductosService {
 
 		
 		
+	}
+
+	@Override
+	public List<TrVentaCobro> obtenerPägosParciales(Long nIdVenta) {
+		
+		return trVentaCobroRepository.obtenerPagosParciales(nIdVenta);
+	}
+
+	@Override
+	public List<TwMaquinaCliente> obtenerMaquinasCliente(Long nIdClinete) {
+		// TODO Auto-generated method stub
+		return twMaquinaClienteRepository.buscarMaquinasCliente(nIdClinete);
+	}
+
+	@Override
+	public TwMaquinaCliente guardarMaquina(TwMaquinaCliente twMaquinaCliente) {
+		// TODO Auto-generated method stub
+		return twMaquinaClienteRepository.save(twMaquinaCliente);
 	}
 
 	
