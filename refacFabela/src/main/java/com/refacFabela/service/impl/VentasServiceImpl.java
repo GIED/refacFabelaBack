@@ -10,12 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.dto.VentaDto;
-<<<<<<< HEAD
-=======
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TrVentaCobro;
->>>>>>> b4edec84755be578fb316527a1fdf4fbc50a2100
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentasFactura;
 import com.refacFabela.model.TwAbono;
@@ -73,11 +70,8 @@ public class VentasServiceImpl implements VentasService {
 	private PedidosProductoRepository pedidosProductoRepository;
 	
 	@Autowired
-<<<<<<< HEAD
 	private VentasFacturaRepository VentasFacturaRepository;
-=======
 	private TrVentaCobroRepository trVentaCobroRepository;
->>>>>>> b4edec84755be578fb316527a1fdf4fbc50a2100
 
 	@Override
 	public List<TwVenta> consltaVentas() {
