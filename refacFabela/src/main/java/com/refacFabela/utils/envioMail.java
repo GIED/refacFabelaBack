@@ -40,7 +40,8 @@ public class envioMail  {
 	  private static String user="ventas@refaccionesfabela.com";
 	  private static String password="fabela20";
 	  private static String port ="587";
-	  private static String hostbcc="soporterefacfabela@gmail.com";
+	  private static String hostbcc="facturas@refaccionesfabela.com";
+	  private static String hostbcc2="jesus_fabela5@hotmail.com";
 	
 	 
 	  
@@ -88,6 +89,7 @@ public class envioMail  {
 
 	          msg.addRecipients(Message.RecipientType.TO, new InternetAddress[]{new InternetAddress(correo)});
 	          msg.addRecipients(Message.RecipientType.BCC, new InternetAddress[]{new InternetAddress(hostbcc)});
+	          msg.addRecipients(Message.RecipientType.BCC, new InternetAddress[]{new InternetAddress(hostbcc2)});
 
 	          Multipart multipart = new MimeMultipart("related");
 	          BodyPart htmlPart = new MimeBodyPart();

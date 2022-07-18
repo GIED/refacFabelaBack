@@ -95,8 +95,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			reporte.setNoIdentificacion(twCotizacionesProducto.getTcProducto().getnId());
 			reporte.setNombreProducto(twCotizacionesProducto.getTcProducto().getsDescripcion());
 			reporte.setClaveSat(twCotizacionesProducto.getTcProducto().getTcClavesat().getsClavesat());
-			reporte.setPrecioUnitario(util.truncarDecimales(twCotizacionesProducto.getnPrecioUnitario()));
-			reporte.setImporte(util.truncarDecimales(twCotizacionesProducto.getnPrecioPartida()));
+			reporte.setPrecioUnitario(util.truncarDecimales(twCotizacionesProducto.getnTotalUnitario()));
+			reporte.setImporte(util.truncarDecimales(twCotizacionesProducto.getnTotalPartida()));
 			reporte.setDescripcionCatSat(twCotizacionesProducto.getTcProducto().getTcClavesat().getsDescripcion());
 		
 
@@ -124,7 +124,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
 
 		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
-		reporteVenta.setRfcEmpresa("TES030201001");
+		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
 		reporteVenta.setNombreCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRazonSocial());
 		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
@@ -154,8 +154,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
 			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsDescripcion());
 			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
-			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnPrecioUnitario()));
-			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnPrecioPartida()));
+			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnTotalUnitario()));
+			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnTotalPartida()));
 			reporte.setDescripcionCatSat(twVentaProducto.getTcProducto().getTcClavesat().getsDescripcion());
 
 			listaProducto.add(reporte);
@@ -180,7 +180,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		utils util=new utils();
 		
 		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
-		reporteVenta.setRfcEmpresa("TES030201001");
+		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
 		reporteVenta.setNombreCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRazonSocial());
 		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
@@ -203,8 +203,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
 			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsDescripcion());
 			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
-			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnPrecioUnitario()));
-			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnPrecioPartida()));
+			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnTotalUnitario()));
+			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnTotalPartida()));
 			
 			listaProducto.add(reporte);
 			
@@ -232,7 +232,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		utils util=new utils();
 
 		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
-		reporteVenta.setRfcEmpresa("TES030201001");
+		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
 		reporteVenta.setNombreCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRazonSocial());
 		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
@@ -355,7 +355,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
 
 		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
-		reporteVenta.setRfcEmpresa("TES030201001");
+		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
 		reporteVenta.setTotal(util.truncarDecimales(totalGeneral));
 		reporteVenta.setDescuento(util.truncarDecimales(descuento));
 		reporteVenta.setAbonos(util.truncarDecimales(totalAbonos));

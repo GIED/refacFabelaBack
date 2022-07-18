@@ -300,7 +300,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[LUGAR DE EXPEDISIÓN]]></text>
+				<text><![CDATA[LUGAR DE EXPEDICIÓN]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="422" y="46" width="132" height="16" uuid="56f27b58-bb8b-464c-8865-53c231982582"/>
@@ -444,7 +444,7 @@
 		<band height="179" splitType="Stretch">
 			<componentElement>
 				<reportElement x="0" y="0" width="554" height="36" uuid="a12f25d1-6161-4d82-8b20-5a35b295493d"/>
-				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="listaPedidoProducto" uuid="7139d9ee-3ec4-4008-9e5b-12b3979364f7">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaPedidoProducto})]]></dataSourceExpression>
 					</datasetRun>

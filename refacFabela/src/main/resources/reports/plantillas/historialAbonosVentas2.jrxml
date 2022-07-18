@@ -85,7 +85,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[LUGAR DE EXPEDISIÓN]]></text>
+				<text><![CDATA[LUGAR DE EXPEDICIÓN]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="419" y="58" width="132" height="16" uuid="56f27b58-bb8b-464c-8865-53c231982582"/>
