@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.dto.BalanceCajaDto;
 import com.refacFabela.model.TwCaja;
 import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.service.CajaService;
@@ -24,6 +25,15 @@ public class CajaServiceImpl implements CajaService {
 	public TwCaja obtenerCajaActiva() {
 		// TODO Auto-generated method stub
 		return cajaRepository.obtenerCajaVigente();
+	}
+
+
+	@Override
+	public BalanceCajaDto obtenerBalanceCaja(Long nIdCaja) {
+		
+		
+		
+		return null;
 	}
 
 	
