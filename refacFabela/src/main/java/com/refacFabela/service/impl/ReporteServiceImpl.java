@@ -524,6 +524,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("entregadas",  balanceCajaDto.getTotalEntregadas());
 			params.put("noEntregadas",  balanceCajaDto.getTotalNoEntregadas());
 			params.put("entregasParciales",  balanceCajaDto.getTotalEntregasParciales());
+			params.put("listaVentaDetalle", balanceCajaDto.getTvReporteDetalleVenta());
 
 
 		

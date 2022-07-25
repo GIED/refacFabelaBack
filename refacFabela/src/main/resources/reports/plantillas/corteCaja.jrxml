@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteCaja" printOrder="Horizontal" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="19" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="315"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -237,6 +237,20 @@
 		<field name="nTotalFormaPago" class="java.lang.Double"/>
 	</subDataset>
 	<subDataset name="dataset1" uuid="f52220f7-c836-4a3d-a11b-ed049381aa5f"/>
+	<subDataset name="listaVentaDetalle" uuid="fd769831-8bde-460b-8772-9efb8a13889b">
+		<field name="nIdVenta" class="java.lang.Long"/>
+		<field name="sNombreUsuario" class="java.lang.String"/>
+		<field name="sRazonSocial" class="java.lang.String"/>
+		<field name="sTipoVenta" class="java.lang.String"/>
+		<field name="sTipoPago" class="java.lang.String"/>
+		<field name="sFormaPago" class="java.lang.String"/>
+		<field name="nAnticipo" class="java.lang.Double"/>
+		<field name="nDescuento" class="java.lang.Double"/>
+		<field name="nTotalVenta" class="java.lang.Double"/>
+		<field name="nTotalPagoCajaNota" class="java.lang.Double"/>
+		<field name="nSaldoFinalVenta" class="java.lang.Double"/>
+		<field name="sEstatusEntrega" class="java.lang.String"/>
+	</subDataset>
 	<parameter name="logo" class="java.lang.Object"/>
 	<parameter name="nombreEmpresa" class="java.lang.String"/>
 	<parameter name="rfcEmpresa" class="java.lang.String"/>
@@ -253,6 +267,7 @@
 	<parameter name="entregadas" class="java.lang.Integer"/>
 	<parameter name="noEntregadas" class="java.lang.Integer"/>
 	<parameter name="entregasParciales" class="java.lang.Integer"/>
+	<parameter name="listaVentaDetalle" class="java.util.List"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -457,7 +472,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="179" splitType="Stretch">
+		<band height="355" splitType="Immediate">
 			<componentElement>
 				<reportElement x="15" y="2" width="259" height="17" uuid="a12f25d1-6161-4d82-8b20-5a35b295493d"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
@@ -728,13 +743,216 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{entregadas}]]></textFieldExpression>
 			</textField>
+			<rectangle>
+				<reportElement x="0" y="122" width="802" height="15" forecolor="#060607" backcolor="#010101" uuid="24c6826e-449d-4f4f-8d63-f7e9b7333785"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="122" width="802" height="15" forecolor="#F3F1F1" uuid="c023899e-8d34-4732-b6f3-b6e2b03c1f8c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Georgia" size="8" isBold="false" isItalic="false" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[DETALLE GENERAL DE  VENTAS ]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="0" y="169" width="802" height="30" isPrintWhenDetailOverflows="true" uuid="620f310d-da04-4a37-a793-c4e40ce4efdd"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical" ignoreWidth="false">
+					<datasetRun subDataset="listaVentaDetalle" uuid="5d05237a-32ec-4d35-abf5-a041d3f268bf">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaVentaDetalle})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="30" width="802">
+						<textField>
+							<reportElement x="0" y="0" width="37" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="5b80833d-26cc-4d75-9f83-e6588f9e9106"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{nIdVenta}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="37" y="0" width="95" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="62c547d6-feae-413c-be11-c3bf64458290"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{sNombreUsuario}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="132" y="0" width="94" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="e3ac6e88-838c-45c2-81f9-4a05e455bb33"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{sRazonSocial}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="226" y="0" width="93" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="2abff516-a2ee-4837-ad5a-1eb463afb314"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{sTipoVenta}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="319" y="0" width="93" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="9ee9e4dd-bf0b-4a91-a2e0-fbec39110c86"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{sTipoPago}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="412" y="0" width="93" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="5e6864d0-325b-40d4-8394-3f94cd49da7a"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{sFormaPago}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="505" y="0" width="40" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="b42ecd18-5808-46f1-b5f8-191dba6cc620"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{nAnticipo}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="545" y="0" width="40" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="05efceae-c6f2-4cbb-9dfd-7a62050c2505"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{nDescuento}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="585" y="0" width="40" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="25ac4993-ac66-4745-a3d0-87ea6511db8d"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{nTotalVenta}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="625" y="0" width="40" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="dd68b10d-e910-4674-910b-a68c49e56471"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{nTotalPagoCajaNota}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="665" y="0" width="40" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="57d31fe4-3ae0-43e9-a031-1b186bc9b983"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{nSaldoFinalVenta}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="705" y="0" width="97" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="05a1ab41-2bff-4c2e-b2d3-d5b173b6c484"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{sEstatusEntrega}]]></textFieldExpression>
+						</textField>
+						<line>
+							<reportElement x="0" y="27" width="802" height="1" forecolor="#B1ACAC" uuid="80ae8c6a-4c52-4412-aa4f-87444f388d54"/>
+						</line>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="144" width="37" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="ccbea7d0-728e-4472-9831-6d9cdc05432c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[VENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="37" y="144" width="95" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="265b65b3-591d-4e38-b4b1-6edbe557e0a3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[USUARIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="132" y="144" width="94" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="84fc6f2b-15d5-45d9-a4f5-1634b32aa2e7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[RFC CLIENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="226" y="144" width="93" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="c71f3607-83bb-4655-aee7-4c20fb81b751"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[TIPO VENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="319" y="144" width="93" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="cc29be4a-e800-4d5b-a10f-258be5d31cbe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[TIPO PAGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="412" y="144" width="93" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="535d3891-3fe6-46ef-94b2-34198c904a13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[FORMA PAGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="505" y="144" width="40" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="1ec98b28-ed5b-4206-906d-da87cfe05c47"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[ANTICIPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="545" y="144" width="40" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="13236110-6a48-4646-bd39-292a0b2fb3b2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[DESCUENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="585" y="144" width="40" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="e0a99a2e-9ea2-4abb-bfe3-9920dfdd5883"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[TOTAL VENTAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="625" y="144" width="40" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="942aa8c3-ec48-48ec-a26c-0dceb965fcb3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[TOTAL PAGOCAJA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="665" y="144" width="40" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="de319f3d-e740-40af-933b-9c35da86321e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[SALDO FINAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="705" y="144" width="97" height="25" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#FEFEFE" backcolor="#080101" uuid="469a6fb2-1dd6-403b-95e6-2f172bdebd2e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[ESTATUS ENTREGA]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="77" splitType="Stretch">
+		<band height="27" splitType="Stretch">
 			<rectangle>
 				<reportElement x="0" y="0" width="802" height="20" backcolor="#010101" uuid="24599061-58f7-4661-9c0a-65a5b6b72a61"/>
 			</rectangle>
