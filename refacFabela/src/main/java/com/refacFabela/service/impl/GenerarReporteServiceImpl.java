@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.ls.LSInput;
 
 import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.BalanceCajaDto;
 import com.refacFabela.dto.PedidoDto;
 import com.refacFabela.dto.PedidoProductoDto;
 import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
@@ -15,16 +16,24 @@ import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TcUsuario;
+import com.refacFabela.model.TrVentaCobro;
+import com.refacFabela.model.TvReporteCajaFormaPago;
+import com.refacFabela.model.TvReporteDetalleVenta;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TwAbono;
+import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwCotizacionesProducto;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
+import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.CotizacionProductoRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
+import com.refacFabela.repository.TrVentaCobroRepository;
+import com.refacFabela.repository.TvReporteCajaFormaPagoRepository;
+import com.refacFabela.repository.TvReporteDetalleVentaRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.UsuariosRepository;
@@ -61,6 +70,16 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	
 	@Autowired	
 	private PedidosProductoRepository pedidosProductoRepository;
+	@Autowired
+	public TrVentaCobroRepository trVentaCobroRepository;
+	@Autowired 
+	public TvReporteDetalleVentaRepository tvReporteDetalleVentaRepository;
+	@Autowired
+	public TvReporteCajaFormaPagoRepository tvReporteCajaFormaPagoRepository;
+	@Autowired
+	public CajaRepository cajaRepository;
+	@Autowired
+	public UsuariosRepository usuariosRepository;
 	
 	
 
@@ -420,6 +439,76 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		
 				
 		return reporteService.generaPedidoPDF(twPedido, listaPedidoProducto);
+	}
+	
+	public byte[] getReporteCaja(Long nIdCaja) {
+		
+		Double totalIngresosVenta = 0.0;
+		Double totalIngresosAbono = 0.0;
+		Double totalVentaCaja = 0.0;
+		Integer totalEntregadas=0;
+		Integer totalNoEntregadas=0;
+		Integer totalEntegasParciales=0;
+
+		List<TrVentaCobro> trVentasCobro = trVentaCobroRepository.obtenerPagosCaja(nIdCaja);
+		List<TwAbono> twAbono = abonoVentaIdRepository.obtenerAbonosCaja(nIdCaja);
+		List<TvReporteDetalleVenta> trReporteDetalleVentas = tvReporteDetalleVentaRepository.obtenerVentasCajaReporte(nIdCaja);		
+		List<TvReporteCajaFormaPago> tvReporteCajaFormaPago=tvReporteCajaFormaPagoRepository.obtenerFormaPagoCaja(nIdCaja);		
+		 TwCaja caja = cajaRepository.getById(nIdCaja); 
+		 TcUsuario usuario = usuariosRepository.obtenerUsuario(caja.getTcUsuario().getnId());
+		 utils util=new utils();				
+		BalanceCajaDto balanceCajaDto= new BalanceCajaDto();		
+	
+		 
+		for (int i = 0; i < trVentasCobro.size(); i++) {			
+			totalIngresosVenta+= trVentasCobro.get(i).getnMonto();			
+			
+		}
+		
+		for (int i = 0; i < twAbono.size(); i++) {			
+			totalIngresosAbono+= twAbono.get(i).getnAbono();			
+			
+		}
+		
+		for (int i = 0; i < trReporteDetalleVentas.size(); i++) {			
+			totalVentaCaja+= trReporteDetalleVentas.get(i).getnTotalVenta();	
+			
+			if(trReporteDetalleVentas.get(i).getsEstatusEntrega().equals("ENTREGADA")) {
+				totalEntregadas+=1;
+			}
+			
+			if(trReporteDetalleVentas.get(i).getsEstatusEntrega().equals("NO ENTREGADA")) {
+				totalNoEntregadas+=1;
+			}
+			if(trReporteDetalleVentas.get(i).getsEstatusEntrega().equals("ENTREGADA PARCIAL")) {
+				totalEntegasParciales+=1;
+			}
+			
+	
+			
+		}
+		
+		
+		/*LLENAOD DE OBJETO BALANCE CAJA*/
+		balanceCajaDto.setCaja(caja.getnId());
+		balanceCajaDto.setFechaInicioCaja(util.formatoFecha(caja.getD_fechaApertura()));
+		balanceCajaDto.setTotalIngresoVenta(totalIngresosVenta);
+		balanceCajaDto.setTotalIngresoAbonos(totalIngresosAbono);
+		balanceCajaDto.setTotalGeneralIngresos(totalIngresosVenta+totalIngresosAbono);
+		balanceCajaDto.setTotalVentas(totalVentaCaja);
+		balanceCajaDto.setNoVentas(trReporteDetalleVentas.size());
+		balanceCajaDto.setNoAbonos(twAbono.size());
+		balanceCajaDto.setUsuarioCaja(usuario.getsNombreUsuario());
+		balanceCajaDto.setTotalEntregadas(totalEntregadas);
+		balanceCajaDto.setTotalNoEntregadas(totalNoEntregadas);
+		balanceCajaDto.setTotalEntregasParciales(totalEntegasParciales);
+		balanceCajaDto.setFechaGeneraReporte(util.formatoFecha(util.fechaSistema));
+		balanceCajaDto.setTvReporteDetalleVenta(trReporteDetalleVentas);
+		balanceCajaDto.setTvReporteCajaFormaPago(tvReporteCajaFormaPago);
+
+
+
+		return reporteService.generarReporteCajaPDF(balanceCajaDto);
 	}
 	
 	
