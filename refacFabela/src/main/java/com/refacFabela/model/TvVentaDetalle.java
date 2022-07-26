@@ -98,7 +98,7 @@ public class TvVentaDetalle implements Serializable {
 	@JoinColumn(name = "n_idTipoVenta", updatable = false, insertable = false )
 	private TcTipoVenta tcTipoVenta ;
 	
-	
+	  
 
 	public TvVentaDetalle() {
 		

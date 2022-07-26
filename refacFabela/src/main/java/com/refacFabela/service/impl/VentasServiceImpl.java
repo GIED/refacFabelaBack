@@ -326,22 +326,27 @@ public class VentasServiceImpl implements VentasService {
 		
 		
 		TwVenta venta = ventasRepository.getById(tvVentaDetalle.getnId());
-		TwCaja caja =cajaRepository.obtenerCajaVigente();
-		TrVentaCobro ventaCobro =new TrVentaCobro();
-		List<TrVentaCobro> listaVentaCobro;
-		utils util =new utils();
+		TwCaja caja = cajaRepository.obtenerCajaVigente();
+		TrVentaCobro ventaCobro = new TrVentaCobro();
 		Double totalPagos=0.0;
 		boolean cambio=false;
 		
-	
+		System.out.println("parametros recibidos: "+tvVentaDetalle);
 		
-		listaVentaCobro=trVentaCobroRepository.obtenerPagosParciales(tvVentaDetalle.getnId());
+		List<TrVentaCobro> listaVentaCobro = this.trVentaCobroRepository.findBynIdVenta(venta.getnId());
 		
+		System.out.println("listaVentaCobro: "+listaVentaCobro);
+		System.out.println("antes de: "+venta);
 		
-		for (int i = 0; i < listaVentaCobro.size(); i++) {
+		if (listaVentaCobro != null && listaVentaCobro.size()>0) {
 			
-			totalPagos=totalPagos+listaVentaCobro.get(i).getnMonto();
+			for (int i = 0; i < listaVentaCobro.size(); i++) {
+				
+				totalPagos=totalPagos+listaVentaCobro.get(i).getnMonto();
+			}
+			
 		}
+		
 		
 		if(tvVentaDetalle.getnSaldoTotal()==totalPagos) {
 			
@@ -368,8 +373,7 @@ public class VentasServiceImpl implements VentasService {
 				venta.setnIdEstatusVenta(2L);
 			}
 			else {
-				venta.setnIdEstatusVenta(1L);
-				
+				venta.setnIdEstatusVenta(1L);				
 			}
 			
 		}
@@ -387,13 +391,15 @@ public class VentasServiceImpl implements VentasService {
 			ventaCobro.setnMonto(tvVentaDetalle.getnAnticipo());
 		}
 		
+		System.out.println(venta);
 	
 		ventaCobro.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
-		ventaCobro.setdFecha(util.fechaSistema);
+		ventaCobro.setdFecha(utils.fechaSistema);
 		ventaCobro.setnIdCaja(caja.getnId());
 		ventaCobro.setTwVenta(venta);
 		ventaCobro.setTwCaja(venta.getTwCaja());
 				
+		
 		System.err.println(ventaCobro);
 		
 		ventasRepository.save(venta);

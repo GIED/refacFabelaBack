@@ -352,16 +352,4 @@ public class TwVenta implements Serializable {
 
 
 	
-	
-	
-
-
-
-	
-	
-	
-	
-	
-
-	
 }
