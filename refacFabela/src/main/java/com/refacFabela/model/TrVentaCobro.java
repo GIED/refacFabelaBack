@@ -205,8 +205,13 @@ public class TrVentaCobro implements Serializable {
 	public String toString() {
 		return "TrVentaCobro [nId=" + nId + ", nIdVenta=" + nIdVenta + ", nIdCaja=" + nIdCaja + ", nMonto=" + nMonto
 				+ ", dFecha=" + dFecha + ", nEstatus=" + nEstatus + ", nIdFormaPago=" + nIdFormaPago + ", twCaja="
-				+ twCaja + ", twVenta=" + twVenta + "]";
+				+ twCaja + ", twVenta=" + twVenta + ", tcFormapago=" + tcFormapago + "]";
 	}
+
+
+
+
+	
 	
 	
 	

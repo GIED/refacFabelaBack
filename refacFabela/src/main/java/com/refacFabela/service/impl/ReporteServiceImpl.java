@@ -35,6 +35,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.BalanceCajaDto;
 import com.refacFabela.dto.PedidoProductoDto;
 import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
 import com.refacFabela.dto.ReporteCotizacionDto;
@@ -489,6 +490,79 @@ public class ReporteServiceImpl implements ReporteService {
 		
 		return null;
 	}
+	
+	
+	public byte[] generarReporteCajaPDF(BalanceCajaDto balanceCajaDto) {
+	
+		try {
+			
+			System.err.println(balanceCajaDto);
+			
+			String ruta="";
+			Resource resource = new ClassPathResource("/reports/plantillas/corteCaja.jrxml");
+			final Map<String, Object> params = new HashMap<>();
+			File pdfFile = null;
+			String nombreArchivo = "caja_"+balanceCajaDto.getCaja();
+			
+			 ruta="/opt/webserver/backEnd/refacFabela/";
+	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+			utils util= new utils();
+			
+			//aqui van los parametros
+			params.put("logo", this.imagenHeader);
+			params.put("nombreEmpresa", "REFACCIONES FABELLA");
+			params.put("rfcEmpresa", "FAMJ810312FY6");
+			params.put("listaFormaPago", balanceCajaDto.getTvReporteCajaFormaPago());
+			params.put("caja",  balanceCajaDto.getCaja());
+			params.put("fechaEmicion",  balanceCajaDto.getFechaGeneraReporte());
+			params.put("totalIngresoVentas", util.truncarDecimales(balanceCajaDto.getTotalIngresoVenta()) );
+			params.put("totalIngresoAbonos",  util.truncarDecimales(balanceCajaDto.getTotalIngresoAbonos()) );
+			params.put("totalIngresoGeneral",  util.truncarDecimales(balanceCajaDto.getTotalGeneralIngresos()) );
+			params.put("noVentas",  balanceCajaDto.getNoVentas());
+			params.put("noAbonos",  balanceCajaDto.getNoAbonos());
+			params.put("totalVentas",  util.truncarDecimales(balanceCajaDto.getTotalVentas()));
+			params.put("entregadas",  balanceCajaDto.getTotalEntregadas());
+			params.put("noEntregadas",  balanceCajaDto.getTotalNoEntregadas());
+			params.put("entregasParciales",  balanceCajaDto.getTotalEntregasParciales());
+			params.put("listaVentaDetalle", balanceCajaDto.getTvReporteDetalleVenta());
+
+
+		
+			
+	        params.put("qr", getQR(("\nTotalventas: "+balanceCajaDto.getTotalVentas()+"\nTotal ventas: "+balanceCajaDto.getTotalIngresoVenta()+"\nTotal abonos: "+balanceCajaDto.getTotalIngresoAbonos()+"\nTotal ingreso: "+balanceCajaDto.getTotalGeneralIngresos())));
+	       
+	      
+			
+			
+			// InputStream ligado al reporte
+			InputStream inputStreamReport = resource.getInputStream();
+			FileOutputStream pos = new FileOutputStream(pdfFile);
+			JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
+			JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(balanceCajaDto)), pos);
+			
+			// Cierre de output stream
+			pos.flush();
+			pos.close();
+			
+			// Se recuperan los bytes correspondientes al reporte
+			byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+			
+			//Eliminar el archivo generado
+			
+			//pdfFile.delete();
+			
+			
+			
+			return bytesReporte;
+			//return null;
+
+		} catch (Exception e) {
+			logger.error("Error en metodo generaPDF(). Error al generar el pdf de reporte de caja ", e);
+		}
+		
+		return null;
+	}
+
 
 
 	

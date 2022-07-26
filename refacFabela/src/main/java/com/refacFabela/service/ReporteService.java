@@ -3,6 +3,7 @@ package com.refacFabela.service;
 import java.util.List;
 
 import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.BalanceCajaDto;
 import com.refacFabela.dto.PedidoProductoDto;
 import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
 import com.refacFabela.dto.ReporteCotizacionDto;
@@ -18,5 +19,6 @@ public interface ReporteService {
 	 byte[] generaAbonoVentaClientePDF(TcCliente cliente,  List<ReporteAbonoVentaCreditoDto> listaAbonoVenta, ReporteVentaDto reporteVenta);	 
 	 byte[] generaVentaPedidoPDF(ReporteVentaDto reporteVenta,  List<ReporteVentaDto> listaProducto);	 
 	 byte[] generaPedidoPDF(TwPedido twPedido,  List<PedidoProductoDto> listaPedidoProducto);
+	 byte[] generarReporteCajaPDF(BalanceCajaDto balanceCajaDto);
 
 }
