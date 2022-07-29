@@ -403,27 +403,11 @@ public class VentasServiceImpl implements VentasService {
 		TwVenta venta = ventasRepository.getById(tvVentaDetalle.getnId());
 		TwCaja caja = cajaRepository.obtenerCajaVigente();
 		TrVentaCobro ventaCobro = new TrVentaCobro();
-		Double totalPagos=0.0;
 		boolean cambio=false;
 		
-		System.out.println("parametros recibidos: "+tvVentaDetalle);
-		
-		List<TrVentaCobro> listaVentaCobro = this.trVentaCobroRepository.findBynIdVenta(venta.getnId());
-		
-		System.out.println("listaVentaCobro: "+listaVentaCobro);
-		System.out.println("antes de: "+venta);
-		
-		if (listaVentaCobro != null && listaVentaCobro.size()>0) {
-			
-			for (int i = 0; i < listaVentaCobro.size(); i++) {
-				
-				totalPagos=totalPagos+listaVentaCobro.get(i).getnMonto();
-			}
-			
-		}
 		
 		
-		if(tvVentaDetalle.getnSaldoTotal()==totalPagos) {
+		if(tvVentaDetalle.getnTotalVenta()==tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo()) {
 			
 			cambio=true;
 			
