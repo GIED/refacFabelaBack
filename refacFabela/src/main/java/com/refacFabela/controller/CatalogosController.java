@@ -236,6 +236,18 @@ public class CatalogosController {
 		}
 		return null;
 	}
+	@GetMapping("/consultaCajas")
+	public List<TwCaja> catalogocaja() {
+		try {
+
+			return cajaService.obteneroCajas();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener las cajas " + e);
+		}
+		return null;
+	}
 	
 	@GetMapping("/catalogoEstatusId")
 	public TcEstatusVenta consultaCajaActiva(@RequestParam Long nId) {

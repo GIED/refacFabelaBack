@@ -491,7 +491,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		
 		/*LLENAOD DE OBJETO BALANCE CAJA*/
 		balanceCajaDto.setCaja(caja.getnId());
-		balanceCajaDto.setFechaInicioCaja(util.formatoFecha(caja.getD_fechaApertura()));
+		balanceCajaDto.setFechaInicioCaja(util.formatoFecha(caja.getdFechaApertura()));
 		balanceCajaDto.setTotalIngresoVenta(totalIngresosVenta);
 		balanceCajaDto.setTotalIngresoAbonos(totalIngresosAbono);
 		balanceCajaDto.setTotalGeneralIngresos(totalIngresosVenta+totalIngresosAbono);
