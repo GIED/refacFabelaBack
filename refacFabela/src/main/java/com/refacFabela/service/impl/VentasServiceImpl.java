@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.dto.TvVentaDetalleDto;
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
@@ -71,6 +72,8 @@ public class VentasServiceImpl implements VentasService {
 	
 	@Autowired
 	private VentasFacturaRepository VentasFacturaRepository;
+	
+	@Autowired
 	private TrVentaCobroRepository trVentaCobroRepository;
 
 	@Override
@@ -315,9 +318,81 @@ public class VentasServiceImpl implements VentasService {
 	}
 
 	@Override
-	public List<TvVentaDetalle> consultaVentaDetalleIdEstatusVenta( Long nEstatusVenta) {
+	public List<TvVentaDetalleDto> consultaVentaDetalleIdEstatusVenta( Long nEstatusVenta) {
 		
-		return tvVentaDetalleRepository.consultaVentaDetalleIdEstatusVenta( nEstatusVenta);
+		List<TvVentaDetalle> ventas =tvVentaDetalleRepository.consultaVentaDetalleIdEstatusVenta( nEstatusVenta);
+		
+		List<TvVentaDetalleDto> ventasNew =new ArrayList<TvVentaDetalleDto>();
+		
+		
+		for (TvVentaDetalle detalleVenta : ventas) {
+			
+			TvVentaDetalleDto ventaDetalleNew =new TvVentaDetalleDto();
+			double totalPagos = 0.0;
+			
+			ventaDetalleNew.setnId(detalleVenta.getnId());
+			ventaDetalleNew.setnIdCliente(detalleVenta.getnIdCliente());
+			ventaDetalleNew.setnIdUsuario(detalleVenta.getnIdUsuario());
+			ventaDetalleNew.setsFolioVenta(detalleVenta.getsFolioVenta());
+			ventaDetalleNew.setdFechaVenta(detalleVenta.getdFechaVenta());
+			ventaDetalleNew.setnTipoPago(detalleVenta.getnTipoPago());
+			ventaDetalleNew.setdFechaInicioCredito(detalleVenta.getdFechaInicioCredito());
+			ventaDetalleNew.setdFechaTerminoCredito(detalleVenta.getdFechaTerminoCredito());
+			ventaDetalleNew.setdFechaPagoCredito(detalleVenta.getdFechaPagoCredito());
+			ventaDetalleNew.setnTotalVenta(detalleVenta.getnTotalVenta());
+			
+			if (detalleVenta.getnAnticipo() != null) {
+				ventaDetalleNew.setnAnticipo(detalleVenta.getnAnticipo());				
+			}else {
+				ventaDetalleNew.setnAnticipo(0.0);				
+				
+			}
+			
+			
+			
+			List<TrVentaCobro> listaVentaCobro = this.trVentaCobroRepository.findBynIdVenta(ventaDetalleNew.getnId());
+			
+			if (listaVentaCobro.size()>0) {
+				
+				ventaDetalleNew.setnTotalAbono((double) listaVentaCobro.size());		
+				
+				for (int i = 0; i < listaVentaCobro.size(); i++) {
+					
+					totalPagos=totalPagos+listaVentaCobro.get(i).getnMonto();
+				}
+				
+				ventaDetalleNew.setnSaldoTotal(ventaDetalleNew.getnTotalVenta()-totalPagos);
+				ventaDetalleNew.setnAvancePago(totalPagos);
+ 				
+			}else {
+				ventaDetalleNew.setnTotalAbono(0.0);	
+				ventaDetalleNew.setnSaldoTotal(ventaDetalleNew.getnTotalVenta());
+				ventaDetalleNew.setnAvancePago(0.0);
+			}
+			
+			
+			
+			ventaDetalleNew.setsEstatus(detalleVenta.getsEstatus());
+			ventaDetalleNew.setDescuento(detalleVenta.getDescuento());
+			ventaDetalleNew.setnIdTipoVenta(detalleVenta.getnIdTipoVenta());
+			ventaDetalleNew.setTcCliente(detalleVenta.getTcCliente());
+			ventaDetalleNew.setTcUsuario(detalleVenta.getTcUsuario());
+			ventaDetalleNew.setTcEstatusVenta(detalleVenta.getTcEstatusVenta());
+			ventaDetalleNew.setTcFormapago(detalleVenta.getTcFormapago());
+			ventaDetalleNew.setTwCaja(detalleVenta.getTwCaja());
+			ventaDetalleNew.setTcTipoVenta(detalleVenta.getTcTipoVenta());
+			
+			
+			
+			ventasNew.add(ventaDetalleNew);
+			
+			
+		}
+		
+		
+		
+		
+		return ventasNew;
 	}
 
 	@Override
@@ -360,14 +435,14 @@ public class VentasServiceImpl implements VentasService {
 		
 		venta.setDescuento(tvVentaDetalle.getDescuento());
 		
-		if(tvVentaDetalle.getTcFormapago() != null && tvVentaDetalle.getTcEstatusVenta().getnId()!=3) {
+		if(tvVentaDetalle.getTcTipoVenta().getnId()!=3) {
 						
 		venta.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
 		venta.setnIdEstatusVenta(2L);
 		
 		}
 		
-		if(tvVentaDetalle.getTcFormapago() != null && tvVentaDetalle.getTcEstatusVenta().getnId()==3) {
+		if(tvVentaDetalle.getTcTipoVenta().getnId()==3) {
 			venta.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
 			if(cambio) {
 				venta.setnIdEstatusVenta(2L);
@@ -380,9 +455,11 @@ public class VentasServiceImpl implements VentasService {
 		
 		
 		
+	
+		System.out.println(venta);
+	
 		ventaCobro.setnIdVenta(venta.getnId());
 		ventaCobro.setnIdCaja(venta.getnIdCaja());
-	
 		if(venta.getTcTipoVenta().getnId()!=3) {
 			ventaCobro.setnMonto(tvVentaDetalle.getnTotalVenta());
 			
@@ -391,13 +468,11 @@ public class VentasServiceImpl implements VentasService {
 			ventaCobro.setnMonto(tvVentaDetalle.getnAnticipo());
 		}
 		
-		System.out.println(venta);
-	
 		ventaCobro.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
 		ventaCobro.setdFecha(utils.fechaSistema);
+		ventaCobro.setnEstatus(1L);
 		ventaCobro.setnIdCaja(caja.getnId());
-		ventaCobro.setTwVenta(venta);
-		ventaCobro.setTwCaja(venta.getTwCaja());
+		
 				
 		
 		System.err.println(ventaCobro);
