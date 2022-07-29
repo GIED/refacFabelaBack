@@ -23,7 +23,7 @@ public class TwAbono implements Serializable {
 	private Date dFecha;
 
 	@Column(name = "n_abono")
-	private double nAbono;
+	private Double nAbono;
 
 	@Column(name = "n_estatus")
 	private int nEstatus;
@@ -77,11 +77,11 @@ public class TwAbono implements Serializable {
 		this.dFecha = dFecha;
 	}
 
-	public double getnAbono() {
+	public Double getnAbono() {
 		return nAbono;
 	}
 
-	public void setnAbono(double nAbono) {
+	public void setnAbono(Double nAbono) {
 		this.nAbono = nAbono;
 	}
 

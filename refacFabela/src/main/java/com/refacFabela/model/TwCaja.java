@@ -15,28 +15,36 @@ public class TwCaja implements Serializable {
 	@Column(name = "n_id")
 	private Long nId;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date d_fechaApertura;
+	@Column(name = "d_fechaApertura")
+	private Date dFechaApertura;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date d_fechaCierre;
+	@Column(name = "d_fechaCierre")
+	private Date dFechaCierre;
 
 	@Column(name = "n_estatus")
 	private int nEstatus;
+	
+	@Column(name = "n_pagoEfectivo")
+	private double nPagoEfectivo;
+    
+	@Column(name = "n_pagoElectronico")
+	private double nPagoElectronico;
+    
+	@Column(name = "n_saldoCierre")
+	private double nSaldoCierre;
+	
+	@Column(name = "n_saldoFinal")
+	private double nSaldoFinal;
 
-	private double n_pagoEfectivo;
-
-	private double n_pagoElectronico;
-
-	private double n_saldoCierre;
-
-	private double n_saldoFinal;
-
-	private double n_saldoInicial;
+	@Column(name = "n_saldoInicial")
+	private double nSaldoInicial;
+	
+	@Column(name = "n_idUsuario")
+	private double nIdUsuario;
 
 	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
-	@JoinColumn(name = "n_idUsuario")
+	@JoinColumn(name = "n_idUsuario", insertable = false, updatable = false)
 	private TcUsuario tcUsuario;
 
 	// bi-directional many-to-one association to TwVenta
@@ -52,20 +60,20 @@ public class TwCaja implements Serializable {
 		this.nId = nId;
 	}
 
-	public Date getD_fechaApertura() {
-		return d_fechaApertura;
+	public Date getdFechaApertura() {
+		return dFechaApertura;
 	}
 
-	public void setD_fechaApertura(Date d_fechaApertura) {
-		this.d_fechaApertura = d_fechaApertura;
+	public void setdFechaApertura(Date dFechaApertura) {
+		this.dFechaApertura = dFechaApertura;
 	}
 
-	public Date getD_fechaCierre() {
-		return d_fechaCierre;
+	public Date getdFechaCierre() {
+		return dFechaCierre;
 	}
 
-	public void setD_fechaCierre(Date d_fechaCierre) {
-		this.d_fechaCierre = d_fechaCierre;
+	public void setdFechaCierre(Date dFechaCierre) {
+		this.dFechaCierre = dFechaCierre;
 	}
 
 	public int getnEstatus() {
@@ -76,44 +84,54 @@ public class TwCaja implements Serializable {
 		this.nEstatus = nEstatus;
 	}
 
-	public double getN_pagoEfectivo() {
-		return n_pagoEfectivo;
+	public double getnPagoEfectivo() {
+		return nPagoEfectivo;
 	}
 
-	public void setN_pagoEfectivo(double n_pagoEfectivo) {
-		this.n_pagoEfectivo = n_pagoEfectivo;
+	public void setnPagoEfectivo(double nPagoEfectivo) {
+		this.nPagoEfectivo = nPagoEfectivo;
 	}
 
-	public double getN_pagoElectronico() {
-		return n_pagoElectronico;
+	
+
+	public double getnPagoElectronico() {
+		return nPagoElectronico;
 	}
 
-	public void setN_pagoElectronico(double n_pagoElectronico) {
-		this.n_pagoElectronico = n_pagoElectronico;
+	public void setnPagoElectronico(double nPagoElectronico) {
+		this.nPagoElectronico = nPagoElectronico;
 	}
 
-	public double getN_saldoCierre() {
-		return n_saldoCierre;
+	public double getnSaldoCierre() {
+		return nSaldoCierre;
 	}
 
-	public void setN_saldoCierre(double n_saldoCierre) {
-		this.n_saldoCierre = n_saldoCierre;
+	public void setnSaldoCierre(double nSaldoCierre) {
+		this.nSaldoCierre = nSaldoCierre;
 	}
 
-	public double getN_saldoFinal() {
-		return n_saldoFinal;
+	public double getnSaldoFinal() {
+		return nSaldoFinal;
 	}
 
-	public void setN_saldoFinal(double n_saldoFinal) {
-		this.n_saldoFinal = n_saldoFinal;
+	public void setnSaldoFinal(double nSaldoFinal) {
+		this.nSaldoFinal = nSaldoFinal;
 	}
 
-	public double getN_saldoInicial() {
-		return n_saldoInicial;
+	public double getnSaldoInicial() {
+		return nSaldoInicial;
 	}
 
-	public void setN_saldoInicial(double n_saldoInicial) {
-		this.n_saldoInicial = n_saldoInicial;
+	public void setnSaldoInicial(double nSaldoInicial) {
+		this.nSaldoInicial = nSaldoInicial;
+	}
+
+	public double getnIdUsuario() {
+		return nIdUsuario;
+	}
+
+	public void setnIdUsuario(double nIdUsuario) {
+		this.nIdUsuario = nIdUsuario;
 	}
 
 	public TcUsuario getTcUsuario() {
@@ -124,13 +142,6 @@ public class TwCaja implements Serializable {
 		this.tcUsuario = tcUsuario;
 	}
 
-	@Override
-	public String toString() {
-		return "TwCaja [nId=" + nId + ", d_fechaApertura=" + d_fechaApertura + ", d_fechaCierre=" + d_fechaCierre
-				+ ", nEstatus=" + nEstatus + ", n_pagoEfectivo=" + n_pagoEfectivo + ", n_pagoElectronico="
-				+ n_pagoElectronico + ", n_saldoCierre=" + n_saldoCierre + ", n_saldoFinal=" + n_saldoFinal
-				+ ", n_saldoInicial=" + n_saldoInicial + ", tcUsuario=" + tcUsuario + "]";
-	}
 	
 	
 

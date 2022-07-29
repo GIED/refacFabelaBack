@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.dto.BalanceCajaDto;
 import com.refacFabela.model.TcClavesat;
+import com.refacFabela.model.TwCaja;
 import com.refacFabela.service.CajaService;
 import com.refacFabela.service.CatalagosService;
 
@@ -37,6 +38,18 @@ public class CajaController {
 		} catch (Exception e) {
 
 			logger.error("Error al el balamce de la caja " + e);
+		}
+		return null;
+	}
+	@GetMapping("/nuevaCaja")
+	public TwCaja consultaBalanceCaja(@RequestParam Double saldoInicial, @RequestParam Long nIdUsuario) {
+		try {
+
+			return cajaService.nuevaCaja( saldoInicial, nIdUsuario);
+
+		} catch (Exception e) {
+
+			logger.error("Error al aperturar la nueva caja " + e);
 		}
 		return null;
 	}
