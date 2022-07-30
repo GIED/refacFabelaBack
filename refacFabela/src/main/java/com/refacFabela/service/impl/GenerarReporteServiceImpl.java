@@ -1,5 +1,10 @@
 package com.refacFabela.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +19,7 @@ import com.refacFabela.dto.PedidoProductoDto;
 import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
 import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
+import com.refacFabela.enums.TipoDoc;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TcUsuario;
 import com.refacFabela.model.TrVentaCobro;
@@ -509,6 +515,50 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 
 		return reporteService.generarReporteCajaPDF(balanceCajaDto);
+	}
+
+	@Override
+	public byte[] getDocumento(Long nIdCaja, TipoDoc TipoDoc) {
+		String ruta="";
+		File pdfFile = null;
+		
+		
+		if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.PDF_FACTURA)) {
+			
+			ruta=com.refacFabela.enums.TipoDoc.PDF_FACTURA.getPath();
+						    		    
+			 byte[] bytesReporte = null;
+			try {
+				  bytesReporte = Files.readAllBytes(Paths.get(ruta+ nIdCaja + ".pdf"));
+				
+			      return bytesReporte;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+		} 
+		
+		else if(TipoDoc.equals(com.refacFabela.enums.TipoDoc.XML_FACTURA)) {
+			ruta=com.refacFabela.enums.TipoDoc.XML_FACTURA.getPath();
+		    
+			 byte[] bytesReporte = null;
+			try {
+				  bytesReporte = Files.readAllBytes(Paths.get(ruta+ nIdCaja + ".xml"));
+				
+			      return bytesReporte;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+		
+		return null;
 	}
 	
 	

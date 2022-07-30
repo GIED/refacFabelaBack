@@ -1,5 +1,7 @@
 package com.refacFabela.service;
 
+import com.refacFabela.enums.TipoDoc;
+
 public interface GeneraReporteService {
 	
 	public byte[] getCotizacionPDF(Long nIdCotizacion);
@@ -9,5 +11,6 @@ public interface GeneraReporteService {
 	public byte[] getAbonoVentaIdClientePDF(Long nIdCliente);
 	public byte[] getPedidoIdPDF(Long nIdPedido);
 	public byte[] getReporteCaja(Long nIdCaja);
+	public byte[] getDocumento(Long nIdCaja, TipoDoc TipoDoc);
 
 }
