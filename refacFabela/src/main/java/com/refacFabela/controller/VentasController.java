@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.TvStockProductoDto;
+import com.refacFabela.dto.TvVentaDetalleDto;
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcProducto;
@@ -118,7 +119,7 @@ public class VentasController {
 	}
 	
 	@GetMapping("/obtenerVentasClienteDetalleEstatusVenta") 
-	public List<TvVentaDetalle> obtenerVentasClientesDetalleEstatusVenta(@RequestParam()  long nEstatusVenta) {
+	public List<TvVentaDetalleDto> obtenerVentasClientesDetalleEstatusVenta(@RequestParam()  long nEstatusVenta) {
 
 		try {
 			return ventasService.consultaVentaDetalleIdEstatusVenta( nEstatusVenta);

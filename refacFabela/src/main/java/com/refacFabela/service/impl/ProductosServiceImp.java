@@ -399,7 +399,7 @@ public class ProductosServiceImp implements ProductosService {
 	@Override
 	public List<TrVentaCobro> obtenerPägosParciales(Long nIdVenta) {
 		
-		return trVentaCobroRepository.obtenerPagosParciales(nIdVenta);
+		return trVentaCobroRepository.findBynIdVenta(nIdVenta);
 	}
 
 	@Override
