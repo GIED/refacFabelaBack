@@ -131,11 +131,11 @@ public class VentasServiceImpl implements VentasService {
 			twVentaProducto.setnIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
 			twVentaProducto.setnCantidad(ventaDto.getListaValidada().get(i).getnCantidad());
 			twVentaProducto.setnPrecioUnitario(ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioSinIva());
-			twVentaProducto.setnIvaUnitario(ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioConIva() - ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioSinIva());
+			twVentaProducto.setnIvaUnitario(ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioIva());
 			twVentaProducto.setnTotalUnitario(twVentaProducto.getnPrecioUnitario() + twVentaProducto.getnIvaUnitario());
 			twVentaProducto.setnPrecioPartida(twVentaProducto.getnCantidad() * twVentaProducto.getnPrecioUnitario());
-			twVentaProducto.setnIvaPartida(twVentaProducto.getnPrecioPartida() * .16);
-			twVentaProducto.setnTotalPartida(twVentaProducto.getnPrecioPartida() + twVentaProducto.getnIvaPartida());
+			twVentaProducto.setnIvaPartida(utils.truncarDecimales(twVentaProducto.getnPrecioPartida() * .16));
+			twVentaProducto.setnTotalPartida(utils.truncarDecimales(twVentaProducto.getnPrecioPartida() + twVentaProducto.getnIvaPartida()));
 			twVentaProducto.setnEstatusEntregaAlmacen(0);
 			twVentaProducto.setnIdUsuario(ventaDto.getIdUsuario());
 			
@@ -407,7 +407,7 @@ public class VentasServiceImpl implements VentasService {
 		
 		
 		
-		if(tvVentaDetalle.getnTotalVenta()==tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo()) {
+		if(tvVentaDetalle.getnTotalVenta()==tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo() || (tvVentaDetalle.getnTotalVenta()-(tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo()))<=0.01) {
 			
 			cambio=true;
 			
