@@ -72,6 +72,9 @@ public class TcProducto implements Serializable {
 	
 	@Column(name = "s_id_bar")
 	private String sIdBar;
+	
+	@Column(name = "n_precio_iva")
+	private double nPrecioIva;
 
 	// bi-directional many-to-one association to TcCategoria
 	@ManyToOne()
@@ -310,6 +313,19 @@ public class TcProducto implements Serializable {
 	public void setsIdBar(String sIdBar) {
 		this.sIdBar = sIdBar;
 	}
+	
+	
+	
+
+
+	public double getnPrecioIva() {
+		return nPrecioIva;
+	}
+
+
+	public void setnPrecioIva(double nPrecioIva) {
+		this.nPrecioIva = nPrecioIva;
+	}
 
 
 	@Override
@@ -319,9 +335,12 @@ public class TcProducto implements Serializable {
 				+ sDescripcion + ", sMarca=" + sMarca + ", sMoneda=" + sMoneda + ", sNoParte=" + sNoParte
 				+ ", sProducto=" + sProducto + ", nIdusuario=" + nIdusuario + ", nIdGanancia=" + nIdGanancia
 				+ ", nIdclavesat=" + nIdclavesat + ", nPrecioPeso=" + nPrecioPeso + ", nPrecioSinIva=" + nPrecioSinIva
-				+ ", nPrecioConIva=" + nPrecioConIva + ", tcCategoria=" + tcCategoria + ", tcCategoriaGeneral="
-				+ tcCategoriaGeneral + ", tcClavesat=" + tcClavesat + ", tcGanancia=" + tcGanancia + ", tcUsuario="
-				+ tcUsuario + "]";
+				+ ", nPrecioConIva=" + nPrecioConIva + ", sIdBar=" + sIdBar + ", nPrecioIva=" + nPrecioIva
+				+ ", tcCategoria=" + tcCategoria + ", tcCategoriaGeneral=" + tcCategoriaGeneral + ", tcClavesat="
+				+ tcClavesat + ", tcGanancia=" + tcGanancia + ", tcUsuario=" + tcUsuario + "]";
 	}
+
+
+	
 
 }

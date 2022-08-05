@@ -59,8 +59,8 @@ public class CotizacionServiceImpl implements CotizacionService {
 			twCotizacionProducto.setnIvaUnitario(cotizacionDto.getnIvaUnitario());
 			twCotizacionProducto.setnTotalUnitario(cotizacionDto.getnTotalUnitario());
 			twCotizacionProducto.setnPrecioPartida(cotizacionDto.getnCantidad()* cotizacionDto.getnPrecioUnitario());
-			twCotizacionProducto.setnIvaPartida(twCotizacionProducto.getnPrecioPartida() * .16);
-			twCotizacionProducto.setnTotalPartida(twCotizacionProducto.getnPrecioPartida() + twCotizacionProducto.getnIvaPartida());
+			twCotizacionProducto.setnIvaPartida(utils.truncarDecimales(twCotizacionProducto.getnPrecioPartida() * .16));
+			twCotizacionProducto.setnTotalPartida(utils.truncarDecimales(twCotizacionProducto.getnPrecioPartida() + twCotizacionProducto.getnIvaPartida()));
 			
 			listaCotizacionRegistro.add(twCotizacionProducto);
 			
