@@ -484,7 +484,7 @@ public class VentasServiceImpl implements VentasService {
 
 	@Override
 	public List<TvVentasFactura> consultaVentasParaFactura() {
-				return this.VentasFacturaRepository.findAll();
+				return this.VentasFacturaRepository.obtenerFacturas();
 	}
 
 	
