@@ -100,22 +100,43 @@ public class PedidosServiceImpl implements PedidosService {
 		// DECRARACIÓN DE VARIABLES
 		utils util = new utils();
 		TwPedidoProducto pedidioProducto = new TwPedidoProducto();
+		TwPedidoProducto pedidioProductoIngreso = null;
 		TwPedido twPedido = new TwPedido();
 		TwVenta twVenta = new TwVenta();
 		int totalProductosIngreso = 0;
 		List<TwPedidoProducto> listaTwPedidoProducto = new ArrayList<TwPedidoProducto>();
 		TwProductobodega productoBodega = new TwProductobodega();
-
+	    pedidioProductoIngreso=pedidosProductoRepository.getById(twPedidoProducto.getnId());
 		// GUARDA EL ESTATUS DEL ASPIRANTE
+	
+		
+		productoBodega = productoBodegaRepository.obtenerProductoBodega(twPedidoProducto.getnIdProducto(), "LOCAL");
+		System.err.println(pedidioProductoIngreso.getnCantidaRecibida());
+		System.err.println(twPedidoProducto.getnCantidaRecibida());
+		
+	
+		
+		if(twPedidoProducto.getnCantidaRecibida()==0) {
+			System.err.println("entre");
+
+		productoBodega.setnCantidad(productoBodega.getnCantidad() + twPedidoProducto.getnCantidaRecibida());
+		}
+		else {
+			
+			System.err.println(pedidioProductoIngreso.getnCantidaRecibida());
+			System.err.println(twPedidoProducto.getnCantidaRecibida());
+			System.err.println(productoBodega.getnCantidad() + pedidioProductoIngreso.getnCantidaRecibida() - twPedidoProducto.getnCantidaRecibida());
+			productoBodega.setnCantidad(productoBodega.getnCantidad() +  twPedidoProducto.getnCantidaRecibida() - pedidioProductoIngreso.getnCantidaRecibida() );
+			System.err.println(productoBodega);
+			
+			
+		}
+		productoBodegaRepository.save(productoBodega);
+
 		twPedidoProducto.setdFechaRecibida(util.fechaSistema);
 		pedidioProducto = pedidosProductoRepository.save(twPedidoProducto);
 
-		productoBodega = productoBodegaRepository.obtenerProductoBodega(pedidioProducto.getnIdProducto(), "LOCAL");
-
-		productoBodega.setnCantidad(productoBodega.getnCantidad() + pedidioProducto.getnCantidadPedida());
-
-		productoBodegaRepository.save(productoBodega);
-
+		
 		// CONSULTA EL NUMERO DE PARTIDAS ENTREGADAS
 		listaTwPedidoProducto = pedidosProductoRepository.obtenerPedidosRegistrados(twPedidoProducto.getnIdPedido());
 
@@ -134,7 +155,7 @@ public class PedidosServiceImpl implements PedidosService {
 			// GUADAR HISTORA DE INGRESO DE PRODUCTOS
 			
 			TwHistoriaIngresoProducto twHistoriaIngresoProducto = new TwHistoriaIngresoProducto();
-			twHistoriaIngresoProducto.setnCantidad(twPedidoProducto.getnCantidadPedida());
+			twHistoriaIngresoProducto.setnCantidad(twPedidoProducto.getnCantidaRecibida());
 			twHistoriaIngresoProducto.setnIdBodega(1L);
 			twHistoriaIngresoProducto.setnIdPedido(twPedidoProducto.getnIdPedido());
 			twHistoriaIngresoProducto.setnIdProducto(twPedidoProducto.getnIdProducto());

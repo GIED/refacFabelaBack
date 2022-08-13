@@ -35,7 +35,7 @@ public class TcProducto implements Serializable {
 	private Long nIdCategoria;
 
 	@Column(name = "n_precio")
-	private double nPrecio;
+	private Double nPrecio;
 
 	@Column(name = "s_descripcion")
 	private String sDescripcion;
@@ -62,19 +62,19 @@ public class TcProducto implements Serializable {
 	private Long nIdclavesat;
 
 	@Column(name = "n_precio_peso")
-	private double nPrecioPeso;
+	private Double nPrecioPeso;
 
 	@Column(name = "n_precio_sin_iva")
-	private double nPrecioSinIva;
+	private Double nPrecioSinIva;
 
 	@Column(name = "n_precio_con_iva")
-	private double nPrecioConIva;
+	private Double nPrecioConIva;
 	
 	@Column(name = "s_id_bar")
 	private String sIdBar;
 	
 	@Column(name = "n_precio_iva")
-	private double nPrecioIva;
+	private Double nPrecioIva;
 
 	// bi-directional many-to-one association to TcCategoria
 	@ManyToOne()
@@ -136,27 +136,27 @@ public class TcProducto implements Serializable {
 		this.nId = nId;
 	}
 
-	public double getnPrecioPeso() {
+	public Double getnPrecioPeso() {
 		return nPrecioPeso;
 	}
 
-	public void setnPrecioPeso(double nPrecioPeso) {
+	public void setnPrecioPeso(Double nPrecioPeso) {
 		this.nPrecioPeso = nPrecioPeso;
 	}
 
-	public double getnPrecioSinIva() {
+	public Double getnPrecioSinIva() {
 		return nPrecioSinIva;
 	}
 
-	public void setnPrecioSinIva(double nPrecioSinIva) {
+	public void setnPrecioSinIva(Double nPrecioSinIva) {
 		this.nPrecioSinIva = nPrecioSinIva;
 	}
 
-	public double getnPrecioConIva() {
+	public Double getnPrecioConIva() {
 		return nPrecioConIva;
 	}
 
-	public void setnPrecioConIva(double nPrecioConIva) {
+	public void setnPrecioConIva(Double nPrecioConIva) {
 		this.nPrecioConIva = nPrecioConIva;
 	}
 
@@ -192,11 +192,11 @@ public class TcProducto implements Serializable {
 		this.nIdCategoria = nIdCategoria;
 	}
 
-	public double getnPrecio() {
+	public Double getnPrecio() {
 		return nPrecio;
 	}
 
-	public void setnPrecio(double nPrecio) {
+	public void setnPrecio(Double nPrecio) {
 		this.nPrecio = nPrecio;
 	}
 
@@ -318,12 +318,12 @@ public class TcProducto implements Serializable {
 	
 
 
-	public double getnPrecioIva() {
+	public Double getnPrecioIva() {
 		return nPrecioIva;
 	}
 
 
-	public void setnPrecioIva(double nPrecioIva) {
+	public void setnPrecioIva(Double nPrecioIva) {
 		this.nPrecioIva = nPrecioIva;
 	}
 
