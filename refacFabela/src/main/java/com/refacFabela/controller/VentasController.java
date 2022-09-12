@@ -306,5 +306,16 @@ public class VentasController {
 	}
 	
 	
+	@PostMapping("/cancelaVentaProducto")
+	public VentaProductoDto cancelaVentaProducto(@RequestBody  VentaProductoDto ventaProductoDto) {
+		try {
+			return productosService.cacelarVentaProducto(ventaProductoDto);
+		} catch (Exception e) {
+			logger.error("Error al cancelar la venta" + e);
+		}
+		return null;
+	}
+	
+	
 
 }

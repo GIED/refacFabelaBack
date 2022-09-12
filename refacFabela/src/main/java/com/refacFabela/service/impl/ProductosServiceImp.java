@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.TvStockProductoDto;
+import com.refacFabela.dto.TvVentaDetalleDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
@@ -22,13 +23,16 @@ import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
+import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwMaquinaCliente;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwVenta;
+import com.refacFabela.model.TwVentaProductoCancela;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
+import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.CatalagoFormaPagoRepository;
 import com.refacFabela.repository.CatalogoAnaquelRepository;
 import com.refacFabela.repository.CatalogoBodegasRepository;
@@ -43,6 +47,7 @@ import com.refacFabela.repository.TvVentasStockRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwMaquinaClienteRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
+import com.refacFabela.repository.TwVentaProductoCancelaRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentaProductoMesRepository;
 import com.refacFabela.repository.VentasRepository;
@@ -90,7 +95,13 @@ public class ProductosServiceImp implements ProductosService {
 	private TrVentaCobroRepository trVentaCobroRepository;
 	@Autowired 
 	private TwMaquinaClienteRepository twMaquinaClienteRepository;
-	
+	@Autowired
+	private TwVentaProductoCancelaRepository twVentaProductoCancelaRepository;
+	@Autowired
+	private CajaRepository cajaRepository;
+
+
+
 	
 	
 
@@ -414,8 +425,58 @@ public class ProductosServiceImp implements ProductosService {
 		return twMaquinaClienteRepository.save(twMaquinaCliente);
 	}
 
-	
-	
+	@Override
+	public VentaProductoDto cacelarVentaProducto(VentaProductoDto ventaProductoDto) {
+				
+		TwVentasProducto twVentasProducto= new TwVentasProducto();	
+		TwProductobodega twProductobodega = new TwProductobodega();
+		TwVentaProductoCancela twVentaProductoCancela= new TwVentaProductoCancela();
+		utils util= new utils();
+		TwCaja caja = new TwCaja();
+		
+		twVentasProducto=twProductosVentaRepository.obtenerProductoVenta(ventaProductoDto.getnIdVenta(), ventaProductoDto.getnIdProducto());		
+		twVentasProducto.setnEstatus(0);	
+		ventaProductoDto.setnEstatus(0);		
+		twProductosVentaRepository.save(twVentasProducto);	
+		caja=cajaRepository.obtenerCajaVigente();
+		
+		twProductobodega=productoBodegaRepository.obtenerProductoBodega(ventaProductoDto.getnIdProducto(), "LOCAL");
+		
+		if (twProductobodega!=null) {
+			
+			twProductobodega.setnCantidad(twProductobodega.getnCantidad()+ventaProductoDto.getnCantidad());
+			
+			productoBodegaRepository.save(twProductobodega);
+			
+			
+			twVentaProductoCancela.setnIdVenta(twVentasProducto.getnIdVenta());
+			twVentaProductoCancela.setnIdProductos(twVentasProducto.getnIdProducto());
+			twVentaProductoCancela.setnCantidad(twVentasProducto.getnCantidad());
+			twVentaProductoCancela.setnPrecioUnitario(twVentasProducto.getnPrecioUnitario());
+			twVentaProductoCancela.setnIvaUnitario(twVentasProducto.getnIvaUnitario());
+			twVentaProductoCancela.setnTotalUnitario(twVentasProducto.getnTotalUnitario());
+			twVentaProductoCancela.setnPrecioPartida(twVentasProducto.getnPrecioPartida());
+			twVentaProductoCancela.setnIdUsuario(twVentasProducto.getnIdUsuario());
+			twVentaProductoCancela.setdFecha(util.fechaSistema);
+			twVentaProductoCancela.setnIdCaja(caja.getnId());
+			
+			
+			twVentaProductoCancelaRepository.save(twVentaProductoCancela);
+			
+			
+			
+		}
+		
+		else {
+			
+			return null;
+		}
+		
+		
+		
+		return ventaProductoDto;
+	}
+
 	
 	/*private ProductoDto convertirAProductoDto(final TcProducto tcProducto) {
 		

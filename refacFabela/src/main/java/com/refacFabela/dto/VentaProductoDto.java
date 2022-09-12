@@ -23,6 +23,8 @@ public class VentaProductoDto implements  Serializable {
 	private String sBodega;
 	private String sNivel;
 	private String sAnaquel;
+	private Integer nEstatus;
+	private Long nIdVenta;
 	
 	
 	
@@ -42,6 +44,8 @@ public class VentaProductoDto implements  Serializable {
 		this.nTotalPartida = twVentasProducto.getnTotalPartida();
 		this.dFechaVenta = twVentasProducto.getTwVenta().getdFechaVenta();
 		this.nEstatusEntregaAlmacen = twVentasProducto.getnEstatusEntregaAlmacen();
+		this.nEstatus=twVentasProducto.getnEstatus();
+		this.nIdVenta=twVentasProducto.getnIdVenta();
 	}
 	
 
@@ -167,6 +171,22 @@ public class VentaProductoDto implements  Serializable {
 				+ nCantidad + ", nTotalUnitario=" + nTotalUnitario + ", nTotalPartida=" + nTotalPartida
 				+ ", dFechaVenta=" + dFechaVenta + ", nEstatusEntregaAlmacen=" + nEstatusEntregaAlmacen + ", sBodega="
 				+ sBodega + ", sNivel=" + sNivel + ", sAnaquel=" + sAnaquel + "]";
+	}
+
+	public Integer getnEstatus() {
+		return nEstatus;
+	}
+
+	public void setnEstatus(Integer nEstatus) {
+		this.nEstatus = nEstatus;
+	}
+
+	public Long getnIdVenta() {
+		return nIdVenta;
+	}
+
+	public void setnIdVenta(Long nIdVenta) {
+		this.nIdVenta = nIdVenta;
 	}
 
 	

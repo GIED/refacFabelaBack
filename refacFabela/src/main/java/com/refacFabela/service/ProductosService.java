@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.TvStockProductoDto;
+import com.refacFabela.dto.TvVentaDetalleDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
@@ -38,7 +39,8 @@ public interface ProductosService {
 	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id);
 	public List<TvVentaStock> obtenerVentasStockFecha(String  dFechaInicio, String dFechaFinal);
 	public List<TrVentaCobro> obtenerPägosParciales(Long nIdVenta);
-	public List<TwMaquinaCliente> obtenerMaquinasCliente(Long nIdClinete);
+	public List<TwMaquinaCliente> obtenerMaquinasCliente(Long nIdClinete);	
+	public VentaProductoDto cacelarVentaProducto(VentaProductoDto ventaProductoDto);
 	public String consultaVentaProductoId(TwVentasProducto ventaProductoDto);
 	public TwAbono guardarAbono(TwAbono abonoDto);
 	public TcProducto calcularNuevoPrecio(TcProducto tcProducto);

@@ -55,6 +55,9 @@ public class TwVentasProducto implements Serializable {
 	
 	@Column(name = "n_totalUnitario")
 	private double nTotalUnitario;
+	
+	@Column(name = "n_estatus")
+	private Integer nEstatus;
 
 	// bi-directional many-to-one association to TcProducto
 	@ManyToOne
@@ -223,6 +226,14 @@ public class TwVentasProducto implements Serializable {
 				+ ", nIvaUnitario=" + nIvaUnitario + ", nPrecioPartida=" + nPrecioPartida + ", nPrecioUnitario="
 				+ nPrecioUnitario + ", nTotalPartida=" + nTotalPartida + ", nTotalUnitario=" + nTotalUnitario
 				+ ", tcProducto=" + tcProducto + ", tcUsuario=" + tcUsuario + ", twVenta=" + twVenta + "]";
+	}
+
+	public Integer getnEstatus() {
+		return nEstatus;
+	}
+
+	public void setnEstatus(Integer nEstatus) {
+		this.nEstatus = nEstatus;
 	}
 	
 	
