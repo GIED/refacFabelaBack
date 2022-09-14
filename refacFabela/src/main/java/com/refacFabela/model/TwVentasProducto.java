@@ -58,6 +58,9 @@ public class TwVentasProducto implements Serializable {
 	
 	@Column(name = "n_estatus")
 	private Integer nEstatus;
+	
+	@Column(name = "s_condicionEntrega")
+	private String sCondicionEntrega;
 
 	// bi-directional many-to-one association to TcProducto
 	@ManyToOne
@@ -234,6 +237,14 @@ public class TwVentasProducto implements Serializable {
 
 	public void setnEstatus(Integer nEstatus) {
 		this.nEstatus = nEstatus;
+	}
+
+	public String getsCondicionEntrega() {
+		return sCondicionEntrega;
+	}
+
+	public void setsCondicionEntrega(String sCondicionEntrega) {
+		this.sCondicionEntrega = sCondicionEntrega;
 	}
 	
 	

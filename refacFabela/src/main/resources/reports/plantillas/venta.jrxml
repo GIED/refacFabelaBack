@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="16"/>
+	<property name="ireport.y" value="153"/>
 	<subDataset name="listaProductos" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="cantidad" class="java.lang.Integer"/>
 		<field name="noIdentificacion" class="java.lang.Long"/>
@@ -11,6 +11,7 @@
 		<field name="importe" class="java.lang.Double"/>
 		<field name="descripcionCatSat" class="java.lang.String"/>
 		<field name="claveSat" class="java.lang.String"/>
+		<field name="condicionEntrega" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="listaProductos" class="java.util.List"/>
 	<parameter name="logo" class="java.lang.Object"/>
@@ -167,13 +168,19 @@
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="348" y="19" width="100" height="19" forecolor="#04115F" backcolor="#010101" uuid="1e08c1ff-cf9d-484c-af67-a2c51bdf246c"/>
+				<reportElement x="348" y="19" width="71" height="19" forecolor="#04115F" backcolor="#010101" uuid="1e08c1ff-cf9d-484c-af67-a2c51bdf246c"/>
 				<graphicElement>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="449" y="19" width="106" height="19" forecolor="#04115F" backcolor="#010101" uuid="ea3efc1c-c23d-4668-986d-7b4c7a56e209"/>
+				<reportElement x="419" y="19" width="63" height="19" forecolor="#04115F" backcolor="#010101" uuid="ea3efc1c-c23d-4668-986d-7b4c7a56e209"/>
+				<graphicElement>
+					<pen lineColor="#C7C7C7"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="482" y="19" width="73" height="19" forecolor="#04115F" backcolor="#010101" uuid="49b5822d-a50c-4049-b69b-a73903b805f0"/>
 				<graphicElement>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
@@ -194,18 +201,25 @@
 				<text><![CDATA[Identificador]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="449" y="19" width="106" height="20" forecolor="#FFFFFF" uuid="b538b53c-fd58-4ba9-a020-48ffb24690e8"/>
+				<reportElement x="419" y="19" width="63" height="20" forecolor="#FFFFFF" uuid="b538b53c-fd58-4ba9-a020-48ffb24690e8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Total Partida]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="348" y="19" width="100" height="20" forecolor="#FFFFFF" uuid="27143959-56d0-4abc-9bce-6af76a4749bd"/>
+				<reportElement x="348" y="19" width="71" height="20" forecolor="#FFFFFF" uuid="27143959-56d0-4abc-9bce-6af76a4749bd"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Precio Unitario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="482" y="19" width="73" height="20" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" uuid="67167c2c-c974-4d84-8862-412d127188fd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Entrega]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="147" y="19" width="200" height="20" forecolor="#FFFFFF" uuid="9c8ef098-ce97-4004-ae60-41679920980e"/>
@@ -217,44 +231,14 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="42" splitType="Stretch">
+		<band height="48" splitType="Stretch">
 			<componentElement>
-				<reportElement x="0" y="0" width="555" height="36" uuid="3aac5f86-73ff-4c83-8971-334795e08c64"/>
+				<reportElement x="0" y="0" width="555" height="40" uuid="3aac5f86-73ff-4c83-8971-334795e08c64"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="listaProductos" uuid="142a0beb-1982-4feb-87c2-a9648cf06b10">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaProductos})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="36" width="555">
-						<rectangle>
-							<reportElement x="1" y="1" width="62" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="288133bb-de6e-4a09-b3b4-8721b7001169"/>
-							<graphicElement>
-								<pen lineColor="#C7C7C7"/>
-							</graphicElement>
-						</rectangle>
-						<rectangle>
-							<reportElement x="64" y="1" width="82" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="a3cdcaa0-c985-43a6-9957-1b670c29b1cb"/>
-							<graphicElement>
-								<pen lineColor="#C7C7C7"/>
-							</graphicElement>
-						</rectangle>
-						<rectangle>
-							<reportElement x="147" y="1" width="200" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="8f623e0b-164c-47d7-bad9-8551502c8366"/>
-							<graphicElement>
-								<pen lineColor="#C7C7C7"/>
-							</graphicElement>
-						</rectangle>
-						<rectangle>
-							<reportElement x="348" y="1" width="100" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="9171b3cd-9296-4641-82f2-0147c9c3a952"/>
-							<graphicElement>
-								<pen lineColor="#C7C7C7"/>
-							</graphicElement>
-						</rectangle>
-						<rectangle>
-							<reportElement x="449" y="1" width="106" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="95cf0443-a146-42ba-a8c7-89b4cd62a12d"/>
-							<graphicElement>
-								<pen lineColor="#C7C7C7"/>
-							</graphicElement>
-						</rectangle>
+					<jr:listContents height="40" width="555">
 						<textField>
 							<reportElement x="0" y="0" width="63" height="35" uuid="9f6097fd-74a2-4590-bbcf-e652abf73266"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -277,19 +261,29 @@
 							<textFieldExpression><![CDATA[$F{nombreProducto}+"\nClave Prod. Serv.-"+$F{claveSat}+" "+$F{descripcionCatSat}]]></textFieldExpression>
 						</textField>
 						<textField pattern="#,##0.00">
-							<reportElement x="348" y="1" width="100" height="35" uuid="9cb1d605-8167-4934-976b-990f1663fa76"/>
+							<reportElement x="348" y="1" width="72" height="35" uuid="9cb1d605-8167-4934-976b-990f1663fa76"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
 						</textField>
 						<textField pattern="#,##0.00">
-							<reportElement x="449" y="0" width="106" height="35" uuid="75512337-d642-4256-a170-87d2011e0137"/>
+							<reportElement x="420" y="1" width="62" height="35" uuid="75512337-d642-4256-a170-87d2011e0137"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
 						</textField>
+						<textField pattern="#,##0.00">
+							<reportElement x="482" y="1" width="73" height="35" uuid="7e31e202-55ad-40e3-8523-c1ad1423139c"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{condicionEntrega}]]></textFieldExpression>
+						</textField>
+						<line>
+							<reportElement x="0" y="37" width="555" height="1" forecolor="#D3D3D3" uuid="cadd15d7-272f-4b8a-b6ce-9e4c6b23d146"/>
+						</line>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>

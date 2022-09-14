@@ -25,6 +25,7 @@ public class VentaProductoDto implements  Serializable {
 	private String sAnaquel;
 	private Integer nEstatus;
 	private Long nIdVenta;
+	private String sCondicionEntrega;
 	
 	
 	
@@ -46,6 +47,7 @@ public class VentaProductoDto implements  Serializable {
 		this.nEstatusEntregaAlmacen = twVentasProducto.getnEstatusEntregaAlmacen();
 		this.nEstatus=twVentasProducto.getnEstatus();
 		this.nIdVenta=twVentasProducto.getnIdVenta();
+		this.sCondicionEntrega=twVentasProducto.getsCondicionEntrega();
 	}
 	
 
@@ -187,6 +189,14 @@ public class VentaProductoDto implements  Serializable {
 
 	public void setnIdVenta(Long nIdVenta) {
 		this.nIdVenta = nIdVenta;
+	}
+
+	public String getsCondicionEntrega() {
+		return sCondicionEntrega;
+	}
+
+	public void setsCondicionEntrega(String sCondicionEntrega) {
+		this.sCondicionEntrega = sCondicionEntrega;
 	}
 
 	

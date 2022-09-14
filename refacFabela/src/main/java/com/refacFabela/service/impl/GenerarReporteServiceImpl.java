@@ -31,6 +31,7 @@ import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwCotizacionesProducto;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
+import com.refacFabela.model.TwVentaProductoCancela;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CajaRepository;
@@ -42,6 +43,7 @@ import com.refacFabela.repository.TvReporteCajaFormaPagoRepository;
 import com.refacFabela.repository.TvReporteDetalleVentaRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.TwPedidoRepository;
+import com.refacFabela.repository.TwVentaProductoCancelaRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.service.GeneraReporteService;
@@ -86,6 +88,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	public CajaRepository cajaRepository;
 	@Autowired
 	public UsuariosRepository usuariosRepository;
+	@Autowired
+	public TwVentaProductoCancelaRepository  twVentaProductoCancelaRepository;
 	
 	
 
@@ -182,6 +186,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnTotalUnitario()));
 			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnTotalPartida()));
 			reporte.setDescripcionCatSat(twVentaProducto.getTcProducto().getTcClavesat().getsDescripcion());
+			reporte.setCondicionEntrega(twVentaProducto.getsCondicionEntrega());
 
 			listaProducto.add(reporte);
 
@@ -455,6 +460,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		Integer totalEntregadas=0;
 		Integer totalNoEntregadas=0;
 		Integer totalEntegasParciales=0;
+		Double totalReitegros=0.0;
 
 		List<TrVentaCobro> trVentasCobro = trVentaCobroRepository.obtenerPagosCaja(nIdCaja);
 		List<TwAbono> twAbono = abonoVentaIdRepository.obtenerAbonosCaja(nIdCaja);
@@ -462,8 +468,10 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		List<TvReporteCajaFormaPago> tvReporteCajaFormaPago=tvReporteCajaFormaPagoRepository.obtenerFormaPagoCaja(nIdCaja);		
 		 TwCaja caja = cajaRepository.getById(nIdCaja); 
 		 TcUsuario usuario = usuariosRepository.obtenerUsuario(caja.getTcUsuario().getnId());
+		 
 		 utils util=new utils();				
-		BalanceCajaDto balanceCajaDto= new BalanceCajaDto();		
+		BalanceCajaDto balanceCajaDto= new BalanceCajaDto();	
+		totalReitegros=twVentaProductoCancelaRepository.totalCancela(nIdCaja);
 	
 		 
 		for (int i = 0; i < trVentasCobro.size(); i++) {			
@@ -500,7 +508,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		balanceCajaDto.setFechaInicioCaja(util.formatoFecha(caja.getdFechaApertura()));
 		balanceCajaDto.setTotalIngresoVenta(totalIngresosVenta);
 		balanceCajaDto.setTotalIngresoAbonos(totalIngresosAbono);
-		balanceCajaDto.setTotalGeneralIngresos(totalIngresosVenta+totalIngresosAbono);
+		balanceCajaDto.setTotalGeneralIngresos(totalIngresosVenta+totalIngresosAbono-totalReitegros);
 		balanceCajaDto.setTotalVentas(totalVentaCaja);
 		balanceCajaDto.setNoVentas(trReporteDetalleVentas.size());
 		balanceCajaDto.setNoAbonos(twAbono.size());
@@ -511,6 +519,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		balanceCajaDto.setFechaGeneraReporte(util.formatoFecha(util.fechaSistema));
 		balanceCajaDto.setTvReporteDetalleVenta(trReporteDetalleVentas);
 		balanceCajaDto.setTvReporteCajaFormaPago(tvReporteCajaFormaPago);
+		balanceCajaDto.setTotalReintegro(totalReitegros);
 
 
 

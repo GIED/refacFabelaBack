@@ -32,6 +32,7 @@ public class ReporteVentaDto implements Serializable{
 	private String correo;
 	private Double descuento;
 	private Double abonos;
+	private String condicionEntrega;
 	
 	
 	
@@ -198,6 +199,14 @@ public class ReporteVentaDto implements Serializable{
 
 	public void setAbonos(Double abonos) {
 		this.abonos = abonos;
+	}
+
+	public String getCondicionEntrega() {
+		return condicionEntrega;
+	}
+
+	public void setCondicionEntrega(String condicionEntrega) {
+		this.condicionEntrega = condicionEntrega;
 	}
 	
 	

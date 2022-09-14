@@ -27,6 +27,7 @@ public class BalanceCajaDto {
 	public Integer totalNoEntregadas;
 	public Integer totalEntregasParciales;
 	public List<TvReporteCajaFormaPago> tvReporteCajaFormaPago;
+	public Double totalReintegro;
 	
 	
 	
@@ -304,6 +305,22 @@ public class BalanceCajaDto {
 				+ ", totalEntregadas=" + totalEntregadas + ", totalNoEntregadas=" + totalNoEntregadas
 				+ ", totalEntregasParciales=" + totalEntregasParciales + ", tvReporteCajaFormaPago="
 				+ tvReporteCajaFormaPago + "]";
+	}
+
+
+
+
+
+	public Double getTotalReintegro() {
+		return totalReintegro;
+	}
+
+
+
+
+
+	public void setTotalReintegro(Double totalReintegro) {
+		this.totalReintegro = totalReintegro;
 	}
 	
 	

@@ -126,6 +126,7 @@ public class VentasServiceImpl implements VentasService {
 		for (int i= 0 ; i < ventaDto.getListaValidada().size(); i++) {
 
 			TwVentasProducto twVentaProducto = new TwVentasProducto();
+			TwProductobodega twProductobodega=new TwProductobodega();
 
 			twVentaProducto.setnIdVenta(ventaRegistrada.getnId());
 			twVentaProducto.setnIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
@@ -138,6 +139,20 @@ public class VentasServiceImpl implements VentasService {
 			twVentaProducto.setnTotalPartida(utils.truncarDecimales(twVentaProducto.getnPrecioPartida() + twVentaProducto.getnIvaPartida()));
 			twVentaProducto.setnEstatusEntregaAlmacen(0);
 			twVentaProducto.setnIdUsuario(ventaDto.getIdUsuario());
+			twVentaProducto.setnEstatus(1);
+			/*condición de entrega*/
+			
+			twProductobodega=productoBodegaRepository.obtenerProductoBodega(ventaDto.getListaValidada().get(i).getnIdProducto(), "LOCAL");
+			
+			if(twProductobodega.getnCantidad()!=null) {
+				if(twProductobodega.getnCantidad()>=ventaDto.getListaValidada().get(i).getnCantidad()) {
+					twVentaProducto.setsCondicionEntrega("ENTREGA INMEDIATA");					
+				}
+				if(twProductobodega.getnCantidad()<ventaDto.getListaValidada().get(i).getnCantidad()) {
+					twVentaProducto.setsCondicionEntrega("TRASPASO DE MERCANCIA");					
+				}
+				
+			}
 			
 			TwVentasProducto twVentaProductoNew = new TwVentasProducto();
 
