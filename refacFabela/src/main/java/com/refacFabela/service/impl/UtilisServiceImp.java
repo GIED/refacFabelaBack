@@ -28,6 +28,7 @@ public TcProducto calcularPrecio(TcProducto tcProducto){
 		tcProducto.setnPrecioPeso(precioPeso);
 		tcProducto.setnPrecioSinIva(precioPeso+(precioPeso*ganancia));
 		tcProducto.setnPrecioConIva((precioPeso+(precioPeso*ganancia))+((precioPeso+(precioPeso*ganancia))*iva));
+		tcProducto.setnPrecioIva((precioPeso+(precioPeso*ganancia))*iva);
 		
 		System.out.println("El precio peso es "+precioPeso);
 		System.out.println("El objeto completo es "+tcProducto);
