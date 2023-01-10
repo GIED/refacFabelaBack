@@ -45,11 +45,24 @@ public class CotizacionController {
 	public List<TwCotizacionesDetalle> consultaCotizaciones() {
 
 		try {
-			//cotizacionService.guardaCorizacion(listaCotizacion);
+			
 			return cotizacionService.consultaCotizaciones();
 		} catch (Exception e) {
 
-			logger.error("Error al guardar la cotización" + e);
+			logger.error("Error al consultar las cotizaciones" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/consultaCotizacionesLike")
+	public List<TwCotizacionesDetalle> consultaCotizacionesLike(@RequestParam String buscar) {
+
+		try {
+		
+			return cotizacionService.consultaCotizacionesLike(buscar);
+		} catch (Exception e) {
+
+			logger.error("Error al consultar las cotizaciones de la palabra clabe" + e);
 		}
 		return null;
 	}

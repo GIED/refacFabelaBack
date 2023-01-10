@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#000000">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#E6CFCF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F8F3F3"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#000000">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#E6CFCF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F8F3F3"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#000000">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#E6CFCF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 5">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TH" mode="Opaque" backcolor="#000000">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_CH" mode="Opaque" backcolor="#E6CFCF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TH" mode="Opaque" backcolor="#000000">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_CH" mode="Opaque" backcolor="#E6CFCF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7">
+		<box>
+			<pen lineWidth="1.0" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 7_TH" mode="Opaque" backcolor="#000000">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 7_CH" mode="Opaque" backcolor="#E6CFCF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 7_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 8">
+		<box>
+			<pen lineWidth="1.0" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 8_TH" mode="Opaque" backcolor="#000000">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 8_CH" mode="Opaque" backcolor="#E6CFCF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 8_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 9">
+		<box>
+			<pen lineWidth="1.0" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 9_TH" mode="Opaque" backcolor="#000000">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 9_CH" mode="Opaque" backcolor="#E6CFCF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 9_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FEFEFE"/>
+		</box>
+	</style>
+	<style name="table 10">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 10_TH" mode="Opaque" backcolor="#000000">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 10_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 10_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="listaPedidoProducto" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
+		<field name="noParte" class="java.lang.String"/>
+		<field name="producto" class="java.lang.String"/>
+		<field name="fechaPedido" class="java.lang.String"/>
+		<field name="fechaRecibida" class="java.lang.String"/>
+		<field name="cantidad" class="java.lang.Integer"/>
+		<field name="precio" class="java.lang.Double"/>
+		<field name="estatus" class="java.lang.String"/>
+		<field name="proveedor" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="dataset1" uuid="f52220f7-c836-4a3d-a11b-ed049381aa5f"/>
+	<parameter name="listaPedidoProducto" class="java.util.List" isForPrompting="false"/>
+	<parameter name="logo" class="java.lang.Object"/>
+	<parameter name="nombreEmpresa" class="java.lang.String"/>
+	<parameter name="rfcEmpresa" class="java.lang.String"/>
+	<parameter name="fecha" class="java.lang.String"/>
+	<parameter name="qr" class="java.lang.Object"/>
+	<parameter name="usuario" class="java.lang.String"/>
+	<parameter name="id" class="java.lang.Long"/>
+	<parameter name="clave" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="114" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="128" y="74" width="272" height="20" uuid="61b2d64d-ac46-4fd4-b78f-f797870e8aee"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="128" y="42" width="272" height="12" uuid="1a75ac5a-ee45-43c5-85b7-f80489ecb76e"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{rfcEmpresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="128" y="30" width="272" height="12" uuid="b60ff935-5ef7-44a0-8e1f-3dc6ddef3e70"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[JESUS ALEJANDRO FABELA MARTINEZ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="128" y="10" width="272" height="20" uuid="84f6d898-dee9-4327-aea4-cfa49dee4e5f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Georgia" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nombreEmpresa}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="128" y="54" width="272" height="20" uuid="36afb027-a8ef-4448-9a31-a3e06305bacc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Georgia" size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Usuario]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="10" width="128" height="75" uuid="f4c729d6-c749-40e0-ac03-8baa18ad53b2"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="422" y="62" width="132" height="16" uuid="51934318-e94d-40ac-8804-58e0f62879a0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[LUGAR DE EXPEDICIÓN]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="422" y="46" width="132" height="16" uuid="56f27b58-bb8b-464c-8865-53c231982582"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="423" y="78" width="132" height="16" uuid="f23e8d6c-a9dd-4052-a95a-35f6f6ebb183"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Toluca de Lerdo, México]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="422" y="30" width="132" height="16" uuid="5132774c-e159-47b4-a91d-5685b51c87f6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA DE EMISIÓN]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="422" y="16" width="132" height="16" uuid="9df6eea0-e310-469b-889e-744c55ac4640"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PD-"+$P{id}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="422" y="0" width="132" height="16" uuid="46621689-9376-4c45-8c87-5e767ae4f64d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FOLIO DEL PEDIDO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="41" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="0" width="554" height="18" forecolor="#060607" backcolor="#010101" uuid="e81e0e49-22b9-48cd-8739-a0d14d64359f"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="440" y="19" width="114" height="22" forecolor="#FFFFFF" uuid="18b0ae8d-9414-4371-b778-9b069536b412"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Estatus]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="0" width="554" height="18" forecolor="#F3F1F1" uuid="c8c96e35-8e64-480b-877c-f65667cb2212"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Georgia" size="8" isBold="false" isItalic="false" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[LISTA DE PRODUCTOS]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="64" y="18" width="82" height="21" forecolor="#04115F" backcolor="#010101" uuid="6a705bbf-fafc-4786-bc02-ac49718d74ae"/>
+				<graphicElement>
+					<pen lineColor="#C7C7C7"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="18" width="62" height="21" forecolor="#04115F" backcolor="#010101" uuid="a355d19d-6cf5-4e6f-a854-5eb2d9774ddb"/>
+				<graphicElement>
+					<pen lineColor="#C7C7C7"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="147" y="18" width="112" height="21" forecolor="#04115F" backcolor="#010101" uuid="9d082597-f5ce-441c-8b75-145d1b5ce1a3"/>
+				<graphicElement>
+					<pen lineColor="#C7C7C7"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="259" y="18" width="75" height="21" forecolor="#04115F" backcolor="#010101" uuid="42c4d09a-adcf-4259-9fa0-2bd99b5ecd19"/>
+				<graphicElement>
+					<pen lineColor="#C7C7C7"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="334" y="18" width="106" height="21" forecolor="#04115F" backcolor="#010101" uuid="fd24a529-f2fb-45ff-9953-c34d036322fa"/>
+				<graphicElement>
+					<pen lineColor="#C7C7C7"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="17" width="63" height="21" forecolor="#FEFEFE" uuid="a3a46877-a83f-40c4-b6a5-a20a22c455e4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
+				</textElement>
+				<text><![CDATA[No. Parte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="64" y="18" width="82" height="21" forecolor="#FFFFFF" uuid="bde950f5-ce12-41c7-af29-4adcb816ee40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="18" width="106" height="22" forecolor="#FFFFFF" uuid="d5590ab2-da2c-4119-8cec-1725d3869414"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Estatus]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="18" width="75" height="22" forecolor="#FFFFFF" uuid="c1366e5f-dc4f-4b48-99f0-997e97bc516d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Cantidad Pedida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="147" y="18" width="112" height="22" forecolor="#FFFFFF" uuid="b2ec9321-2d2c-4461-bf92-6738d27110eb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Fecha de Pedido]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="441" y="18" width="114" height="22" forecolor="#04115F" backcolor="#010101" uuid="8327610f-31b1-45f7-97d8-eba6d5c7a8cb"/>
+				<graphicElement>
+					<pen lineColor="#C7C7C7"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="441" y="18" width="113" height="22" forecolor="#FEFEFE" uuid="c131e518-c6a1-41e9-af25-a8951c5c992b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Proveedor]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="179" splitType="Stretch">
+			<componentElement>
+				<reportElement x="0" y="0" width="554" height="36" uuid="a12f25d1-6161-4d82-8b20-5a35b295493d"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="listaPedidoProducto" uuid="7139d9ee-3ec4-4008-9e5b-12b3979364f7">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaPedidoProducto})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="36" width="554">
+						<rectangle>
+							<reportElement x="1" y="1" width="62" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="48345741-c272-4380-9e40-ac8abb639156"/>
+							<graphicElement>
+								<pen lineColor="#C7C7C7"/>
+							</graphicElement>
+						</rectangle>
+						<rectangle>
+							<reportElement x="64" y="1" width="82" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="977f42d9-ef1c-47d4-b98e-653b6f3fdf14"/>
+							<graphicElement>
+								<pen lineColor="#C7C7C7"/>
+							</graphicElement>
+						</rectangle>
+						<rectangle>
+							<reportElement x="147" y="1" width="112" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="ceb5a9b6-720e-4eee-becd-987be5c2f893"/>
+							<graphicElement>
+								<pen lineColor="#C7C7C7"/>
+							</graphicElement>
+						</rectangle>
+						<rectangle>
+							<reportElement x="259" y="0" width="75" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="1733a4e2-aca8-492f-989e-696b2be889aa"/>
+							<graphicElement>
+								<pen lineColor="#C7C7C7"/>
+							</graphicElement>
+						</rectangle>
+						<rectangle>
+							<reportElement x="335" y="0" width="105" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="930aa07f-ed94-41fd-a2b3-5815801c1f6c"/>
+							<graphicElement>
+								<pen lineColor="#C7C7C7"/>
+							</graphicElement>
+						</rectangle>
+						<textField>
+							<reportElement x="0" y="0" width="63" height="35" uuid="803bdd01-f59a-4b10-9c93-37d0a8687f1e"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{noParte}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="64" y="1" width="82" height="34" uuid="01ec5021-33f2-4b42-a316-647e642dcdd6"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true">
+							<reportElement x="147" y="1" width="112" height="35" uuid="4c4e8833-99ba-4952-a277-f3feb35d1387"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{fechaPedido}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0.00">
+							<reportElement x="259" y="1" width="75" height="35" uuid="b1c9c4d1-cb43-4eef-bdb8-b9b11c4270e4"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0.00">
+							<reportElement x="335" y="1" width="105" height="35" uuid="430c2048-db60-46f9-b5b5-e8aa394f28fb"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{estatus}]]></textFieldExpression>
+						</textField>
+						<rectangle>
+							<reportElement x="440" y="0" width="114" height="34" forecolor="#04115F" backcolor="#FEFEFE" uuid="c6d2c3ea-f176-43f6-93a8-5dbc43995e95"/>
+							<graphicElement>
+								<pen lineColor="#C7C7C7"/>
+							</graphicElement>
+						</rectangle>
+						<textField>
+							<reportElement x="440" y="1" width="114" height="33" isPrintInFirstWholeBand="true" uuid="084a0f7f-8b3d-4816-8a2c-4dd88a36e04c"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8" isUnderline="false"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{proveedor}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="33" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="20" backcolor="#010101" uuid="24599061-58f7-4661-9c0a-65a5b6b72a61"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20" forecolor="#FEFEFE" uuid="3c04e276-813b-4063-b6b1-88224e0e3fe6"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="183">
+			<image>
+				<reportElement x="0" y="0" width="259" height="147" uuid="f46844c0-a280-4cad-8e25-9583ed2395aa"/>
+				<imageExpression><![CDATA[$P{qr}]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="0" y="157" width="555" height="20" backcolor="#010101" uuid="e1ed1eaf-d4a4-4510-be85-362626007541"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="157" width="555" height="20" forecolor="#FEFEFE" uuid="c80f4abc-31c3-43c2-ba09-cd1ecbd38eb1"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

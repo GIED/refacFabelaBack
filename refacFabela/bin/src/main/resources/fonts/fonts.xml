@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<fontFamilies>
+
+    <fontFamily name="Helvetica">
+        <normal><![CDATA[fonts/Helvetica.ttf]]></normal>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+    </fontFamily>
+    
+    <fontFamily name="Georgia">
+        <normal><![CDATA[fonts/Georgia.ttf]]></normal>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+    </fontFamily>
+
+</fontFamilies>

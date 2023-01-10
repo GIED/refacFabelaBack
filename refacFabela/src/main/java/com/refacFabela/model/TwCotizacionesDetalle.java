@@ -32,7 +32,7 @@ public class TwCotizacionesDetalle implements Serializable {
 	private String sFolioCotizacion;
 	
 	@Column(name = "n_totalCotizacion")
-	private double nTotalCotizacion;
+	private Double nTotalCotizacion;
 	
 	@Column(name = "n_vigencia")
 	private int nVigencia;
@@ -117,11 +117,11 @@ public class TwCotizacionesDetalle implements Serializable {
 
 	
 
-	public double getnTotalCotizacion() {
+	public Double getnTotalCotizacion() {
 		return nTotalCotizacion;
 	}
 
-	public void setnTotalCotizacion(double nTotalCotizacion) {
+	public void setnTotalCotizacion(Double nTotalCotizacion) {
 		this.nTotalCotizacion = nTotalCotizacion;
 	}
 

@@ -12,6 +12,7 @@ public interface CotizacionService {
 	
 	public TwCotizaciones guardaCorizacion(List<CotizacionDto> listaCotizacion);
 	public List<TwCotizacionesDetalle> consultaCotizaciones();
+	public List<TwCotizacionesDetalle> consultaCotizacionesLike(String buscar);
 	public TwCotizacionesDetalle consultaCotizacionById(Long idCotizacion);
 	public List<TvStockProductoDto> consultaCotizacionId(Long id);
 	public List<TwCotizacionesProducto> consultaCotizacionIdCotizacion(Long id);

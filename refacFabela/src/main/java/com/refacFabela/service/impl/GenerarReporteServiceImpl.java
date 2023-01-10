@@ -472,6 +472,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		 utils util=new utils();				
 		BalanceCajaDto balanceCajaDto= new BalanceCajaDto();	
 		totalReitegros=twVentaProductoCancelaRepository.totalCancela(nIdCaja);
+		totalReitegros=totalReitegros==null?0:totalReitegros;
 	
 		 
 		for (int i = 0; i < trVentasCobro.size(); i++) {			
@@ -508,7 +509,11 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		balanceCajaDto.setFechaInicioCaja(util.formatoFecha(caja.getdFechaApertura()));
 		balanceCajaDto.setTotalIngresoVenta(totalIngresosVenta);
 		balanceCajaDto.setTotalIngresoAbonos(totalIngresosAbono);
-		balanceCajaDto.setTotalGeneralIngresos(totalIngresosVenta+totalIngresosAbono-totalReitegros);
+		System.err.println(balanceCajaDto);
+		System.err.println(totalIngresosVenta);
+		System.err.println(totalIngresosAbono);
+		System.err.println(totalReitegros);
+		balanceCajaDto.setTotalGeneralIngresos(totalIngresosVenta+totalIngresosAbono-totalReitegros);	
 		balanceCajaDto.setTotalVentas(totalVentaCaja);
 		balanceCajaDto.setNoVentas(trReporteDetalleVentas.size());
 		balanceCajaDto.setNoAbonos(twAbono.size());
@@ -520,6 +525,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		balanceCajaDto.setTvReporteDetalleVenta(trReporteDetalleVentas);
 		balanceCajaDto.setTvReporteCajaFormaPago(tvReporteCajaFormaPago);
 		balanceCajaDto.setTotalReintegro(totalReitegros);
+		
+		
 
 
 

@@ -78,7 +78,7 @@ public class CotizacionServiceImpl implements CotizacionService {
 	@Override
 	public List<TwCotizacionesDetalle> consultaCotizaciones() {
 		
-		return twCotizacionesRepository.findAll();
+		return twCotizacionesRepository.findByBuscar2();
 		
 	}
 	
@@ -123,6 +123,13 @@ public class CotizacionServiceImpl implements CotizacionService {
 	public List<TwCotizacionesProducto> consultaCotizacionIdCotizacion(Long id) {
 		// TODO Auto-generated method stub
 		return cotizacionProductoRepository.findBynIdCotizacion(id);
+	}
+
+	@Override
+	public List<TwCotizacionesDetalle> consultaCotizacionesLike(String buscar) {
+		
+	
+	 	return this.twCotizacionesRepository.findByBuscar(buscar);
 	}
 
 
