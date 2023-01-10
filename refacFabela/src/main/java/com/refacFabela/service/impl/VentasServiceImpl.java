@@ -106,12 +106,20 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setnTipoPago(ventaDto.getTipoPago().longValue());
 		twVenta.setdFechaInicioCredito(ventaDto.getFechaIniCredito());
 		twVenta.setdFechaTerminoCredito(ventaDto.getFechaFinCredito());
+		System.err.println(ventaDto.getTipoPago());
+				
 		twVenta.setdFechaVenta(utils.fechaSistema);
 		if (twVenta.getnIdTipoVenta() == 2L) {
 			twVenta.setnIdEstatusVenta(2L);
 		}else {
 			twVenta.setnIdEstatusVenta(1L);			
 		}
+		
+		if(ventaDto.getTipoPago()==1L){
+			twVenta.setnIdEstatusVenta(2L);
+			
+		}	
+		
 		twVenta.setnIdFacturacion(0L);
 		twVenta.setnIdCaja(utils.cajaActivaId(cajaRepository.obtenerCajaVigente()));
 		twVenta.setnIdCotizacion(ventaDto.getTwCotizacion().getnId());
