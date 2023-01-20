@@ -114,7 +114,7 @@ public class TcProducto implements Serializable {
 //	@OneToMany(mappedBy="tcProducto")
 //	private List<TwPedido> twPedidos;
 //
-//	//bi-directional many-to-one association to TwProductobodega
+	//bi-directional many-to-one association to TwProductobodega
 //	@OneToMany(mappedBy="tcProducto")
 //	private List<TwProductobodega> twProductobodegas;
 //

@@ -19,10 +19,10 @@ public interface ProductosRepository extends JpaRepository<TcProducto, Long> {
 	public List<TcProducto> findBynEstatus(int estatus);
 	
 	
-	@Query("Select c from TcProducto c where c.sNoParte like %:producto% or c.sProducto like %:producto% or c.sDescripcion like %:producto%")
+	@Query("Select c from TcProducto c where c.sNoParte like %:producto% or c.sProducto like %:producto% or c.sDescripcion like %:producto% or c.sMarca like %:producto% order by c.sMarca asc ")
 	public List<TcProducto> ConsultaProductoLike(String producto);
 	
-	@Query("Select c from TcProducto c where c.sNoParte like %:No_Parte% or c.sProducto like %:No_Parte% or c.sDescripcion like %:No_Parte%")
+	@Query("Select c from TcProducto c where c.sNoParte like %:No_Parte% or c.sProducto like %:No_Parte% or c.sDescripcion like %:No_Parte% or c.sMarca like %:No_Parte% order by c.sMarca asc")
 	public List<TcProducto> ConsultaNoParteLike(String No_Parte);
 	
 	public TcProducto findBynId(Long nId);
