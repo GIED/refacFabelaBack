@@ -81,6 +81,7 @@ public class VentasServiceImpl implements VentasService {
 
 		return ventasRepository.findAll();
 	}
+	
 
 	@Override
 	public List<TvVentaDetalle> consultaVentaDetalleId(Long nIdCliente, Long nTipoPago) {
@@ -508,6 +509,20 @@ public class VentasServiceImpl implements VentasService {
 	@Override
 	public List<TvVentasFactura> consultaVentasParaFactura() {
 				return this.VentasFacturaRepository.obtenerFacturas();
+	}
+
+
+	@Override
+	public List<TvVentaDetalle> consultaVentaslike(String buscar) {
+	
+		return tvVentaDetalleRepository.findByLike(buscar);
+	}
+
+
+	@Override
+	public List<TvVentaDetalle> consultaVentasTop() {
+		
+		return tvVentaDetalleRepository.findByTop();
 	}
 
 	

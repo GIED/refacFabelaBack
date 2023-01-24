@@ -54,6 +54,31 @@ public class VentasController {
 		}
 		return null;
 	}
+	@GetMapping("/obtenerVentaslike")
+	public List<TvVentaDetalle> consultaVentasLike(@RequestParam() String buscar) {
+		try {
+
+			return ventasService.consultaVentaslike(buscar.toUpperCase());
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener ventas Like " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerVentasTop")
+	public List<TvVentaDetalle> consultaVentasTop() {
+		try {
+
+			return ventasService.consultaVentasTop();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener ventas Top " + e);
+		}
+		return null;
+	}
 	
 	@GetMapping("/obtenerVentaId")
 	public TwVenta consultaVentasId(@RequestParam() Long nIdVenta) {

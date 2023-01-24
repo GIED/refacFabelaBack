@@ -12,6 +12,8 @@ import com.refacFabela.model.TwVenta;
 public interface VentasService {
 
 	public List<TwVenta> consltaVentas();
+	public List<TvVentaDetalle> consultaVentaslike(String buscar);
+	public List<TvVentaDetalle> consultaVentasTop();
 	public TwVenta consltaVentasId(Long nIdVenta);
 	public TwVenta consltaVentasIdCotizacion(Long nIdCotizacion);
 	public List<TvVentaDetalle> consultaVentaDetalle();
