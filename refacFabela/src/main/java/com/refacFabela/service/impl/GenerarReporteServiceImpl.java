@@ -122,7 +122,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 			reporte.setCantidad(twCotizacionesProducto.getnCantidad());
 			reporte.setNoIdentificacion(twCotizacionesProducto.getTcProducto().getnId());
-			reporte.setNombreProducto(twCotizacionesProducto.getTcProducto().getsDescripcion());
+			reporte.setNombreProducto(twCotizacionesProducto.getTcProducto().getsProducto());
 			reporte.setClaveSat(twCotizacionesProducto.getTcProducto().getTcClavesat().getsClavesat());
 			reporte.setPrecioUnitario(util.truncarDecimales(twCotizacionesProducto.getnTotalUnitario()));
 			reporte.setImporte(util.truncarDecimales(twCotizacionesProducto.getnTotalPartida()));
@@ -181,7 +181,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 			reporte.setCantidad(twVentaProducto.getnCantidad());
 			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
-			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsDescripcion());
+			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsProducto());
 			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
 			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnTotalUnitario()));
 			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnTotalPartida()));
@@ -231,7 +231,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			
 			reporte.setCantidad(twVentaProducto.getnCantidad());
 			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
-			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsDescripcion());
+			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsProducto());
 			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
 			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnTotalUnitario()));
 			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnTotalPartida()));
