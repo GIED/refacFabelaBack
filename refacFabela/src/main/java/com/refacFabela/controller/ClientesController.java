@@ -90,6 +90,18 @@ public class ClientesController {
 
 		return null;
 	}
+	@GetMapping("consultaClienteRfc")
+	public TcCliente consultaClienteRfc(HttpServletResponse response, @RequestParam() String clienteBuscar) {
+
+		try {
+			return clienteService.consultaClienteRfc(clienteBuscar.toUpperCase());
+
+		} catch (Exception e) {
+			logger.error("Error al consultar cliente" + e);
+		}
+
+		return null;
+	}
 
 	@GetMapping("eliminaClienteId")
 	public String eliminarClienteId(HttpServletResponse response, @RequestParam() Long id) {

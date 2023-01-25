@@ -58,8 +58,12 @@ public class ClientesServiceImp implements ClienteService {
 
 	@Override
 	public String eliminarClienteId(Long id) {
+		
+		TcCliente cliente = new TcCliente();
+		cliente=clientesRepository.findBynIdUsuario(id);
+		cliente.setnEstatus(0);
 	
-		clientesRepository.deleteById(id);
+		clientesRepository.save(cliente);
 		return "Cliente Eliminado";
 	}
 
