@@ -1,6 +1,7 @@
 package com.refacFabela.repository;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,15 +16,12 @@ public interface UsuariosRepository extends JpaRepository<TcUsuario, Long> {
 
 	
 	@Query("Select e from TcUsuario e where e.nId= :nIdUsuario")
-	public TcUsuario obtenerUsuario(Long nIdUsuario);
-
-	
+	public TcUsuario obtenerUsuario(Long nIdUsuario);	
+	@Query("Select e from TcUsuario e where e.sUsuario= :usuario")
+	public TcUsuario obtenerUsuarioNombre(String usuario);	
 	Optional<TcUsuario> findBysUsuario(String nombreUsuario);
+	@Query("Select e from TcUsuario e where e.nEstatus=1")
+	public List<TcUsuario> obtenerUsuariosActivos();
 	
-	/**
-	 * consulta si existe el nombre de usuario
-	 * @param nombreUsuario
-	 * @return
-	 */
 	boolean existsBysUsuario(String usuario);
 }

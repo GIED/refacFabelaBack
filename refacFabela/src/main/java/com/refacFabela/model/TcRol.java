@@ -51,6 +51,11 @@ public class TcRol {
 	public void setsRol(RolNombre sRol) {
 		this.sRol = sRol;
 	}
+
+	@Override
+	public String toString() {
+		return "TcRol [nId=" + nId + ", sRol=" + sRol + "]";
+	}
 	
 	
 	

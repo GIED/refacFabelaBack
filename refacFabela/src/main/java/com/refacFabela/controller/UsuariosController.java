@@ -76,9 +76,10 @@ public class UsuariosController {
 			
 		}
 		
-//		if (usuarioService.existsByNombreUsuario(nuevoUsuario.getsUsuario())) {
-//			return new ResponseEntity<>(new Mensaje("ese nombre de usuario ya existe"), HttpStatus.BAD_REQUEST);
-//		}
+		
+		if (usuarioService.existsByNombreUsuario(nuevoUsuario.getsUsuario())) {
+	return new ResponseEntity<>(new Mensaje("ese nombre de usuario ya existe"), HttpStatus.BAD_REQUEST);
+	}
 		
 		
 		usuarioService.save(nuevoUsuario);
@@ -88,9 +89,10 @@ public class UsuariosController {
 	}
 
 	@PostMapping("/guardarUsuario")
-	public TcUsuario guardarUsuario(@RequestBody TcUsuario tcUsuario) {
+	public NuevoUsuario guardarUsuario(@RequestBody NuevoUsuario tcUsuario) {
 		try {
-
+		
+             
 			return usuarioService.guardaUsuario(tcUsuario);
 
 		} catch (Exception e) {

@@ -10,7 +10,7 @@ public interface UsuarioService {
 
 	public List<TcUsuario> obtenerUsuarios();
 	public TcUsuario consultaUsuario(Long id);
-	public TcUsuario guardaUsuario(TcUsuario tcUsuario);
+	public NuevoUsuario guardaUsuario(NuevoUsuario tcUsuario);
 	public String eliminarUsuario(Long id);
 	
 	public Optional<TcUsuario> getByNombreUsuario(String usuario);

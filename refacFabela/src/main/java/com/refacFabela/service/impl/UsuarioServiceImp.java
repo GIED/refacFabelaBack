@@ -40,7 +40,7 @@ public class UsuarioServiceImp implements UsuarioService {
 	@Override
 	public List<TcUsuario> obtenerUsuarios() {
 
-		return usuarioRepository.findAll();
+		return usuarioRepository.obtenerUsuariosActivos();
 	}
 
 	@Override
@@ -50,9 +50,30 @@ public class UsuarioServiceImp implements UsuarioService {
 	}
 
 	@Override
-	public TcUsuario guardaUsuario(TcUsuario tcUsuario) {
-
-		return usuarioRepository.save(tcUsuario);
+	public NuevoUsuario guardaUsuario(NuevoUsuario tcUsuario) {
+		
+		TcUsuario usu = usuarioRepository.obtenerUsuarioNombre(tcUsuario.getsUsuario());
+		
+		usu.setsNombreUsuario(tcUsuario.getsNombreUsuario());
+		usu.setsPassword(passwordEncoder.encode(tcUsuario.getsPassword()));	
+		usu.setRoles(asignaRol(tcUsuario));
+		if(tcUsuario.getnEstatus().equals(0)) {
+			usu.setnEstatus(0);
+		}
+		System.err.println(tcUsuario);
+		usu=usuarioRepository.save(usu);
+		
+		
+		NuevoUsuario nuevoUsuario=new NuevoUsuario();
+		nuevoUsuario.setsUsuario(usu.getsUsuario());
+		nuevoUsuario.setsNombreUsuario(usu.getsNombreUsuario());
+		nuevoUsuario.setsPassword(usu.getsPassword());
+		nuevoUsuario.setsClaveUser(usu.getsClaveUser());
+		nuevoUsuario.setnEstatus(usu.getnEstatus());
+		nuevoUsuario.setRoles(tcUsuario.getRoles());		
+		
+		
+		return nuevoUsuario;
 	}
 
 	@Override
@@ -82,6 +103,8 @@ public class UsuarioServiceImp implements UsuarioService {
 		
 		TcUsuario newUsuario = usuarioRepository.save(usuario); 
 		
+		
+		
 		if (!nuevoUsuario.getRfcDistribuidor().equals("no aplica")) {
 			
 			TcCliente tcCliente= this.clienteService.consultaClienteRfc(nuevoUsuario.getRfcDistribuidor());
@@ -102,7 +125,8 @@ public class UsuarioServiceImp implements UsuarioService {
 		if (nuevoUsuario.getRoles().contains("admin")){
 			roles.add(rolService.getByRolNombre(RolNombre.ROLE_ADMIN).get());
 		}
-		if (nuevoUsuario.getRoles().contains("venta")){
+		if (nuevoUsuario.getRoles().contains("ventas")){
+			
 			roles.add(rolService.getByRolNombre(RolNombre.ROLE_VENTA).get());
 		}
 		if (nuevoUsuario.getRoles().contains("distribuidor")){
