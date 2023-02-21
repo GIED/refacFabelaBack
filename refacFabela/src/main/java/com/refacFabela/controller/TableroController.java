@@ -8,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TvTotalesGeneralesTablero;
+import com.refacFabela.model.VwVentaMesAno;
+import com.refacFabela.model.VwVentaProductoAno;
 import com.refacFabela.service.TableroService;
 
 @RestController
@@ -27,6 +31,32 @@ public class TableroController {
 		try {
 
 			return tableroService.consultaTotalesTablero();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener datos generales " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/totales-por-mes-ano")
+	public List<VwVentaMesAno> consultaVentasMesAno(@RequestParam String ano) {
+		try {
+
+			return tableroService.consultaVentaMesAno(ano);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener datos generales " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/total_venta_producto-ano")
+	public List<VwVentaProductoAno> consultaVentasProductoAno(@RequestParam String ano) {
+		try {
+
+			return tableroService.consultaVentaProductoAno(ano);
 
 		} catch (Exception e) {
 
