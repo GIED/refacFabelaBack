@@ -51,6 +51,8 @@ public class UsuariosController {
 
 		return null;
 	}
+	
+	
 
 	@GetMapping("/consultarUsuarioId")
 	public TcUsuario consultaUsuarioId(HttpServletResponse response, @RequestParam() Long id) {

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.refacFabela.model.TvTotalesGeneralesTablero;
 import com.refacFabela.model.VwVentaMesAno;
 import com.refacFabela.model.VwVentaProductoAno;
+import com.refacFabela.model.VwVentasAnoMesVendedores;
+import com.refacFabela.model.VwVentasAnoVendedor;
 import com.refacFabela.repository.TableroTotalesGeneralesRepository;
 import com.refacFabela.repository.VwVentaProductoRepository;
 import com.refacFabela.service.TableroService;
@@ -38,6 +40,18 @@ public class TableroServiceImpl implements TableroService {
 	public List<VwVentaProductoAno> consultaVentaProductoAno(String ano) {
 		
 		return vwVentaProductoRepository.obtenerVentaProductoAno(ano);
+	}
+
+	@Override
+	public List<VwVentasAnoVendedor> consultaVentaAnoVendedor(String ano) {
+		
+		return tableroTotalesGeneralesRepository.obtenerVentaAnoVendedor(ano);
+	}
+
+	@Override
+	public List<VwVentasAnoMesVendedores> consultaVentaAnoMesVendedor(String ano, Long id) {
+		
+		return tableroTotalesGeneralesRepository.obtenerVentaAnoMesVendedor(ano, id);
 	}
 	
 	

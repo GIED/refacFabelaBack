@@ -16,6 +16,8 @@ import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TvTotalesGeneralesTablero;
 import com.refacFabela.model.VwVentaMesAno;
 import com.refacFabela.model.VwVentaProductoAno;
+import com.refacFabela.model.VwVentasAnoMesVendedores;
+import com.refacFabela.model.VwVentasAnoVendedor;
 import com.refacFabela.service.TableroService;
 
 @RestController
@@ -61,6 +63,32 @@ public class TableroController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener datos generales " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/total_venta_ano_vendedor")
+	public List<VwVentasAnoVendedor> consultaVentasAnoVendedor(@RequestParam String ano) {
+		try {
+
+			return tableroService.consultaVentaAnoVendedor(ano);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener datos de venta del año de los vendedores" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/total_venta_ano_mes_vendedor")
+	public List<VwVentasAnoMesVendedores> consultaVentasAnoMesVendedor(@RequestParam String ano, @RequestParam Long id) {
+		try {
+
+			return tableroService.consultaVentaAnoMesVendedor(ano, id);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener datos de venta del año de los vendedores" + e);
 		}
 		return null;
 	}
