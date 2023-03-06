@@ -46,7 +46,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 		
 		try {
 			
-			System.out.println("llego");
+			//System.out.println("llego");
 			
 			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);
 			List<TwVentasProducto> productosVendidos = this.ventasProductoRepository.findBynIdVenta(idVenta);

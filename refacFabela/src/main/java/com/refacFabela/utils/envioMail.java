@@ -49,7 +49,7 @@ public class envioMail  {
 		  
 	
 		 		 
-		 correo="fabelapedro@gmail.com";
+		// correo="fabelapedro@gmail.com";
 		 String error="";
 		     
 	      Properties properties = new Properties();
