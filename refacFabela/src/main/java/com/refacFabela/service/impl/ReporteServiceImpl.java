@@ -213,6 +213,79 @@ public class ReporteServiceImpl implements ReporteService {
 	      return null;
 	}
 	
+	@Override
+	public byte[] generaVentaAlmacenPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto, double totalAbono) {
+		try {
+			String ruta="";
+			System.err.println("LLEGUE A GENERAR EL ARCHIVO ");
+			
+				ruta="/reports/plantillas/ventaAlmacen.jrxml";
+		
+			
+			utils util= new utils();
+			
+			
+			
+	         Resource resource = new ClassPathResource(ruta);
+	         final Map<String, Object> params = new HashMap<>();
+	         File pdfFile = null;
+	         String nombreArchivo = "venta_"+reporteVenta.getFolioVenta();
+	         pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + "_almacen.pdf");
+	        
+	         String fechaVencimiento=util.sumarRestarDiasFecha(reporteVenta.getFecha(), 30);
+
+	         
+	         //aqui van los parametros
+	         params.put("logo", this.imagenHeader);
+	         params.put("nombreEmpresa", reporteVenta.getNombreEmpresa());
+	         params.put("rfcEmpresa", reporteVenta.getRfcEmpresa());
+	         params.put("nombreCliente", reporteVenta.getNombreCliente());
+	         params.put("rfcCliente", reporteVenta.getRfcCliente());
+	         params.put("folioVenta", reporteVenta.getFolioVenta());
+	         params.put("fecha", reporteVenta.getFecha());
+	         params.put("subTotal", reporteVenta.getSubTotal());
+	         params.put("ivaTotal", reporteVenta.getIvaTotal());
+	         params.put("total", reporteVenta.getTotal() - reporteVenta.getDescuento()-totalAbono);
+	         params.put("listaProductos", listaProducto);
+	         params.put("descuento", reporteVenta.getDescuento());
+	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal()+"\nTotal de productos: "+ listaProducto.size()).toString()));
+	         params.put("fechaVencimiento", fechaVencimiento);
+	     	
+	         
+	         
+	         
+	         
+	         
+	         // InputStream ligado al reporte
+	         InputStream inputStreamReport = resource.getInputStream();
+	         FileOutputStream pos = new FileOutputStream(pdfFile);
+	         JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
+	         JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reporteVenta)), pos);
+
+	         // Cierre de output stream
+	         pos.flush();
+	         pos.close();
+
+	         // Se recuperan los bytes correspondientes al reporte
+	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+	         
+	         //envió de correo
+	        
+
+	         //Eliminar el archivo generado
+	        
+	        	 pdfFile.delete();
+	         
+	         
+
+	         return bytesReporte;
+	      } catch (Exception e) {
+	         logger.error("Error en metodo generaVentaPDF(). Error al generar la venta con id: " + reporteVenta.getFolioVenta(), e);
+	      }
+
+	      return null;
+	}
+	
 	public byte[] generaAbonoVentaPDF(ReporteVentaDto reporteVenta, List<AbonosDto> listaAbono, double abonos) {
 		try {
 			String ruta="";

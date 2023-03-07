@@ -15,7 +15,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tw_histroriaPrecioProd")
+@Table(name = "tw_histroriaprecioprod")
 @NamedQuery(name = "TcHistoriaPrecioProducto.findAll", query = "SELECT t FROM TcHistoriaPrecioProducto t")
 public class TcHistoriaPrecioProducto implements Serializable {
 	private static final long serialVersionUID = 1L;

@@ -47,6 +47,18 @@ public class ReportesController {
 		}
 	}
 	
+	@GetMapping(value = "/getVentaAlmacen")
+	public @ResponseBody byte[] getVentaAlmacen(HttpServletResponse response, @RequestParam(required = false) Long nIdVenta) {
+		
+		// genera el pdf con la venta guardada
+		try {
+			return generaReporteService.getVentaAlmacenPDF(nIdVenta);
+		} catch (Exception e) {
+			logger.error("Error al generar la venta almacen ", e);
+			return null;
+		}
+	}
+	
 	@GetMapping(value = "/getVentaPedido")
 	public @ResponseBody byte[] getVentaPedido(HttpServletResponse response, @RequestParam(required = false) Long nIdVentaPedido) {
 		

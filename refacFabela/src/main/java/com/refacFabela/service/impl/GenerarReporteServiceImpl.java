@@ -31,6 +31,7 @@ import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwCotizacionesProducto;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
+import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwVentaProductoCancela;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
@@ -38,6 +39,7 @@ import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.CotizacionProductoRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
+import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvReporteCajaFormaPagoRepository;
 import com.refacFabela.repository.TvReporteDetalleVentaRepository;
@@ -90,6 +92,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	public UsuariosRepository usuariosRepository;
 	@Autowired
 	public TwVentaProductoCancelaRepository  twVentaProductoCancelaRepository;
+	
+	@Autowired
+	public  ProductoBodegaRepository  productoBodegaRepository;
 	
 	
 
@@ -201,6 +206,79 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		return reporteService.generaVentaPDF(reporteVenta, listaProducto, totalAbonos);
 	}
+	
+	
+	@Override
+	public byte[] getVentaAlmacenPDF(Long nIdVenta) {
+
+		List<TwVentasProducto> listaProductos = ventasProductoRepository.findBynIdVenta(nIdVenta);
+		List<TwAbono> listaAbonos=abonoVentaIdRepository.findBynIdVenta(nIdVenta);
+		utils util=new utils();
+
+		ReporteVentaDto reporteVenta = new ReporteVentaDto();
+
+		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
+		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
+		reporteVenta.setNombreCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRazonSocial());
+		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
+		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
+		reporteVenta.setFecha(listaProductos.get(0).getTwVenta().getdFechaVenta());
+		reporteVenta.setTipoPago(listaProductos.get(0).getTwVenta().getnTipoPago());
+		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
+		
+
+		List<ReporteVentaDto> listaProducto = new ArrayList<ReporteVentaDto>();
+
+		double subtotal = 0.0;
+		double iva = 0.0;
+		double totalAbonos=0.0;
+		
+		for(TwAbono twAbono: listaAbonos) {
+			
+			totalAbonos= totalAbonos+twAbono.getnAbono();
+			
+		}
+		
+
+		for (TwVentasProducto twVentaProducto : listaProductos) {
+
+			ReporteVentaDto reporte = new ReporteVentaDto();
+			TwProductobodega productoBodega= new TwProductobodega();
+			
+			System.err.println("llegue a generar el archivo de ventas Almacen ");
+			
+			productoBodega=  productoBodegaRepository.obtenerProductoBodega(twVentaProducto.getTcProducto().getnId(),"LOCAL");
+
+			reporte.setCantidad(twVentaProducto.getnCantidad());
+			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
+			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsProducto());
+			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
+			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnTotalUnitario()));
+			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnTotalPartida()));
+			reporte.setDescripcionCatSat(twVentaProducto.getTcProducto().getTcClavesat().getsDescripcion());
+			reporte.setCondicionEntrega(twVentaProducto.getsCondicionEntrega());
+			reporte.setUbicacion(productoBodega.getTcAnaquel().getsAnaquel()+productoBodega.getTcNivel().getsNivel());
+			reporte.setNoParte(twVentaProducto.getTcProducto().getsNoParte());
+			
+			
+			
+			
+		
+
+			listaProducto.add(reporte);
+
+			subtotal = subtotal + twVentaProducto.getnPrecioPartida();
+			iva = iva + twVentaProducto.getnIvaPartida();
+
+		}
+
+		reporteVenta.setSubTotal(util.truncarDecimales(subtotal));
+		reporteVenta.setIvaTotal(util.truncarDecimales(iva));
+		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva));
+
+		return reporteService.generaVentaAlmacenPDF(reporteVenta, listaProducto, totalAbonos);
+	}
+	
 	@Override
 	public byte[] getVentaPedidoPDF(Long nIdVentaPedido) {
 		

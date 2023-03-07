@@ -33,6 +33,8 @@ public class ReporteVentaDto implements Serializable{
 	private Double descuento;
 	private Double abonos;
 	private String condicionEntrega;
+	private String ubicacion;
+	private String noParte;
 	
 	
 	
@@ -207,6 +209,22 @@ public class ReporteVentaDto implements Serializable{
 
 	public void setCondicionEntrega(String condicionEntrega) {
 		this.condicionEntrega = condicionEntrega;
+	}
+
+	public String getUbicacion() {
+		return ubicacion;
+	}
+
+	public void setUbicacion(String ubicacion) {
+		this.ubicacion = ubicacion;
+	}
+
+	public String getNoParte() {
+		return noParte;
+	}
+
+	public void setNoParte(String noParte) {
+		this.noParte = noParte;
 	}
 	
 	
