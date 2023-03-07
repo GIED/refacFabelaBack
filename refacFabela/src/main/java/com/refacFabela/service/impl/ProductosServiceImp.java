@@ -16,6 +16,7 @@ import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.TvVentaDetalleDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcBodega;
+import com.refacFabela.model.TcCatalogogeneral;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TrVentaCobro;
@@ -37,6 +38,7 @@ import com.refacFabela.repository.CatalagoFormaPagoRepository;
 import com.refacFabela.repository.CatalogoAnaquelRepository;
 import com.refacFabela.repository.CatalogoBodegasRepository;
 import com.refacFabela.repository.CatalogoNivelesRepository;
+import com.refacFabela.repository.CatalogosRepository;
 import com.refacFabela.repository.HistoriaPrecioProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ProductoBodegasIdRepository;
@@ -99,6 +101,9 @@ public class ProductosServiceImp implements ProductosService {
 	private TwVentaProductoCancelaRepository twVentaProductoCancelaRepository;
 	@Autowired
 	private CajaRepository cajaRepository;
+	
+	@Autowired
+	private CatalogosRepository catalogosRepository;
 
 
 
@@ -368,10 +373,14 @@ public class ProductosServiceImp implements ProductosService {
 
 
 	public TcProducto calcularNuevoPrecio(TcProducto tcProducto) {
-		
+		System.err.println("entre a calcular el precio");
 		utils util= new utils();
+		TcCatalogogeneral tipoCambio=new TcCatalogogeneral();
 		
-		tcProducto=util.calcularPrecio(tcProducto);
+		tipoCambio=catalogosRepository.findBysClave("ValorCambio");
+		
+		
+		tcProducto=util.calcularPrecio(tcProducto, tipoCambio.getnValor(),0.0,1);
 		
 		
 		return tcProducto;

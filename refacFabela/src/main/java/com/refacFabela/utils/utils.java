@@ -60,12 +60,54 @@ public  class utils {
 	
 	}
 	
-	public TcProducto calcularPrecio(TcProducto tcProducto) {
+	public TcProducto calcularPrecio(TcProducto tcProducto, Double dolar, Double aumento, int cantidad ) {
+		
+		 double precioCal = 0;
+	        double precioPeso = 0;
+	        double precioPesofinalSinIva = 0;
+	        double precioPesofinalIva = 0;
+	        double precio_partida=0;
+	        double iva_partida=0;
+	        double precio_partida_total=0;
+	        double iva=0.16;
+
+	  
+
+	        if (tcProducto.getsMoneda().equals("USD")) {
+	            precioPeso = tcProducto.getnPrecio()  * dolar;
+	        } else {
+	            precioPeso =tcProducto.getnPrecio();
+	        }
+	        precioPesofinalSinIva = (double) ((precioPeso * tcProducto.getTcGanancia().getnGanancia()) + precioPeso);           
+	        if (aumento > 0) {
+	            precioPesofinalSinIva = precioPesofinalSinIva + aumento;
+	         }
+	        
+	        precioPesofinalIva = (double) (precioPesofinalSinIva) * iva;
+	        precioCal = (double) (precioPesofinalSinIva + precioPesofinalIva);
+	        precio_partida=precioPesofinalSinIva *  cantidad;          
+	        iva_partida=precioPesofinalIva * cantidad;          
+	        precio_partida_total=precioCal * cantidad;   
+	                    
+	         precioPesofinalSinIva=  Math.floor(precioPesofinalSinIva * 100) / 100;
+	         precioPesofinalIva=  Math.floor(precioPesofinalIva * 100) / 100;
+	         precio_partida=  Math.floor(precio_partida * 100) / 100;
+	         iva_partida=  Math.floor(iva_partida * 100) / 100;
+	         precio_partida_total=  Math.floor(precio_partida_total * 100) / 100;
+	         precioCal=  Math.floor(precioCal * 100) / 100;
+	         
+	         tcProducto.setnPrecioPeso(precioCal);
+	         tcProducto.setnPrecioSinIva( precioPesofinalSinIva);
+	         tcProducto.setnPrecioConIva(precioCal);
+	         tcProducto.setnPrecioIva(precioPesofinalIva);
+	         
+	         System.err.println(tcProducto);
 		
 		
 		
-		tcProducto.setnPrecioSinIva(truncarDecimales (tcProducto.getnPrecioPeso())+(tcProducto.getnPrecioPeso()*tcProducto.getTcGanancia().getnGanancia()));
-		tcProducto.setnPrecioConIva(truncarDecimales(tcProducto.getnPrecioSinIva()+(tcProducto.getnPrecioSinIva()*0.16)));
+		
+		
+	
 		
 		
 		
