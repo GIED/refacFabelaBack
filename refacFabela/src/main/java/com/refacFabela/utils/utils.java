@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TwCaja;
+import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.CajaRepository;
 
 public  class utils {
@@ -103,18 +104,57 @@ public  class utils {
 	         
 	         System.err.println(tcProducto);
 		
-		
-		
-		
+	        return tcProducto;
 		
 	
+	}
+	
+	public TwVentasProducto calcularPrecioGuardar(TcProducto tcProducto,  int cantidad ) {
+		
+			
+		
+		 	double precioCal = 0;
+	        double precioPeso = 0;
+	        double ivaPrecio = 0;
+	        double precioPesofinalIva = 0;
+	        double precio_partida=0;
+	        double iva_partida=0;
+	        double precio_partida_total=0;
+	        double iva=0.16;
+	        
+	        System.err.println("tcProducto: "+tcProducto);
+	        
+	        TwVentasProducto twVentaProducto = new TwVentasProducto();
+
+	        ivaPrecio = (double) (tcProducto.getnPrecioSinIva()) * iva;
+	        precioCal = (double) (tcProducto.getnPrecioPeso());
+	        precio_partida= tcProducto.getnPrecioSinIva() *  cantidad;          
+	        iva_partida=ivaPrecio * cantidad;          
+	        precio_partida_total=precioCal * cantidad;   
+	                    
+	         
+	         precio_partida=  Math.floor(precio_partida * 100) / 100;
+	         iva_partida=  Math.floor(iva_partida * 100) / 100;
+	         precio_partida_total=  Math.floor(precio_partida_total * 100) / 100;
+	         precioCal=  Math.floor(precioCal * 100) / 100;
+	         
+	        
+	         
+	         System.err.println(tcProducto);
+	         
+	         	twVentaProducto.setnPrecioUnitario(tcProducto.getnPrecioSinIva());
+				twVentaProducto.setnIvaUnitario(tcProducto.getnPrecioIva());
+				twVentaProducto.setnTotalUnitario(tcProducto.getnPrecioConIva());
+				twVentaProducto.setnPrecioPartida(precio_partida);
+				twVentaProducto.setnIvaPartida(iva_partida);
+				twVentaProducto.setnTotalPartida(precio_partida_total);
+				
+				
+				System.err.println("twVentaProducto: "+twVentaProducto);
 		
 		
 		
-		
-		
-		
-	        return tcProducto;
+	        return twVentaProducto;
 		
 	
 	}

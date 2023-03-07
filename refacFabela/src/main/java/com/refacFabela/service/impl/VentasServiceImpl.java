@@ -137,18 +137,15 @@ public class VentasServiceImpl implements VentasService {
 			TwVentasProducto twVentaProducto = new TwVentasProducto();
 			TwProductobodega twProductobodega=new TwProductobodega();
 
+			twVentaProducto = utils.calcularPrecioGuardar(ventaDto.getListaValidada().get(i).getTcProducto(), ventaDto.getListaValidada().get(i).getnCantidad());
 			twVentaProducto.setnIdVenta(ventaRegistrada.getnId());
 			twVentaProducto.setnIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
 			twVentaProducto.setnCantidad(ventaDto.getListaValidada().get(i).getnCantidad());
-			twVentaProducto.setnPrecioUnitario(ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioSinIva());
-			twVentaProducto.setnIvaUnitario(ventaDto.getListaValidada().get(i).getTcProducto().getnPrecioIva());
-			twVentaProducto.setnTotalUnitario(twVentaProducto.getnPrecioUnitario() + twVentaProducto.getnIvaUnitario());
-			twVentaProducto.setnPrecioPartida(twVentaProducto.getnCantidad() * twVentaProducto.getnPrecioUnitario());
-			twVentaProducto.setnIvaPartida(utils.truncarDecimales(twVentaProducto.getnPrecioPartida() * .16));
-			twVentaProducto.setnTotalPartida(utils.truncarDecimales(twVentaProducto.getnPrecioPartida() + twVentaProducto.getnIvaPartida()));
+			
+			
 			twVentaProducto.setnEstatusEntregaAlmacen(0);
 			twVentaProducto.setnIdUsuario(ventaDto.getIdUsuario());
-			twVentaProducto.setnEstatus(1);
+			twVentaProducto.setnEstatus(1); 
 			/*condición de entrega*/
 			
 			twProductobodega=productoBodegaRepository.obtenerProductoBodega(ventaDto.getListaValidada().get(i).getnIdProducto(), "LOCAL");
@@ -163,9 +160,7 @@ public class VentasServiceImpl implements VentasService {
 				
 			}
 			
-			TwVentasProducto twVentaProductoNew = new TwVentasProducto();
-
-			twVentaProductoNew = this.ventasProductoRepository.save(twVentaProducto);
+			TwVentasProducto twVentaProductoNew = this.ventasProductoRepository.save(twVentaProducto);
 			
 			if (twVenta.getnIdTipoVenta()== 1L) {
 				this.descuentaStock(twVentaProductoNew);

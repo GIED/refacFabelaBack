@@ -10,7 +10,8 @@ import com.refacFabela.model.TwProductobodega;
 
 @Repository
 public interface ProductoBodegaRepository extends JpaRepository<TwProductobodega, Long> {
-
+	
+	@Query("Select d from TwProductobodega d  where d.nIdProducto =:id order by d.nIdBodega asc" )
 	public List<TwProductobodega> findBynIdProducto(Long id);
 	
 	@Query("Select d from TwProductobodega d  where d.nIdBodega =:idBodega and d.nIdNivel=:idNivel and d.nIdAnaquel=:idAnaquel " )
