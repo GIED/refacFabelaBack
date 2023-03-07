@@ -11,7 +11,7 @@ import com.refacFabela.model.TwVenta;
 public interface VentasFacturaRepository extends JpaRepository<TvVentasFactura, Long> {
 	
 	
-	@Query("Select e from TvVentasFactura e order by e.nId desc ")
+	@Query(value="Select * from tv_ventasFactura e where (d_fechaVenta + INTERVAL 7 DAY) >= SYSDATE()   order by e.n_id desc  ", nativeQuery=true)
 	public List<TvVentasFactura> obtenerFacturas();
 
 }
