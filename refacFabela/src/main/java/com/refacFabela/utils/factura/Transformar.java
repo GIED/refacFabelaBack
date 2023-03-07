@@ -25,7 +25,7 @@ public class Transformar {
 	        
 	            cabeceraXmlBean.setVersion(ConstantesFactura.version);
 	            cabeceraXmlBean.setSerie(ConstantesFactura.serie);
-	            cabeceraXmlBean.setFolio(twVenta.getsFolioVenta());
+	            cabeceraXmlBean.setFolio(twVenta.getnId().toString());
 	            cabeceraXmlBean.setFormaPago(twVenta.getTcFormapago().getsClave());
 	            cabeceraXmlBean.setCondicionesPago(ConstantesFactura.condicionesPago);
 	            cabeceraXmlBean.setSubTotal(String.valueOf(util.truncarDecimales(calculaSubTotal(productosVendidos))));
