@@ -27,6 +27,7 @@
 	<parameter name="anticipo" class="java.lang.Double"/>
 	<parameter name="saldoFinal" class="java.lang.Double" isForPrompting="false"/>
 	<parameter name="descuento" class="java.lang.Double"/>
+	<parameter name="nombreVendedor" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -132,6 +133,20 @@
 				</textElement>
 				<text><![CDATA[NO. VENTA]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="1" y="120" width="61" height="20" uuid="a99b6cae-443d-425e-9711-a43d332ec781"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Georgia" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Vendedor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="61" y="120" width="272" height="20" uuid="f9cb6678-d412-4243-904a-308cfaf10226"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nombreVendedor}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
