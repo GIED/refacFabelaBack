@@ -64,13 +64,13 @@ public class Transformar {
 	            conceptoXmlBean.setCantidad(String.valueOf(lista.get(i).getnCantidad()));
 	            conceptoXmlBean.setUnidad("PZA");//checar no se tiene
 	            conceptoXmlBean.setDescripcion(lista.get(i).getTcProducto().getsDescripcion());
-	            conceptoXmlBean.setValorUnitario(String.valueOf(util.truncarDecimales(lista.get(i).getnPrecioUnitario())));
-	            conceptoXmlBean.setImporte(String.valueOf(util.truncarDecimales(lista.get(i).getnPrecioPartida())));
-	            conceptoXmlBean.setBase(String.valueOf(util.truncarDecimales(lista.get(i).getnPrecioPartida())));
+	            conceptoXmlBean.setValorUnitario(String.valueOf(lista.get(i).getnPrecioUnitario()));
+	            conceptoXmlBean.setImporte(String.valueOf(lista.get(i).getnPrecioPartida()));
+	            conceptoXmlBean.setBase(String.valueOf(lista.get(i).getnPrecioPartida()));
 	            conceptoXmlBean.setImpuesto(ConstantesFactura.impuesto);
 	            conceptoXmlBean.setTipoFactor(ConstantesFactura.TipoFactor);
 	            conceptoXmlBean.setTasaOCuota(ConstantesFactura.TasaOCuota);
-	            conceptoXmlBean.setImporteImpuesto(String.valueOf(util.truncarDecimales(lista.get(i).getnIvaPartida())));
+	            conceptoXmlBean.setImporteImpuesto(String.valueOf(lista.get(i).getnIvaPartida()));
 	            listaConcepto.add(conceptoXmlBean);
 	        }
 

@@ -130,7 +130,7 @@ public  class utils {
 	        precioCal = (double) (tcProducto.getnPrecioPeso());
 	        precio_partida= tcProducto.getnPrecioSinIva() *  cantidad;          
 	        iva_partida=ivaPrecio * cantidad;          
-	        precio_partida_total=precioCal * cantidad;   
+	        precio_partida_total=precio_partida + iva_partida;   
 	                    
 	         
 	         precio_partida=  Math.floor(precio_partida * 100) / 100;
