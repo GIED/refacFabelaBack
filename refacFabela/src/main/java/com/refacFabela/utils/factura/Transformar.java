@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.util.PropertySource.Util;
 import org.springframework.stereotype.Component;
 
 import com.refacFabela.model.TwVenta;
@@ -28,9 +29,9 @@ public class Transformar {
 	            cabeceraXmlBean.setFolio(twVenta.getnId().toString());
 	            cabeceraXmlBean.setFormaPago(twVenta.getTcFormapago().getsClave());
 	            cabeceraXmlBean.setCondicionesPago(ConstantesFactura.condicionesPago);
-	            cabeceraXmlBean.setSubTotal(String.valueOf(util.truncarDecimales(calculaSubTotal(productosVendidos))));
+	            cabeceraXmlBean.setSubTotal(String.valueOf(calculaSubTotal(productosVendidos)));
 	            cabeceraXmlBean.setMoneda(ConstantesFactura.moneda);
-	            cabeceraXmlBean.setTotal(String.valueOf(util.truncarDecimales(calcularTotal(productosVendidos))));
+	            cabeceraXmlBean.setTotal(String.valueOf(calcularTotal(productosVendidos)));
 	            cabeceraXmlBean.setTipoComprobante(ConstantesFactura.tipoComprobante);
 	            cabeceraXmlBean.setMetodoPago(ConstantesFactura.MetodoPago);
 	            cabeceraXmlBean.setLugarExpedicion(ConstantesFactura.lugarExpedicion);
@@ -64,13 +65,13 @@ public class Transformar {
 	            conceptoXmlBean.setCantidad(String.valueOf(lista.get(i).getnCantidad()));
 	            conceptoXmlBean.setUnidad("PZA");//checar no se tiene
 	            conceptoXmlBean.setDescripcion(lista.get(i).getTcProducto().getsDescripcion());
-	            conceptoXmlBean.setValorUnitario(String.valueOf(util.truncarDecimales(lista.get(i).getnPrecioUnitario())));
-	            conceptoXmlBean.setImporte(String.valueOf(util.truncarDecimales(lista.get(i).getnPrecioPartida())));
-	            conceptoXmlBean.setBase(String.valueOf(util.truncarDecimales(lista.get(i).getnPrecioPartida())));
+	            conceptoXmlBean.setValorUnitario(String.valueOf(lista.get(i).getnPrecioUnitario()));
+	            conceptoXmlBean.setImporte(String.valueOf(lista.get(i).getnPrecioPartida()));
+	            conceptoXmlBean.setBase(String.valueOf(lista.get(i).getnPrecioPartida()));
 	            conceptoXmlBean.setImpuesto(ConstantesFactura.impuesto);
 	            conceptoXmlBean.setTipoFactor(ConstantesFactura.TipoFactor);
 	            conceptoXmlBean.setTasaOCuota(ConstantesFactura.TasaOCuota);
-	            conceptoXmlBean.setImporteImpuesto(String.valueOf(util.truncarDecimales(lista.get(i).getnIvaPartida())));
+	            conceptoXmlBean.setImporteImpuesto(String.valueOf(lista.get(i).getnIvaPartida()));
 	            listaConcepto.add(conceptoXmlBean);
 	        }
 
@@ -88,38 +89,39 @@ public class Transformar {
 	    public Impuesto obtenerImpuestoTotal(List<TwVentasProducto> lista) {
 	        Impuesto impuesto = new Impuesto();
 	        utils util =new utils();
-	        impuesto.setTotalImpuestosTraslados(String.valueOf(util.truncarDecimales(calculaIvaTotal(lista))));
+	        impuesto.setTotalImpuestosTraslados(String.valueOf(calculaIvaTotal(lista)));
 	        impuesto.setImpuesto(ConstantesFactura.impuesto);
 	        impuesto.setTipoFactor(ConstantesFactura.TipoFactor);
 	        impuesto.setTasaOCuota(ConstantesFactura.TasaOCuota);
-	        impuesto.setImporte(String.valueOf(util.truncarDecimales(calculaIvaTotal(lista))));
+	        impuesto.setImporte(String.valueOf(calculaIvaTotal(lista)));
 
 	        return impuesto;
 	    }
 
 	    private static Double calculaSubTotal(List<TwVentasProducto> lista) {
 	        Double subTotal = 0.0;
+	        utils util =new utils();
 	        for (int i = 0; i < lista.size(); i++) {
 	            subTotal = subTotal + lista.get(i).getnPrecioPartida();
 	        }
-	        return subTotal;
+	        return util.truncaValor(subTotal) ;
 	    }
 
 	    private static Double calculaIvaTotal(List<TwVentasProducto> lista) {
 	        Double iva = 0.0;
+	        utils util =new utils();
 	        for (int i = 0; i < lista.size(); i++) {
 	            iva = iva + lista.get(i).getnIvaPartida();
 	        }
 
-	        return iva;
+	        return util.truncaValor(iva);
 	    }
 	    
 	    private static Double calcularTotal(List<TwVentasProducto> lista){     
-	      Double  total=0.0;
-	      for (int i = 0; i < lista.size(); i++) {
-	    	  total = total + lista.get(i).getnTotalPartida();
-	        }
-	        return total;
+	      Double  total=0.0;      
+	      utils util =new utils();
+	        total= calculaSubTotal(lista) + calculaIvaTotal(lista); 
+	        return  util.truncaValor(total);
 	    }
 
 }

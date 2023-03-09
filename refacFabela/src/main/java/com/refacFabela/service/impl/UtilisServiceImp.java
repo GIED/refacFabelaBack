@@ -20,21 +20,15 @@ public class UtilisServiceImp {
 
 public TcProducto calcularPrecio(TcProducto tcProducto){
 		
+	     utils util =new utils();		
+	
+	     TcGanancia ganancia=obtenerGananciaTc(tcProducto.getnIdGanancia());
+	     tcProducto.setTcGanancia(ganancia);
+	     
+	     System.err.println(util.calcularPrecio(tcProducto, obtenerTipoCambio(), 0.0, 0));
+					
 		
-		Double iva=obtenerValorIva();
-		Double precioPeso=convertirMoneda(tcProducto.getsMoneda(), tcProducto.getnPrecio());
-		Double ganancia=obtenerGanancia(tcProducto.getnIdGanancia());
-		
-		tcProducto.setnPrecioPeso(precioPeso);
-		tcProducto.setnPrecioSinIva(precioPeso+(precioPeso*ganancia));
-		tcProducto.setnPrecioConIva((precioPeso+(precioPeso*ganancia))+((precioPeso+(precioPeso*ganancia))*iva));
-		tcProducto.setnPrecioIva((precioPeso+(precioPeso*ganancia))*iva);
-		
-		System.out.println("El precio peso es "+precioPeso);
-		System.out.println("El objeto completo es "+tcProducto);
-			
-		
-		return tcProducto;
+		return util.calcularPrecio(tcProducto, obtenerTipoCambio(), 0.0, 0);
 	}
 
 	public Double obtenerTipoCambio() {
@@ -76,6 +70,13 @@ public TcProducto calcularPrecio(TcProducto tcProducto){
 		TcGanancia ganancia=catalogoGananciaRepository.getById(nId);
 		
 		return ganancia.getnGanancia();
+	}
+	
+public TcGanancia obtenerGananciaTc(Long nId) {
+		
+		TcGanancia ganancia=catalogoGananciaRepository.getById(nId);
+		
+		return ganancia;
 	}
 
 }
