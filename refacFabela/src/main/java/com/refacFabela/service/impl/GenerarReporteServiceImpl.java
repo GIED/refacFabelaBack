@@ -113,6 +113,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteCotizacion.setFolioCotizacion(listaProductos.get(0).getTwCotizacione().getnId());
 		reporteCotizacion.setFecha(listaProductos.get(0).getTwCotizacione().getdFecha());
 		reporteCotizacion.setCorreo(listaProductos.get(0).getTwCotizacione().getTcCliente().getsCorreo());
+		
+
 
 		List<ReporteCotizacionDto> listaProducto = new ArrayList<ReporteCotizacionDto>();
 
@@ -165,6 +167,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setFecha(listaProductos.get(0).getTwVenta().getdFechaVenta());
 		reporteVenta.setTipoPago(listaProductos.get(0).getTwVenta().getnTipoPago());
 		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
+		reporteVenta.setNombreVendedor(listaProductos.get(0).getTcUsuario().getsNombreUsuario());
 		
 
 		List<ReporteVentaDto> listaProducto = new ArrayList<ReporteVentaDto>();
@@ -225,6 +228,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setFecha(listaProductos.get(0).getTwVenta().getdFechaVenta());
 		reporteVenta.setTipoPago(listaProductos.get(0).getTwVenta().getnTipoPago());
 		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
+		reporteVenta.setNombreVendedor(listaProductos.get(0).getTcUsuario().getsNombreUsuario());
 		
 
 		List<ReporteVentaDto> listaProducto = new ArrayList<ReporteVentaDto>();
@@ -295,6 +299,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setFecha(listaProductos.get(0).getTwVenta().getdFechaVenta());
 		reporteVenta.setAnticipo(listaProductos.get(0).getTwVenta().getAnticipo());
 		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
+		reporteVenta.setNombreVendedor(listaProductos.get(0).getTcUsuario().getsNombreUsuario());
 		
 		
 		List<ReporteVentaDto> listaProducto = new ArrayList<ReporteVentaDto>();
@@ -495,6 +500,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				pedidoProductoDto.setCantidad(twPedidoProducto.getnCantidadPedida());
 				pedidoProductoDto.setFechaPedido(util.formatoFecha(twPedidoProducto.getdFechaPedido()));
 				pedidoProductoDto.setProveedor(twPedidoProducto.getTcProveedore().getsRazonSocial());
+				
 				
 				if(twPedidoProducto.getdFechaPedido()!=null) {
 					pedidoProductoDto.setFechaRecibida(util.formatoFecha(twPedidoProducto.getdFechaPedido()));

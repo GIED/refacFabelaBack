@@ -35,6 +35,7 @@ public class ReporteVentaDto implements Serializable{
 	private String condicionEntrega;
 	private String ubicacion;
 	private String noParte;
+	private String nombreVendedor;
 	
 	
 	
@@ -225,6 +226,14 @@ public class ReporteVentaDto implements Serializable{
 
 	public void setNoParte(String noParte) {
 		this.noParte = noParte;
+	}
+
+	public String getNombreVendedor() {
+		return nombreVendedor;
+	}
+
+	public void setNombreVendedor(String nombreVendedor) {
+		this.nombreVendedor = nombreVendedor;
 	}
 	
 	

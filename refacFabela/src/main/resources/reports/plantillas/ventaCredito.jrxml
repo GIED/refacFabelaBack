@@ -27,6 +27,7 @@
 	<parameter name="fechaVencimiento" class="java.lang.String"/>
 	<parameter name="descuento" class="java.lang.Double"/>
 	<parameter name="totalAbono" class="java.lang.Double"/>
+	<parameter name="nombreVendedor" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -129,6 +130,20 @@
 				<reportElement x="419" y="121" width="132" height="16" uuid="3f0b2ca8-c3b4-4806-956d-ae562cf9e502"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{fechaVencimiento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="118" width="61" height="20" uuid="ef341305-3f64-4f51-ac9f-1deaa3f2c202"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Georgia" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Vendedor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="63" y="118" width="272" height="20" uuid="1a25a252-d9af-425c-9a65-d7fc6988eadd"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nombreVendedor}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

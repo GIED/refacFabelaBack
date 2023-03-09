@@ -178,6 +178,7 @@ public class ReporteServiceImpl implements ReporteService {
 	     	if(reporteVenta.getTipoPago()==1) {
 	         params.put("totalAbono", totalAbono);
 	     	}
+	     	 params.put("nombreVendedor", reporteVenta.getNombreVendedor());
 	         
 	         
 	         
@@ -250,6 +251,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("descuento", reporteVenta.getDescuento());
 	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal()+"\nTotal de productos: "+ listaProducto.size()).toString()));
 	         params.put("fechaVencimiento", fechaVencimiento);
+	         params.put("nombreVendedor", reporteVenta.getNombreVendedor());
 	     	
 	         
 	         
@@ -395,8 +397,8 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("descuento", reporteVenta.getDescuento());
 	        params.put("qr", getQR(("Folio de venta por pedido: VP-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+(reporteVenta.getTotal()-reporteVenta.getAnticipo()-reporteVenta.getDescuento())+"\nTotal de productos: "+ listaProducto.size()).toString()));
 	        params.put("saldoFinal", reporteVenta.getTotal()-reporteVenta.getAnticipo());
+	        params.put("nombreVendedor", reporteVenta.getNombreVendedor());
 	        
-			System.err.println("El saldo final es de:"+(reporteVenta.getTotal()-reporteVenta.getAnticipo()-reporteVenta.getDescuento()));
 			
 			
 			

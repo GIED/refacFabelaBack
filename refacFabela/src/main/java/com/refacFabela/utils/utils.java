@@ -1,6 +1,8 @@
 package com.refacFabela.utils;
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
@@ -48,32 +50,27 @@ public  class utils {
 	}
 	
 	public Double truncarDecimales(Double value) {
-		int decimalpoint=2;
 		
-		 value = value * Math.pow(10, decimalpoint);
-	        value = Math.floor(value);
-	        value = value / Math.pow(10, decimalpoint);
+		
+
+		
+		 
 	  
-	        System.out.println(value);
-	  
-	        return value;
+	        return Math.floor(value * 100) / 100;
 		
 	
 	}
 	
 	public TcProducto calcularPrecio(TcProducto tcProducto, Double dolar, Double aumento, int cantidad ) {
 		
-		 double precioCal = 0;
+		
 	        double precioPeso = 0;
 	        double precioPesofinalSinIva = 0;
-	        double precioPesofinalIva = 0;
-	        double precio_partida=0;
-	        double iva_partida=0;
-	        double precio_partida_total=0;
+            double precio_unitario_calculado = 0;
+		 	double iva_unitario_calculado = 0;
+	        double total_unitario_calculado = 0;   	        
 	        double iva=0.16;
-
-	  
-
+            System.err.println(dolar);
 	        if (tcProducto.getsMoneda().equals("USD")) {
 	            precioPeso = tcProducto.getnPrecio()  * dolar;
 	        } else {
@@ -88,24 +85,23 @@ public  class utils {
 	         }
 	        
 	        
+	
 	        
-	        precioPesofinalIva = (double) (precioPesofinalSinIva) * iva;
-	        precioCal = (double) (precioPesofinalSinIva + precioPesofinalIva);
-	        precio_partida=precioPesofinalSinIva *  cantidad;          
-	        iva_partida=precioPesofinalIva * cantidad;          
-	        precio_partida_total=precioCal * cantidad;   
+	        
+	        
+	        precio_unitario_calculado = (double) (truncarDecimales(precioPesofinalSinIva));
+	        iva_unitario_calculado = (double) (precio_unitario_calculado) * iva; 
+	        total_unitario_calculado=precio_unitario_calculado + iva_unitario_calculado;      
 	                    
-	         precioPesofinalSinIva=  Math.floor(precioPesofinalSinIva * 100) / 100;
-	         precioPesofinalIva=  Math.floor(precioPesofinalIva * 100) / 100;
-	         precio_partida=  Math.floor(precio_partida * 100) / 100;
-	         iva_partida=  Math.floor(iva_partida * 100) / 100;
-	         precio_partida_total=  Math.floor(precio_partida_total * 100) / 100;
-	         precioCal=  Math.floor(precioCal * 100) / 100;
 	         
-	         tcProducto.setnPrecioPeso(precioCal);
-	         tcProducto.setnPrecioSinIva( precioPesofinalSinIva);
-	         tcProducto.setnPrecioConIva(precioCal);
-	         tcProducto.setnPrecioIva(precioPesofinalIva);
+	         
+	         
+	         
+	         
+	         tcProducto.setnPrecioPeso(truncarDecimales(total_unitario_calculado));
+	         tcProducto.setnPrecioSinIva( truncarDecimales(precio_unitario_calculado));
+	         tcProducto.setnPrecioConIva(truncarDecimales(total_unitario_calculado));
+	         tcProducto.setnPrecioIva(truncarDecimales(iva_unitario_calculado));
 	         
 	         System.err.println(tcProducto);
 		
@@ -130,23 +126,25 @@ public  class utils {
 	        
 	        
 	        TwVentasProducto twVentaProducto = new TwVentasProducto();
+	        
+	        
 
-	        precio_unitario_calculado = (double) (tcProducto.getnPrecioSinIva());
-	        iva_unitario_calculado = (double) (precio_unitario_calculado) * iva;
+	        precio_unitario_calculado = (double) (truncarDecimales(tcProducto.getnPrecioSinIva()));
+	        iva_unitario_calculado = (double) (precio_unitario_calculado) * iva; 
 	        total_unitario_calculado=precio_unitario_calculado + iva_unitario_calculado;
-	        precio_partida_calculado= precio_unitario_calculado *  cantidad;          
-	        iva_partida_calculado=(precio_unitario_calculado * cantidad) * iva;          
-	        partida_total_calculado=precio_partida_calculado + iva_partida_calculado;   
+	        precio_partida_calculado= precio_unitario_calculado *  cantidad;         
+	        iva_partida_calculado=iva_unitario_calculado * cantidad;          
+	        partida_total_calculado=total_unitario_calculado * cantidad;   
 	                    
 	         
 	         
 	         
-	         	twVentaProducto.setnPrecioUnitario(precio_unitario_calculado);
-				twVentaProducto.setnIvaUnitario(iva_unitario_calculado);
-				twVentaProducto.setnTotalUnitario(total_unitario_calculado);
-				twVentaProducto.setnPrecioPartida(precio_partida_calculado);
-				twVentaProducto.setnIvaPartida(iva_partida_calculado);
-				twVentaProducto.setnTotalPartida(partida_total_calculado);
+	         	twVentaProducto.setnPrecioUnitario(truncarDecimales(precio_unitario_calculado));
+				twVentaProducto.setnIvaUnitario(truncarDecimales(iva_unitario_calculado));
+				twVentaProducto.setnTotalUnitario(truncarDecimales(total_unitario_calculado));
+				twVentaProducto.setnPrecioPartida(truncarDecimales(precio_partida_calculado));
+				twVentaProducto.setnIvaPartida(truncarDecimales(iva_partida_calculado));
+				twVentaProducto.setnTotalPartida(truncarDecimales(partida_total_calculado));
 				
 				
 				
@@ -157,5 +155,14 @@ public  class utils {
 		
 	
 	}
+	
+    public static Double truncaValor(Double numero) {
+
+        BigDecimal bd = new BigDecimal(numero);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        System.out.println(bd.doubleValue());
+
+        return bd.doubleValue();
+    }
 
 }
