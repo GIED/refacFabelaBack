@@ -499,6 +499,8 @@ public class ProductosServiceImp implements ProductosService {
 
 	@Override
 	public List<TwVentaProductosTraer> obtenerProductosTraer(Long nIdVenta) {
+	
+	
 		
 		return twVentaProductosTraerRepository.findBynIdVenta(nIdVenta);
 	}
