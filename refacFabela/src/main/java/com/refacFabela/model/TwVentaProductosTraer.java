@@ -30,8 +30,8 @@ public class TwVentaProductosTraer implements Serializable {
 	@Column(name = "n_idProducto")
 	private Long nIdProducto;
 	
-	@Column(name = "s_cantidad")
-	private Integer sCantidad;
+	@Column(name = "n_cantidad")
+	private Integer nCantidad;
 	
 	@Column(name = "s_ubicacion")
 	private String sUbicacion;
@@ -84,13 +84,16 @@ public class TwVentaProductosTraer implements Serializable {
 
 
 
-	public Integer getsCantidad() {
-		return sCantidad;
+	
+
+
+	public Integer getnCantidad() {
+		return nCantidad;
 	}
 
 
-	public void setsCantidad(Integer sCantidad) {
-		this.sCantidad = sCantidad;
+	public void setnCantidad(Integer nCantidad) {
+		this.nCantidad = nCantidad;
 	}
 
 
