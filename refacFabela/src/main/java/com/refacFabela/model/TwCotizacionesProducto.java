@@ -40,6 +40,9 @@ public class TwCotizacionesProducto implements Serializable {
 	
 	@Column(name = "n_totalUnitario")
 	private double nTotalUnitario;
+	
+	@Column(name = "s_condicionEntrega")
+	private String sCondicionEntrega;
 
 	// bi-directional many-to-one association to TcProducto
 	@ManyToOne
@@ -149,6 +152,16 @@ public class TwCotizacionesProducto implements Serializable {
 	public void setTwCotizacione(TwCotizaciones twCotizacione) {
 		this.twCotizacione = twCotizacione;
 	}
+
+	public String getsCondicionEntrega() {
+		return sCondicionEntrega;
+	}
+
+	public void setsCondicionEntrega(String sCondicionEntrega) {
+		this.sCondicionEntrega = sCondicionEntrega;
+	}
+	
+	
 
 	
 

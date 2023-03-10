@@ -11,8 +11,10 @@ import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.model.TwCotizaciones;
 import com.refacFabela.model.TwCotizacionesDetalle;
 import com.refacFabela.model.TwCotizacionesProducto;
+import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.repository.CotizacionProductoRepository;
 import com.refacFabela.repository.CotizacionRepository;
+import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TwCotizacionesRepository;
 import com.refacFabela.service.CotizacionService;
 import com.refacFabela.utils.utils;
@@ -28,6 +30,10 @@ public class CotizacionServiceImpl implements CotizacionService {
 	@Autowired
 	private TwCotizacionesRepository twCotizacionesRepository;
 	
+	@Autowired
+	
+	private ProductoBodegaRepository productoBodegaRepository;
+	
 
 	
 	@Override
@@ -36,6 +42,7 @@ public class CotizacionServiceImpl implements CotizacionService {
 		//System.out.println(listaCotizacion);
 		TwCotizaciones twCotizacion = new TwCotizaciones();
 		utils utils=new utils();
+		int totalProducto=0;
 		
 		twCotizacion.setnIdCliente(listaCotizacion.get(0).getnIdCliente());
 		twCotizacion.setnIdUsuario(listaCotizacion.get(0).getnIdUsuario());
@@ -49,8 +56,9 @@ public class CotizacionServiceImpl implements CotizacionService {
 		List<TwCotizacionesProducto> listaCotizacionRegistro = new ArrayList<TwCotizacionesProducto>();
 		
 		for (CotizacionDto cotizacionDto : listaCotizacion) {
-			
+			 totalProducto=0;
 			TwCotizacionesProducto twCotizacionProducto = new TwCotizacionesProducto();
+			
 			
 			twCotizacionProducto.setnIdCotizacion(cotizacionRegistrada.getnId());
 			twCotizacionProducto.setnIdProducto(cotizacionDto.getnIdProducto());
@@ -61,6 +69,24 @@ public class CotizacionServiceImpl implements CotizacionService {
 			twCotizacionProducto.setnPrecioPartida(cotizacionDto.getnCantidad()* cotizacionDto.getnPrecioUnitario());
 			twCotizacionProducto.setnIvaPartida(utils.truncarDecimales(twCotizacionProducto.getnPrecioPartida() * .16));
 			twCotizacionProducto.setnTotalPartida(utils.truncarDecimales(twCotizacionProducto.getnPrecioPartida() + twCotizacionProducto.getnIvaPartida()));
+			
+			List<TwProductobodega> productoBodega=productoBodegaRepository.findBynIdProducto(cotizacionDto.getnIdProducto());
+			
+			for (int i = 0; i < productoBodega.size(); i++) {
+				
+				totalProducto=totalProducto+productoBodega.get(i).getnCantidad();
+				
+			}
+			
+			if(totalProducto>=cotizacionDto.getnCantidad()) {
+				twCotizacionProducto.setsCondicionEntrega("INMEDIATA");
+			}
+			else
+			{
+				twCotizacionProducto.setsCondicionEntrega("POR DEFINIR");
+			}
+			
+			
 			
 			listaCotizacionRegistro.add(twCotizacionProducto);
 			

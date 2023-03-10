@@ -27,6 +27,8 @@ public class ReporteCotizacionDto implements Serializable{
 	private Double total;
 	private String descripcionCatSat;
 	private String correo;
+	private String condicionEntrega;
+	
 	
 	
 	
@@ -155,6 +157,16 @@ public class ReporteCotizacionDto implements Serializable{
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
+
+	public String getCondicionEntrega() {
+		return condicionEntrega;
+	}
+
+	public void setCondicionEntrega(String condicionEntrega) {
+		this.condicionEntrega = condicionEntrega;
+	}
+	
+	
 	
 		
 

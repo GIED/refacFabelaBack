@@ -134,7 +134,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			reporte.setPrecioUnitario(util.truncarDecimales(twCotizacionesProducto.getnTotalUnitario()));
 			reporte.setImporte(util.truncarDecimales(twCotizacionesProducto.getnTotalPartida()));
 			reporte.setDescripcionCatSat(twCotizacionesProducto.getTcProducto().getTcClavesat().getsDescripcion());
-		
+			reporte.setCondicionEntrega(twCotizacionesProducto.getsCondicionEntrega());
 
 			listaProducto.add(reporte);
 
