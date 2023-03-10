@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="381"/>
 	<subDataset name="listaProductos" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="cantidad" class="java.lang.Integer"/>
 		<field name="noIdentificacion" class="java.lang.Long"/>
@@ -165,31 +165,31 @@
 				<text><![CDATA[CONCEPTOS]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="64" y="19" width="82" height="19" forecolor="#04115F" backcolor="#010101" uuid="f7a3f26f-3762-46a9-98bc-90e146f3e0bc"/>
+				<reportElement x="92" y="19" width="82" height="19" forecolor="#04115F" backcolor="#010101" uuid="f7a3f26f-3762-46a9-98bc-90e146f3e0bc"/>
 				<graphicElement>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="1" y="19" width="62" height="19" forecolor="#04115F" backcolor="#010101" uuid="be7d0f52-9dba-4fbe-8290-973fcd46b96e"/>
+				<reportElement x="29" y="19" width="62" height="19" forecolor="#04115F" backcolor="#010101" uuid="be7d0f52-9dba-4fbe-8290-973fcd46b96e"/>
 				<graphicElement>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="147" y="19" width="200" height="19" forecolor="#04115F" backcolor="#010101" uuid="37ed251b-68fb-4a59-a50e-d891d5d25c03"/>
+				<reportElement x="174" y="19" width="200" height="19" forecolor="#04115F" backcolor="#010101" uuid="37ed251b-68fb-4a59-a50e-d891d5d25c03"/>
 				<graphicElement>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="348" y="19" width="71" height="19" forecolor="#04115F" backcolor="#010101" uuid="1e08c1ff-cf9d-484c-af67-a2c51bdf246c"/>
+				<reportElement x="374" y="19" width="60" height="19" forecolor="#04115F" backcolor="#010101" uuid="1e08c1ff-cf9d-484c-af67-a2c51bdf246c"/>
 				<graphicElement>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement x="419" y="19" width="63" height="19" forecolor="#04115F" backcolor="#010101" uuid="ea3efc1c-c23d-4668-986d-7b4c7a56e209"/>
+				<reportElement x="434" y="19" width="48" height="19" forecolor="#04115F" backcolor="#010101" uuid="ea3efc1c-c23d-4668-986d-7b4c7a56e209"/>
 				<graphicElement>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
@@ -201,7 +201,7 @@
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="1" y="18" width="63" height="19" forecolor="#FEFEFE" uuid="72f6c679-0fe2-4a37-b529-6fb2e6ea067a"/>
+				<reportElement x="29" y="19" width="63" height="19" forecolor="#FEFEFE" uuid="72f6c679-0fe2-4a37-b529-6fb2e6ea067a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
@@ -209,21 +209,21 @@
 				<text><![CDATA[Cantidad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="64" y="19" width="82" height="19" forecolor="#FFFFFF" uuid="b9d3c28e-0a2a-4609-80eb-7897554d3055"/>
+				<reportElement x="92" y="19" width="82" height="19" forecolor="#FFFFFF" uuid="b9d3c28e-0a2a-4609-80eb-7897554d3055"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Identificador]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="419" y="19" width="63" height="20" forecolor="#FFFFFF" uuid="b538b53c-fd58-4ba9-a020-48ffb24690e8"/>
+				<reportElement x="434" y="19" width="48" height="20" forecolor="#FFFFFF" uuid="b538b53c-fd58-4ba9-a020-48ffb24690e8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Total Partida]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="348" y="19" width="71" height="20" forecolor="#FFFFFF" uuid="27143959-56d0-4abc-9bce-6af76a4749bd"/>
+				<reportElement x="374" y="18" width="60" height="20" forecolor="#FFFFFF" uuid="27143959-56d0-4abc-9bce-6af76a4749bd"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
@@ -237,11 +237,25 @@
 				<text><![CDATA[Entrega]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="147" y="19" width="200" height="20" forecolor="#FFFFFF" uuid="9c8ef098-ce97-4004-ae60-41679920980e"/>
+				<reportElement x="174" y="19" width="200" height="20" forecolor="#FFFFFF" uuid="9c8ef098-ce97-4004-ae60-41679920980e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Producto]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="19" width="28" height="19" forecolor="#04115F" backcolor="#010101" uuid="da8ca60c-32f9-4472-8438-4eeb0a014930"/>
+				<graphicElement>
+					<pen lineColor="#C7C7C7"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="20" width="28" height="19" forecolor="#FEFEFE" uuid="1afbfa32-6d5e-4847-b6df-fd9ab5ddd445"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
+				</textElement>
+				<text><![CDATA[NP]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -254,36 +268,42 @@
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaProductos})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:listContents height="40" width="555">
+						<rectangle>
+							<reportElement mode="Transparent" x="41" y="10" width="37" height="19" forecolor="#04115F" backcolor="#010101" uuid="7225e9b8-a2b2-4f5a-8fa0-e002cf6bbf64"/>
+							<graphicElement>
+								<pen lineColor="#C7C7C7"/>
+							</graphicElement>
+						</rectangle>
 						<textField>
-							<reportElement x="0" y="0" width="63" height="35" uuid="9f6097fd-74a2-4590-bbcf-e652abf73266"/>
+							<reportElement mode="Transparent" x="28" y="1" width="63" height="35" backcolor="#666666" uuid="9f6097fd-74a2-4590-bbcf-e652abf73266"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font size="8"/>
+								<font size="8" isBold="true" isUnderline="false"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="64" y="1" width="82" height="34" uuid="9ff4c602-25e7-45b6-95fb-13fbeba7f167"/>
+							<reportElement x="91" y="1" width="82" height="35" uuid="9ff4c602-25e7-45b6-95fb-13fbeba7f167"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{noIdentificacion}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
-							<reportElement x="147" y="1" width="200" height="35" uuid="e13e8216-a05c-49c7-947b-929036de4766"/>
+							<reportElement x="174" y="1" width="200" height="35" uuid="e13e8216-a05c-49c7-947b-929036de4766"/>
 							<textElement textAlignment="Justified" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{nombreProducto}+"\nClave Prod. Serv.-"+$F{claveSat}+" "+$F{descripcionCatSat}]]></textFieldExpression>
 						</textField>
 						<textField pattern="#,##0.00">
-							<reportElement x="348" y="1" width="72" height="35" uuid="9cb1d605-8167-4934-976b-990f1663fa76"/>
+							<reportElement x="374" y="1" width="60" height="35" uuid="9cb1d605-8167-4934-976b-990f1663fa76"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
 						</textField>
 						<textField pattern="#,##0.00">
-							<reportElement x="420" y="1" width="62" height="35" uuid="75512337-d642-4256-a170-87d2011e0137"/>
+							<reportElement x="434" y="1" width="48" height="35" uuid="75512337-d642-4256-a170-87d2011e0137"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
@@ -299,6 +319,13 @@
 						<line>
 							<reportElement x="0" y="37" width="555" height="1" forecolor="#D3D3D3" uuid="cadd15d7-272f-4b8a-b6ce-9e4c6b23d146"/>
 						</line>
+						<textField>
+							<reportElement x="0" y="1" width="28" height="35" uuid="2cc792ae-3d6a-496c-8c83-77fd670652ff"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+						</textField>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>
