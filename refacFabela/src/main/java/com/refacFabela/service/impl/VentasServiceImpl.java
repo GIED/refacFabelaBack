@@ -1,6 +1,7 @@
 package com.refacFabela.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwVenta;
+import com.refacFabela.model.TwVentaProductosTraer;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CajaRepository;
@@ -32,6 +34,7 @@ import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.TwPedidoRepository;
+import com.refacFabela.repository.TwVentaProductosTraerRepository;
 import com.refacFabela.repository.VentasFacturaRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
@@ -75,6 +78,9 @@ public class VentasServiceImpl implements VentasService {
 	
 	@Autowired
 	private TrVentaCobroRepository trVentaCobroRepository;
+	
+	@Autowired
+	private TwVentaProductosTraerRepository twVentaProductosTraerRepository;
 
 	@Override
 	public List<TwVenta> consltaVentas() {
@@ -251,10 +257,28 @@ public class VentasServiceImpl implements VentasService {
 					} else if (listaStockBodega.getnIdBodega() == 2) { // si no hay stock en bodega 1 entra a bodega 2
 
 						if (listaStockBodega.getnCantidad() > 0) {// valida si hay stock en bodega 2
+							
+							//guardamos datos de traer bodega					
+							
+							TwVentaProductosTraer productosTraer = new TwVentaProductosTraer();
+							String ubicacion = "";
+							
+							productosTraer.setnIdProducto(twVentaProducto.getnIdProducto());
+							productosTraer.setnIdVenta(twVentaProducto.getnIdVenta());																				
+							ubicacion= listaStockBodega.getTcBodega().getsBodega()+"-"+listaStockBodega.getTcAnaquel().getsAnaquel()+"-"+listaStockBodega.getTcNivel().getsNivel();
+							productosTraer.setsUbicacion(ubicacion);
+							productosTraer.setnEstatus(0L);
+							productosTraer.setdFecha(new Date());
+							
+							
+							
+							//descontamos stock
 
 							if (listaStockBodega.getnCantidad() >= cantidad) {
 
 								listaStockBodega.setnCantidad(listaStockBodega.getnCantidad() - cantidad);
+								
+								productosTraer.setnCantidad(cantidad);	
 
 								productoBodegaRepository.save(listaStockBodega);// actualizamos stock
 								cantidad = 0;
@@ -264,23 +288,42 @@ public class VentasServiceImpl implements VentasService {
 							} else {
 
 								cantidad = cantidad - listaStockBodega.getnCantidad();
+								productosTraer.setnCantidad(listaStockBodega.getnCantidad());	
 								listaStockBodega.setnCantidad(0);
 								productoBodegaRepository.save(listaStockBodega); // actualizamos stock
 								twVentaProducto.setdFechaEntregaEstimada(utils.tomorrow);
 								this.ventasProductoRepository.save(twVentaProducto);
 
 							}
-
+							
+							twVentaProductosTraerRepository.save(productosTraer);
+							
 						}
 					}
 
 					else { // entra a la bodega 3
 
 						if (listaStockBodega.getnCantidad() > 0) {// valida si hay stock en bodega 3
+							
+							//guardamos datos de traer bodega	
+							
+							TwVentaProductosTraer productosTraer = new TwVentaProductosTraer();
+							String ubicacion = "";
+							
+							productosTraer.setnIdProducto(twVentaProducto.getnIdProducto());
+							productosTraer.setnIdVenta(twVentaProducto.getnIdVenta());					
+																	
+							ubicacion= listaStockBodega.getTcBodega().getsBodega()+"-"+listaStockBodega.getTcAnaquel().getsAnaquel()+"-"+listaStockBodega.getTcNivel().getsNivel();
+							productosTraer.setsUbicacion(ubicacion);
+							productosTraer.setnEstatus(0L);
+							productosTraer.setdFecha(new Date());
+							
+							twVentaProductosTraerRepository.save(productosTraer);
 
 							if (listaStockBodega.getnCantidad() >= cantidad) {
 
 								listaStockBodega.setnCantidad(listaStockBodega.getnCantidad() - cantidad);
+								productosTraer.setnCantidad(cantidad);	
 
 								productoBodegaRepository.save(listaStockBodega);// actualizamos stock
 								cantidad = 0;
@@ -290,12 +333,17 @@ public class VentasServiceImpl implements VentasService {
 							} else {
 
 								cantidad = cantidad - listaStockBodega.getnCantidad();
+								productosTraer.setnCantidad(listaStockBodega.getnCantidad());
 								listaStockBodega.setnCantidad(0);
 								productoBodegaRepository.save(listaStockBodega); // actualizamos stock
 								twVentaProducto.setdFechaEntregaEstimada(utils.tomorrow);
 								this.ventasProductoRepository.save(twVentaProducto);
 
 							}
+							if (productosTraer.getnCantidad() !=0) {
+								twVentaProductosTraerRepository.save(productosTraer);								
+							}
+							
 						}
 
 					}
