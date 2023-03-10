@@ -31,6 +31,7 @@ import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentaProductoCancela;
+import com.refacFabela.model.TwVentaProductosTraer;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CajaRepository;
@@ -50,6 +51,7 @@ import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwMaquinaClienteRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.TwVentaProductoCancelaRepository;
+import com.refacFabela.repository.TwVentaProductosTraerRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentaProductoMesRepository;
 import com.refacFabela.repository.VentasRepository;
@@ -104,6 +106,9 @@ public class ProductosServiceImp implements ProductosService {
 	
 	@Autowired
 	private CatalogosRepository catalogosRepository;
+	
+	@Autowired
+	private TwVentaProductosTraerRepository twVentaProductosTraerRepository;
 
 
 
@@ -484,6 +489,18 @@ public class ProductosServiceImp implements ProductosService {
 		
 		
 		return ventaProductoDto;
+	}
+
+	@Override
+	public TwVentaProductosTraer ventaProductosTraer(TwVentaProductosTraer ventaProductosTraer) {
+		
+		return twVentaProductosTraerRepository.save(ventaProductosTraer);
+	}
+
+	@Override
+	public List<TwVentaProductosTraer> obtenerProductosTraer(Long nIdVenta) {
+		
+		return twVentaProductosTraerRepository.findBynIdVenta(nIdVenta);
 	}
 
 	

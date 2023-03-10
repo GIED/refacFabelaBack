@@ -28,6 +28,7 @@ import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwMaquinaCliente;
 import com.refacFabela.model.TwVenta;
+import com.refacFabela.model.TwVentaProductosTraer;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.service.VentasService;
@@ -337,6 +338,28 @@ public class VentasController {
 			return productosService.cacelarVentaProducto(ventaProductoDto);
 		} catch (Exception e) {
 			logger.error("Error al cancelar la venta" + e);
+		}
+		return null;
+	}
+	
+	@PostMapping("/guardarVentaProductosTraer")
+	public TwVentaProductosTraer guardaVentaProductosTraer(@RequestBody  TwVentaProductosTraer ventaProductosTraer) {
+		try {
+			return productosService.ventaProductosTraer(ventaProductosTraer);
+		} catch (Exception e) {
+			logger.error("Error al guardar los productos traer" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerProductosTraer")
+	public List<TwVentaProductosTraer> obtenerProductosTraerVenta(@RequestParam()  Long nIdVenta) {
+
+		try {
+			return productosService.obtenerProductosTraer(nIdVenta);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener las maquinas del cliente" + e);
 		}
 		return null;
 	}
