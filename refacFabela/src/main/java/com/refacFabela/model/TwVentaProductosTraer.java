@@ -147,13 +147,7 @@ public class TwVentaProductosTraer implements Serializable {
 	}
 
 
-	@Override
-	public String toString() {
-		return "TwVentaProductosTraer [nId=" + nId + ", nIdVenta=" + nIdVenta + ", nIdProducto=" + nIdProducto
-				+ ", sCantidad=" + sCantidad + ", sUbicacion=" + sUbicacion + ", nEstatus=" + nEstatus + ", dFecha="
-				+ dFecha + ", tcProducto=" + tcProducto + ", twVenta=" + twVenta + "]";
-	}
-
+	
 
 	
 	
