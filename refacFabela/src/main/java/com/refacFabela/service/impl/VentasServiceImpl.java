@@ -568,5 +568,12 @@ public class VentasServiceImpl implements VentasService {
 		return tvVentaDetalleRepository.findByTop();
 	}
 
+
+	@Override
+	public List<TvVentasFactura> consultaVentasFacturadas() {
+
+		return this.VentasFacturaRepository.obtenerVentasFacturadas();
+	}
+
 	
 }

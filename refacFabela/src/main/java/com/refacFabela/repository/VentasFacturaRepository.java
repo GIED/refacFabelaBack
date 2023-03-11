@@ -13,5 +13,8 @@ public interface VentasFacturaRepository extends JpaRepository<TvVentasFactura, 
 	
 	@Query(value="Select * from tv_ventasFactura e where (d_fechaVenta + INTERVAL 7 DAY) >= SYSDATE() and e.n_estatusVenta > 1  order by e.n_id desc  ", nativeQuery=true)
 	public List<TvVentasFactura> obtenerFacturas();
+	
+	@Query(value="Select * from tv_ventasFactura e where  e.n_idFactura > 0  order by e.n_id desc  ", nativeQuery=true)
+	public List<TvVentasFactura> obtenerVentasFacturadas();
 
 }

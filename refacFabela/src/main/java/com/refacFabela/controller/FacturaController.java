@@ -66,6 +66,12 @@ public class FacturaController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.ventasService.consultaVentasParaFactura());
 	}
 	
+	@GetMapping("ventasFacturadas")
+	public ResponseEntity<List<TvVentasFactura>> consultaVentasFacturadas(){
+		
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.ventasService.consultaVentasFacturadas());
+	}
+	
 	
 	
 	@GetMapping(value = "getDocumento")
