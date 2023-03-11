@@ -26,6 +26,7 @@ public interface VentasService {
 	public TvVentaDetalle guardarVentaDetalle(TvVentaDetalle tvVentaDetalle);
 	public List<TwAbono> consultaAbonoVentaId(Long nId);
 	public List<TvVentasFactura> consultaVentasParaFactura();
+	public List<TvVentasFactura> consultaVentasFacturadas();
 
 	
 	
