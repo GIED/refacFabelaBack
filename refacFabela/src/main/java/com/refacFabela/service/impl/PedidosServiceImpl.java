@@ -110,27 +110,31 @@ public class PedidosServiceImpl implements PedidosService {
 		// GUARDA EL ESTATUS DEL ASPIRANTE
 	
 		
-//		productoBodega = productoBodegaRepository.obtenerProductoBodega(twPedidoProducto.getnIdProducto(), "LOCAL");
-//		System.err.println(pedidioProductoIngreso.getnCantidaRecibida());
-//		System.err.println(twPedidoProducto.getnCantidaRecibida());
-//		
-//	
-//		
-//		if(twPedidoProducto.getnCantidaRecibida()==0) {
-//			System.err.println("entre");
-//
-//		productoBodega.setnCantidad(productoBodega.getnCantidad() + twPedidoProducto.getnCantidaRecibida());
-//		}
-//		else {
-//			
-//			System.err.println(pedidioProductoIngreso.getnCantidaRecibida());
-//			System.err.println(twPedidoProducto.getnCantidaRecibida());
-//			System.err.println(productoBodega.getnCantidad() + pedidioProductoIngreso.getnCantidaRecibida() - twPedidoProducto.getnCantidaRecibida());
-//			productoBodega.setnCantidad(productoBodega.getnCantidad() +  twPedidoProducto.getnCantidaRecibida() - pedidioProductoIngreso.getnCantidaRecibida() );
-//			System.err.println(productoBodega);
-//						
-//		}
-//		productoBodegaRepository.save(productoBodega);
+	    if (twPedidoProducto.getTwPedido().getTwVenta() == null) {
+			
+			productoBodega = productoBodegaRepository.obtenerProductoBodega(twPedidoProducto.getnIdProducto(), "LOCAL");
+			System.err.println(pedidioProductoIngreso.getnCantidaRecibida());
+			System.err.println(twPedidoProducto.getnCantidaRecibida());
+			
+		
+			
+			if(twPedidoProducto.getnCantidaRecibida()==0) {
+				System.err.println("entre");
+	
+			productoBodega.setnCantidad(productoBodega.getnCantidad() + twPedidoProducto.getnCantidaRecibida());
+			}
+			else {
+				
+				System.err.println(pedidioProductoIngreso.getnCantidaRecibida());
+				System.err.println(twPedidoProducto.getnCantidaRecibida());
+				System.err.println(productoBodega.getnCantidad() + pedidioProductoIngreso.getnCantidaRecibida() - twPedidoProducto.getnCantidaRecibida());
+				productoBodega.setnCantidad(productoBodega.getnCantidad() +  twPedidoProducto.getnCantidaRecibida() - pedidioProductoIngreso.getnCantidaRecibida() );
+				System.err.println(productoBodega);
+							
+			}
+			productoBodegaRepository.save(productoBodega);
+		}
+	    
 
 		twPedidoProducto.setdFechaRecibida(util.fechaSistema);
 		pedidioProducto = pedidosProductoRepository.save(twPedidoProducto);

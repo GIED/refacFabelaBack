@@ -121,6 +121,8 @@
     <artifactId>jaxws-api</artifactId>
     <version>2.3.0</version>
 </dependency>
+
+
 		
 		
 	</dependencies>
@@ -131,6 +133,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
 		</plugins>
 	</build>
 
