@@ -451,7 +451,7 @@ public class ProductosServiceImp implements ProductosService {
 		twVentasProducto=twProductosVentaRepository.obtenerProductoVenta(ventaProductoDto.getnIdVenta(), ventaProductoDto.getnIdProducto());		
 		twVentasProducto.setnEstatus(0);	
 		ventaProductoDto.setnEstatus(0);		
-		twProductosVentaRepository.save(twVentasProducto);	
+		twProductosVentaRepository.delete(twVentasProducto);	
 		caja=cajaRepository.obtenerCajaVigente();
 		
 		twProductobodega=productoBodegaRepository.obtenerProductoBodega(ventaProductoDto.getnIdProducto(), "LOCAL");
