@@ -304,96 +304,12 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="187">
-			<staticText>
-				<reportElement x="210" y="57" width="179" height="20" uuid="85d05d8c-4bfc-408a-8724-cfcc498a71d4"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SUBTOTAL]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="210" y="96" width="179" height="20" uuid="3124ffee-f70c-4de6-9fed-761e0c3c45c7"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[DESCUENTO]]></text>
-			</staticText>
-			<textField pattern="#,##0.00">
-				<reportElement x="411" y="57" width="132" height="20" uuid="9c3c0239-5db0-4279-9904-8d5fd71e001e"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["$ "+$P{subTotal}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="411" y="76" width="132" height="20" uuid="0576e01f-b9e8-4848-8150-d922d76085be"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["$ "+$P{ivaTotal}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0.00">
-				<reportElement x="411" y="96" width="132" height="20" uuid="402621c4-95fb-43c6-83bd-05e7e4b964f8"/>
-				<textElement verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["$ "+$P{descuento}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="210" y="76" width="178" height="20" uuid="826c7741-d29f-4902-842a-0b2cd373fcd9"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[TRASLADO IVA TASA 0.16000]]></text>
-			</staticText>
-			<image>
-				<reportElement x="0" y="5" width="259" height="147" uuid="f46844c0-a280-4cad-8e25-9583ed2395aa"/>
-				<imageExpression><![CDATA[$P{qr}]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="209" y="37" width="179" height="20" uuid="df1be9d4-31c9-4d33-8ec2-2a9cdb3f20c1"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[MONEDA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="411" y="37" width="132" height="20" uuid="cb55f2fd-d077-49d0-be00-ae143ab9d1a3"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[MXN - PESO MEXICANO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="411" y="17" width="132" height="20" uuid="69c30589-4991-452e-a851-09b31f73a2c6"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[CONTADO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="209" y="17" width="179" height="20" uuid="99cd8618-ed3d-4194-a66b-aad482e11b19"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[CONDICIONES DE PAGO]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true" pattern="#,##0.00">
-				<reportElement x="411" y="116" width="132" height="20" uuid="03538aa7-8d40-4115-9fc9-c1fddf22e7d6"/>
-				<textElement verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["$ "+$P{total}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="210" y="116" width="179" height="20" uuid="0cc388a5-7693-4f16-9d2f-d1ece580fbf2"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[TOTAL]]></text>
-			</staticText>
+		<band height="25">
 			<rectangle>
-				<reportElement x="0" y="167" width="555" height="20" backcolor="#010101" uuid="b59c8d9a-3a7c-451d-8156-5e14c171e638"/>
+				<reportElement x="0" y="0" width="555" height="20" backcolor="#010101" uuid="b59c8d9a-3a7c-451d-8156-5e14c171e638"/>
 			</rectangle>
 			<textField>
-				<reportElement x="0" y="167" width="555" height="20" forecolor="#FEFEFE" uuid="a939c20f-2220-4067-9c8d-b9b794249612"/>
+				<reportElement x="3" y="0" width="555" height="20" forecolor="#FEFEFE" uuid="a939c20f-2220-4067-9c8d-b9b794249612"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
