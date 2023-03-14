@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.BalanceCajaDto;
 import com.refacFabela.dto.PedidoDto;
 import com.refacFabela.dto.PedidoProductoDto;
+import com.refacFabela.dto.ProductoBodegaDto;
 import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
 import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
@@ -659,6 +661,43 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		
 		
 		return null;
+	}
+
+	@Override
+	public byte[] getReporteInventario(Long nIBodega, Long nIdNivel, Long nIdAnaquel) {
+		
+		
+		
+	
+		List <TwProductobodega> listaProductoInventario=productoBodegaRepository.obtenerInventaroEsp(nIBodega, nIdAnaquel, nIdNivel);
+		
+		
+		List <ProductoBodegaDto> listaProductoBodegaDto  =new ArrayList<ProductoBodegaDto>(); ;
+		System.err.println(listaProductoInventario);
+		
+		
+		for (int i = 0; i < listaProductoInventario.size(); i++) {
+			ProductoBodegaDto productoBodegaDto = new ProductoBodegaDto();
+			productoBodegaDto.setNoParte(listaProductoInventario.get(i).getTcProducto().getsNoParte());
+			productoBodegaDto.setProducto(listaProductoInventario.get(i).getTcProducto().getsProducto());
+			productoBodegaDto.setCantidad(listaProductoInventario.get(i).getnCantidad());
+			productoBodegaDto.setBodega(listaProductoInventario.get(i).getTcBodega().getsBodega());
+			productoBodegaDto.setAnaquel(listaProductoInventario.get(i).getTcAnaquel().getsAnaquel());
+			productoBodegaDto.setNivel(listaProductoInventario.get(i).getTcNivel().getsNivel());
+
+			
+			
+			
+			
+			listaProductoBodegaDto.add(productoBodegaDto);
+			
+		}
+		
+		System.err.println(listaProductoBodegaDto);
+		
+		
+		
+		return reporteService.generarReporteInventarioPDF(listaProductoBodegaDto);
 	}
 	
 	

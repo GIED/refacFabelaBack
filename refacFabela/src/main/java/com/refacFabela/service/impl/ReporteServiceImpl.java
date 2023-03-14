@@ -37,11 +37,13 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.BalanceCajaDto;
 import com.refacFabela.dto.PedidoProductoDto;
+import com.refacFabela.dto.ProductoBodegaDto;
 import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
 import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TwPedido;
+import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
@@ -639,6 +641,56 @@ public class ReporteServiceImpl implements ReporteService {
 		return null;
 	}
 
+	public byte[] generarReporteInventarioPDF(List<ProductoBodegaDto> listaProductoBodega) {
+		
+		try {
+			
+		
+			
+			String ruta="";
+			Resource resource = new ClassPathResource("/reports/plantillas/inventario.jrxml");
+			final Map<String, Object> params = new HashMap<>();
+			File pdfFile = null;
+			String nombreArchivo = "inventario";
+			
+			 ruta="/opt/webserver/backEnd/refacFabela/";
+	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+			utils util= new utils();
+			
+			//aqui van los parametros
+			
+			params.put("listaProductos", listaProductoBodega);
+		
+
+			
+			// InputStream ligado al reporte
+			InputStream inputStreamReport = resource.getInputStream();
+			FileOutputStream pos = new FileOutputStream(pdfFile);
+			JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
+			JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(listaProductoBodega)), pos);
+			
+			// Cierre de output stream
+			pos.flush();
+			pos.close();
+			
+			// Se recuperan los bytes correspondientes al reporte
+			byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+			
+			//Eliminar el archivo generado
+			
+			//pdfFile.delete();
+			
+			
+			
+			return bytesReporte;
+			//return null;
+
+		} catch (Exception e) {
+			logger.error("Error en metodo generaPDF(). Error al generar el pdf de reporte de caja ", e);
+		}
+		
+		return null;
+	}
 
 
 	

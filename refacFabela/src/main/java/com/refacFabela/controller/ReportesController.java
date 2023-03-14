@@ -118,6 +118,18 @@ public class ReportesController {
 		}
 	}
 	
+	@GetMapping(value = "/getReporteInventario")
+	public @ResponseBody byte[] getReporteIntario(HttpServletResponse response, @RequestParam(required = false) Long nIdBodega, @RequestParam(required = false) Long nIdAnaquel, @RequestParam(required = false) Long nIdNivel) {
+		
+		// genera el pdf con la venta guardada
+		try {
+			return generaReporteService.getReporteInventario(nIdBodega,nIdAnaquel, nIdNivel);
+		} catch (Exception e) {
+			logger.error("Error al generar el pdf del reporte de la caja ", e);
+			return null;
+		}
+	}
+	
 	
 
 
