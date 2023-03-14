@@ -80,5 +80,18 @@ public class PedidosController {
 		return null;
 	}
 	
+	@PostMapping("/borrarPedidoProducto")
+	public TwPedidoProducto borrarPedidoProducto(@RequestBody TwPedidoProducto twPedidoProducto) {
+
+		try {
+			return pedidosService.borrarPedidoProducto(twPedidoProducto);
+
+		} catch (Exception e) {
+			logger.error("Error al borrar el pedido producto" + e);
+		}
+
+		return null;
+	}
+	
 
 }

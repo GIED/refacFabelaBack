@@ -43,7 +43,8 @@ public class PedidosServiceImpl implements PedidosService {
 	private VentasRepository ventasRepository;
 	@Autowired
 	private TwHistoriaIngresoProductoRepository twHistoriaIngresoProductoRepository;
-
+  
+	
 	@Override
 	public List<TwPedidoProducto> obtenerPedidosRegistrados(Long nIdPedido) {
 
@@ -194,6 +195,14 @@ public class PedidosServiceImpl implements PedidosService {
 		}
 
 		return pedidioProducto;
+	}
+
+	@Override
+	public TwPedidoProducto borrarPedidoProducto(TwPedidoProducto twPedidoProducto) {
+		
+		pedidosProductoRepository.delete(twPedidoProducto);
+		
+		return null;
 	}
 
 }

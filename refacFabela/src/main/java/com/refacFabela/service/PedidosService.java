@@ -13,6 +13,7 @@ public interface PedidosService {
 	public List<TwPedidoProducto> obtenerPedidosRegistrados(Long nIdPedido);
 	public List<TvPedidoDetalle> obtenerPedidosEstatus(Long nEstatus);
 	public PedidoDto guaradarPedido(PedidoDto pedidoDto);
+	public TwPedidoProducto borrarPedidoProducto(TwPedidoProducto twPedidoProducto);
 	public TwPedidoProducto ingresoProducto(TwPedidoProducto twPedidoProducto);
 
 
