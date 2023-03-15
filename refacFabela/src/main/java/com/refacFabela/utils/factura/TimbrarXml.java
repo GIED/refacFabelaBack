@@ -42,8 +42,11 @@ import org.xml.sax.SAXException;
 import com.refacFabela.model.TwFacturacion;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.factura.CabeceraXml;
+import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.FacturacionService;
 import com.refacFabela.service.VentasService;
+import com.refacFabela.utils.envioMail;
+import com.refacFabela.utils.utils;
 import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.RespuestaCreditos;
 import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.RespuestaTFD33;
 import com.refacFabela.ws.org.tempuri.IWSCFDI33;
@@ -58,6 +61,9 @@ public class TimbrarXml {
 	
 	@Autowired 
 	private VentasService ventasService;
+	
+	@Autowired
+	private VentasRepository ventasRepository;
 
 	public String timbrarXml(Comprobante xml, Long idVenta, CabeceraXml cabecera)
 			throws GeneralSecurityException, IOException, ParserConfigurationException, SAXException, Exception {
@@ -164,6 +170,8 @@ public class TimbrarXml {
 	
 	private  void procesarXml(final String xml, Long idVenta, CabeceraXml cabecera, String cadenaOriginal) throws ParserConfigurationException, SAXException, IOException, TransformerException, Exception {
         RespuestaTFD33 Respuesta;
+        
+        utils util=new utils();
 
         Respuesta = timbrarCFDI(ConstantesFactura.usuarioFolios, ConstantesFactura.passwordFolios, xml, "TIMBRADO33");
        
@@ -201,7 +209,33 @@ public class TimbrarXml {
             this.ventasService.updateStatusVenta(twVenta);
             
             generarPdf(Respuesta.getTimbre().getValue().getUUID().getValue(), idVenta);
-            //enviarMail(cabecera);
+            
+            TwVenta venta=new TwVenta();
+            
+            
+            
+            /*Consulta para conocer el correo del cliente*/
+            venta=ventasRepository.findBynId(idVenta);
+            
+            
+            
+            /*Envió de correo*/
+            
+            String ruta="/opt/webserver/backEnd/refacFabela/";
+            String nombreArchivo=venta.getnId().toString();    
+                        
+            envioMail enviar=new envioMail();
+       				enviar.enviarCorreo(venta.getTcCliente().getsCorreo(), 
+       						"Factura_"+venta.getnId(),
+       						"<p>Adjunto al presente factura No. "+venta.getnId()+"</p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
+       						ruta,
+       						nombreArchivo,
+       						2
+       						);
+            
+            
+            
+  
 
         } else {
             System.out.println("Hubo un error en la operación");

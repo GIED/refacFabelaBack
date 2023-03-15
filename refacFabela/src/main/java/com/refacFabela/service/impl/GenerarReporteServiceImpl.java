@@ -52,6 +52,7 @@ import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.service.GeneraReporteService;
 import com.refacFabela.service.ReporteService;
+import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
 
 import antlr.Utils;
@@ -632,6 +633,15 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			 byte[] bytesReporte = null;
 			try {
 				  bytesReporte = Files.readAllBytes(Paths.get(ruta+ nIdCaja + ".pdf"));
+				  
+				    envioMail enviar=new envioMail();
+       				enviar.enviarCorreo("fabelapedro@gmail.com", 
+       						"Factura_"+nIdCaja.toString(),
+       						"<p>Adjunto al presente factura No. "+nIdCaja.toString()+"</p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
+       						ruta,
+       						nIdCaja.toString()+".pdf",
+       						2
+       						);
 				
 			      return bytesReporte;
 			} catch (IOException e) {

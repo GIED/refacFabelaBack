@@ -49,7 +49,7 @@ public class envioMail  {
 		  
 	
 		 		 
-		// correo="fabelapedro@gmail.com";
+		 correo="fabelapedro@gmail.com";
 		 String error="";
 		     
 	      Properties properties = new Properties();
@@ -107,21 +107,31 @@ public class envioMail  {
 	          
 	          System.err.println(ruta+nombreArchivo);
 	          
-	          if(tipo!=2) {
+	          if(tipo==2) {
 
 	         BodyPart adjuntoPDF = new MimeBodyPart();
-	          adjuntoPDF.setDataHandler(new DataHandler(new FileDataSource(ruta+nombreArchivo+".pdf")));
+	          adjuntoPDF.setDataHandler(new DataHandler(new FileDataSource(ruta+"/pdf"+nombreArchivo+".pdf")));
 	          adjuntoPDF.setFileName(nombreArchivo+".pdf");                       
-	         /*
+	         
 	             BodyPart adjuntoXML = new MimeBodyPart();
-	          adjuntoXML.setDataHandler(new DataHandler(new FileDataSource(ConstantesGenerales.rutaxmlTimbrado+cabecera.getFolio()+".xml")));
-	          adjuntoXML.setFileName(cabecera.getFolio()+".xml");    */
+	          adjuntoXML.setDataHandler(new DataHandler(new FileDataSource(ruta+"/pdf"+nombreArchivo+".xml")));
+	          adjuntoXML.setFileName(nombreArchivo+".pdf");    
 	          
 	        
 	          multipart.addBodyPart(adjuntoPDF); 
-	         //   multipart.addBodyPart(adjuntoXML); 
+	            multipart.addBodyPart(adjuntoXML); 
 	        
 	          } 
+	          
+	          if(tipo!=2) {
+
+	 	         BodyPart adjuntoPDF = new MimeBodyPart();
+	 	          adjuntoPDF.setDataHandler(new DataHandler(new FileDataSource(ruta+nombreArchivo+".pdf")));
+	 	          adjuntoPDF.setFileName(nombreArchivo+".pdf");             
+	 	          multipart.addBodyPart(adjuntoPDF); 
+	 	        
+	 	        
+	 	          } 
 	          multipart.addBodyPart(htmlPart);
 	          msg.setContent(multipart);
 
