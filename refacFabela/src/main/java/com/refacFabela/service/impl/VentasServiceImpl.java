@@ -575,5 +575,19 @@ public class VentasServiceImpl implements VentasService {
 		return this.VentasFacturaRepository.obtenerVentasFacturadas();
 	}
 
+
+	@Override
+	public List<TrVentaCobro> consultarPagoId(Long idVenta) {
+		
+		return this.trVentaCobroRepository.findBynIdVenta(idVenta);
+	}
+
+
+	@Override
+	public void eliminarCobroIdVenta(Long idVenta) {
+		this.trVentaCobroRepository.deleteBynIdVenta(idVenta);
+		
+	}
+
 	
 }

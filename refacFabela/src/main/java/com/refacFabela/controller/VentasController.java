@@ -364,6 +364,32 @@ public class VentasController {
 		return null;
 	}
 	
+	@PostMapping("/cambiarVentaACredito")
+	public TwVenta cambiarVentaACredito(@RequestBody  TwVenta venta) {
+		try {
+			
+		/**
+		 * aCTUALIZAMOS VENTA
+		 */
+			TwVenta twVenta = ventasService.updateStatusVenta(venta);
+			
+		/**
+		 * Verificamos que no haya registros en trVentaCobro
+		 */
+			
+			List<TrVentaCobro> listaCobros = ventasService.consultarPagoId(twVenta.getnId());
+			
+			if (listaCobros.size() > 0) {
+				ventasService.eliminarCobroIdVenta(twVenta.getnId());
+			}
+			
+			return twVenta;
+		} catch (Exception e) {
+			logger.error("Error al cambiar venta a credito" + e);
+		}
+		return null;
+	}
+	
 	
 
 }
