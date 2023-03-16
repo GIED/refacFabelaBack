@@ -69,6 +69,7 @@ public class ConstantesFactura {
 	    public static final String emailpass = "fabela20";     
 	    public static final String rutaxmlTimbrado = "/opt/webserver/backEnd/refacFabela/xml/";
 	    public static final String rutaPdf = "/opt/webserver/backEnd/refacFabela/pdf/";
+	    public static final String rutaRaiz = "/opt/webserver/backEnd/refacFabela/";
 	    public static final String rutaCer = "/opt/webserver/backEnd/refacFabela/factura/archivos/00001000000506837151.cer";
 	    public static final String rutaKey = "/opt/webserver/backEnd/refacFabela/factura/archivos/CSD_JESUS_ALEJANDRO_FABELA_MARTINEZ_FAMJ810312FY6_20210321_221418.key";
 	    

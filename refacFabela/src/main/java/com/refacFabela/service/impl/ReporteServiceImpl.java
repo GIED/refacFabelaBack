@@ -47,6 +47,7 @@ import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
+import com.refacFabela.utils.factura.ConstantesFactura;
 
 import antlr.Utils;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -306,7 +307,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         final Map<String, Object> params = new HashMap<>();
 	         File pdfFile = null;
 	         String nombreArchivo = "abono_"+reporteVenta.getFolioVenta();
-	          ruta="/opt/webserver/backEnd/refacFabela/";
+	          ruta=ConstantesFactura.rutaRaiz;
 	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
 	        
 	         String fechaVencimiento=util.sumarRestarDiasFecha(reporteVenta.getFecha(), 30);

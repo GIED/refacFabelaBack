@@ -34,6 +34,7 @@ import com.refacFabela.model.TwCotizacionesProducto;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwProductobodega;
+import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentaProductoCancela;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
@@ -50,10 +51,12 @@ import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.TwVentaProductoCancelaRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentasProductoRepository;
+import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.GeneraReporteService;
 import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
+import com.refacFabela.utils.factura.ConstantesFactura;
 
 import antlr.Utils;
 
@@ -98,6 +101,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	
 	@Autowired
 	public  ProductoBodegaRepository  productoBodegaRepository;
+	
+	@Autowired
+	private VentasRepository ventasRepository;
 	
 	
 
@@ -621,25 +627,29 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	}
 
 	@Override
-	public byte[] getDocumento(Long nIdCaja, TipoDoc TipoDoc) {
+	public byte[] getDocumento(Long nIdVenta, TipoDoc TipoDoc) {
 		String ruta="";
+		String rutaRaiz="";
 		File pdfFile = null;
 		
 		
 		if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.PDF_FACTURA)) {
 			
 			ruta=com.refacFabela.enums.TipoDoc.PDF_FACTURA.getPath();
+			rutaRaiz=ConstantesFactura.rutaRaiz;
 						    		    
 			 byte[] bytesReporte = null;
 			try {
-				  bytesReporte = Files.readAllBytes(Paths.get(ruta+ nIdCaja + ".pdf"));
+				  bytesReporte = Files.readAllBytes(Paths.get(ruta+ nIdVenta + ".pdf"));
+				  
+				 TwVenta twVenta= this.ventasRepository.getById(nIdVenta);
 				  
 				    envioMail enviar=new envioMail();
-       				enviar.enviarCorreo("fabelapedro@gmail.com", 
-       						"Factura_"+nIdCaja.toString(),
-       						"<p>Adjunto al presente factura No. "+nIdCaja.toString()+"</p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
-       						ruta,
-       						nIdCaja.toString()+".pdf",
+       				enviar.enviarCorreo(twVenta.getTcCliente().getsCorreo(), 
+       						"Factura_"+nIdVenta.toString(),
+       						"<p>Adjunto al presente factura No. "+nIdVenta.toString()+"</p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
+       						rutaRaiz,
+       						nIdVenta.toString(),
        						2
        						);
 				
@@ -658,7 +668,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		    
 			 byte[] bytesReporte = null;
 			try {
-				  bytesReporte = Files.readAllBytes(Paths.get(ruta+ nIdCaja + ".xml"));
+				  bytesReporte = Files.readAllBytes(Paths.get(ruta+ nIdVenta + ".xml"));
 				
 			      return bytesReporte;
 			} catch (IOException e) {
