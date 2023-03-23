@@ -644,6 +644,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				  
 				 TwVenta twVenta= this.ventasRepository.getById(nIdVenta);
 				  
+				 /*
 				    envioMail enviar=new envioMail();
        				enviar.enviarCorreo(twVenta.getTcCliente().getsCorreo(), 
        						"Factura_"+nIdVenta.toString(),
@@ -651,7 +652,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
        						rutaRaiz,
        						nIdVenta.toString(),
        						2
-       						);
+       						); */
 				
 			      return bytesReporte;
 			} catch (IOException e) {

@@ -215,20 +215,24 @@ public class TimbrarXml {
             
             
             /*Consulta para conocer el correo del cliente*/
+            
+            String ruta="";
+    		String rutaRaiz="";
             venta=ventasRepository.findBynId(idVenta);
-            
-            
+           
+            ruta=com.refacFabela.enums.TipoDoc.PDF_FACTURA.getPath();
+			rutaRaiz=ConstantesFactura.rutaRaiz;
+            String nombreArchivo=venta.getnId().toString();  
             
             /*Envió de correo*/
-            
-            String ruta="/opt/webserver/backEnd/refacFabela/";
-            String nombreArchivo=venta.getnId().toString();    
+                      
+              
                         
             envioMail enviar=new envioMail();
        				enviar.enviarCorreo(venta.getTcCliente().getsCorreo(), 
        						"Factura_"+venta.getnId(),
        						"<p>Adjunto al presente factura No. "+venta.getnId()+"</p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
-       						ruta,
+       						rutaRaiz,
        						nombreArchivo,
        						2
        						);

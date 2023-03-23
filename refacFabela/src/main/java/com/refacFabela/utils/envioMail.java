@@ -52,7 +52,7 @@ public class envioMail {
 		System.err.println(nombreArchivo);
 		System.err.println(tipo);
 
-		correo="fabelapedro@gmail.com";
+		// correo="fabelapedro@gmail.com";
 		String error = "";
 
 		Properties properties = new Properties();
