@@ -26,6 +26,7 @@ public class VentaProductoDto implements  Serializable {
 	private Integer nEstatus;
 	private Long nIdVenta;
 	private String sCondicionEntrega;
+	private double nUnitario;
 	
 	
 	
@@ -48,6 +49,7 @@ public class VentaProductoDto implements  Serializable {
 		this.nEstatus=twVentasProducto.getnEstatus();
 		this.nIdVenta=twVentasProducto.getnIdVenta();
 		this.sCondicionEntrega=twVentasProducto.getsCondicionEntrega();
+		this.nUnitario=twVentasProducto.getnPrecioUnitario();
 	}
 	
 
@@ -197,6 +199,14 @@ public class VentaProductoDto implements  Serializable {
 
 	public void setsCondicionEntrega(String sCondicionEntrega) {
 		this.sCondicionEntrega = sCondicionEntrega;
+	}
+
+	public double getnUnitario() {
+		return nUnitario;
+	}
+
+	public void setnUnitario(double nUnitario) {
+		this.nUnitario = nUnitario;
 	}
 
 	

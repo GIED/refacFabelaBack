@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.refacFabela.dto.CotizacionDto;
 import com.refacFabela.dto.TvStockProductoDto;
+import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TwCotizaciones;
 import com.refacFabela.model.TwCotizacionesDetalle;
 import com.refacFabela.model.TwCotizacionesProducto;
@@ -124,14 +125,22 @@ public class CotizacionServiceImpl implements CotizacionService {
 		
 		List<TvStockProductoDto> listaProductos = new ArrayList<TvStockProductoDto>();
 		
+		
+		
 		for (TwCotizacionesProducto twCotizacionesProducto : listaProductoCotizados) {
 			
 			TvStockProductoDto tvStockProducto = new TvStockProductoDto();
+			TcProducto tcProductoNuevo=new TcProducto();
 			
 			tvStockProducto.setnIdProducto(twCotizacionesProducto.getnIdProducto());
 			tvStockProducto.setnCantidadTotal(0);
 			tvStockProducto.setnCantidad(twCotizacionesProducto.getnCantidad());
-			tvStockProducto.setTcProducto(twCotizacionesProducto.getTcProducto());
+			
+			
+			tcProductoNuevo=twCotizacionesProducto.getTcProducto();
+		tcProductoNuevo.setnPrecioConIva(twCotizacionesProducto.getnTotalUnitario());
+        tvStockProducto.setTcProducto(tcProductoNuevo);
+			
 			tvStockProducto.setnStatus(1);
 			
 			listaProductos.add(tvStockProducto);
