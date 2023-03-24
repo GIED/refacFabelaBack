@@ -300,25 +300,18 @@ public class TimbrarXml {
 
 		// Se comprueba le operación
 		if (Respuesta.isOperacionExitosa()) {
-			System.out.println("Exito");
-			// Solo traera la informacion del primer paquete.
-
-			System.out.println("En Uso: "
-					+ Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(0).isEnUso().booleanValue());
-			System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(0)
-					.getFechaActivacion().toString());
-			System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(0)
-					.getFechaVencimiento().toString());
-			System.out.println(
-					Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(0).getPaquete().getValue());
-			System.out.println(
-					Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(0).getTimbres().intValue());
-			System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(0)
-					.getTimbresRestantes().intValue());
-			restantes = Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(0).getTimbresRestantes()
-					.intValue();
-			System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(0).getTimbresUsados()
-					.intValue());
+			for (int i = 0; i < Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().size(); i++) {
+				  System.out.println("En Uso: " + Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).isEnUso().booleanValue());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getFechaActivacion().toString());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getFechaVencimiento().toString());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getPaquete().getValue());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbres().intValue());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresRestantes().intValue());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresUsados().intValue());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).isVigente());
+	                  restantes=Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresRestantes().intValue();
+	                         System.out.println("RESTANTES :"+ restantes);
+			}
 
 		} else {
 			System.out.println("Hubo un error al realizar la consulta");

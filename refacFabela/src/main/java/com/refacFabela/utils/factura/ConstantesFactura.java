@@ -64,7 +64,7 @@ public class ConstantesFactura {
 	    public static final String rfcReceptor = "TES030201001";   
 	    public static final String passwordKey = "fabela1203";
 	    public static final String usuarioFolios = "FAMJ810312FY6"; 
-	    public static final String passwordFolios = "1Nfzoaj@";  
+	    public static final String passwordFolios = "Gv1+nhyoyy";  
 	    public static final String emailusuario = "ventas@refaccionesfabela.com";
 	    public static final String emailpass = "fabela20";     
 	    public static final String rutaxmlTimbrado = "/opt/webserver/backEnd/refacFabela/xml/";
