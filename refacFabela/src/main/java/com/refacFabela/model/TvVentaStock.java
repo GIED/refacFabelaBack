@@ -23,6 +23,9 @@ public class TvVentaStock  implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "n_id")
+	private Long nId;
+	
 	@Column(name = "n_idVenta")
 	private Long nIdVenta;
 	
@@ -52,6 +55,19 @@ public class TvVentaStock  implements Serializable {
 		
 	}
 	
+	
+
+	public Long getnId() {
+		return nId;
+	}
+
+
+
+	public void setnId(Long nId) {
+		this.nId = nId;
+	}
+
+
 
 	public Long getnIdVenta() {
 		return nIdVenta;

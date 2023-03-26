@@ -395,17 +395,13 @@ public class ProductosServiceImp implements ProductosService {
 	public List<TvVentaStock> obtenerVentasStockFecha(String dFechaInicio, String dFechaFinal) {
 		
 		
-		String fechaDeLanzamiento = "2022-05-20"; 
-		String fechaDeLanzamiento2 = "2022-01-20"; 
-
+//		String fechaDeLanzamiento = "2022-05-20"; 
+//		String fechaDeLanzamiento2 = "2022-01-20"; 
+//
 		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			Date dataFormateada = formato.parse(dFechaInicio);
 			Date dataFormateada2 = formato.parse(dFechaFinal);
-			System.err.println(dataFormateada);
-			System.err.println(dataFormateada2);
-			
-			
 			
 			return  tvVentasStockRepository.obtenerVentasStock(dataFormateada, dataFormateada2);
 			
