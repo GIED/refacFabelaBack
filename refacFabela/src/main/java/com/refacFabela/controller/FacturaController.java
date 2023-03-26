@@ -87,6 +87,18 @@ public class FacturaController {
 		}
 	}
 	
+	@GetMapping(value = "consultaCreditos")
+	public int consultaCreditos() {
+		
+		try {
+			
+			return this.facturaService.consultaCreditos();
+		} catch (Exception e) {
+			logger.error("Error al consultar creditos ", e);
+			return 0;
+		}
+	}
+	
 	
 	
 

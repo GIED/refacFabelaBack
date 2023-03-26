@@ -73,6 +73,12 @@ public class FacturacionServiceImpl implements FacturacionService {
 	public TwFacturacion guardar(TwFacturacion twFacturacion) {
 		return this.FacturaRepository.save(twFacturacion);
 	}
+
+	@Override
+	public int consultaCreditos() {
+		
+		return TimbrarXml.consultaFolio();
+	}
 	
 	
 

@@ -7,5 +7,7 @@ public interface FacturacionService {
 	public String venta(Long idVenta, String cveCfdi) throws Exception;
 	
 	public TwFacturacion guardar(TwFacturacion twFacturacion);
+	
+	public int consultaCreditos();
 
 }
