@@ -19,7 +19,9 @@ import com.refacFabela.utils.factura.GeneraXml;
 import com.refacFabela.utils.factura.TimbrarXml;
 import com.refacFabela.utils.factura.Transformar;
 
-import mx.bigdata.sat.cfdi.v33.schema.Comprobante;
+import mx.grupocorasa.sat.cfd._40.Comprobante;
+
+
 @Service
 public class FacturacionServiceImpl implements FacturacionService {
 	

@@ -31,6 +31,9 @@ public class CabeceraXml implements Serializable{
 	private String rfcReceptor;
 	private String usoCFDI;
 	private String emailReceptor;
+	private String regimenFiscalReceptor;
+	private String domicilioFiscalReceptor;
+	private String exportacion;
 	
 	
 	public CabeceraXml() {
@@ -169,6 +172,47 @@ public class CabeceraXml implements Serializable{
 	public void setEmailReceptor(String emailReceptor) {
 		this.emailReceptor = emailReceptor;
 	}
+
+	public String getRegimenFiscalReceptor() {
+		return regimenFiscalReceptor;
+	}
+
+	public void setRegimenFiscalReceptor(String regimenFiscalReceptor) {
+		this.regimenFiscalReceptor = regimenFiscalReceptor;
+	}
+
+	public String getDomicilioFiscalReceptor() {
+		return domicilioFiscalReceptor;
+	}
+
+	public void setDomicilioFiscalReceptor(String domicilioFiscalReceptor) {
+		this.domicilioFiscalReceptor = domicilioFiscalReceptor;
+	}
+	
+	
+
+	public String getExportacion() {
+		return exportacion;
+	}
+
+	public void setExportacion(String exportacion) {
+		this.exportacion = exportacion;
+	}
+
+	@Override
+	public String toString() {
+		return "CabeceraXml [version=" + version + ", serie=" + serie + ", folio=" + folio + ", fecha=" + fecha
+				+ ", formaPago=" + formaPago + ", condicionesPago=" + condicionesPago + ", subTotal=" + subTotal
+				+ ", moneda=" + moneda + ", total=" + total + ", tipoComprobante=" + tipoComprobante + ", metodoPago="
+				+ metodoPago + ", lugarExpedicion=" + lugarExpedicion + ", noCertificado=" + noCertificado
+				+ ", certificado=" + certificado + ", sello=" + sello + ", nombreEmisor=" + nombreEmisor
+				+ ", rfcEmisor=" + rfcEmisor + ", regimenFiscal=" + regimenFiscal + ", nombreReceptor=" + nombreReceptor
+				+ ", rfcReceptor=" + rfcReceptor + ", usoCFDI=" + usoCFDI + ", emailReceptor=" + emailReceptor
+				+ ", regimenFiscalReceptor=" + regimenFiscalReceptor + ", domicilioFiscalReceptor="
+				+ domicilioFiscalReceptor + "]";
+	}
+	
+	
 	
 	
 

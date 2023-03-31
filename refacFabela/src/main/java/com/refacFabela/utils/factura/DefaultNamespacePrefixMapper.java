@@ -11,7 +11,7 @@ private Map<String, String> namespaceMap= new HashMap<>();
     
     public  DefaultNamespacePrefixMapper(){
         namespaceMap.put("http://www.w3.org/2001/XMLSchema-instance", "xsi");
-        namespaceMap.put("http://www.sat.gob.mx/cfd/3", "cfdi");
+        namespaceMap.put("http://www.sat.gob.mx/cfd/4", "cfdi");
         
     }
     

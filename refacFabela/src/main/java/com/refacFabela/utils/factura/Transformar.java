@@ -45,6 +45,9 @@ public class Transformar {
 	            cabeceraXmlBean.setNombreReceptor(twVenta.getTcCliente().getsRazonSocial());
 	            cabeceraXmlBean.setRfcReceptor(twVenta.getTcCliente().getsRfc());// cambiar por rfc de camp 
 	            cabeceraXmlBean.setEmailReceptor(twVenta.getTcCliente().getsCorreo());// cambiar por email camp
+	            cabeceraXmlBean.setRegimenFiscalReceptor(twVenta.getTcCliente().getTcRegimenFiscal().getsCveRegimen());
+	            cabeceraXmlBean.setDomicilioFiscalReceptor(twVenta.getTcCliente().getnCp().toString());
+	            cabeceraXmlBean.setExportacion(ConstantesFactura.exportacion);
 	        
 
 	        return cabeceraXmlBean;
@@ -72,6 +75,7 @@ public class Transformar {
 	            conceptoXmlBean.setTipoFactor(ConstantesFactura.TipoFactor);
 	            conceptoXmlBean.setTasaOCuota(ConstantesFactura.TasaOCuota);
 	            conceptoXmlBean.setImporteImpuesto(String.valueOf(lista.get(i).getnIvaPartida()));
+	            conceptoXmlBean.setObjetoImp(ConstantesFactura.objetoImp);
 	            listaConcepto.add(conceptoXmlBean);
 	        }
 

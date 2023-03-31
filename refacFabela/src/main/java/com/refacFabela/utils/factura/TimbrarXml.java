@@ -52,7 +52,9 @@ import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.Respues
 import com.refacFabela.ws.org.tempuri.IWSCFDI33;
 import com.refacFabela.ws.org.tempuri.WSCFDI33;
 
-import mx.bigdata.sat.cfdi.v33.schema.Comprobante;
+import mx.grupocorasa.sat.cfd._40.Comprobante;
+
+
 @Component
 public class TimbrarXml {
 	

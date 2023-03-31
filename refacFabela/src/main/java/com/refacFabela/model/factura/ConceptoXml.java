@@ -23,6 +23,7 @@ public class ConceptoXml implements Serializable{
 	private String tipoFactor;
 	private String tasaOCuota;
 	private String importeImpuesto;
+	private String objetoImp;
 	
 	
 	
@@ -113,6 +114,25 @@ public class ConceptoXml implements Serializable{
 	}
 	public void setImporteImpuesto(String importeImpuesto) {
 		this.importeImpuesto = importeImpuesto;
+	}
+	
+	
+
+	public String getObjetoImp() {
+		return objetoImp;
+	}
+
+	public void setObjetoImp(String objetoImp) {
+		this.objetoImp = objetoImp;
+	}
+
+	@Override
+	public String toString() {
+		return "ConceptoXml [claveUnidad=" + claveUnidad + ", claveProdServ=" + claveProdServ + ", noIdentificacion="
+				+ noIdentificacion + ", cantidad=" + cantidad + ", unidad=" + unidad + ", descripcion=" + descripcion
+				+ ", valorUnitario=" + valorUnitario + ", importe=" + importe + ", descuento=" + descuento + ", Base="
+				+ Base + ", impuesto=" + impuesto + ", tipoFactor=" + tipoFactor + ", tasaOCuota=" + tasaOCuota
+				+ ", importeImpuesto=" + importeImpuesto + "]";
 	}
 	
 	

@@ -51,7 +51,12 @@ public class Impuesto implements Serializable{
 	public void setTotalImpuestosTraslados(String totalImpuestosTraslados) {
 		this.totalImpuestosTraslados = totalImpuestosTraslados;
 	}
+	@Override
+	public String toString() {
+		return "Impuesto [base=" + base + ", impuesto=" + impuesto + ", tipoFactor=" + tipoFactor + ", tasaOCuota="
+				+ tasaOCuota + ", importe=" + importe + ", totalImpuestosTraslados=" + totalImpuestosTraslados + "]";
+	}
     
     
-
+	
 }
