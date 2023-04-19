@@ -1,6 +1,7 @@
 package com.refacFabela.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class CotizacionServiceImpl implements CotizacionService {
 		twCotizacion.setnIdCliente(listaCotizacion.get(0).getnIdCliente());
 		twCotizacion.setnIdUsuario(listaCotizacion.get(0).getnIdUsuario());
 		twCotizacion.setsFolioCotizacion(listaCotizacion.get(0).getsFolio());
-		twCotizacion.setdFecha(utils.fechaSistema);
+		twCotizacion.setdFecha(new Date());
 		twCotizacion.setnEstatus(1);
 		
 		TwCotizaciones cotizacionRegistrada = new TwCotizaciones();
@@ -165,6 +166,13 @@ public class CotizacionServiceImpl implements CotizacionService {
 		
 	
 	 	return this.twCotizacionesRepository.findByBuscar(buscar);
+	}
+
+	@Override
+	public List<TwCotizacionesProducto> consultaCotizacionClienteProducto(Long nIdCliente, Long nIdProducto) {		
+	
+		
+		return cotizacionProductoRepository.findByIdClienteProducto(nIdCliente, nIdProducto);
 	}
 
 

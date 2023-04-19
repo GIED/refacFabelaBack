@@ -42,12 +42,15 @@ public class GeneraXml {
 	            
 	        ObjectFactory of = new ObjectFactory();
 	        Comprobante xml = of.createComprobante();
+	        
+	        LocalDateTime now = LocalDateTime.now();    
+	        LocalDateTime oneHourAgo = now.minusHours(1);
 
 	        xml.setVersion(cabeceraXml.getVersion());
 	        xml.setSerie(cabeceraXml.getSerie());
 	        xml.setFolio(cabeceraXml.getFolio());
 	        System.err.println(LocalDateTime.now());
-	        xml.setFecha(LocalDateTime.now());
+	        xml.setFecha(oneHourAgo);
 	        xml.setFormaPago(CFormaPago.fromValue(cabeceraXml.getFormaPago()));
 	        xml.setCondicionesDePago(cabeceraXml.getCondicionesPago());
 	        xml.setSubTotal(new BigDecimal(cabeceraXml.getSubTotal()));

@@ -2,18 +2,12 @@ package com.refacFabela.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.refacFabela.dto.TvVentaDetalleDto;
 import com.refacFabela.dto.VentaDto;
-import com.refacFabela.model.TcEstatusVenta;
-import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentasFactura;
@@ -115,7 +109,7 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setdFechaTerminoCredito(ventaDto.getFechaFinCredito());
 		System.err.println(ventaDto.getTipoPago());
 				
-		twVenta.setdFechaVenta(utils.fechaSistema);
+		twVenta.setdFechaVenta(new Date());
 		if (twVenta.getnIdTipoVenta() == 2L) {
 			twVenta.setnIdEstatusVenta(2L);
 		}else {
@@ -181,8 +175,8 @@ public class VentasServiceImpl implements VentasService {
 		}
 		
 		if(ventaDto.getIdTipoVenta()==3L) {
-			twPedido.setsCvePedido("VP-"+utils.formatoFecha(utils.fechaSistema)+Math.random()*1000000+1);
-			twPedido.setdFechaPedido(utils.fechaSistema);
+			twPedido.setsCvePedido("VP-"+utils.formatoFecha(new Date())+Math.random()*1000000+1);
+			twPedido.setdFechaPedido(new Date());
 			twPedido.setnIdUsuario(ventaDto.getIdUsuario());
 			twPedido.setnEstatus(0L);
 			twPedido.setnIdVenta(ventaRegistrada.getnId());
@@ -192,7 +186,7 @@ public class VentasServiceImpl implements VentasService {
 			for (int i = 0; i < ventaDto.getListaValidada().size(); i++) {
 				
 			    twPedidoProducto.setsClavePedido(respuesta.getsCvePedido());
-				twPedidoProducto.setdFechaPedido(utils.fechaSistema);
+				twPedidoProducto.setdFechaPedido(new Date());
 				twPedidoProducto.setnMotivoPedido(2L);
 				twPedidoProducto.setnIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
 				twPedidoProducto.setnCantidadPedida(ventaDto.getListaValidada().get(i).getnCantidad());
@@ -520,7 +514,7 @@ public class VentasServiceImpl implements VentasService {
 		}
 		
 		ventaCobro.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
-		ventaCobro.setdFecha(utils.fechaSistema);
+		ventaCobro.setdFecha(new Date());
 		ventaCobro.setnEstatus(1L);
 		ventaCobro.setnIdCaja(caja.getnId());
 		

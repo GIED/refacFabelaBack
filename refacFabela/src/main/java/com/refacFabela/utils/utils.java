@@ -19,7 +19,7 @@ public  class utils {
 	
 	public static String filtroTipoCambio = "ValorCambio";
 	public static String filtroIva = "ValorIva";
-	public static Date fechaSistema = (new Date());
+	public static Date fechaSistema = new Date();
 	public static LocalDateTime today = LocalDateTime.now();
 	public static LocalDateTime tomorrow = today.plusDays(1);
 

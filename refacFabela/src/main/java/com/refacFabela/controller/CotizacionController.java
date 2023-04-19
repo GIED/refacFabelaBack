@@ -92,4 +92,18 @@ public class CotizacionController {
 		}
 		return null;
 	}
+	
+	
+	@GetMapping("/consultaCotizacionClienteProducto")
+	public List<TwCotizacionesProducto> consultaCotizacionClienteProducto(@RequestParam Long nIdCliente, @RequestParam Long nIdProducto) {
+
+		try {
+			
+			return cotizacionService.consultaCotizacionClienteProducto(nIdCliente, nIdProducto);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos cotizados" + e);
+		}
+		return null;
+	}
 }

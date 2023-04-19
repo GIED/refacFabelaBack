@@ -8,25 +8,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.imageio.ImageIO;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.jasperreports.JasperReportsUtils;
-import org.w3c.dom.ls.LSInput;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -43,13 +37,10 @@ import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TwPedido;
-import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
 import com.refacFabela.utils.factura.ConstantesFactura;
-
-import antlr.Utils;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -475,7 +466,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("rfcEmpresa", reporteVenta.getRfcEmpresa());
 			params.put("nombreCliente", cliente.getsRazonSocial());
 			params.put("rfcCliente", cliente.getsRfc());		
-			params.put("fecha", util.formatoFecha(util.fechaSistema));
+			params.put("fecha", util.formatoFecha(new Date()));
 			//params.put("subTotal", reporteVenta.getSubTotal());
 			//params.put("ivaTotal", reporteVenta.getIvaTotal());
 			params.put("total", reporteVenta.getTotal());

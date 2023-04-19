@@ -16,7 +16,9 @@ public interface TwCotizacionesRepository extends JpaRepository<TwCotizacionesDe
 	@Query("Select c from TwCotizacionesDetalle c where   c.tcCliente.sRazonSocial like %:buscar% or c.tcCliente.sRfc like %:buscar% or c.nId like %:buscar%")
 	public List<TwCotizacionesDetalle> findByBuscar(String buscar);
 
-	@Query(value="Select * from tv_cotizacionDetalle where (d_fecha + INTERVAL 7 DAY) >= SYSDATE()  order by n_id desc ",   nativeQuery = true) 
+	@Query(value="Select * from tv_cotizacionDetalle where (d_fecha + INTERVAL 25 DAY) >= SYSDATE()  order by n_id desc ",   nativeQuery = true) 
 	public List<TwCotizacionesDetalle> findByBuscar2();
+	
+
 
 }

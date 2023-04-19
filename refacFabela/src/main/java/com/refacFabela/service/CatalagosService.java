@@ -2,6 +2,7 @@ package com.refacFabela.service;
 
 import java.util.List;
 
+import com.refacFabela.dto.fechaDto;
 import com.refacFabela.model.TcAnaquel;
 import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcCatalogogeneral;
@@ -38,4 +39,5 @@ public interface CatalagosService {
 	public TcEstatusVenta catalagoEstatusVentaId(Long nId);
 	public List<TcCp> catalagoCp(String cp);
 	public List<TcRegimenFiscal> catalagoRegimenFiscal();
+	public fechaDto fechaActual();
 }

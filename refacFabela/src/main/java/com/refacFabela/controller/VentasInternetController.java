@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +107,7 @@ public class VentasInternetController {
 					
 					comprobantePago.setsComprobante(nombreArchivo);
 					comprobantePago.setnStatus(1);
-					comprobantePago.setdFechaCarga(utils.fechaSistema);
+					comprobantePago.setdFechaCarga(new Date());
 					
 					response.put("twPagoComprobanteInternet", this.ventaInternetService.guardarComprobante(comprobantePago));
 					response.put("mensaje", "comprobante subido correctamente: "+nombreArchivo);
@@ -179,7 +180,7 @@ public class VentasInternetController {
 		
 			//Pago Aceptado
 		if (twPagoComprobanteInternet.getnStatus() == 2) {
-			twPagoComprobanteInternet.setdFechaValidacion(utils.fechaSistema);
+			twPagoComprobanteInternet.setdFechaValidacion(new Date());
 			pagoActualizado = this.ventaInternetService.guardarComprobante(twPagoComprobanteInternet);
 			Listacotizacion=cotizacionService.consultaCotizacionId(pagoActualizado.getnIdCotizacion());
 			

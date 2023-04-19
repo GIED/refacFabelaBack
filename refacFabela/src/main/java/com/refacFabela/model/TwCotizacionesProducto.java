@@ -52,7 +52,7 @@ public class TwCotizacionesProducto implements Serializable {
 	// bi-directional many-to-one association to TwCotizacione
 	@ManyToOne
 	@JoinColumn(name = "n_idCotizaciones", insertable = false, updatable = false)
-	private TwCotizaciones twCotizacione;
+	private TwCotizaciones twCotizaciones;
 
 	public TwCotizacionesProducto() {
 	}
@@ -145,12 +145,13 @@ public class TwCotizacionesProducto implements Serializable {
 		this.tcProducto = tcProducto;
 	}
 
-	public TwCotizaciones getTwCotizacione() {
-		return twCotizacione;
+	
+	public TwCotizaciones getTwCotizaciones() {
+		return twCotizaciones;
 	}
 
-	public void setTwCotizacione(TwCotizaciones twCotizacione) {
-		this.twCotizacione = twCotizacione;
+	public void setTwCotizaciones(TwCotizaciones twCotizaciones) {
+		this.twCotizaciones = twCotizaciones;
 	}
 
 	public String getsCondicionEntrega() {

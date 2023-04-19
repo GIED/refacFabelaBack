@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -117,11 +118,11 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		reporteCotizacion.setNombreEmpresa("Refacciones Fabela");
 		reporteCotizacion.setRfcEmpresa("FAMJ810312FY6");
-		reporteCotizacion.setNombreCliente(listaProductos.get(0).getTwCotizacione().getTcCliente().getsRazonSocial());
-		reporteCotizacion.setRfcCliente(listaProductos.get(0).getTwCotizacione().getTcCliente().getsRfc());
-		reporteCotizacion.setFolioCotizacion(listaProductos.get(0).getTwCotizacione().getnId());
-		reporteCotizacion.setFecha(listaProductos.get(0).getTwCotizacione().getdFecha());
-		reporteCotizacion.setCorreo(listaProductos.get(0).getTwCotizacione().getTcCliente().getsCorreo());
+		reporteCotizacion.setNombreCliente(listaProductos.get(0).getTwCotizaciones().getTcCliente().getsRazonSocial());
+		reporteCotizacion.setRfcCliente(listaProductos.get(0).getTwCotizaciones().getTcCliente().getsRfc());
+		reporteCotizacion.setFolioCotizacion(listaProductos.get(0).getTwCotizaciones().getnId());
+		reporteCotizacion.setFecha(listaProductos.get(0).getTwCotizaciones().getdFecha());
+		reporteCotizacion.setCorreo(listaProductos.get(0).getTwCotizaciones().getTcCliente().getsCorreo());
 		
 
 
@@ -614,7 +615,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		balanceCajaDto.setTotalEntregadas(totalEntregadas);
 		balanceCajaDto.setTotalNoEntregadas(totalNoEntregadas);
 		balanceCajaDto.setTotalEntregasParciales(totalEntegasParciales);
-		balanceCajaDto.setFechaGeneraReporte(util.formatoFecha(util.fechaSistema));
+		balanceCajaDto.setFechaGeneraReporte(util.formatoFecha(new Date()));
 		balanceCajaDto.setTvReporteDetalleVenta(trReporteDetalleVentas);
 		balanceCajaDto.setTvReporteCajaFormaPago(tvReporteCajaFormaPago);
 		balanceCajaDto.setTotalReintegro(totalReitegros);

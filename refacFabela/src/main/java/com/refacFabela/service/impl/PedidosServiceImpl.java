@@ -1,6 +1,7 @@
 package com.refacFabela.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class PedidosServiceImpl implements PedidosService {
 		TwPedido res = null;
 		utils util = new utils();
 
-		twPedido.setdFechaPedido(util.fechaSistema);
+		twPedido.setdFechaPedido(new Date());
 		twPedido.setdFechaPedidoCierre(null);
 		twPedido.setnIdUsuario(pedidoDto.getnIdUsuario());
 		twPedido.setnEstatus(pedidoDto.getnEstatus());
@@ -81,7 +82,7 @@ public class PedidosServiceImpl implements PedidosService {
 
 			twPedidoProducto = pedidoDto.getTwPedidoProducto().get(i);
 
-			twPedidoProducto.setdFechaPedido(util.fechaSistema);
+			twPedidoProducto.setdFechaPedido(new Date());
 			twPedidoProducto.setnIdPedido(res.getnId());
 			twPedidoProducto.setsClavePedido(pedidoDto.getsCvePedido());
 
@@ -137,7 +138,7 @@ public class PedidosServiceImpl implements PedidosService {
 		}
 	    
 
-		twPedidoProducto.setdFechaRecibida(util.fechaSistema);
+		twPedidoProducto.setdFechaRecibida(new Date());
 		pedidioProducto = pedidosProductoRepository.save(twPedidoProducto);
 
 		
@@ -164,7 +165,7 @@ public class PedidosServiceImpl implements PedidosService {
 			twHistoriaIngresoProducto.setnIdPedido(twPedidoProducto.getnIdPedido());
 			twHistoriaIngresoProducto.setnIdProducto(twPedidoProducto.getnIdProducto());
 			twHistoriaIngresoProducto.setnIdUsuario(twPedidoProducto.getnIdUsuario());
-			twHistoriaIngresoProducto.setdFechaingreso(util.fechaSistema);
+			twHistoriaIngresoProducto.setdFechaingreso(new Date());
 			twHistoriaIngresoProductoRepository.save(twHistoriaIngresoProducto);
 
 		}
@@ -175,7 +176,7 @@ public class PedidosServiceImpl implements PedidosService {
 
 			twPedido = twPedidoRepository.getById(twPedidoProducto.getnIdPedido());
 			twPedido.setnEstatus(1L);
-			twPedido.setdFechaPedidoCierre(util.fechaSistema);
+			twPedido.setdFechaPedidoCierre(new Date());
 			System.err.println("esta es la venta a consultar" + twPedido.getnIdVenta());
 
 			// SI EL PEDIDO ES GENERADO A PARTIR DE UNA VENTA POR PEDIDO SE ENVIA UN CORREO,
@@ -201,6 +202,17 @@ public class PedidosServiceImpl implements PedidosService {
 	public TwPedidoProducto borrarPedidoProducto(TwPedidoProducto twPedidoProducto) {
 		
 		pedidosProductoRepository.delete(twPedidoProducto);
+		
+		List<TwPedidoProducto> listProductoPedido=pedidosProductoRepository.obtenerPedidosRegistrados(twPedidoProducto.getnIdPedido());
+		
+		
+		if(listProductoPedido.size()==0) {
+			TwPedido pedido=twPedidoRepository.getById(twPedidoProducto.getnIdPedido());
+			twPedidoRepository.delete(pedido);					
+		}
+		
+		
+		
 		
 		return null;
 	}

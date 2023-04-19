@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.refacFabela.dto.fechaDto;
 import com.refacFabela.model.TcAnaquel;
 import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcCatalogogeneral;
@@ -284,6 +285,19 @@ public class CatalogosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener la lista de Regimen Fiscal " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/fecha")
+	public fechaDto fecha() {
+		try {
+
+			return catalagosService.fechaActual();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener la fechaActual " + e);
 		}
 		return null;
 	}

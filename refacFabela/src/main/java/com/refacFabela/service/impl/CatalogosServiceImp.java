@@ -1,11 +1,13 @@
 package com.refacFabela.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.dto.fechaDto;
 import com.refacFabela.model.TcAnaquel;
 import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcCatalogogeneral;
@@ -37,6 +39,7 @@ import com.refacFabela.repository.CategoriaGeneralRepository;
 import com.refacFabela.repository.TcCpRepository;
 import com.refacFabela.repository.TcRegimenFiscalRepository;
 import com.refacFabela.service.CatalagosService;
+import com.refacFabela.utils.utils;
 
 @Service
 public class CatalogosServiceImp implements CatalagosService {
@@ -178,6 +181,18 @@ public class CatalogosServiceImp implements CatalagosService {
 	public List<TcRegimenFiscal> catalagoRegimenFiscal() {
 		// TODO Auto-generated method stub
 		return tcRegimenFiscalRepository.findAll(Sort.by(Sort.Direction.ASC, "sDescripcion"));
+	}
+
+	@Override
+	public fechaDto fechaActual() {
+		
+		
+		fechaDto fecha= new fechaDto();
+		
+		fecha.setFechaActual(new Date());
+		
+		
+		return fecha ;
 	}
 
 	

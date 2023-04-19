@@ -1,5 +1,6 @@
 package com.refacFabela.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class ClientesServiceImp implements ClienteService {
 	public TcCliente guardarCliente(TcCliente tcCliente) {
 		utils util=new utils();
 		if(tcCliente.getN_limiteCredito()>0 && tcCliente.getD_fechaCredito()==null) {
-			tcCliente.setD_fechaCredito(utils.fechaSistema);			
+			tcCliente.setD_fechaCredito(new Date());			
 			
 		}
 		

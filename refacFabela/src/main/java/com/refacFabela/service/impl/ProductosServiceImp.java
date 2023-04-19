@@ -6,14 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ibm.icu.text.SimpleDateFormat;
-import com.refacFabela.dto.AbonosDto;
-import com.refacFabela.dto.TvStockProductoDto;
-import com.refacFabela.dto.TvVentaDetalleDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcCatalogogeneral;
@@ -144,7 +139,7 @@ public class ProductosServiceImp implements ProductosService {
 	public TcProducto guardarProducto(TcProducto tcProducto) {
 
 		// se asigana la fecha de la aplicación
-		tcProducto.setdFecha(utils.fechaSistema);
+		tcProducto.setdFecha(new Date());
 
 		// Se manda calcular el precio final, precio sin iva y precio peso del producto
 		tcProducto = utilisServiceImp.calcularPrecio(tcProducto);
@@ -242,7 +237,7 @@ public class ProductosServiceImp implements ProductosService {
 		newProducto.setnIdGanancia(twProductosAlternativo.getTcProductoAlternativo().getnIdGanancia());
 		newProducto.setnIdusuario(twProductosAlternativo.getTcProductoAlternativo().getnIdusuario());
 		newProducto.setnEstatus(twProductosAlternativo.getTcProductoAlternativo().getnEstatus());
-		newProducto.setdFecha(utils.fechaSistema);
+		newProducto.setdFecha(new Date());
 		newProducto.setnIdclavesat(twProductosAlternativo.getTcProductoAlternativo().getnIdclavesat());
 		
 		// Se manda calcular el precio final, precio sin iva y precio peso del producto
@@ -306,7 +301,7 @@ public class ProductosServiceImp implements ProductosService {
 		System.err.println(ventaProductoDto.getnId());
 		
 		twVentasProductoDTO=twProductosVentaRepository.obtenerPrpductosId(ventaProductoDto.getnId());
-		twVentasProductoDTO.setdFechaEntregaAlmacen(utils.fechaSistema);
+		twVentasProductoDTO.setdFechaEntregaAlmacen(new Date());
 		twVentasProductoDTO.setnEstatusEntregaAlmacen(ventaProductoDto.getnEstatusEntregaAlmacen());
 		
 		twProductosVentaRepository.save(twVentasProductoDTO); 
@@ -320,7 +315,7 @@ public class ProductosServiceImp implements ProductosService {
 		
 		
 	
-		abonoDto.setdFecha(utils.fechaSistema);
+		abonoDto.setdFecha(new Date());
 	
 		
 		System.err.println(abonoDto);
@@ -467,7 +462,7 @@ public class ProductosServiceImp implements ProductosService {
 			twVentaProductoCancela.setnTotalUnitario(twVentasProducto.getnTotalUnitario());
 			twVentaProductoCancela.setnPrecioPartida(twVentasProducto.getnPrecioPartida());
 			twVentaProductoCancela.setnIdUsuario(twVentasProducto.getnIdUsuario());
-			twVentaProductoCancela.setdFecha(util.fechaSistema);
+			twVentaProductoCancela.setdFecha(new Date());
 			twVentaProductoCancela.setnIdCaja(caja.getnId());
 			
 			

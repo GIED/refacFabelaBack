@@ -16,5 +16,6 @@ public interface CotizacionService {
 	public TwCotizacionesDetalle consultaCotizacionById(Long idCotizacion);
 	public List<TvStockProductoDto> consultaCotizacionId(Long id);
 	public List<TwCotizacionesProducto> consultaCotizacionIdCotizacion(Long id);
+	public List<TwCotizacionesProducto> consultaCotizacionClienteProducto(Long nIdCliente, Long nIdProducto);
 
 }
