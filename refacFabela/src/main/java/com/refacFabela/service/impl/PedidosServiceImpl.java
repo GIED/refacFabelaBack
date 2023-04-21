@@ -217,4 +217,10 @@ public class PedidosServiceImpl implements PedidosService {
 		return null;
 	}
 
+	@Override
+	public List<TvPedidoDetalle> obtenerPedidos() {
+		
+		return tvPedidoDetalleRepository.obtenerPedidosDetalle();
+	}
+
 }

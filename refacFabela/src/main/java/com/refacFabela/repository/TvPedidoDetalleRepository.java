@@ -14,5 +14,7 @@ public interface TvPedidoDetalleRepository extends JpaRepository<TvPedidoDetalle
 	
 	@Query("Select c from TvPedidoDetalle c where c.nEstatus= :nEstatus")
 	List<TvPedidoDetalle> obtenerPedidosDetalleEstatus(long nEstatus);
+	@Query("Select c from TvPedidoDetalle c order by c.nId asc ")
+	List<TvPedidoDetalle> obtenerPedidosDetalle();
 
 }

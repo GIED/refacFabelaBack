@@ -54,6 +54,19 @@ public class PedidosController {
 		return null;
 	}
 	
+	@GetMapping("/obtenerPedidos")
+	public List<TvPedidoDetalle> obtenerPedidos() {
+		try {
+
+			return pedidosService.obtenerPedidos();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los pedidos registrados " + e);
+		}
+		return null;
+	}
+	
 	@PostMapping("/guardarPedido")
 	public PedidoDto guardarPedido(@RequestBody PedidoDto pedidoDto) {
 

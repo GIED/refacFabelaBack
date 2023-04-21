@@ -10,6 +10,7 @@ import com.refacFabela.model.TwCotizacionesProducto;
 @Repository
 public interface CotizacionProductoRepository extends JpaRepository<TwCotizacionesProducto, Long> {
 	
+	@Query("Select c from TwCotizacionesProducto c where nIdCotizacion=:idCotizacion  order by  c.nId asc ")
 	public List<TwCotizacionesProducto> findBynIdCotizacion(Long idCotizacion);
 	
 	@Query("Select c from TwCotizacionesProducto c where twCotizaciones.tcCliente.nId=:nIdCliente and tcProducto.nId=:nIdProducto order by nIdCotizacion desc ")
