@@ -221,14 +221,9 @@ public class VentasServiceImpl implements VentasService {
 			
 			listaStock = productoBodegaRepository.findBynIdProducto(twVentaProducto.getnIdProducto());
 			
-			int cantidad = twVentaProducto.getnCantidad();
-		
-			
+			int cantidad = twVentaProducto.getnCantidad();	
 
 		
-			
-			
-			
 
 			while (cantidad != 0) {
 				

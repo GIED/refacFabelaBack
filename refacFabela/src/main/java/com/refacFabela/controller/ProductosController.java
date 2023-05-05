@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
+import com.refacFabela.model.TvStockProductoHist;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
+import com.refacFabela.model.TwVentaProductoCancela;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.service.ProductosService;
@@ -198,6 +200,29 @@ public class ProductosController {
 		return null;
 	}
 	
+	@GetMapping("/obtenerHistorialStockProducto")
+	public List<TvStockProductoHist> obtenerHistorialStockProducto(@RequestParam() Long id) {
+
+		try {
+			return productosService.obtenerStockProductoHist(id);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener el stock de bodegas" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerProductosCancelaId")
+	public List<TwVentaProductoCancela> obtenerProductosCancelaId(@RequestParam() Long id) {
+
+		try {
+			return productosService.obtenerProductosCancelaId(id);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos cancelados" + e);
+		}
+		return null;
+	}
 	
 	
 

@@ -12,7 +12,7 @@ import com.refacFabela.model.TvVentaProductoMes;
 public interface VentaProductoMesRepository extends JpaRepository<TvVentaProductoMes, Long> {
 
 	
-	@Query(value="Select * from tv_venta_producto_mes where n_idProductos=:id", nativeQuery = true) 
+	@Query(value="Select * from tv_venta_producto_mes where n_idProductos=:id order by substr(s_fechaVentaNumero,4,8), substr(s_fechaVentaNumero,1,2) asc", nativeQuery = true) 
 	public List<TvVentaProductoMes> obtenerVentaProductoMesId(Long id);
 	
 }

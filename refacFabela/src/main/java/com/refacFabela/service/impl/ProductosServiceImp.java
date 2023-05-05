@@ -16,6 +16,7 @@ import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvStockProducto;
+import com.refacFabela.model.TvStockProductoHist;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
@@ -41,6 +42,7 @@ import com.refacFabela.repository.ProductoBodegasIdRepository;
 import com.refacFabela.repository.ProductosAlternativosRepository;
 import com.refacFabela.repository.ProductosRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
+import com.refacFabela.repository.TvStockProductoHistRepository;
 import com.refacFabela.repository.TvVentasStockRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwMaquinaClienteRepository;
@@ -105,6 +107,8 @@ public class ProductosServiceImp implements ProductosService {
 	@Autowired
 	private TwVentaProductosTraerRepository twVentaProductosTraerRepository;
 
+	@Autowired
+	private TvStockProductoHistRepository tvStockProductoHistRepository;
 
 
 	
@@ -494,6 +498,18 @@ public class ProductosServiceImp implements ProductosService {
 	
 		
 		return twVentaProductosTraerRepository.findBynIdVenta(nIdVenta);
+	}
+
+	@Override
+	public List<TvStockProductoHist> obtenerStockProductoHist(Long id) {
+		
+		return tvStockProductoHistRepository.obtenerHistoriaStockProducto(id);
+	}
+
+	@Override
+	public List<TwVentaProductoCancela> obtenerProductosCancelaId(Long id) {
+		
+		return twVentaProductoCancelaRepository.productosCancelados(id);
 	}
 
 	

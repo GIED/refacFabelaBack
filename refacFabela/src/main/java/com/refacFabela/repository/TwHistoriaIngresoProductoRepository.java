@@ -12,7 +12,7 @@ import com.refacFabela.model.TwHistoriaIngresoProducto;
 public interface TwHistoriaIngresoProductoRepository extends JpaRepository<TwHistoriaIngresoProducto, Long> {
 	
 	
-	@Query("Select e from TwHistoriaIngresoProducto e where e.nIdProducto=:nId")	
+	@Query("Select e from TwHistoriaIngresoProducto e where e.nIdProducto=:nId order by nIdPedido desc")	
 	List<TwHistoriaIngresoProducto> obtenerIngresoProductos(Long nId);
 
 }
