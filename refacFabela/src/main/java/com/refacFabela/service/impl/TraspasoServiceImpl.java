@@ -22,12 +22,19 @@ public class TraspasoServiceImpl implements TraspasoService {
 	@Transactional
 	public TwProductobodega guardar(TwProductobodega productoBodega) {
 		
+		TwProductobodega pb =new TwProductobodega();
+		
+		pb=productoBodegaRepository.obtenerStockBodega(productoBodega.getnIdProducto(), productoBodega.getnIdBodega());
+		productoBodega.setnCantidad(pb.getnCantidad());
+		
 		return this.productoBodegaRepository.save(productoBodega);
 	}
 
 
 	@Override
 	public List<TwProductobodega> guardarExterno(List<TwProductobodega> listProductoBodega) {
+		
+		
 		
 		return this.productoBodegaRepository.saveAll(listProductoBodega);
 	}

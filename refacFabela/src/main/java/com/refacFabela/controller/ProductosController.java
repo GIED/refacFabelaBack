@@ -90,6 +90,7 @@ public class ProductosController {
 	public List<TcProducto> obtenerProductosNoParteLike(@RequestParam() String No_Parte) {
 
 		try {
+			System.err.println(productosService.obtenerNoParteLike(No_Parte));
 			return productosService.obtenerNoParteLike(No_Parte);
 		} catch (Exception e) {
 

@@ -20,5 +20,8 @@ public interface ProductoBodegaRepository extends JpaRepository<TwProductobodega
 	@Query("Select d from TwProductobodega d  where d.nIdProducto =:nIProducto and d.tcBodega.sBodega =:bodega " )
 	public TwProductobodega obtenerProductoBodega(Long nIProducto, String bodega);
 	
+	@Query("Select d from TwProductobodega d  where d.nIdProducto =:producto and d.nIdBodega =:bodega " )
+	public TwProductobodega obtenerStockBodega(Long producto, Long bodega);
+	  
 	
 }
