@@ -50,7 +50,9 @@ public class FacturacionServiceImpl implements FacturacionService {
 			
 			//System.out.println("llego");
 			
-			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);
+			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);			
+			
+			if(twVenta.getnIdFacturacion()==0L) {
 			List<TwVentasProducto> productosVendidos = this.ventasProductoRepository.findBynIdVenta(idVenta);
 			
 			
@@ -64,9 +66,13 @@ public class FacturacionServiceImpl implements FacturacionService {
 	        timbrarXml.timbrarXml(xml, idVenta, cabeceraXml);
 	        
 	        return "ok";
+	        }
+			else {
+				return "Ya se facturó";
+			}
 			
 		}catch (Exception e) {
-			return null;
+			return "Error al facturar";
 		}
 		
 	}

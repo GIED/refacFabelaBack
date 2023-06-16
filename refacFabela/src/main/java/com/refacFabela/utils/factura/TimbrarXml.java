@@ -174,6 +174,9 @@ public class TimbrarXml {
         RespuestaTFD33 Respuesta;
         
         utils util=new utils();
+		TwVenta twVentaConsulta = this.ventasRepository.findBynId(idVenta);	
+		
+		if(twVentaConsulta.getnIdFacturacion()==0L) {
 
         Respuesta = timbrarCFDI(ConstantesFactura.usuarioFolios, ConstantesFactura.passwordFolios, xml, "TIMBRADO33");
        
@@ -201,7 +204,8 @@ public class TimbrarXml {
             twFacturacion.setS_selloSat(Respuesta.getTimbre().getValue().getSelloSAT().getValue()); 
             twFacturacion.setS_cadenaOriginal(cadenaOriginal);
             twFacturacion.setnEstatus(1);
-            
+                        
+          
             twFacturacion = facturacionService.guardar(twFacturacion);
             
             TwVenta twVenta = this.ventasService.consltaVentasId(idVenta);
@@ -248,11 +252,15 @@ public class TimbrarXml {
             System.out.println(Respuesta.getCodigoRespuesta().getValue());
             System.out.println(Respuesta.getMensajeErrorDetallado().getValue());
         }
-
+         
         if (Respuesta.getCodigoConfirmacion().getValue() != null) {
             System.out.println("Codigo de Confirmacion: " + Respuesta.getCodigoConfirmacion().getValue());
         }    
  
+        
+		}
+
+       
        
     
         
