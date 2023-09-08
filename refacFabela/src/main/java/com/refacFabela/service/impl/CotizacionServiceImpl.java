@@ -139,15 +139,20 @@ public class CotizacionServiceImpl implements CotizacionService {
 			
 			
 			tcProductoNuevo=twCotizacionesProducto.getTcProducto();
-		tcProductoNuevo.setnPrecioConIva(twCotizacionesProducto.getnTotalUnitario());
-        tvStockProducto.setTcProducto(tcProductoNuevo);
+		    tcProductoNuevo.setnPrecioConIva(twCotizacionesProducto.getnTotalUnitario());
+		    tcProductoNuevo.setnPrecioIva(twCotizacionesProducto.getnIvaUnitario());
+		    tcProductoNuevo.setnPrecioSinIva(twCotizacionesProducto.getnPrecioUnitario());
+		    tcProductoNuevo.setnPrecioPeso(twCotizacionesProducto.getnPrecioUnitario());
+            tvStockProducto.setTcProducto(tcProductoNuevo);
 			
 			tvStockProducto.setnStatus(1);
+			System.err.println(tvStockProducto);
 			
 			listaProductos.add(tvStockProducto);
 			
 			
 		}
+		System.err.println(listaProductos);
 		
 		
 		return listaProductos;
