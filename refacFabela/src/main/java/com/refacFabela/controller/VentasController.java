@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.ProductoDescuentoDto;
 import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.TvVentaDetalleDto;
 import com.refacFabela.dto.VentaDto;
@@ -182,7 +183,7 @@ public class VentasController {
 	public TwVenta guardarVenta(@RequestBody VentaDto ventaDto) {
 
 		try {		
-			
+			System.err.println("Entre al metodo de guardado"+ ventaDto);
 			
 			return ventasService.guardarVenta(ventaDto);
 		} catch (Exception e) {
@@ -270,11 +271,11 @@ public class VentasController {
 	}
 	
 	@PostMapping("/calcularNuevoPrecio")
-	public TcProducto calcularNuevoPrecio(@RequestBody TcProducto tcProducto) {
+	public TcProducto calcularNuevoPrecio(@RequestBody ProductoDescuentoDto productoDescuentoDto) {
 
-		try {
-		
-			return productosService.calcularNuevoPrecio(tcProducto);
+		try {		
+			System.err.println(productoDescuentoDto);
+			return productosService.calcularNuevoPrecio(productoDescuentoDto);
 		} catch (Exception e) {
 
 			logger.error("Error al calcular el nuevo precio" + e);

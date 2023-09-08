@@ -51,6 +51,9 @@ public class TcCliente implements Serializable {
 	
 	@Column(name="n_idRegimenFiscal")
 	private Integer nIdRegimenFiscal;
+	
+	@Column(name="n_descuento")
+	private Boolean nDescuento;
 
 	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
@@ -221,6 +224,30 @@ public class TcCliente implements Serializable {
 	public void setnCp(Integer nCp) {
 		this.nCp = nCp;
 	}
+
+
+
+
+
+
+	public Boolean getnDescuento() {
+		return nDescuento;
+	}
+
+
+
+
+
+
+	public void setnDescuento(Boolean nDescuento) {
+		this.nDescuento = nDescuento;
+	}
+
+
+
+
+
+
 
 
 	

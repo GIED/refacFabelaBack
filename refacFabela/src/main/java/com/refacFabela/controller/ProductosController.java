@@ -172,6 +172,19 @@ public class ProductosController {
 		}
 		return null;
 	}
+	@GetMapping("/obtenerProductosAlternativosDescuento")
+	public List<TwProductosAlternativo> obtenerProductosAlternativosDescueto(@RequestParam() Long nId, @RequestParam() Long nIdCliente) {
+
+		try {
+			
+			
+			return productosService.obtenerProductosAlternativosDescuento(nId, nIdCliente);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los Productos alternativos" + e);
+		}
+		return null;
+	}
 
 	@PostMapping("/guardarProductoAlternativo")
 	public TwProductosAlternativo obtenerProductosNoParteLike(

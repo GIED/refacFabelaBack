@@ -9,9 +9,11 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.refacFabela.dto.ProductoDescuentoDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcCatalogogeneral;
+import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TrVentaCobro;
@@ -36,6 +38,7 @@ import com.refacFabela.repository.CatalogoAnaquelRepository;
 import com.refacFabela.repository.CatalogoBodegasRepository;
 import com.refacFabela.repository.CatalogoNivelesRepository;
 import com.refacFabela.repository.CatalogosRepository;
+import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.HistoriaPrecioProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ProductoBodegasIdRepository;
@@ -109,6 +112,9 @@ public class ProductosServiceImp implements ProductosService {
 
 	@Autowired
 	private TvStockProductoHistRepository tvStockProductoHistRepository;
+	
+	@Autowired
+	private ClientesRepository clientesRepository;
 
 
 	
@@ -222,6 +228,40 @@ public class ProductosServiceImp implements ProductosService {
 	public List<TwProductosAlternativo> obtenerProductosAlternativos(Long nId) {
 		
 		return productosAlternativosRepository.consultaProductosAlternativos(nId, 1);
+	}
+public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long nId, Long nIdCliente) {
+		
+	TcCliente cliente =new TcCliente();
+	TcCatalogogeneral tipoCambio=new TcCatalogogeneral();
+	
+	utils util=new  utils();
+	tipoCambio=catalogosRepository.findBysClave("ValorCambio");
+	
+	cliente=clientesRepository.getById(nIdCliente);
+	
+	 List<TwProductosAlternativo> twProductosAlternativo=productosAlternativosRepository.consultaProductosAlternativos(nId, 1);
+	
+	if(cliente.getnDescuento().equals(true)) {
+		
+		for (int i = 0; i < twProductosAlternativo.size(); i++) {
+		
+			
+			twProductosAlternativo.get(i).setTcProductoAlternativo(util.calcularPrecio(twProductosAlternativo.get(i).getTcProductoAlternativo(), tipoCambio.getnValor(), 0.0, 1, true));;
+			
+		}
+		
+	}
+	
+	System.err.println(twProductosAlternativo);
+	
+	
+	
+	
+	
+	
+	
+
+		return twProductosAlternativo;
 	}
 
 	@Override
@@ -376,15 +416,28 @@ public class ProductosServiceImp implements ProductosService {
 	}
 
 
-	public TcProducto calcularNuevoPrecio(TcProducto tcProducto) {
+	public TcProducto calcularNuevoPrecio( ProductoDescuentoDto productoDescuentoDto) {
 		System.err.println("entre a calcular el precio");
 		utils util= new utils();
 		TcCatalogogeneral tipoCambio=new TcCatalogogeneral();
+		boolean descuento = false;
 		
 		tipoCambio=catalogosRepository.findBysClave("ValorCambio");
+		System.err.println(productoDescuentoDto);
+		
+		if(productoDescuentoDto.getTcCliente().getnDescuento().equals(true) ) {
+			System.err.println("Entre a cambiar la badera para hacer el descuento");
+			descuento=true;
+			
+		}
+		
+		 
+		
+		TcProducto tcProducto=new TcProducto();
+		tcProducto=productoDescuentoDto.getTcProducto();
 		
 		
-		tcProducto=util.calcularPrecio(tcProducto, tipoCambio.getnValor(),0.0,1);
+		tcProducto=util.calcularPrecio(tcProducto, tipoCambio.getnValor(),0.0,1, descuento);
 		
 		
 		return tcProducto;

@@ -10,7 +10,7 @@ import com.refacFabela.model.TwProductosAlternativo;
 @Repository
 public interface ProductosAlternativosRepository extends JpaRepository<TwProductosAlternativo, Long> {
 	
-	@Query(value = "select p from TwProductosAlternativo p where p.nIdProducto=:nIdProducto and p.nEstatus=:nEsatus ")
+	@Query(value = "select p from TwProductosAlternativo p where p.nIdProducto=:nIdProducto and p.nEstatus=:nEsatus order by tcProductoAlternativo.sNoParte asc ")
 	public List<TwProductosAlternativo> consultaProductosAlternativos(Long nIdProducto, int nEsatus);
 	
 

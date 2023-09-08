@@ -71,7 +71,7 @@ public class CotizacionServiceImpl implements CotizacionService {
 			twCotizacionProducto.setnPrecioPartida(cotizacionDto.getnCantidad()* cotizacionDto.getnPrecioUnitario());
 			twCotizacionProducto.setnIvaPartida(utils.truncarDecimales(twCotizacionProducto.getnPrecioPartida() * .16));
 			twCotizacionProducto.setnTotalPartida(utils.truncarDecimales(twCotizacionProducto.getnPrecioPartida() + twCotizacionProducto.getnIvaPartida()));
-			
+			twCotizacionProducto.setnIdDescuento(cotizacionDto.getnInDescuento());
 			List<TwProductobodega> productoBodega=productoBodegaRepository.findBynIdProducto(cotizacionDto.getnIdProducto());
 			
 			for (int i = 0; i < productoBodega.size(); i++) {

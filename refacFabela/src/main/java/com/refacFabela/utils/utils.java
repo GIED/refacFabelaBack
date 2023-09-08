@@ -61,54 +61,50 @@ public  class utils {
 	
 	}
 	
-	public TcProducto calcularPrecio(TcProducto tcProducto, Double dolar, Double aumento, int cantidad ) {
-		
-		
+	public TcProducto calcularPrecio(TcProducto tcProducto, Double dolar, Double aumento, int cantidad, boolean descuento ) {
+				
 	        double precioPeso = 0;
 	        double precioPesofinalSinIva = 0;
             double precio_unitario_calculado = 0;
 		 	double iva_unitario_calculado = 0;
 	        double total_unitario_calculado = 0;   	        
 	        double iva=0.16;
-            System.err.println(dolar);
+	       
+          
 	        if (tcProducto.getsMoneda().equals("USD")) {
 	            precioPeso = tcProducto.getnPrecio()  * dolar;
 	        } else {
 	            precioPeso =tcProducto.getnPrecio();
+	            }      	
+	        
+	        if(descuento) {	
+	        	if(tcProducto.getTcDescuento().getnId()>0) {
+	        	tcProducto.setsProducto(tcProducto.getsProducto()+"-"+tcProducto.getTcDescuento().getnId()+"%");
+	        	}
+	        	precioPeso=precioPeso- (precioPeso* tcProducto.getTcDescuento().getnGanancia());
+	        	
 	        }
 	        
-	       
+	        
 	        
 	        precioPesofinalSinIva = (double) ((precioPeso * tcProducto.getTcGanancia().getnGanancia()) + precioPeso);           
 	        if (aumento > 0) {
 	            precioPesofinalSinIva = precioPesofinalSinIva + aumento;
-	         }
-	        
-	        
-	
-	        
-	        
-	        
+	         }	          	        
 	        precio_unitario_calculado = (double) (truncarDecimales(precioPesofinalSinIva));
 	        iva_unitario_calculado = (double) (precio_unitario_calculado) * iva; 
-	        total_unitario_calculado=precio_unitario_calculado + iva_unitario_calculado;      
-	                    
-	         
-	         
-	         
-	         
-	         
+	        total_unitario_calculado=precio_unitario_calculado + iva_unitario_calculado;      	            
 	         tcProducto.setnPrecioPeso(truncarDecimales(total_unitario_calculado));
 	         tcProducto.setnPrecioSinIva( truncarDecimales(precio_unitario_calculado));
 	         tcProducto.setnPrecioConIva(truncarDecimales(total_unitario_calculado));
-	         tcProducto.setnPrecioIva(truncarDecimales(iva_unitario_calculado));
-	         
-	         System.err.println(tcProducto);
-		
-	        return tcProducto;
+	         tcProducto.setnPrecioIva(truncarDecimales(iva_unitario_calculado));	         
+	       
+		     return tcProducto;
 		
 	
 	}
+	
+	
 	
 	public TwVentasProducto calcularPrecioGuardar(TcProducto tcProducto,  int cantidad ) {
 		

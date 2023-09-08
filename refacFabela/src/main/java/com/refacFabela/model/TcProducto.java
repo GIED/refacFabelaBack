@@ -75,6 +75,10 @@ public class TcProducto implements Serializable {
 	
 	@Column(name = "n_precio_iva")
 	private Double nPrecioIva;
+	
+	@Column(name = "n_id_descuento")
+	private Long nIdDescuento;
+	
 
 	// bi-directional many-to-one association to TcCategoria
 	@ManyToOne()
@@ -99,6 +103,10 @@ public class TcProducto implements Serializable {
 	@ManyToOne()
 	@JoinColumn(name = "n_idusuario", referencedColumnName = "n_id", updatable = false, insertable = false)
 	private TcUsuario tcUsuario;
+	
+	@ManyToOne()
+	@JoinColumn(name = "n_id_descuento", referencedColumnName = "n_id", updatable = false, insertable = false)
+	private TcGanancia tcDescuento;
 	
 	//bi-directional many-to-one association to TwProductosAlternativo
 	//@OneToMany(mappedBy="tcProducto")
@@ -325,6 +333,34 @@ public class TcProducto implements Serializable {
 
 	public void setnPrecioIva(Double nPrecioIva) {
 		this.nPrecioIva = nPrecioIva;
+	}
+	
+	
+
+
+	public Long getnIdDescuento() {
+		return nIdDescuento;
+	}
+
+
+	public void setnIdDescuento(Long nIdDescuento) {
+		this.nIdDescuento = nIdDescuento;
+	}
+	
+	
+	
+
+
+
+
+
+	public TcGanancia getTcDescuento() {
+		return tcDescuento;
+	}
+
+
+	public void setTcDescuento(TcGanancia tcDescuento) {
+		this.tcDescuento = tcDescuento;
 	}
 
 

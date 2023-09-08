@@ -17,6 +17,7 @@ public class CotizacionDto implements Serializable{
 	private Double nIvaUnitario;
 	private Double nTotalUnitario;
 	private String sFolio;
+	private Integer nInDescuento;
 	
 	public Long getnIdCliente() {
 		return nIdCliente;
@@ -65,6 +66,14 @@ public class CotizacionDto implements Serializable{
 	}
 	public void setsFolio(String sFolio) {
 		this.sFolio = sFolio;
+	}
+	
+	
+	public Integer getnInDescuento() {
+		return nInDescuento;
+	}
+	public void setnInDescuento(Integer nInDescuento) {
+		this.nInDescuento = nInDescuento;
 	}
 	@Override
 	public String toString() {

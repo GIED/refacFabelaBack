@@ -25,10 +25,10 @@ public TcProducto calcularPrecio(TcProducto tcProducto){
 	     TcGanancia ganancia=obtenerGananciaTc(tcProducto.getnIdGanancia());
 	     tcProducto.setTcGanancia(ganancia);
 	     
-	     System.err.println(util.calcularPrecio(tcProducto, obtenerTipoCambio(), 0.0, 0));
+	     System.err.println(util.calcularPrecio(tcProducto, obtenerTipoCambio(), 0.0, 0, false));
 					
 		
-		return util.calcularPrecio(tcProducto, obtenerTipoCambio(), 0.0, 0);
+		return util.calcularPrecio(tcProducto, obtenerTipoCambio(), 0.0, 0, false);
 	}
 
 	public Double obtenerTipoCambio() {

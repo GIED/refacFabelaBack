@@ -146,6 +146,7 @@ public class VentasServiceImpl implements VentasService {
 			twVentaProducto.setnIdVenta(ventaRegistrada.getnId());
 			twVentaProducto.setnIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
 			twVentaProducto.setnCantidad(ventaDto.getListaValidada().get(i).getnCantidad());
+			twVentaProducto.setnIdDescuento(ventaDto.getListaValidada().get(i).getTcProducto().getnIdDescuento());
 			
 			
 			twVentaProducto.setnEstatusEntregaAlmacen(0);
@@ -164,6 +165,9 @@ public class VentasServiceImpl implements VentasService {
 				}
 				
 			}
+			
+			System.err.println("Esto es lo que se estará guardando"+twVentaProducto);
+			
 			
 			TwVentasProducto twVentaProductoNew = this.ventasProductoRepository.save(twVentaProducto);
 			
