@@ -78,6 +78,8 @@ public class TcProducto implements Serializable {
 	
 	@Column(name = "n_id_descuento")
 	private Long nIdDescuento;
+	@Column(name = "n_id_marca")
+	private Long nIdMarca;
 	
 
 	// bi-directional many-to-one association to TcCategoria
@@ -348,10 +350,14 @@ public class TcProducto implements Serializable {
 	}
 	
 	
-	
+	public Long getnIdMarca() {
+		return nIdMarca;
+	}
 
 
-
+	public void setnIdMarca(Long nIdMarca) {
+		this.nIdMarca = nIdMarca;
+	}
 
 
 	public TcGanancia getTcDescuento() {

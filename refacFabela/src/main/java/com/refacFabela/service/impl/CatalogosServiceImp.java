@@ -18,6 +18,7 @@ import com.refacFabela.model.TcCp;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
+import com.refacFabela.model.TcMarca;
 import com.refacFabela.model.TcNivel;
 import com.refacFabela.model.TcRegimenFiscal;
 import com.refacFabela.model.TcTipoVenta;
@@ -37,6 +38,7 @@ import com.refacFabela.repository.CatalogoNivelesRepository;
 import com.refacFabela.repository.CatalogosRepository;
 import com.refacFabela.repository.CategoriaGeneralRepository;
 import com.refacFabela.repository.TcCpRepository;
+import com.refacFabela.repository.TcMarcaRepository;
 import com.refacFabela.repository.TcRegimenFiscalRepository;
 import com.refacFabela.service.CatalagosService;
 import com.refacFabela.utils.utils;
@@ -74,6 +76,8 @@ public class CatalogosServiceImp implements CatalagosService {
 	private TcCpRepository tcCpRepository;
 	@Autowired
 	private TcRegimenFiscalRepository tcRegimenFiscalRepository;
+	@Autowired
+	private TcMarcaRepository tcMarcaRepository;
 
 	@Override
 	public TcCatalogogeneral actualizarTipoCambio(TcCatalogogeneral ccCatalogogeneral) {
@@ -193,6 +197,16 @@ public class CatalogosServiceImp implements CatalagosService {
 		
 		
 		return fecha ;
+	}
+	
+	
+	@Override
+	public List<TcMarca> catalogoMarca() {		
+			
+		
+		
+		
+		return tcMarcaRepository.findAll() ;
 	}
 
 	

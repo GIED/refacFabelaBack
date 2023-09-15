@@ -137,10 +137,10 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			ReporteCotizacionDto reporte = new ReporteCotizacionDto();
 		
 
-			reporte.setCantidad(twCotizacionesProducto.getnCantidad());
+			reporte.setCantidad(twCotizacionesProducto.getnCantidad() );
 			reporte.setNoIdentificacion(twCotizacionesProducto.getTcProducto().getnId());
 			
-			if(twCotizacionesProducto.getnIdDescuento()>0) {
+			if(twCotizacionesProducto.getnIdDescuento()>0 ) {
 				reporte.setNombreProducto(twCotizacionesProducto.getTcProducto().getsProducto()+"- dto");
 				
 			}
@@ -208,7 +208,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 			reporte.setCantidad(twVentaProducto.getnCantidad());
 			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
-			if(twVentaProducto.getnIdDescuento()>0) {
+			if(twVentaProducto.getnIdDescuento()>0 ) {
 				reporte.setNombreProducto(twVentaProducto.getTcProducto().getsProducto()+" - dto");
 				
 			}

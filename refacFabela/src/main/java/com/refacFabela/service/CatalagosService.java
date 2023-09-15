@@ -13,6 +13,7 @@ import com.refacFabela.model.TcCp;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
+import com.refacFabela.model.TcMarca;
 import com.refacFabela.model.TcNivel;
 import com.refacFabela.model.TcRegimenFiscal;
 import com.refacFabela.model.TcTipoVenta;
@@ -40,4 +41,5 @@ public interface CatalagosService {
 	public List<TcCp> catalagoCp(String cp);
 	public List<TcRegimenFiscal> catalagoRegimenFiscal();
 	public fechaDto fechaActual();
+	public List<TcMarca> catalogoMarca();
 }

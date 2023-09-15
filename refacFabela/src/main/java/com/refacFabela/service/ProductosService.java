@@ -31,6 +31,7 @@ public interface ProductosService {
 	public List<TcProducto> obtenerProductoLike(String Producto);
 	public List<TcProducto> obtenerNoParteLike(String No_Parte);
 	public TcProducto guardarProducto(TcProducto tcProducto);
+	public TcProducto guardarProductoGeneral(TcProducto tcProducto);
 	public List<TcHistoriaPrecioProducto> historiaPrecioProducto(Long n_id);
 	public List<TwHistoriaIngresoProducto> historiaIngresoProducto(Long n_id);
 	public List<TwProductobodega> consultaProductoBodega(Long id);

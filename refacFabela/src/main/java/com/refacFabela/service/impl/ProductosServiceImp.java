@@ -204,6 +204,14 @@ public class ProductosServiceImp implements ProductosService {
 
 		return nuevoProducto;
 	}
+	
+	@Override
+	public TcProducto guardarProductoGeneral(TcProducto tcProducto) {
+
+		
+
+		return productosRepository.save(tcProducto);
+	}
 
 	@Override
 	public List<TcHistoriaPrecioProducto> historiaPrecioProducto(Long n_id) {

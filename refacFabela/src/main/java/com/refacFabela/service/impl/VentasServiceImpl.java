@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.refacFabela.dto.TvVentaDetalleDto;
 import com.refacFabela.dto.VentaDto;
+import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.ThStockProducto;
 import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvVentaDetalle;
@@ -23,6 +24,7 @@ import com.refacFabela.model.TwVentaProductosTraer;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CajaRepository;
+import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.CotizacionRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
@@ -80,6 +82,9 @@ public class VentasServiceImpl implements VentasService {
 	
 	@Autowired
 	private ThStockProductoRepository thStockProductoRepository;
+	
+	@Autowired
+	private ClientesRepository clientesRepository;
 
 	@Override
 	public List<TwVenta> consltaVentas() {
@@ -104,6 +109,9 @@ public class VentasServiceImpl implements VentasService {
 		TwPedido twPedido=new TwPedido();
 		TwPedido respuesta=new TwPedido();
 		TwPedidoProducto twPedidoProducto=new TwPedidoProducto();
+		TcCliente tcCliente= new TcCliente();
+		
+		tcCliente=clientesRepository.buscarCliente(ventaDto.getIdCliente());
 
 		twVenta.setnIdCliente(ventaDto.getIdCliente());
 		twVenta.setnIdUsuario(ventaDto.getIdUsuario());
@@ -146,8 +154,14 @@ public class VentasServiceImpl implements VentasService {
 			twVentaProducto.setnIdVenta(ventaRegistrada.getnId());
 			twVentaProducto.setnIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
 			twVentaProducto.setnCantidad(ventaDto.getListaValidada().get(i).getnCantidad());
+			if(tcCliente.getnDescuento()) {
 			twVentaProducto.setnIdDescuento(ventaDto.getListaValidada().get(i).getTcProducto().getnIdDescuento());
-			
+			}
+			else
+			{
+			twVentaProducto.setnIdDescuento(0L);
+				
+			}
 			
 			twVentaProducto.setnEstatusEntregaAlmacen(0);
 			twVentaProducto.setnIdUsuario(ventaDto.getIdUsuario());

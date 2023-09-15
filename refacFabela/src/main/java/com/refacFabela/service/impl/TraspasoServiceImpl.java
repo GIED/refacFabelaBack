@@ -1,5 +1,6 @@
 package com.refacFabela.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -7,8 +8,10 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.model.TwAjustesInventario;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.repository.ProductoBodegaRepository;
+import com.refacFabela.repository.TwAjusteInventarioRepository;
 import com.refacFabela.service.TraspasoService;
 
 @Service
@@ -16,6 +19,8 @@ public class TraspasoServiceImpl implements TraspasoService {
 	
 	@Autowired
 	private ProductoBodegaRepository productoBodegaRepository;
+	@Autowired
+	private TwAjusteInventarioRepository twAjusteInventarioRepository;
 	
 	
 	@Override
@@ -25,7 +30,7 @@ public class TraspasoServiceImpl implements TraspasoService {
 		TwProductobodega pb =new TwProductobodega();
 		
 		pb=productoBodegaRepository.obtenerStockBodega(productoBodega.getnIdProducto(), productoBodega.getnIdBodega());
-		productoBodega.setnCantidad(pb.getnCantidad());
+		productoBodega.setnCantidad(productoBodega.getnCantidad());
 		
 		return this.productoBodegaRepository.save(productoBodega);
 	}
@@ -37,6 +42,16 @@ public class TraspasoServiceImpl implements TraspasoService {
 		
 		
 		return this.productoBodegaRepository.saveAll(listProductoBodega);
+	}
+
+
+	@Override
+	public TwAjustesInventario guardarAjusteInventario(TwAjustesInventario twAjustesInventario) {
+		 Date date = new Date();
+		twAjustesInventario.setsFecha(date);
+		
+		
+		return twAjusteInventarioRepository.save(twAjustesInventario);
 	}
 
 }

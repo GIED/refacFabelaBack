@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.refacFabela.model.TcCliente;
+import com.refacFabela.model.TwAjustesInventario;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.service.TraspasoService;
 
@@ -50,7 +52,18 @@ public class TraspasosController {
 		
 	}
 	
-	
+	@PostMapping("guardarAjusteInventario")
+	public TwAjustesInventario guardarCliente(@RequestBody TwAjustesInventario twAjustesInventario) {
+
+		try {
+			return  this.traspasoService.guardarAjusteInventario(twAjustesInventario);
+
+		} catch (Exception e) {
+			logger.error("Error al guardar el ajuste del inventario" + e);
+		}
+
+		return null;
+	}
 	
 
 	

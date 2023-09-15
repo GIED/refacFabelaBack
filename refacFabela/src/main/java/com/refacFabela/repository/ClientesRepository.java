@@ -18,4 +18,7 @@ public interface ClientesRepository extends JpaRepository<TcCliente, Long> {
     public TcCliente findBysRfc(String rfc);
     
     public TcCliente findBynIdUsuario(Long id);
+    
+    @Query("Select c from TcCliente c where c.nId=:nIdCliente")
+   	public TcCliente buscarCliente(Long nIdCliente);
 }

@@ -238,7 +238,18 @@ public class ProductosController {
 		return null;
 	}
 	
-	
+	@PostMapping("/guardarProductoGeneral")
+	public TcProducto guardaProducto(@RequestBody TcProducto tcProducto) {
+
+		try {
+
+			return productosService.guardarProductoGeneral(tcProducto);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
 
 	
 	

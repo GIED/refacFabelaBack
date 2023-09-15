@@ -26,11 +26,13 @@ import com.refacFabela.model.TcCp;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
+import com.refacFabela.model.TcMarca;
 import com.refacFabela.model.TcNivel;
 import com.refacFabela.model.TcRegimenFiscal;
 import com.refacFabela.model.TcTipoVenta;
 import com.refacFabela.model.TcUsocfdi;
 import com.refacFabela.model.TwCaja;
+import com.refacFabela.repository.TcMarcaRepository;
 import com.refacFabela.service.CajaService;
 import com.refacFabela.service.CatalagosService;
 
@@ -44,6 +46,8 @@ public class CatalogosController {
 	private CatalagosService catalagosService;
 	@Autowired
 	private CajaService cajaService;
+	
+	
 
 	@PostMapping("/actualizarTipoCambio")
 	public TcCatalogogeneral actualizaTipoCambio(@RequestBody TcCatalogogeneral tcCatalogogeneral) {
@@ -294,6 +298,19 @@ public class CatalogosController {
 		try {
 
 			return catalagosService.fechaActual();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener la fechaActual " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/catalogoMarca")
+	public List<TcMarca> catalogoMarca() {
+		try {
+
+			return catalagosService.catalogoMarca();
 
 		} catch (Exception e) {
 
