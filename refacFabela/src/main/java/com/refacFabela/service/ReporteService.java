@@ -9,6 +9,7 @@ import com.refacFabela.dto.ProductoBodegaDto;
 import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
 import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
+import com.refacFabela.dto.TwSaldoUtilizadoDto;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwProductobodega;
@@ -17,6 +18,7 @@ public interface ReporteService {
 	
 	 byte[] generaCotizacionPDF(ReporteCotizacionDto reporteCotizacion,  List<ReporteCotizacionDto> listaProducto); 
 	 byte[] generaVentaPDF(ReporteVentaDto reporteVenta,  List<ReporteVentaDto> listaProducto, double totalAbono);
+	 byte[] generaSaldoFavorPDF(ReporteVentaDto reporteVenta,  List<ReporteVentaDto> listaProducto, double totalAbono,  double saldoFinalSaldo, double totalSaldoUsado, List<TwSaldoUtilizadoDto> listaTwSaldoUtilizadoDto);
 	 byte[] generaVentaAlmacenPDF(ReporteVentaDto reporteVenta,  List<ReporteVentaDto> listaProducto, double totalAbono);
 	 byte[] generaAbonoVentaPDF(ReporteVentaDto reporteVenta,  List<AbonosDto> listaProducto, double totalAbonos);
 	 byte[] generaAbonoVentaClientePDF(TcCliente cliente,  List<ReporteAbonoVentaCreditoDto> listaAbonoVenta, ReporteVentaDto reporteVenta);	 

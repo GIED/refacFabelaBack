@@ -63,6 +63,10 @@ public class TwVenta implements Serializable {
 	@Column(name = "n_idFormaPago")
 	private Long  nIdFormaPago;
 	
+	@Column(name = "n_saldo")
+	private Boolean  nSaldo;
+	
+	
 
 
 	// bi-directional many-to-one association to TcCliente
@@ -336,6 +340,18 @@ public class TwVenta implements Serializable {
 	public void setAnticipo(Double anticipo) {
 		this.anticipo = anticipo;
 	}
+	
+	
+
+
+	public Boolean getnSaldo() {
+		return nSaldo;
+	}
+
+
+	public void setnSaldo(Boolean nSaldo) {
+		this.nSaldo = nSaldo;
+	}
 
 
 	@Override
@@ -345,11 +361,13 @@ public class TwVenta implements Serializable {
 				+ ", nIdFacturacion=" + nIdFacturacion + ", nIdTipoVenta=" + nIdTipoVenta + ", nTipoPago=" + nTipoPago
 				+ ", nIdCaja=" + nIdCaja + ", dFechaInicioCredito=" + dFechaInicioCredito + ", dFechaTerminoCredito="
 				+ dFechaTerminoCredito + ", dFechaPagoCredito=" + dFechaPagoCredito + ", nIdCotizacion=" + nIdCotizacion
-				+ ", anticipo=" + anticipo + ", descuento=" + descuento + ", nIdFormaPago=" + nIdFormaPago
-				+ ", tcCliente=" + tcCliente + ", tcTipoVenta=" + tcTipoVenta + ", tcUsuario=" + tcUsuario
+				+ ", anticipo=" + anticipo + ", descuento=" + descuento + ", nIdFormaPago=" + nIdFormaPago + ", nSaldo="
+				+ nSaldo + ", tcCliente=" + tcCliente + ", tcTipoVenta=" + tcTipoVenta + ", tcUsuario=" + tcUsuario
 				+ ", tcEstatusVenta=" + tcEstatusVenta + ", twCaja=" + twCaja + ", tcFormapago=" + tcFormapago + "]";
 	}
 
+
+	
 
 	
 }

@@ -6,6 +6,7 @@ public interface GeneraReporteService {
 	
 	public byte[] getCotizacionPDF(Long nIdCotizacion);
 	public byte[] getVentaPDF(Long nIdVenta);
+	public byte[] getSaldoFavorPDF(Long nIdVenta);
 	public byte[] getVentaAlmacenPDF(Long nIdVenta);
 	public byte[] getVentaPedidoPDF(Long nIdVentaPedido);
 	public byte[] getAbonoVentaIdPDF(Long nIdVenta);

@@ -22,6 +22,7 @@ import com.refacFabela.dto.ProductoBodegaDto;
 import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
 import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
+import com.refacFabela.dto.TwSaldoUtilizadoDto;
 import com.refacFabela.enums.TipoDoc;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TcUsuario;
@@ -35,6 +36,7 @@ import com.refacFabela.model.TwCotizacionesProducto;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwProductobodega;
+import com.refacFabela.model.TwSaldoUtilizado;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentaProductoCancela;
 import com.refacFabela.model.TwVentasProducto;
@@ -49,7 +51,8 @@ import com.refacFabela.repository.TvReporteCajaFormaPagoRepository;
 import com.refacFabela.repository.TvReporteDetalleVentaRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.TwPedidoRepository;
-import com.refacFabela.repository.TwVentaProductoCancelaRepository;
+import com.refacFabela.repository.TwSaldoUtilizadoRepository;
+import com.refacFabela.repository.TwSaldosRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
@@ -98,13 +101,16 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	@Autowired
 	public UsuariosRepository usuariosRepository;
 	@Autowired
-	public TwVentaProductoCancelaRepository  twVentaProductoCancelaRepository;
+	public TwSaldosRepository  twSaldosRepository;
 	
 	@Autowired
 	public  ProductoBodegaRepository  productoBodegaRepository;
 	
 	@Autowired
 	private VentasRepository ventasRepository;
+	
+	@Autowired
+	private TwSaldoUtilizadoRepository twSaldoUtilizadoRepository;
 	
 	
 
@@ -235,6 +241,104 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva));
 
 		return reporteService.generaVentaPDF(reporteVenta, listaProducto, totalAbonos);
+	}
+	
+	public byte[] getSaldoFavorPDF(Long nIdVenta) {
+
+		List<TwVentasProducto> listaProductos = ventasProductoRepository.buscarProductosCancelados(nIdVenta);
+		List<TwAbono> listaAbonos=abonoVentaIdRepository.findBynIdVenta(nIdVenta);
+		List<TwSaldoUtilizado> listaSaldoUtilizado=twSaldoUtilizadoRepository.consultaSaldosUtilizados(nIdVenta);
+		List<TwSaldoUtilizadoDto> listaTwSaldoUtilizadoDto=new ArrayList<TwSaldoUtilizadoDto>();
+	  
+
+		utils util=new utils();
+
+		ReporteVentaDto reporteVenta = new ReporteVentaDto();
+
+		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
+		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
+		reporteVenta.setNombreCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRazonSocial());
+		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
+		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
+		reporteVenta.setFecha(new Date());
+		reporteVenta.setTipoPago(listaProductos.get(0).getTwVenta().getnTipoPago());
+		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
+		reporteVenta.setNombreVendedor(listaProductos.get(0).getTcUsuario().getsNombreUsuario());
+		
+
+		List<ReporteVentaDto> listaProducto = new ArrayList<ReporteVentaDto>();
+
+		double subtotal = 0.0;
+		double iva = 0.0;
+		double totalAbonos=0.0;
+		double totalSaldoUsado=0.0;
+		double saldoFinalSaldo=0.0;
+		
+		for(TwAbono twAbono: listaAbonos) {
+			
+			totalAbonos= totalAbonos+twAbono.getnAbono();
+			
+		}
+		
+
+		for (TwVentasProducto twVentaProducto : listaProductos) {
+
+			ReporteVentaDto reporte = new ReporteVentaDto();
+
+			reporte.setCantidad(twVentaProducto.getnCantidad());
+			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
+			if(twVentaProducto.getnIdDescuento()>0 ) {
+				reporte.setNombreProducto(twVentaProducto.getTcProducto().getsProducto()+" - dto");
+				
+			}
+			else {
+				reporte.setNombreProducto(twVentaProducto.getTcProducto().getsProducto());
+				
+			}
+		
+			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
+			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnTotalUnitario()));
+			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnTotalPartida()));
+			reporte.setDescripcionCatSat(twVentaProducto.getTcProducto().getTcClavesat().getsDescripcion());
+			reporte.setCondicionEntrega("PRODUCTO CANCELADO");
+
+			listaProducto.add(reporte);
+
+			subtotal = subtotal + twVentaProducto.getnPrecioPartida();
+			iva = iva + twVentaProducto.getnIvaPartida();
+
+		}
+		
+		for (TwSaldoUtilizado saldoUtilizadoDto : listaSaldoUtilizado) {
+			
+			TwSaldoUtilizadoDto saldo = new TwSaldoUtilizadoDto();
+			
+			saldo.setnIdVenta(saldoUtilizadoDto.getnIdVenta());
+			saldo.setdFecha(saldoUtilizadoDto.getdFecha());
+			saldo.setnEstatus(saldoUtilizadoDto.getnEstatus());
+			saldo.setnIdCaja(saldoUtilizadoDto.getnIdCaja());
+			saldo.setnIdUsuario(saldoUtilizadoDto.getnIdUsuario());
+			saldo.setnSaldoUtilizado(saldoUtilizadoDto.getnSaldoUtilizado());
+			saldo.setnSaldoTotal(saldoUtilizadoDto.getnSaldoTotal());
+			saldo.setnIdVentaUtilizado(saldoUtilizadoDto.getnIdVentaUtilizado());
+			
+			listaTwSaldoUtilizadoDto.add(saldo);
+			
+			totalSaldoUsado+=saldoUtilizadoDto.getnSaldoUtilizado();
+			
+		}
+		
+		
+		
+
+		reporteVenta.setSubTotal(util.truncarDecimales(subtotal));
+		reporteVenta.setIvaTotal(util.truncarDecimales(iva));
+		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva));
+		saldoFinalSaldo= util.truncarDecimales(subtotal+iva-totalSaldoUsado);
+		totalSaldoUsado=util.truncarDecimales(totalSaldoUsado);
+		
+
+		return reporteService.generaSaldoFavorPDF(reporteVenta, listaProducto, totalAbonos, saldoFinalSaldo,totalSaldoUsado, listaTwSaldoUtilizadoDto );
 	}
 	
 	
@@ -590,7 +694,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		 
 		 utils util=new utils();				
 		BalanceCajaDto balanceCajaDto= new BalanceCajaDto();	
-		totalReitegros=twVentaProductoCancelaRepository.totalCancela(nIdCaja);
+		totalReitegros=twSaldosRepository.totalCancela(nIdCaja);
 		totalReitegros=totalReitegros==null?0:totalReitegros;
 	
 		 

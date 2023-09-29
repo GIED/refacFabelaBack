@@ -28,9 +28,11 @@ import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwMaquinaCliente;
+import com.refacFabela.model.TwSaldoUtilizado;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentaProductosTraer;
 import com.refacFabela.model.TwVentasProducto;
+import com.refacFabela.model.VwSaldoVentaFavorDisponible;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.service.VentasService;
 
@@ -202,7 +204,7 @@ public class VentasController {
 			return ventasService.guardarVentaDetalle(tvVentaDetalle);
 		} catch (Exception e) {
 
-			logger.error("Error al guardar la venta" + e);
+			logger.error("Error al guardar la venta detalle" + e);
 		}
 		return null;
 	}
@@ -367,23 +369,19 @@ public class VentasController {
 	
 	@PostMapping("/cambiarVentaACredito")
 	public TwVenta cambiarVentaACredito(@RequestBody  TwVenta venta) {
-		try {
-			
+		try {			
 		/**
 		 * aCTUALIZAMOS VENTA
 		 */
-			TwVenta twVenta = ventasService.updateStatusVenta(venta);
-			
+			TwVenta twVenta = ventasService.updateStatusVenta(venta);			
 		/**
 		 * Verificamos que no haya registros en trVentaCobro
-		 */
-			
+		 */			
 			List<TrVentaCobro> listaCobros = ventasService.consultarPagoId(twVenta.getnId());
 			
 			if (listaCobros.size() > 0) {
 				ventasService.eliminarCobroIdVenta(twVenta.getnId());
-			}
-			
+			}			
 			return twVenta;
 		} catch (Exception e) {
 			logger.error("Error al cambiar venta a credito" + e);
@@ -391,6 +389,39 @@ public class VentasController {
 		return null;
 	}
 	
+	@PostMapping("/guardarSaldoUtilizado")
+	public TwSaldoUtilizado guardarSaldoUtilizado(@RequestBody  TwSaldoUtilizado twSaldoUtilizado) {
+		try {
+			return productosService.guardarSaldoUtilizado(twSaldoUtilizado);
+		} catch (Exception e) {
+			logger.error("Error al guardar los el saldo utilizado" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerSaldosUtilizadosId")
+	public List<TwSaldoUtilizado> obtenerSaldosUtilizadosId(@RequestParam()  Long nIdVenta) {
+
+		try {
+			return productosService.obtenerSaldosUtilizados(nIdVenta);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los saldos utilizados" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerSaldoVentaCancela")
+	public VwSaldoVentaFavorDisponible obtenerSaldoVentaCancela(@RequestParam()  Long nIdVenta) {
+
+		try {
+			return productosService.obtenerSaldoVentaCancela(nIdVenta);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los saldos venta cancela" + e);
+		}
+		return null;
+	}
 	
 
 }

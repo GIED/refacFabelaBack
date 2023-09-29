@@ -12,12 +12,13 @@ import com.refacFabela.model.TwVentasProducto;
 @Repository
 public interface TwProductosVentaRepository extends JpaRepository<TwVentasProducto, Long> {
 	
-	@Query("Select new com.refacFabela.dto.VentaProductoDto (e) from TwVentasProducto e where twVenta.nId=:id")	
+	@Query("Select new com.refacFabela.dto.VentaProductoDto (e) from TwVentasProducto e where twVenta.nId=:id and e.nEstatus=1")	
 	public List<VentaProductoDto> obtenerPrpductosVentaId(Long id);
+	@Query("Select e from TwVentasProducto e where e.twVenta.nId=:id and e.nEstatus=1")
 	public List<TwVentasProducto> findBynIdVenta(Long id);
-	@Query("Select e from TwVentasProducto e where nId=:id")	
+	@Query("Select e from TwVentasProducto e where nId=:id and e.nEstatus=1")	
 	public TwVentasProducto obtenerPrpductosId(Long id);	
-	@Query("Select e from TwVentasProducto e where nIdVenta=:idVenta and nIdProducto=:idProducto")	
+	@Query("Select e from TwVentasProducto e where nIdVenta=:idVenta and nIdProducto=:idProducto and e.nEstatus=1")	
 	public TwVentasProducto obtenerProductoVenta(Long idVenta, Long idProducto);
 
 

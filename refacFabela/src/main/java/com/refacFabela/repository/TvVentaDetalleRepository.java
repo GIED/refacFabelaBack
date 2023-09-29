@@ -12,7 +12,7 @@ import com.refacFabela.model.TwVenta;
 @Repository
 public interface TvVentaDetalleRepository extends JpaRepository<TvVentaDetalle, Long> {
 	
-	@Query("Select c from TvVentaDetalle c where c.nIdCliente=:nIdCliente and c.nTipoPago=:nTipoPago")
+	@Query("Select c from TvVentaDetalle c where c.nIdCliente=:nIdCliente and c.nTipoPago=:nTipoPago and nSaldoTotal>0")
 	public List<TvVentaDetalle> consultaVentaDetalleId(Long nIdCliente, long nTipoPago);
 	
 	@Query("Select c from TvVentaDetalle c where c.twCaja.nId=:idCaja order by c.tcUsuario.nId asc")

@@ -10,7 +10,7 @@ import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TwVentaProductoCancela;
 
 @Repository
-public interface TwVentaProductoCancelaRepository extends JpaRepository<TwVentaProductoCancela, Long> {
+public interface TwSaldosRepository extends JpaRepository<TwVentaProductoCancela, Long> {
 
 	@Query(value="Select sum(n_precioPartida) from tw_venta_producto_cancela where n_idCaja=:id", nativeQuery = true) 
 	public Double totalCancela(Long id);

@@ -19,6 +19,7 @@ import com.refacFabela.model.TwCotizaciones;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwProductobodega;
+import com.refacFabela.model.TwSaldoUtilizado;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentaProductosTraer;
 import com.refacFabela.model.TwVentasProducto;
@@ -32,6 +33,7 @@ import com.refacFabela.repository.ThStockProductoRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.TwPedidoRepository;
+import com.refacFabela.repository.TwSaldoUtilizadoRepository;
 import com.refacFabela.repository.TwVentaProductosTraerRepository;
 import com.refacFabela.repository.VentasFacturaRepository;
 import com.refacFabela.repository.VentasProductoRepository;
@@ -85,7 +87,15 @@ public class VentasServiceImpl implements VentasService {
 	
 	@Autowired
 	private ClientesRepository clientesRepository;
+	
+	@Autowired
+	private TwSaldoUtilizadoRepository twSaldoUtilizadoRepository;
 
+	
+	
+	
+	
+	
 	@Override
 	public List<TwVenta> consltaVentas() {
 
@@ -119,7 +129,8 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setnIdTipoVenta(ventaDto.getIdTipoVenta().longValue());
 		twVenta.setnTipoPago(ventaDto.getTipoPago().longValue());
 		twVenta.setdFechaInicioCredito(ventaDto.getFechaIniCredito());
-		twVenta.setdFechaTerminoCredito(ventaDto.getFechaFinCredito());
+		twVenta.setdFechaTerminoCredito(ventaDto.getFechaFinCredito());		
+		twVenta.setnSaldo(false);
 		System.err.println(ventaDto.getTipoPago());
 				
 		twVenta.setdFechaVenta(new Date());
@@ -139,6 +150,8 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setnIdCotizacion(ventaDto.getTwCotizacion().getnId());
 		twVenta.setAnticipo(ventaDto.getAnticipo());
 		twVenta.setDescuento(0.0);
+		
+		System.err.println(twVenta);
 	
 
 		TwVenta ventaRegistrada = new TwVenta();
@@ -216,7 +229,7 @@ public class VentasServiceImpl implements VentasService {
 				twPedidoProducto.setnIdProveedor(ventaDto.getListaValidada().get(i).getnIdProveedor());
 				twPedidoProducto.setnIdUsuario(ventaDto.getIdUsuario());
 				twPedidoProducto.setnIdPedido(respuesta.getnId());	
-				twPedidoProducto.setnEstatus(false);
+				//twPedidoProducto.setnEstatus(false);
 				
 				pedidosProductoRepository.save(twPedidoProducto);
 				
@@ -556,18 +569,20 @@ public class VentasServiceImpl implements VentasService {
 	}
 
 	@Override
-	public TvVentaDetalle guardarVentaDetalle(TvVentaDetalle tvVentaDetalle) {
-		
+	public TvVentaDetalle guardarVentaDetalle(TvVentaDetalle tvVentaDetalle) throws InterruptedException {
 		
 		
 		TwVenta venta = ventasRepository.getById(tvVentaDetalle.getnId());
 		TwCaja caja = cajaRepository.obtenerCajaVigente();
 		TrVentaCobro ventaCobro = new TrVentaCobro();
+		TrVentaCobro ventaCobroSaldo = new TrVentaCobro();
+		TwSaldoUtilizado twSaldoUtilizado= new TwSaldoUtilizado();
+
 		boolean cambio=false;
 		
-		
-		
-		if(tvVentaDetalle.getnTotalVenta()==tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo() || (tvVentaDetalle.getnTotalVenta()-(tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo()))<=0.01) {
+	
+				
+		if(tvVentaDetalle.getnTotalVenta()==tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo() || (tvVentaDetalle.getnTotalVenta()-(tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo()))<=0.01 ||  tvVentaDetalle.getnTotalVenta()-tvVentaDetalle.getnAnticipo()-tvVentaDetalle.getnSaldoFavor()<=0.1) {
 			
 			cambio=true;
 			
@@ -595,34 +610,83 @@ public class VentasServiceImpl implements VentasService {
 				venta.setnIdEstatusVenta(1L);				
 			}
 			
-		}
-		
-		
+		}		
+	
 		
 	
-		System.out.println(venta);
 	
-		ventaCobro.setnIdVenta(venta.getnId());
-		ventaCobro.setnIdCaja(venta.getnIdCaja());
+		
+			
+		
+		
 		if(venta.getTcTipoVenta().getnId()!=3) {
-			ventaCobro.setnMonto(tvVentaDetalle.getnTotalVenta());
+			
+			if(tvVentaDetalle.getnSaldoFavor()>0) {
+				System.err.println("Entre a guardar los datos del pago");
+				ventaCobro.setnIdVenta(venta.getnId());
+				ventaCobro.setnIdCaja(venta.getnIdCaja());
+				ventaCobro.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
+				ventaCobro.setdFecha(new Date());
+				ventaCobro.setnEstatus(1L);
+				ventaCobro.setnIdCaja(caja.getnId());
+				ventaCobro.setnMonto(tvVentaDetalle.getnAnticipo());
+				trVentaCobroRepository.save(ventaCobro);
+				System.err.println("Sali de guardar el anticipo");
+				
+				ventaCobroSaldo.setnIdVenta(venta.getnId());
+				ventaCobroSaldo.setnIdCaja(venta.getnIdCaja());				
+				ventaCobroSaldo.setdFecha(new Date());
+				ventaCobroSaldo.setnEstatus(1L);
+				ventaCobroSaldo.setnIdCaja(caja.getnId());			
+				ventaCobroSaldo.setnMonto(tvVentaDetalle.getnSaldoFavor());
+				ventaCobroSaldo.setnIdFormaPago(11L);			
+				trVentaCobroRepository.save(ventaCobroSaldo);
+				System.err.println("Sali de guardar el saldo a favor");
+				
+				
+				twSaldoUtilizado.setnIdVenta(tvVentaDetalle.getnIdVentaUtilizado());
+				twSaldoUtilizado.setnSaldoUtilizado(tvVentaDetalle.getnSaldoFavor());
+				twSaldoUtilizado.setnSaldoTotal(tvVentaDetalle.getnSaldoFavor());
+                twSaldoUtilizado.setnIdUsuario(tvVentaDetalle.getnIdUsuario());
+                twSaldoUtilizado.setnEstatus(true);
+                twSaldoUtilizado.setdFecha(new Date());
+                twSaldoUtilizado.setnIdCaja(caja.getnId());
+                twSaldoUtilizado.setnIdVentaUtilizado(tvVentaDetalle.getnId());
+                
+                twSaldoUtilizadoRepository.save(twSaldoUtilizado);
+                
+                
+				
+			}
+			
+			else {
+				System.err.println("entre a guardar el cobre de venta sin saldo a favor");
+				ventaCobro.setnIdVenta(venta.getnId());
+				ventaCobro.setnIdCaja(venta.getnIdCaja());
+				ventaCobro.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
+				ventaCobro.setdFecha(new Date());
+				ventaCobro.setnEstatus(1L);
+				ventaCobro.setnIdCaja(caja.getnId());
+				ventaCobro.setnMonto(tvVentaDetalle.getnTotalVenta());
+				trVentaCobroRepository.save(ventaCobro);
+				
+			}
 			
 		}
 		else {
+			ventaCobro.setnIdVenta(venta.getnId());
+			ventaCobro.setnIdCaja(venta.getnIdCaja());
+			ventaCobro.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
+			ventaCobro.setdFecha(new Date());
+			ventaCobro.setnEstatus(1L);
+			ventaCobro.setnIdCaja(caja.getnId());
 			ventaCobro.setnMonto(tvVentaDetalle.getnAnticipo());
-		}
-		
-		ventaCobro.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
-		ventaCobro.setdFecha(new Date());
-		ventaCobro.setnEstatus(1L);
-		ventaCobro.setnIdCaja(caja.getnId());
-		
-				
-		
-		System.err.println(ventaCobro);
-		
+			trVentaCobroRepository.save(ventaCobro);
+		}					
+
+		System.err.println("voy a guardar esto"+venta);
 		ventasRepository.save(venta);
-		trVentaCobroRepository.save(ventaCobro);
+		
 		
 		
 		return tvVentaDetalle;

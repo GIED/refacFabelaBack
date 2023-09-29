@@ -20,9 +20,11 @@ import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwMaquinaCliente;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
+import com.refacFabela.model.TwSaldoUtilizado;
 import com.refacFabela.model.TwVentaProductoCancela;
 import com.refacFabela.model.TwVentaProductosTraer;
 import com.refacFabela.model.TwVentasProducto;
+import com.refacFabela.model.VwSaldoVentaFavorDisponible;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 
 public interface ProductosService {
@@ -49,8 +51,11 @@ public interface ProductosService {
 	public List<TrVentaCobro> obtenerPägosParciales(Long nIdVenta);
 	public List<TwMaquinaCliente> obtenerMaquinasCliente(Long nIdClinete);	
 	public List<TwVentaProductosTraer> obtenerProductosTraer(Long nIdClinete);	
+	public List<TwSaldoUtilizado> obtenerSaldosUtilizados(Long nIdClinete);	
+	public VwSaldoVentaFavorDisponible obtenerSaldoVentaCancela(Long nIdVenta);
 	public VentaProductoDto cacelarVentaProducto(VentaProductoDto ventaProductoDto);
 	public TwVentaProductosTraer ventaProductosTraer(TwVentaProductosTraer ventaProductoDto);
+	public TwSaldoUtilizado guardarSaldoUtilizado(TwSaldoUtilizado twSaldoUtilizado);
 	public String consultaVentaProductoId(TwVentasProducto ventaProductoDto);
 	public TwAbono guardarAbono(TwAbono abonoDto);
 	public TcProducto calcularNuevoPrecio( ProductoDescuentoDto productoDescuentoDto);

@@ -29,6 +29,8 @@ public class TvReporteDetalleVenta implements Serializable {
 		private String sRazonSocial;
 		@Column(name = "n_estatus_venta") 
 		private Long nEstatusVenta;
+		@Column(name = "s_estatus_venta") 
+		private String sEstatusVenta;
 		@Column(name = "d_fecha_venta") 
 		private Date dFechaVenta;
 		@Column(name = "s_tipo_venta")
@@ -215,6 +217,16 @@ public class TvReporteDetalleVenta implements Serializable {
 
 		public void setsEstatusEntrega(String sEstatusEntrega) {
 			this.sEstatusEntrega = sEstatusEntrega;
+		}
+		
+		
+
+		public String getsEstatusVenta() {
+			return sEstatusVenta;
+		}
+
+		public void setsEstatusVenta(String sEstatusVenta) {
+			this.sEstatusVenta = sEstatusVenta;
 		}
 
 		@Override

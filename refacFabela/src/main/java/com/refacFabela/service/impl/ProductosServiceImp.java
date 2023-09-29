@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,12 @@ import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwMaquinaCliente;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
+import com.refacFabela.model.TwSaldoUtilizado;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentaProductoCancela;
 import com.refacFabela.model.TwVentaProductosTraer;
 import com.refacFabela.model.TwVentasProducto;
+import com.refacFabela.model.VwSaldoVentaFavorDisponible;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.CatalagoFormaPagoRepository;
@@ -50,11 +53,15 @@ import com.refacFabela.repository.TvVentasStockRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwMaquinaClienteRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
-import com.refacFabela.repository.TwVentaProductoCancelaRepository;
+import com.refacFabela.repository.TwSaldoUtilizadoRepository;
+
+import com.refacFabela.repository.TwSaldosRepository;
 import com.refacFabela.repository.TwVentaProductosTraerRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentaProductoMesRepository;
+import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
+import com.refacFabela.repository.VwSaldoVentaFavorDisponibleRepository;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.utils.utils;
 
@@ -100,7 +107,7 @@ public class ProductosServiceImp implements ProductosService {
 	@Autowired 
 	private TwMaquinaClienteRepository twMaquinaClienteRepository;
 	@Autowired
-	private TwVentaProductoCancelaRepository twVentaProductoCancelaRepository;
+	private TwSaldosRepository twSaldosRepository;
 	@Autowired
 	private CajaRepository cajaRepository;
 	
@@ -115,6 +122,12 @@ public class ProductosServiceImp implements ProductosService {
 	
 	@Autowired
 	private ClientesRepository clientesRepository;
+	
+	@Autowired
+	private TwSaldoUtilizadoRepository twSaldoUtilizadoRepository;
+	@Autowired
+	private VwSaldoVentaFavorDisponibleRepository vwSaldoVentaFavorDisponibleRepository;
+
 
 
 	
@@ -499,41 +512,62 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	public VentaProductoDto cacelarVentaProducto(VentaProductoDto ventaProductoDto) {
 				
 		TwVentasProducto twVentasProducto= new TwVentasProducto();	
+		List<TwVentasProducto> twListaVentasProducto= new ArrayList<TwVentasProducto>();	
 		TwProductobodega twProductobodega = new TwProductobodega();
 		TwVentaProductoCancela twVentaProductoCancela= new TwVentaProductoCancela();
+		TwSaldoUtilizado twSaldoUtilizado= new TwSaldoUtilizado();
+		
+		TwVenta twVenta= new TwVenta();
 		utils util= new utils();
 		TwCaja caja = new TwCaja();
 		
 		twVentasProducto=twProductosVentaRepository.obtenerProductoVenta(ventaProductoDto.getnIdVenta(), ventaProductoDto.getnIdProducto());		
 		twVentasProducto.setnEstatus(0);	
-		ventaProductoDto.setnEstatus(0);		
-		twProductosVentaRepository.delete(twVentasProducto);	
-		caja=cajaRepository.obtenerCajaVigente();
+		ventaProductoDto.setnEstatus(0);
 		
+		/*Se gaurda la cancelación del produycto*/
+		twProductosVentaRepository.save(twVentasProducto);	
+		/*Se obtiene la caja activa*/
+		caja=cajaRepository.obtenerCajaVigente();	
+		/*Se obtiene el stock del producto en bodega*/
 		twProductobodega=productoBodegaRepository.obtenerProductoBodega(ventaProductoDto.getnIdProducto(), "LOCAL");
+		/*Se obiene los datos generales de la venta*/
+		twVenta=ventasRepository.findBynId(ventaProductoDto.getnIdVenta());
 		
 		if (twProductobodega!=null) {
 			
-			twProductobodega.setnCantidad(twProductobodega.getnCantidad()+ventaProductoDto.getnCantidad());
 			
+			/*Se re integra el producto a la bodega*/
+			twProductobodega.setnCantidad(twProductobodega.getnCantidad()+ventaProductoDto.getnCantidad());			
 			productoBodegaRepository.save(twProductobodega);
-			
-			
 			twVentaProductoCancela.setnIdVenta(twVentasProducto.getnIdVenta());
 			twVentaProductoCancela.setnIdProductos(twVentasProducto.getnIdProducto());
 			twVentaProductoCancela.setnCantidad(twVentasProducto.getnCantidad());
 			twVentaProductoCancela.setnPrecioUnitario(twVentasProducto.getnPrecioUnitario());
 			twVentaProductoCancela.setnIvaUnitario(twVentasProducto.getnIvaUnitario());
 			twVentaProductoCancela.setnTotalUnitario(twVentasProducto.getnTotalUnitario());
-			twVentaProductoCancela.setnPrecioPartida(twVentasProducto.getnPrecioPartida());
+			twVentaProductoCancela.setnPrecioPartida(twVentasProducto.getnTotalPartida());
 			twVentaProductoCancela.setnIdUsuario(twVentasProducto.getnIdUsuario());
 			twVentaProductoCancela.setdFecha(new Date());
 			twVentaProductoCancela.setnIdCaja(caja.getnId());
 			
 			
-			twVentaProductoCancelaRepository.save(twVentaProductoCancela);
+			twSaldosRepository.save(twVentaProductoCancela);
+			
+				
+			if(twVenta.getnIdEstatusVenta()>1) {				
+			
+			if(twVenta.getnTipoPago()!=1L ) {
+				
+				twVenta.setnSaldo(true);				
+				ventasRepository.save(twVenta);			
+				
+				
+			}
 			
 			
+			
+			}
 			
 		}
 		
@@ -542,6 +576,39 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			return null;
 		}
 		
+		
+		
+		twListaVentasProducto=twProductosVentaRepository.findBynIdVenta(ventaProductoDto.getnIdVenta());
+		
+		if(twListaVentasProducto.size()>0) {
+			
+			twVenta.setnIdEstatusVenta(6L);
+			ventasRepository.save(twVenta);
+			
+		}
+		else {
+			
+			twVenta.setnIdEstatusVenta(5L);
+			ventasRepository.save(twVenta);
+			
+		}
+		
+		
+		if(twVenta.getnTipoPago()==1L) {
+			Date fecha= new Date();
+			
+			twSaldoUtilizado.setnIdUsuario(twVenta.getnIdUsuario());
+			twSaldoUtilizado.setnIdCaja(caja.getnId());
+			twSaldoUtilizado.setnIdVenta(twVenta.getnId());
+			twSaldoUtilizado.setnSaldoTotal(twVentasProducto.getnTotalPartida());
+			twSaldoUtilizado.setnSaldoUtilizado(twVentasProducto.getnTotalPartida());
+			twSaldoUtilizado.setdFecha(fecha);
+			twSaldoUtilizado.setnEstatus(true);
+			
+			twSaldoUtilizadoRepository.save(twSaldoUtilizado);
+			
+				
+		}
 		
 		
 		return ventaProductoDto;
@@ -570,8 +637,35 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	@Override
 	public List<TwVentaProductoCancela> obtenerProductosCancelaId(Long id) {
 		
-		return twVentaProductoCancelaRepository.productosCancelados(id);
+		return twSaldosRepository.productosCancelados(id);
 	}
+
+	@Override
+	public TwSaldoUtilizado guardarSaldoUtilizado(TwSaldoUtilizado twSaldoUtilizado) {
+		
+		return twSaldoUtilizadoRepository.save(twSaldoUtilizado);
+	}
+
+	@Override
+	public List<TwSaldoUtilizado> obtenerSaldosUtilizados(Long nIdClinete) {
+		
+		
+		
+		return twSaldoUtilizadoRepository.consultaSaldosUtilizados(nIdClinete);
+	}
+
+	@Override
+	public VwSaldoVentaFavorDisponible obtenerSaldoVentaCancela(Long nIdVenta) {
+		
+		VwSaldoVentaFavorDisponible vwSaldoVentaFavorDisponible=new VwSaldoVentaFavorDisponible();
+		vwSaldoVentaFavorDisponible=vwSaldoVentaFavorDisponibleRepository.buscarSaldoVenta(nIdVenta);
+		
+		
+		
+		return vwSaldoVentaFavorDisponible;
+	}
+	
+	
 
 	
 	/*private ProductoDto convertirAProductoDto(final TcProducto tcProducto) {

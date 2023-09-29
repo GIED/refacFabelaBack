@@ -89,6 +89,10 @@ public class TvVentaDetalleDto implements Serializable{
 	
 	
 	private TcTipoVenta tcTipoVenta ;
+	
+	private Double nSaldoFavor ;
+	
+	private Long nIdVentaUtilizado;
 
 
 	public Long getnId() {
@@ -318,6 +322,26 @@ public class TvVentaDetalleDto implements Serializable{
 
 	public void setTcTipoVenta(TcTipoVenta tcTipoVenta) {
 		this.tcTipoVenta = tcTipoVenta;
+	}
+
+
+	public Double getnSaldoFavor() {
+		return nSaldoFavor;
+	}
+
+
+	public void setnSaldoFavor(Double nSaldoFavor) {
+		this.nSaldoFavor = nSaldoFavor;
+	}
+
+
+	public Long getnIdVentaUtilizado() {
+		return nIdVentaUtilizado;
+	}
+
+
+	public void setnIdVentaUtilizado(Long nIdVentaUtilizado) {
+		this.nIdVentaUtilizado = nIdVentaUtilizado;
 	}
 	
 	

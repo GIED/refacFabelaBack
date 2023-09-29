@@ -71,6 +71,16 @@ public class TvVentaDetalle implements Serializable {
 	@Column(name = "n_idTipoVenta")
 	private Long nIdTipoVenta;
 	
+	@Column(name = "n_saldo_favor")
+	private Double nSaldoFavor;	
+	
+	@Column(name = "n_id_venta_utilizado")
+	private Long nIdVentaUtilizado;
+	
+	@Column(name = "n_saldo")
+	private Boolean nSaldo;
+	
+	
 	
 	
 	@ManyToOne
@@ -308,6 +318,37 @@ public class TvVentaDetalle implements Serializable {
 
 	public void setnAnticipo(Double nAnticipo) {
 		this.nAnticipo = nAnticipo;
+	}
+	
+	
+
+	public Double getnSaldoFavor() {
+		return nSaldoFavor;
+	}
+
+	public void setnSaldoFavor(Double nSaldoFavor) {
+		this.nSaldoFavor = nSaldoFavor;
+	}
+	
+	
+
+	public Long getnIdVentaUtilizado() {
+		return nIdVentaUtilizado;
+	}
+
+	public void setnIdVentaUtilizado(Long nIdVentaUtilizado) {
+		this.nIdVentaUtilizado = nIdVentaUtilizado;
+	}
+	
+	
+	
+
+	public Boolean getnSaldo() {
+		return nSaldo;
+	}
+
+	public void setnSaldo(Boolean nSaldo) {
+		this.nSaldo = nSaldo;
 	}
 
 	@Override

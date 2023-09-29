@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteCaja" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="19" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="6.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="113"/>
+	<property name="ireport.y" value="1728"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -231,6 +231,11 @@
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
+	<style name="style1">
+		<conditionalStyle>
+			<style/>
+		</conditionalStyle>
+	</style>
 	<subDataset name="listaFormaPago" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="sFormaPago" class="java.lang.String"/>
 		<field name="nIdCaja" class="java.lang.Long"/>
@@ -250,6 +255,8 @@
 		<field name="nTotalPagoCajaNota" class="java.lang.Double"/>
 		<field name="nSaldoFinalVenta" class="java.lang.Double"/>
 		<field name="sEstatusEntrega" class="java.lang.String"/>
+		<field name="sEstatusVenta" class="java.lang.String"/>
+		<field name="nEstatusVenta" class="java.lang.Long"/>
 	</subDataset>
 	<parameter name="logo" class="java.lang.Object"/>
 	<parameter name="nombreEmpresa" class="java.lang.String"/>
@@ -772,8 +779,24 @@
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaVentaDetalle})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:listContents height="30" width="802">
+						<rectangle radius="10">
+							<reportElement x="3" y="3" width="34" height="22" backcolor="#FFFF00" uuid="e06ee451-50d5-480a-9cad-3a7e81ad8a1e">
+								<printWhenExpression><![CDATA[$F{nEstatusVenta}.longValue() == 6L ? new Boolean(true) : new Boolean(false)]]></printWhenExpression>
+							</reportElement>
+							<graphicElement>
+								<pen lineWidth="0.0"/>
+							</graphicElement>
+						</rectangle>
+						<rectangle radius="10">
+							<reportElement x="3" y="3" width="34" height="22" backcolor="#FF0033" uuid="076cc04d-32b6-47f1-9319-33fa1ffef2a4">
+								<printWhenExpression><![CDATA[$F{nEstatusVenta}.longValue() == 5L ? new Boolean(true) : new Boolean(false)]]></printWhenExpression>
+							</reportElement>
+							<graphicElement>
+								<pen lineWidth="0.0"/>
+							</graphicElement>
+						</rectangle>
 						<textField isStretchWithOverflow="true">
-							<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="4" y="0" width="37" height="25" isPrintWhenDetailOverflows="true" uuid="5b80833d-26cc-4d75-9f83-e6588f9e9106"/>
+							<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="2" width="37" height="25" isPrintWhenDetailOverflows="true" uuid="5b80833d-26cc-4d75-9f83-e6588f9e9106"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="7"/>
 							</textElement>
@@ -854,7 +877,7 @@
 							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font size="7"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{sEstatusEntrega}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$F{sEstatusVenta}]]></textFieldExpression>
 						</textField>
 						<line>
 							<reportElement x="0" y="27" width="802" height="1" forecolor="#B1ACAC" uuid="80ae8c6a-4c52-4412-aa4f-87444f388d54"/>

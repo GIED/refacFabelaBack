@@ -47,6 +47,18 @@ public class ReportesController {
 		}
 	}
 	
+	@GetMapping(value = "/getSaldoFavor")
+	public @ResponseBody byte[] getSaldoFavor(HttpServletResponse response, @RequestParam(required = false) Long nIdVenta) {
+		
+		// genera el pdf con la venta guardada
+		try {
+			return generaReporteService.getSaldoFavorPDF(nIdVenta);
+		} catch (Exception e) {
+			logger.error("Error al generar el saldo favor ", e);
+			return null;
+		}
+	}
+	
 	@GetMapping(value = "/getVentaAlmacen")
 	public @ResponseBody byte[] getVentaAlmacen(HttpServletResponse response, @RequestParam(required = false) Long nIdVenta) {
 		

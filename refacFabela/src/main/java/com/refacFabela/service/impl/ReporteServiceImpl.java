@@ -35,6 +35,7 @@ import com.refacFabela.dto.ProductoBodegaDto;
 import com.refacFabela.dto.ReporteAbonoVentaCreditoDto;
 import com.refacFabela.dto.ReporteCotizacionDto;
 import com.refacFabela.dto.ReporteVentaDto;
+import com.refacFabela.dto.TwSaldoUtilizadoDto;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.service.ReporteService;
@@ -209,6 +210,86 @@ public class ReporteServiceImpl implements ReporteService {
 	}
 	
 	@Override
+	public byte[] generaSaldoFavorPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto, double totalAbono,  double saldoFinalSaldo, double totalSaldoUsado, List<TwSaldoUtilizadoDto> listaTwSaldoUtilizadoDto ) {
+		try {
+			String ruta="";
+			
+				ruta="/reports/plantillas/saldoFaVor.jrxml";
+			
+			
+			utils util= new utils();
+			
+			
+			
+	         Resource resource = new ClassPathResource(ruta);
+	         final Map<String, Object> params = new HashMap<>();
+	         File pdfFile = null;
+	         String nombreArchivo = "SALDO_FAVOR_"+reporteVenta.getFolioVenta();
+	         pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + ".pdf");
+	        
+	         String fechaVencimiento=util.sumarRestarDiasFecha(reporteVenta.getFecha(), 30);
+
+	         
+	         //aqui van los parametros
+	         params.put("logo", this.imagenHeader);
+	         params.put("nombreEmpresa", reporteVenta.getNombreEmpresa());
+	         params.put("rfcEmpresa", reporteVenta.getRfcEmpresa());
+	         params.put("nombreCliente", reporteVenta.getNombreCliente());
+	         params.put("rfcCliente", reporteVenta.getRfcCliente());
+	         params.put("folioVenta", reporteVenta.getFolioVenta());
+	         params.put("fecha", reporteVenta.getFecha());
+	         params.put("subTotal", reporteVenta.getSubTotal());
+	         params.put("ivaTotal", reporteVenta.getIvaTotal());
+	         params.put("total", reporteVenta.getTotal() - reporteVenta.getDescuento()-totalAbono);
+	         params.put("listaProductos", listaProducto);
+	         params.put("descuento", reporteVenta.getDescuento());
+	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal()+"\nTotal de productos: "+ listaProducto.size()).toString()));
+	         params.put("fechaVencimiento", fechaVencimiento);
+	     	if(reporteVenta.getTipoPago()==1) {
+	         params.put("totalAbono", totalAbono);
+	     	}
+	     	 params.put("nombreVendedor", reporteVenta.getNombreVendedor());
+	     	 
+	         params.put("listaSaldosUtilizados", listaTwSaldoUtilizadoDto);
+	         params.put("saldoFinalSaldo", saldoFinalSaldo);
+	         params.put("totalSaldoUsado", totalSaldoUsado);
+
+	         
+	         
+	         
+	         
+	         
+	         // InputStream ligado al reporte
+	         InputStream inputStreamReport = resource.getInputStream();
+	         FileOutputStream pos = new FileOutputStream(pdfFile);
+	         JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
+	         JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reporteVenta)), pos);
+
+	         // Cierre de output stream
+	         pos.flush();
+	         pos.close();
+
+	         // Se recuperan los bytes correspondientes al reporte
+	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+	         
+	         //envió de correo
+	        
+
+	         //Eliminar el archivo generado
+	        
+	        	 pdfFile.delete();
+	         
+	         
+
+	         return bytesReporte;
+	      } catch (Exception e) {
+	         logger.error("Error en metodo generarSaldoFacorPDF(). Error al generar el salado favor " + reporteVenta.getFolioVenta(), e);
+	      }
+
+	      return null;
+	}
+	
+	@Override
 	public byte[] generaVentaAlmacenPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto, double totalAbono) {
 		try {
 			String ruta="";
@@ -341,6 +422,8 @@ public class ReporteServiceImpl implements ReporteService {
 
 	         //Eliminar el archivo generado
 	         
+	         /*
+	         
 	         envioMail enviar=new envioMail();
 				enviar.enviarCorreo(reporteVenta.getCorreo(), 
 						"Venta a crédito "+reporteVenta.getFolioVenta(),
@@ -348,7 +431,7 @@ public class ReporteServiceImpl implements ReporteService {
 						ruta,
 						nombreArchivo,
 						1
-						);		
+						);		*/
 	         
 	         
 	        
