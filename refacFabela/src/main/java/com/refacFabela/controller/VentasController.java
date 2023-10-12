@@ -27,9 +27,11 @@ import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
+import com.refacFabela.model.TwAjustesInventario;
 import com.refacFabela.model.TwMaquinaCliente;
 import com.refacFabela.model.TwSaldoUtilizado;
 import com.refacFabela.model.TwVenta;
+import com.refacFabela.model.TwVentaProductoCancela;
 import com.refacFabela.model.TwVentaProductosTraer;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.model.VwSaldoVentaFavorDisponible;
@@ -423,5 +425,28 @@ public class VentasController {
 		return null;
 	}
 	
+	@GetMapping("/obtenerProductosCanceladosFecha")
+	public List<TwVentaProductoCancela> obtenerProductosCancelados(@RequestParam()  String fechaInicio, @RequestParam()  String  fechaTermino) {
+
+		try {
+			return productosService.obtenerVentaProductoCanela(fechaInicio,fechaTermino);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los saldos venta cancela" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerProductosAjusteFecha")
+	public List<TwAjustesInventario> obtenerProductosAjusteFecha(@RequestParam()  String fechaInicio, @RequestParam()  String  fechaTermino) {
+
+		try {
+			return productosService.obtenerVentaProductoAjusteInventario(fechaInicio,fechaTermino);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los saldos venta cancela" + e);
+		}
+		return null;
+	}
 
 }

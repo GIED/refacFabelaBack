@@ -23,6 +23,7 @@ import com.refacFabela.model.TvStockProductoHist;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
+import com.refacFabela.model.TwAjustesInventario;
 import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwMaquinaCliente;
@@ -50,12 +51,14 @@ import com.refacFabela.repository.ProductosRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvStockProductoHistRepository;
 import com.refacFabela.repository.TvVentasStockRepository;
+import com.refacFabela.repository.TwAjusteInventarioRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwMaquinaClienteRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.TwSaldoUtilizadoRepository;
 
 import com.refacFabela.repository.TwSaldosRepository;
+import com.refacFabela.repository.TwVentaProductoCancelaRepository;
 import com.refacFabela.repository.TwVentaProductosTraerRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentaProductoMesRepository;
@@ -127,6 +130,13 @@ public class ProductosServiceImp implements ProductosService {
 	private TwSaldoUtilizadoRepository twSaldoUtilizadoRepository;
 	@Autowired
 	private VwSaldoVentaFavorDisponibleRepository vwSaldoVentaFavorDisponibleRepository;
+	
+	@Autowired
+	private TwVentaProductoCancelaRepository twVentaProductoCancelaRepository;
+	
+	@Autowired
+	
+	private TwAjusteInventarioRepository twAjusteInventarioRepository;
 
 
 
@@ -663,6 +673,55 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		
 		
 		return vwSaldoVentaFavorDisponible;
+	}
+
+	@Override
+	public List<TwVentaProductoCancela> obtenerVentaProductoCanela(String fechaInicio, String fechaTermino) {
+		
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date dataFormateada = formato.parse(fechaInicio);
+			Date dataFormateada2 = formato.parse(fechaTermino);
+			
+			return twVentaProductoCancelaRepository.findByBuscar(dataFormateada, dataFormateada2);
+			
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+			
+		} 
+	
+		
+		
+		
+	
+	}
+
+	@Override
+	public List<TcProducto> obtenerProductoId(Long nId) {
+		
+		return productosRepository.consultarPorId(nId);
+	}
+
+	@Override
+	public List<TwAjustesInventario> obtenerVentaProductoAjusteInventario(String fechaInicio, String fechaTermino) {
+		
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date dataFormateada = formato.parse(fechaInicio);
+			Date dataFormateada2 = formato.parse(fechaTermino);
+			
+			return twAjusteInventarioRepository.findByBuscar(dataFormateada, dataFormateada2);
+			
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+			
+		} 
 	}
 	
 	

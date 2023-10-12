@@ -84,6 +84,9 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("ivaTotal", reporteCotizacion.getIvaTotal());
 	         params.put("total", reporteCotizacion.getTotal());
 	         params.put("listaProductos", listaProducto);
+	         params.put("nombreVendedor", reporteCotizacion.getNombreVendedor());
+
+	         
 	         params.put("qr", getQR(("Folio de cotización: C-"+reporteCotizacion.getFolioCotizacion()+"\nRFC cliente: "+reporteCotizacion.getRfcCliente()+"\nRazón Social: "+reporteCotizacion.getNombreCliente()+"\nTotal: "+reporteCotizacion.getTotal().toString()+"\nTotal de productos: "+ listaProducto.size()).toString()));
 	         
 	         
@@ -214,7 +217,7 @@ public class ReporteServiceImpl implements ReporteService {
 		try {
 			String ruta="";
 			
-				ruta="/reports/plantillas/saldoFaVor.jrxml";
+				ruta="/reports/plantillas/saldoFavor.jrxml";
 			
 			
 			utils util= new utils();

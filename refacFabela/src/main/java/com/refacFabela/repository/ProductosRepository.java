@@ -27,6 +27,9 @@ public interface ProductosRepository extends JpaRepository<TcProducto, Long> {
 	
 	public TcProducto findBynId(Long nId);
 	
+	@Query("Select c from TcProducto c where c.nId=:nId")
+	public List<TcProducto> consultarPorId(Long nId);
+	
 	
 	
 

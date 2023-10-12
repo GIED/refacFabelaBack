@@ -129,6 +129,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteCotizacion.setFolioCotizacion(listaProductos.get(0).getTwCotizaciones().getnId());
 		reporteCotizacion.setFecha(listaProductos.get(0).getTwCotizaciones().getdFecha());
 		reporteCotizacion.setCorreo(listaProductos.get(0).getTwCotizaciones().getTcCliente().getsCorreo());
+		reporteCotizacion.setNombreVendedor(listaProductos.get(0).getTwCotizaciones().getTcUsuario().getsNombreUsuario());
 		
 
 
@@ -386,19 +387,23 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 			reporte.setCantidad(twVentaProducto.getnCantidad());
 			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
-			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsProducto());
+			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsProducto()+'-'+twVentaProducto.getTcProducto().getsMarca());
 			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
 			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnTotalUnitario()));
 			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnTotalPartida()));
 			reporte.setDescripcionCatSat(twVentaProducto.getTcProducto().getTcClavesat().getsDescripcion());
-			reporte.setCondicionEntrega(twVentaProducto.getsCondicionEntrega());
+			if(twVentaProducto.getTwVenta().getnIdTipoVenta()==3L) {
+				reporte.setCondicionEntrega("VENTA POR PEDIDO");
+				
+			}
+			else {
+				reporte.setCondicionEntrega(twVentaProducto.getsCondicionEntrega());
+			}
+		
 			reporte.setUbicacion(productoBodega.getTcAnaquel().getsAnaquel()+productoBodega.getTcNivel().getsNivel());
 			reporte.setNoParte(twVentaProducto.getTcProducto().getsNoParte());
 			
-			
-			
-			
-		
+					
 
 			listaProducto.add(reporte);
 

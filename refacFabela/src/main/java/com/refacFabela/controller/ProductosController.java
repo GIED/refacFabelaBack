@@ -60,6 +60,17 @@ public class ProductosController {
 		}
 		return null;
 	}
+	@GetMapping("/obtenerProductoId")
+	public List<TcProducto> obtenerProductoId(@RequestParam() Long nId) {
+
+		try {
+			return productosService.obtenerProductoId(nId);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
 
 	@PostMapping("/simuladorPrecioProducto")
 	public TcProducto simuladorPrecioProducto(@RequestBody TcProducto tcProducto) {

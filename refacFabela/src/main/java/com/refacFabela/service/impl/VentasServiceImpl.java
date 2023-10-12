@@ -118,7 +118,7 @@ public class VentasServiceImpl implements VentasService {
 		utils utils=new utils();
 		TwPedido twPedido=new TwPedido();
 		TwPedido respuesta=new TwPedido();
-		TwPedidoProducto twPedidoProducto=new TwPedidoProducto();
+		
 		TcCliente tcCliente= new TcCliente();
 		
 		tcCliente=clientesRepository.buscarCliente(ventaDto.getIdCliente());
@@ -190,6 +190,9 @@ public class VentasServiceImpl implements VentasService {
 				if(twProductobodega.getnCantidad()<ventaDto.getListaValidada().get(i).getnCantidad()) {
 					twVentaProducto.setsCondicionEntrega("TRASPASO DE MERCANCIA");					
 				}
+				if(twProductobodega.getnCantidad()<ventaDto.getListaValidada().get(i).getnCantidad() &&  twVenta.getnIdTipoVenta() == 3L  ) {
+					twVentaProducto.setsCondicionEntrega("VENTA POR PEDIDO");					
+				}
 				
 			}
 			
@@ -220,6 +223,7 @@ public class VentasServiceImpl implements VentasService {
 		
 			
 			for (int i = 0; i < ventaDto.getListaValidada().size(); i++) {
+				TwPedidoProducto twPedidoProducto=new TwPedidoProducto();
 				
 			    twPedidoProducto.setsClavePedido(respuesta.getsCvePedido());
 				twPedidoProducto.setdFechaPedido(new Date());

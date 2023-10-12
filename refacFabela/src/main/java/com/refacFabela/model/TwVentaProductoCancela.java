@@ -57,6 +57,9 @@ public class TwVentaProductoCancela  implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "n_idVenta", insertable = false , updatable = false)
 	private TwVenta twVenta;
+	@ManyToOne
+	@JoinColumn(name = "n_idProductos", insertable = false , updatable = false)
+	private  TcProducto tcProducto;
 	
 	
 	public TwVentaProductoCancela() {
@@ -200,6 +203,16 @@ public class TwVentaProductoCancela  implements Serializable {
 
 	public void setTwVenta(TwVenta twVenta) {
 		this.twVenta = twVenta;
+	}
+
+
+	public TcProducto getTcProducto() {
+		return tcProducto;
+	}
+
+
+	public void setTcProducto(TcProducto tcProducto) {
+		this.tcProducto = tcProducto;
 	}
 
 

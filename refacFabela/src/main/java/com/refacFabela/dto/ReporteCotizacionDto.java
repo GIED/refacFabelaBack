@@ -28,6 +28,7 @@ public class ReporteCotizacionDto implements Serializable{
 	private String descripcionCatSat;
 	private String correo;
 	private String condicionEntrega;
+	private String nombreVendedor;
 	
 	
 	
@@ -165,6 +166,15 @@ public class ReporteCotizacionDto implements Serializable{
 	public void setCondicionEntrega(String condicionEntrega) {
 		this.condicionEntrega = condicionEntrega;
 	}
+
+	public String getNombreVendedor() {
+		return nombreVendedor;
+	}
+
+	public void setNombreVendedor(String nombreVendedor) {
+		this.nombreVendedor = nombreVendedor;
+	}
+	
 	
 	
 	
