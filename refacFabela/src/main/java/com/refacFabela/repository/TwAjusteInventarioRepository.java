@@ -14,7 +14,7 @@ import com.refacFabela.model.TwVentaProductoCancela;
 public interface TwAjusteInventarioRepository extends JpaRepository<TwAjustesInventario, Long> {
 
 	
-	@Query("Select c from TwAjustesInventario c where  c.sFecha>=:fechaInicio and c.sFecha<=:fechaTermino order by c.nId desc")
+	@Query("Select c from TwAjustesInventario c where DATE_FORMAT(sFecha, '%Y-%m-%d')  BETWEEN DATE_FORMAT(:fechaInicio, '%Y-%m-%d') and DATE_FORMAT(:fechaTermino,'%Y-%m-%d') order by c.nId desc")
 	public List<TwAjustesInventario> findByBuscar(Date fechaInicio, Date fechaTermino);
 	
 }

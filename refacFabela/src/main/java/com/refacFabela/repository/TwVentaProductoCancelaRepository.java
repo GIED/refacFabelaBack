@@ -12,7 +12,7 @@ import com.refacFabela.model.TwVentaProductoCancela;
 public interface TwVentaProductoCancelaRepository extends JpaRepository<TwVentaProductoCancela, Long> {
 
 	
-	@Query("Select c from TwVentaProductoCancela c where  c.twVenta.dFechaVenta>=:fechaInicio and c.twVenta.dFechaVenta<=:fechaTermino ")
+	@Query("Select c from TwVentaProductoCancela c where   DATE_FORMAT(c.dFecha, '%Y-%m-%d') BETWEEN  DATE_FORMAT(:fechaInicio, '%Y-%m-%d') and DATE_FORMAT(:fechaTermino, '%Y-%m-%d') ")
 	public List<TwVentaProductoCancela> findByBuscar(Date fechaInicio, Date fechaTermino);
 	
 	

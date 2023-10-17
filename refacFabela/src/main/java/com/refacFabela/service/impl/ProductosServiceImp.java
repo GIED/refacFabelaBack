@@ -710,8 +710,14 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		
 		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 		try {
+			
+			
+			
 			Date dataFormateada = formato.parse(fechaInicio);
 			Date dataFormateada2 = formato.parse(fechaTermino);
+			
+			System.err.println(dataFormateada);
+			System.err.println(dataFormateada2);
 			
 			return twAjusteInventarioRepository.findByBuscar(dataFormateada, dataFormateada2);
 			
