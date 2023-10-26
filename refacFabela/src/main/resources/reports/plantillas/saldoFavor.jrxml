@@ -338,12 +338,12 @@
 		</band>
 		<band height="91">
 			<componentElement>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="40" width="553" height="44" uuid="36ed3551-4b9f-40a9-b733-092b49d3804a"/>
+				<reportElement mode="Transparent" x="0" y="40" width="553" height="51" uuid="36ed3551-4b9f-40a9-b733-092b49d3804a"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="listaSaldosUtilizados" uuid="6f45cf0f-a61d-4b2d-89e0-276278a524df">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaSaldosUtilizados})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="44" width="553">
+					<jr:listContents height="51" width="553">
 						<rectangle>
 							<reportElement mode="Transparent" x="137" y="3" width="62" height="34" forecolor="#04115F" backcolor="#010101" uuid="528c9d25-00b7-4a39-9435-b903e5b987d7"/>
 							<graphicElement>
@@ -402,7 +402,7 @@
 				<reportElement x="108" y="0" width="372" height="16" forecolor="#060607" backcolor="#010101" uuid="06c5f663-a1c0-497b-a692-59d9feb99c0a"/>
 			</rectangle>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" x="108" y="0" width="372" height="16" forecolor="#F3F1F1" uuid="b7e2d57c-df23-467d-91fd-1d4830c0c092"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="108" y="0" width="372" height="16" forecolor="#F3F1F1" uuid="b7e2d57c-df23-467d-91fd-1d4830c0c092"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Georgia" size="8" isBold="false" isItalic="false" isPdfEmbedded="false"/>
 				</textElement>
@@ -439,7 +439,7 @@
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="136" y="20" width="63" height="19" forecolor="#FEFEFE" uuid="7c5121be-c965-45c6-bd4a-f0b40163a085"/>
+				<reportElement x="136" y="20" width="63" height="19" forecolor="#FEFEFE" uuid="7c5121be-c965-45c6-bd4a-f0b40163a085"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
@@ -447,28 +447,28 @@
 				<text><![CDATA[Venta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="199" y="20" width="82" height="19" forecolor="#FFFFFF" uuid="d87493de-648e-4668-a3e9-78ef3f9500a9"/>
+				<reportElement x="199" y="20" width="82" height="19" forecolor="#FFFFFF" uuid="d87493de-648e-4668-a3e9-78ef3f9500a9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="413" y="20" width="67" height="20" forecolor="#FFFFFF" uuid="7bf8eabe-d545-4cf1-af18-3bd9cc5b2e36"/>
+				<reportElement x="413" y="20" width="67" height="20" forecolor="#FFFFFF" uuid="7bf8eabe-d545-4cf1-af18-3bd9cc5b2e36"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Saldo Utilizado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="353" y="20" width="60" height="20" forecolor="#FFFFFF" uuid="c727de5a-f5ab-4903-a156-dc09d76f1363"/>
+				<reportElement x="353" y="20" width="60" height="20" forecolor="#FFFFFF" uuid="c727de5a-f5ab-4903-a156-dc09d76f1363"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Venta Utilizado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="281" y="20" width="72" height="20" forecolor="#FFFFFF" uuid="736828d5-43d9-4fed-b40d-52c951c14962"/>
+				<reportElement x="281" y="20" width="72" height="20" forecolor="#FFFFFF" uuid="736828d5-43d9-4fed-b40d-52c951c14962"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
@@ -481,7 +481,7 @@
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="108" y="20" width="28" height="19" forecolor="#FEFEFE" uuid="4b41804d-043a-4905-b88b-4e6b041a5454"/>
+				<reportElement x="108" y="20" width="28" height="19" forecolor="#FEFEFE" uuid="4b41804d-043a-4905-b88b-4e6b041a5454"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>

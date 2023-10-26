@@ -60,6 +60,23 @@ public class FacturaController {
 		}
 	}
 	
+	@GetMapping("complemento")
+	public ResponseEntity<?> complemento(@RequestParam(required = false) Long nIdVenta , String cveCfdi) throws Exception {
+		
+		Map<String, Object> response = new HashMap();
+		
+		if (facturaService.complemento(nIdVenta, cveCfdi).equals("ok")) {
+			
+			response.put("mensaje", "Complemento registrado");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+			
+		}else {		
+			
+			response.put("mensaje", "error al regfistrar complemento de pago");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	@GetMapping("ventasParaFactura")
 	public ResponseEntity<List<TvVentasFactura>> consultaVentasFactura(){
 		

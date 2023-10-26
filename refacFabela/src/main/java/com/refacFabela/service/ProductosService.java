@@ -48,6 +48,9 @@ public interface ProductosService {
 	public List<TwHistoriaIngresoProducto> historiaIngresoProducto(Long n_id);
 
 	public List<TwProductobodega> consultaProductoBodega(Long id);
+	
+	public TwProductobodega consultaProductoBod(Long id, Long nIdBodega);
+
 
 	public List<TwProductobodega> obtenerInventaroEsp(Long idBodega, Long idAnaquel, Long idNivel);
 

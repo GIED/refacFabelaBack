@@ -324,6 +324,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			saldo.setnIdVentaUtilizado(saldoUtilizadoDto.getnIdVentaUtilizado());
 			
 			listaTwSaldoUtilizadoDto.add(saldo);
+			System.err.println(listaTwSaldoUtilizadoDto);
 			
 			totalSaldoUsado+=saldoUtilizadoDto.getnSaldoUtilizado();
 			

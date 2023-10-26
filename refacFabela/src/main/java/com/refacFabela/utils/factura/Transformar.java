@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
+import com.refacFabela.model.factura.CabeceraPagosXml;
 import com.refacFabela.model.factura.CabeceraXml;
 import com.refacFabela.model.factura.ConceptoXml;
 import com.refacFabela.model.factura.Impuesto;
@@ -34,6 +35,41 @@ public class Transformar {
 	            cabeceraXmlBean.setTotal(String.valueOf(calcularTotal(productosVendidos)));
 	            cabeceraXmlBean.setTipoComprobante(ConstantesFactura.tipoComprobante);
 	            cabeceraXmlBean.setMetodoPago(ConstantesFactura.MetodoPago);
+	            cabeceraXmlBean.setLugarExpedicion(ConstantesFactura.lugarExpedicion);
+	            cabeceraXmlBean.setNoCertificado(ConstantesFactura.noCertificado);
+	            cabeceraXmlBean.setCertificado(ConstantesFactura.certificado);
+	            cabeceraXmlBean.setSello("");
+	            cabeceraXmlBean.setNombreEmisor(ConstantesFactura.nombreEmisor);
+	            cabeceraXmlBean.setRfcEmisor(ConstantesFactura.rfcEmisor);
+	            cabeceraXmlBean.setRegimenFiscal(ConstantesFactura.regimenFiscal);
+	            cabeceraXmlBean.setUsoCFDI(cveCfdi);//valor que recibe del front
+	            cabeceraXmlBean.setNombreReceptor(twVenta.getTcCliente().getsRazonSocial());
+	            cabeceraXmlBean.setRfcReceptor(twVenta.getTcCliente().getsRfc());// cambiar por rfc de camp 
+	            cabeceraXmlBean.setEmailReceptor(twVenta.getTcCliente().getsCorreo());// cambiar por email camp
+	            cabeceraXmlBean.setRegimenFiscalReceptor(twVenta.getTcCliente().getTcRegimenFiscal().getsCveRegimen());
+	            cabeceraXmlBean.setDomicilioFiscalReceptor(twVenta.getTcCliente().getnCp().toString());
+	            cabeceraXmlBean.setExportacion(ConstantesFactura.exportacion);
+	        
+
+	        return cabeceraXmlBean;
+
+	    }
+	   
+	   public CabeceraPagosXml objCabeceraPagos(List<TwVentasProducto> productosVendidos, TwVenta twVenta, String cveCfdi) {
+
+		      
+
+	        CabeceraPagosXml cabeceraXmlBean = new CabeceraPagosXml();
+	        
+               utils util =new utils();
+	        
+	            cabeceraXmlBean.setVersion(ConstantesFactura.version);
+	            cabeceraXmlBean.setSerie(ConstantesFactura.serie);
+	            cabeceraXmlBean.setFolio(twVenta.getnId().toString()+"_1");	           
+	            cabeceraXmlBean.setSubTotal(String.valueOf(0));
+	            cabeceraXmlBean.setMoneda(ConstantesFactura.moneda);
+	            cabeceraXmlBean.setTotal(String.valueOf(0));
+	            cabeceraXmlBean.setTipoComprobante("P");	           
 	            cabeceraXmlBean.setLugarExpedicion(ConstantesFactura.lugarExpedicion);
 	            cabeceraXmlBean.setNoCertificado(ConstantesFactura.noCertificado);
 	            cabeceraXmlBean.setCertificado(ConstantesFactura.certificado);

@@ -122,6 +122,40 @@ public class ConstantesFactura {
 	            m.setProperty("com.sun.xml.bind.namespacePrefixMapper", new DefaultNamespacePrefixMapper());
 	            m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd");
 	            m.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+	          
+
+	            // String rutaComprobante = "C:/Users/gioca/Downloads/facturacion/prueba/cfdi.xml";        
+	            // m.marshal(xml, new File(rutaComprobante));
+	            StringWriter sw = new StringWriter();
+	            m.marshal(xml, sw);
+
+	            xmlString = sw.toString();
+
+	            //System.out.println("xml en string: " + xmlString);
+	        } catch (JAXBException e) {
+	            e.printStackTrace();
+	        }
+	        return xmlString;
+	    }
+	    
+	    public static String xmltoStringPagos(Comprobante xml) {
+
+	        String xmlString = "";
+	        try {
+
+	            JAXBContext context = JAXBContext.newInstance(Comprobante.class);
+	            Marshaller m = context.createMarshaller();
+	            
+
+	            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+	            m.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+	            m.setProperty("com.sun.xml.bind.namespacePrefixMapper", new DefaultNamespacePrefixMapper());
+	            m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/Pagos20 http://www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos20.xsd");
+	            m.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+	           
+
+	      
+	          
 
 	            // String rutaComprobante = "C:/Users/gioca/Downloads/facturacion/prueba/cfdi.xml";        
 	            // m.marshal(xml, new File(rutaComprobante));

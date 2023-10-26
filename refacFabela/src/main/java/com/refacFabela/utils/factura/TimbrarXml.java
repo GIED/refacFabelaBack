@@ -41,6 +41,7 @@ import org.xml.sax.SAXException;
 
 import com.refacFabela.model.TwFacturacion;
 import com.refacFabela.model.TwVenta;
+import com.refacFabela.model.factura.CabeceraPagosXml;
 import com.refacFabela.model.factura.CabeceraXml;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.FacturacionService;
@@ -103,6 +104,54 @@ public class TimbrarXml {
 			if (consultaFolio() > 0) {
 				System.out.println("ENTRE A TIMBRAR");
 				procesarXml(consello, idVenta, cabecera, cadenaOriginal);
+			} else {
+				System.err.println("creditos insuficientes");
+			}
+
+		} catch (TransformerException e) {
+			Logger.getLogger(GeneraXml.class.getName()).log(Level.SEVERE, null, e);
+		}
+
+		return "Timbrado Correcto";
+
+	}
+	
+	public String timbrarPagoXml(Comprobante xml, Long idVenta, CabeceraPagosXml cabecera)
+			throws GeneralSecurityException, IOException, ParserConfigurationException, SAXException, Exception {
+		String xmlString = "";
+		String cadenaOriginal = "";
+		PrivateKey llavePrivada = null;
+		String selloDigital = "";
+
+		File key = new File(ConstantesFactura.rutaKey);
+
+		try {
+
+			xmlString = ConstantesFactura.xmltoString(xml);
+
+			System.out.println("xml: " + xmlString);
+
+			cadenaOriginal = generarCadenaOriginal(xmlString);
+			// obtener llave privada
+			llavePrivada = getPrivateKey(key, ConstantesFactura.passwordKey);
+
+			// obtener sello digital
+			selloDigital = generarSelloDigital(llavePrivada, cadenaOriginal);
+			System.out.println("sali a geerar sello digital");
+			String SelloModificado = quitarSaltos(selloDigital);
+			System.out.println("sali a  sello digital modificado");
+
+			// Agregamos sello al xml
+			xml.setSello(SelloModificado);
+			System.out.println("sali de agregar sello xml");
+
+			String consello = ConstantesFactura.xmltoStringPagos(xml);
+			System.out.println("sali de transformar xml a string");
+
+			// mandamos xml a timbrar al webservice
+			if (consultaFolio() > 0) {
+				System.out.println("ENTRE A TIMBRAR");
+				procesarPagoXml(consello, idVenta, cabecera, cadenaOriginal);
 			} else {
 				System.err.println("creditos insuficientes");
 			}
@@ -259,6 +308,106 @@ public class TimbrarXml {
  
         
 		}
+
+       
+       
+    
+        
+      
+    }
+	
+	
+	private  void procesarPagoXml(final String xml, Long idVenta, CabeceraPagosXml cabecera, String cadenaOriginal) throws ParserConfigurationException, SAXException, IOException, TransformerException, Exception {
+        RespuestaTFD33 Respuesta;
+        
+        utils util=new utils();
+		TwVenta twVentaConsulta = this.ventasRepository.findBynId(idVenta);	
+		
+		System.err.println(xml);
+		
+	   /* 	if(twVentaConsulta.getnIdFacturacion()==0L) {
+
+        Respuesta = timbrarCFDI(ConstantesFactura.usuarioFolios, ConstantesFactura.passwordFolios, xml, "TIMBRADO33");
+       
+       
+        TwFacturacion twFacturacion = new TwFacturacion();
+
+   if (Respuesta.isOperacionExitosa()) {
+
+            stringToDom(Respuesta.getXMLResultado().getValue(), idVenta);
+
+            System.out.println("Operación exitosa");
+            System.out.println(Respuesta.getXMLResultado().getValue());
+            System.out.println("PDF: " + Respuesta.getPDFResultado().getValue());
+            System.out.println(Respuesta.getTimbre().getValue().getEstado().getValue());
+            System.out.println(Respuesta.getTimbre().getValue().getNumeroCertificadoSAT().getValue());
+            System.out.println(Respuesta.getTimbre().getValue().getSelloCFD().getValue());
+            System.out.println(Respuesta.getTimbre().getValue().getSelloSAT().getValue());
+            System.out.println(Respuesta.getTimbre().getValue().getUUID().getValue());
+          
+            twFacturacion.setN_idVenta(idVenta);
+            twFacturacion.setsUuid(Respuesta.getTimbre().getValue().getUUID().getValue());
+            twFacturacion.setsEstado(Respuesta.getTimbre().getValue().getEstado().getValue());
+            twFacturacion.setS_noCertificadoSat(Respuesta.getTimbre().getValue().getNumeroCertificadoSAT().getValue());
+            twFacturacion.setS_selloCfd(Respuesta.getTimbre().getValue().getSelloCFD().getValue());
+            twFacturacion.setS_selloSat(Respuesta.getTimbre().getValue().getSelloSAT().getValue()); 
+            twFacturacion.setS_cadenaOriginal(cadenaOriginal);
+            twFacturacion.setnEstatus(1);
+                        
+          
+            twFacturacion = facturacionService.guardar(twFacturacion);
+            
+            TwVenta twVenta = this.ventasService.consltaVentasId(idVenta);
+            
+            twVenta.setnIdFacturacion(twFacturacion.getnId());
+            
+            this.ventasService.updateStatusVenta(twVenta);
+            
+            generarPdf(Respuesta.getTimbre().getValue().getUUID().getValue(), idVenta);
+            
+            TwVenta venta=new TwVenta();
+            
+            
+            
+       
+            
+            String ruta="";
+    		String rutaRaiz="";
+            venta=ventasRepository.findBynId(idVenta);
+           
+            ruta=com.refacFabela.enums.TipoDoc.PDF_FACTURA.getPath();
+			rutaRaiz=ConstantesFactura.rutaRaiz;
+            String nombreArchivo=venta.getnId().toString();  
+            
+      
+                      
+              
+                        
+            envioMail enviar=new envioMail();
+       				enviar.enviarCorreo(venta.getTcCliente().getsCorreo(), 
+       						"Factura_"+venta.getnId(),
+       						"<p>Adjunto al presente factura No. "+venta.getnId()+"</p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
+       						rutaRaiz,
+       						nombreArchivo,
+       						2
+       						);
+            
+            
+            
+  
+
+        } else {
+            System.out.println("Hubo un error en la operación");
+            System.out.println(Respuesta.getCodigoRespuesta().getValue());
+            System.out.println(Respuesta.getMensajeErrorDetallado().getValue());
+        }
+         
+        if (Respuesta.getCodigoConfirmacion().getValue() != null) {
+            System.out.println("Codigo de Confirmacion: " + Respuesta.getCodigoConfirmacion().getValue());
+        }    
+ 
+        
+		} */
 
        
        

@@ -104,10 +104,10 @@
 		</dependency>
 		<!-- Libreria para factura -->
 		<dependency>
-			<groupId>mx.grupocorasa.cfdi</groupId>
-			<artifactId>cfdi-base</artifactId>
-			<version>3.3.2</version>
-		</dependency>
+  <groupId>mx.grupocorasa.cfdibase</groupId>
+  <artifactId>cfdi-base</artifactId>
+  <version>4.0.15</version>
+</dependency>
 		<dependency>
 			<groupId>com.factura</groupId>
 			<artifactId>factura4</artifactId>

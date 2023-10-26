@@ -6,17 +6,21 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.refacFabela.model.factura.CabeceraPagosXml;
 import com.refacFabela.model.factura.CabeceraXml;
 import com.refacFabela.model.factura.ConceptoXml;
 import com.refacFabela.model.factura.Impuesto;
 
+
 import mx.grupocorasa.sat.cfd._40.Comprobante;
+import mx.grupocorasa.sat.cfd._40.Comprobante.Complemento;
 import mx.grupocorasa.sat.cfd._40.Comprobante.Conceptos;
 import mx.grupocorasa.sat.cfd._40.Comprobante.Conceptos.Concepto;
 import mx.grupocorasa.sat.cfd._40.Comprobante.Emisor;
 import mx.grupocorasa.sat.cfd._40.Comprobante.Impuestos;
 import mx.grupocorasa.sat.cfd._40.Comprobante.Receptor;
 import mx.grupocorasa.sat.cfd._40.ObjectFactory;
+import mx.grupocorasa.sat.common.Pagos20.Pagos;
 import mx.grupocorasa.sat.common.catalogos.CClaveUnidad;
 import mx.grupocorasa.sat.common.catalogos.CExportacion;
 import mx.grupocorasa.sat.common.catalogos.CFormaPago;
@@ -53,16 +57,25 @@ public class GeneraXml {
 	        xml.setFecha(oneHourAgo);
 	        xml.setFormaPago(CFormaPago.fromValue(cabeceraXml.getFormaPago()));
 	        xml.setCondicionesDePago(cabeceraXml.getCondicionesPago());
+	        System.err.println( xml.getCondicionesDePago());
 	        xml.setSubTotal(new BigDecimal(cabeceraXml.getSubTotal()));
 	        //xml.setDescuento(new BigDecimal("100.00"));
 	        xml.setMoneda(CMoneda.MXN);
 	        //xml.setTipoCambio(new BigDecimal("1"));
 	        xml.setTotal(new BigDecimal(cabeceraXml.getTotal()));
 	        xml.setTipoDeComprobante(CTipoDeComprobante.I);
-	        xml.setMetodoPago(CMetodoPago.fromValue(ConstantesFactura.MetodoPago));
+	        
+	        // Se cambia el metodo de pago si la forma de pago es por definir a PPD
+	        if(cabeceraXml.getFormaPago().equals("99")) {
+	        	 xml.setMetodoPago(CMetodoPago.fromValue("PPD"));
+	        }
+	        else {
+	        	 xml.setMetodoPago(CMetodoPago.fromValue(ConstantesFactura.MetodoPago));
+	        }  
+	              
 	        xml.setLugarExpedicion(cabeceraXml.getLugarExpedicion());// codigo postal 
 	        xml.setExportacion(CExportacion.fromValue(cabeceraXml.getExportacion()));
-	       
+	        System.err.println(LocalDateTime.now());
 
 	        //EMISOR
 	        xml.setEmisor(createEmisor(of, cabeceraXml));
@@ -86,6 +99,55 @@ public class GeneraXml {
 
 	        return xml;
 	    }
+	   
+	   public  Comprobante createComprobantePagos(CabeceraPagosXml cabeceraXml, List<ConceptoXml> listaConceptos, Impuesto impuesto) throws Exception {
+	        
+	        System.out.println("cabeceraXml: "+cabeceraXml.toString());
+	        System.out.println("listaConceptos: "+listaConceptos.toString());
+	        System.out.println("impuestoXml: "+impuesto.toString());
+	        
+	            
+	        ObjectFactory of = new ObjectFactory();
+	        Comprobante xml = of.createComprobante();
+	        
+	        LocalDateTime now = LocalDateTime.now();    
+	        LocalDateTime oneHourAgo = now.minusHours(1);
+
+	        xml.setVersion(cabeceraXml.getVersion());
+	        xml.setSerie(cabeceraXml.getSerie());
+	        xml.setFolio(cabeceraXml.getFolio());	       
+	        xml.setFecha(oneHourAgo);	       
+	        xml.setSubTotal(new BigDecimal(cabeceraXml.getSubTotal()));	    
+	        xml.setMoneda(CMoneda.MXN);	   
+	        xml.setTotal(new BigDecimal(cabeceraXml.getTotal()));
+	        xml.setTipoDeComprobante(CTipoDeComprobante.P);	   
+	        xml.setLugarExpedicion(cabeceraXml.getLugarExpedicion());// codigo postal 
+	        xml.setExportacion(CExportacion.fromValue(cabeceraXml.getExportacion()));
+	        xml.setCertificado(cabeceraXml.getCertificado());
+	        xml.setNoCertificado(cabeceraXml.getNoCertificado());
+
+	        //EMISOR
+	        xml.setEmisor(createEmisorPagos(of, cabeceraXml));
+
+	        //RECEPTOR
+	        xml.setReceptor(createReceptorPagos(of, cabeceraXml)); 	        
+
+	        //CONCEPTOS
+	        xml.setConceptos(createConceptosPagos(of, listaConceptos));
+	        
+	        xml.setComplemento(createComplemento(of, listaConceptos));
+
+	        //ImpuestosTotales
+	     //  xml.setImpuestos(createImpuestos(of, impuesto, cabeceraXml));
+
+	        
+
+	        
+
+	      
+
+	        return xml;
+	    }
 
 	    
 	    private static Emisor createEmisor(ObjectFactory of, CabeceraXml cabeceraXml) {
@@ -95,8 +157,27 @@ public class GeneraXml {
 	        emisor.setRegimenFiscal(CRegimenFiscal.fromValue(cabeceraXml.getRegimenFiscal()));
 	        return emisor;
 	    }
+	    private static Emisor createEmisorPagos(ObjectFactory of, CabeceraPagosXml cabeceraXml) {
+	        Emisor emisor = of.createComprobanteEmisor();
+	        emisor.setNombre(cabeceraXml.getNombreEmisor());
+	        emisor.setRfc(cabeceraXml.getRfcEmisor());
+	        emisor.setRegimenFiscal(CRegimenFiscal.fromValue(cabeceraXml.getRegimenFiscal()));
+	        return emisor;
+	    }
 
 	    private static Receptor createReceptor(ObjectFactory of, CabeceraXml cabeceraXml) {
+	        Receptor receptor = of.createComprobanteReceptor();
+	        receptor.setRfc(cabeceraXml.getRfcReceptor());
+	        receptor.setNombre(cabeceraXml.getNombreReceptor());
+	        //receptor.setResidenciaFiscal(CPais.MEX);
+	        //receptor.setNumRegIdTrib("ResidenteExtranjero1");
+	        receptor.setUsoCFDI(CUsoCFDI.fromValue(cabeceraXml.getUsoCFDI()));
+	        receptor.setDomicilioFiscalReceptor(cabeceraXml.getDomicilioFiscalReceptor());
+	        receptor.setRegimenFiscalReceptor(CRegimenFiscal.fromValue(cabeceraXml.getRegimenFiscalReceptor()));
+	       
+	        return receptor;
+	    }
+	    private static Receptor createReceptorPagos(ObjectFactory of, CabeceraPagosXml cabeceraXml) {
 	        Receptor receptor = of.createComprobanteReceptor();
 	        receptor.setRfc(cabeceraXml.getRfcReceptor());
 	        receptor.setNombre(cabeceraXml.getNombreReceptor());
@@ -130,11 +211,49 @@ public class GeneraXml {
 	        }  
 	        return cps;
 	    }
+	    
+	    private static Conceptos createConceptosPagos(ObjectFactory of, List<ConceptoXml> listaConceptos) {
+	        Conceptos cps = of.createComprobanteConceptos();
+	        List<Concepto> list = cps.getConcepto();
+	       
+	        Concepto c1 = of.createComprobanteConceptosConcepto();
+	        
+	        c1.setClaveUnidad(CClaveUnidad.fromValue("ACT"));
+	        c1.setClaveProdServ("84111506");
+	       // c1.setNoIdentificacion(concepto.getNoIdentificacion());
+	        c1.setCantidad(new BigDecimal(1));
+	        c1.setDescripcion("Pago");
+	        c1.setUnidad("PZA");	        
+	        c1.setValorUnitario(new BigDecimal(0));
+	        c1.setImporte(new BigDecimal(0));
+	        c1.setObjetoImp(CObjetoImp.fromValue("02"));
+	        //c1.setDescuento(new BigDecimal("100.00"));//
+	       // c1.setImpuestos(createImpuestosConceptos(of, concepto.getImpuesto(), concepto.getTasaOCuota(), concepto.getImporteImpuesto(), concepto.getBase()));
+	        list.add(c1);
+	            
+	        
+	        return cps;
+	    }
+	    
+	    private static Complemento createComplemento(ObjectFactory of, List<ConceptoXml> listaConceptos) {
+	    	Complemento cps = of.createComprobanteComplemento();
+	                           
+	    	
+	 
+	    	
+	    	
+	       
+	       
+	        
+	        
+	        return cps;
+	    }
 
 	    private static Concepto.Impuestos createImpuestosConceptos(ObjectFactory of, String impuesto, String tasa, String importe, String base) {
 	        Concepto.Impuestos imp = of.createComprobanteConceptosConceptoImpuestos();
 	        Concepto.Impuestos.Traslados trs = of.createComprobanteConceptosConceptoImpuestosTraslados();
 	        Concepto.Impuestos.Traslados.Traslado tr = of.createComprobanteConceptosConceptoImpuestosTrasladosTraslado();
+	        
 	        tr.setImpuesto(CImpuesto.fromValue(impuesto));
 	        tr.setTipoFactor(CTipoFactor.TASA);
 	        tr.setTasaOCuota(new BigDecimal(tasa));

@@ -247,6 +247,10 @@ public class ProductosServiceImp implements ProductosService {
 		
 		return productoBodegaRepository.findBynIdProducto(id);
 	}
+public TwProductobodega consultaProductoBod(Long id, Long nidBodega) {
+		
+		return productoBodegaRepository.findBynIdProductoIdBodega(id, nidBodega);
+	}
 
 	@Override
 	public List<TwProductobodega> obtenerInventaroEsp(Long idBodega, Long idAnaquel, Long idNivel) {

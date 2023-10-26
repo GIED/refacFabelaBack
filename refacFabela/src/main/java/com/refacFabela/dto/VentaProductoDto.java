@@ -30,6 +30,7 @@ public class VentaProductoDto implements  Serializable {
 	
 	
 	
+	
 	public VentaProductoDto() {
 		
 	}

@@ -119,6 +119,14 @@ public class TwSaldoUtilizadoDto implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+
+	@Override
+	public String toString() {
+		return "TwSaldoUtilizadoDto [nIdVenta=" + nIdVenta + ", nSaldoTotal=" + nSaldoTotal + ", nSaldoUtilizado="
+				+ nSaldoUtilizado + ", nIdUsuario=" + nIdUsuario + ", nEstatus=" + nEstatus + ", dFecha=" + dFecha
+				+ ", nIdCaja=" + nIdCaja + ", nIdVentaUtilizado=" + nIdVentaUtilizado + "]";
+	}
 	
 	
 	

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.refacFabela.model.TwFacturacion;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
+import com.refacFabela.model.factura.CabeceraPagosXml;
 import com.refacFabela.model.factura.CabeceraXml;
 import com.refacFabela.model.factura.ConceptoXml;
 import com.refacFabela.model.factura.Impuesto;
@@ -64,6 +65,39 @@ public class FacturacionServiceImpl implements FacturacionService {
 			
 			//timbramos xml
 	        timbrarXml.timbrarXml(xml, idVenta, cabeceraXml);
+	        
+	        return "ok";
+	        }
+			else {
+				return "Ya se facturó";
+			}
+			
+		}catch (Exception e) {
+			return "Error al facturar";
+		}
+		
+	}
+	
+public String complemento(Long idVenta, String cveCfdi) throws Exception {
+		
+		try {
+			
+			//System.out.println("llego");
+			
+			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);			
+			
+			if(twVenta.getnIdFacturacion()==0L) {
+			List<TwVentasProducto> productosVendidos = this.ventasProductoRepository.findBynIdVenta(idVenta);
+			
+			
+			CabeceraPagosXml cabeceraXml = transformar.objCabeceraPagos(productosVendidos, twVenta, cveCfdi);
+			List<ConceptoXml> listaConceptos = transformar.listaConceptos(productosVendidos);
+			Impuesto impuesto = transformar.obtenerImpuestoTotal(productosVendidos);
+			
+			Comprobante xml = generarXml.createComprobantePagos(cabeceraXml, listaConceptos, impuesto);
+			
+			//timbramos xml
+	        timbrarXml.timbrarPagoXml(xml, idVenta, cabeceraXml);
 	        
 	        return "ok";
 	        }

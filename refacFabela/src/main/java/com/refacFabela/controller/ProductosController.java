@@ -158,6 +158,17 @@ public class ProductosController {
 		}
 		return null;
 	}
+	@GetMapping("/obtenerProductoBodega")
+	public TwProductobodega obtenerProductoBodega(@RequestParam() Long id, @RequestParam() Long idBodega) {
+
+		try {
+			return productosService.consultaProductoBod(id, idBodega);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener el stock de bodegas" + e);
+		}
+		return null;
+	}
 
 	@GetMapping("/obtenerInventarioEsp")
 	public List<TwProductobodega> obtenerInventaroEsp(@RequestParam() Long idBodega, @RequestParam() Long idAnaquel,

@@ -14,6 +14,9 @@ public interface ProductoBodegaRepository extends JpaRepository<TwProductobodega
 	@Query("Select d from TwProductobodega d  where d.nIdProducto =:id order by d.nIdBodega asc" )
 	public List<TwProductobodega> findBynIdProducto(Long id);
 	
+	@Query("Select d from TwProductobodega d  where d.nIdProducto =:id and d.nIdBodega=:nIdBodega order by d.nIdBodega asc" )
+	public TwProductobodega findBynIdProductoIdBodega(Long id, Long nIdBodega);
+	
 	@Query("Select d from TwProductobodega d  where d.nIdBodega =:idBodega and d.nIdNivel=:idNivel and d.nIdAnaquel=:idAnaquel order by nCantidad desc" )
 	public List<TwProductobodega> obtenerInventaroEsp(Long idBodega, Long idAnaquel, Long idNivel);
 	
