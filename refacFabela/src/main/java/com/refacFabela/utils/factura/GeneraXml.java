@@ -235,16 +235,20 @@ public class GeneraXml {
 	        return cps;
 	    }
 	    
+	    
+	    
+	    
 	    private static Complemento createComplemento(ObjectFactory of, List<ConceptoXml> listaConceptos) {
 	    	Complemento cps = of.createComprobanteComplemento();
 	                           
 	    	
-	 
+	    	PagoComplemento pago = new PagoComplemento();
+	    	
+	    	pago.createComplementoPago();
 	    	
 	    	
 	       
-	       
-	        
+	   
 	        
 	        return cps;
 	    }
