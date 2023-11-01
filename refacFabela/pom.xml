@@ -108,13 +108,7 @@
 			<artifactId>cfdi-base</artifactId>
 			<version>3.3.2</version>
 		</dependency>
-		<dependency>
-			<groupId>com.refacFabela</groupId>
-			<artifactId>cfdi</artifactId>
-			<version>4.0.14</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/cfdi-base-4.0.14.jar</systemPath>
-		</dependency>
+		
 		<dependency>
 			<groupId>com.factura</groupId>
 			<artifactId>factura4</artifactId>

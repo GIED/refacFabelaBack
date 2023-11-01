@@ -25,6 +25,8 @@ public interface VentasService {
 	public TwVenta guardarVenta(VentaDto ventaDto);
 	public TwVenta updateStatusVenta(TwVenta twVenta);
 	public TvVentaDetalle guardarVentaDetalle(TvVentaDetalle tvVentaDetalle) throws InterruptedException;
+	public TvVentaDetalle guardarDescuento(TvVentaDetalle tvVentaDetalle) throws InterruptedException;
+
 	public List<TwAbono> consultaAbonoVentaId(Long nId);
 	public List<TvVentasFactura> consultaVentasParaFactura();
 	public List<TvVentasFactura> consultaVentasFacturadas();

@@ -20,6 +20,7 @@ import com.refacFabela.dto.ProductoDescuentoDto;
 import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.TvVentaDetalleDto;
 import com.refacFabela.dto.VentaDto;
+import com.refacFabela.dto.VentaProductoCancelaDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TrVentaCobro;
@@ -201,7 +202,7 @@ public class VentasController {
 	public TvVentaDetalle guardarVentaDescuento(@RequestBody TvVentaDetalle tvVentaDetalle) {
 
 		try {		
-			
+			System.err.println(tvVentaDetalle);
 			
 			return ventasService.guardarVentaDetalle(tvVentaDetalle);
 		} catch (Exception e) {
@@ -210,6 +211,19 @@ public class VentasController {
 		}
 		return null;
 	}
+	@PostMapping("/guardarVentaDescuento")
+	public TvVentaDetalle guardarDescuento(@RequestBody TvVentaDetalle tvVentaDetalle) {
+
+		try {		
+				
+			return ventasService.guardarDescuento(tvVentaDetalle);
+		} catch (Exception e) {
+
+			logger.error("Error al guardar la venta detalle" + e);
+		}
+		return null;
+	}
+	
 	@GetMapping("/consultaProductoVentaId")
 	public List<VentaProductoDto> obtenerProductoVendidosIdVenta(@RequestParam() Long id) {
 
@@ -338,9 +352,9 @@ public class VentasController {
 	
 	
 	@PostMapping("/cancelaVentaProducto")
-	public VentaProductoDto cancelaVentaProducto(@RequestBody  VentaProductoDto ventaProductoDto) {
+	public VentaProductoDto cancelaVentaProducto(@RequestBody  VentaProductoCancelaDto ventaProductoCancelaDto) {
 		try {
-			return productosService.cacelarVentaProducto(ventaProductoDto);
+			return productosService.cacelarVentaProducto(ventaProductoCancelaDto);
 		} catch (Exception e) {
 			logger.error("Error al cancelar la venta" + e);
 		}

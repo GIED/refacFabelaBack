@@ -584,7 +584,7 @@ public class VentasServiceImpl implements VentasService {
 
 		boolean cambio=false;
 		
-	
+		venta.setDescuento(tvVentaDetalle.getDescuento());
 				
 		if(tvVentaDetalle.getnTotalVenta()==tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo() || (tvVentaDetalle.getnTotalVenta()-(tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo()))<=0.01 ||  tvVentaDetalle.getnTotalVenta()-tvVentaDetalle.getnAnticipo()-tvVentaDetalle.getnSaldoFavor()<=0.1) {
 			
@@ -596,7 +596,7 @@ public class VentasServiceImpl implements VentasService {
 		}
 		
 		
-		venta.setDescuento(tvVentaDetalle.getDescuento());
+		
 		
 		if(tvVentaDetalle.getTcTipoVenta().getnId()!=3) {
 						
@@ -688,7 +688,8 @@ public class VentasServiceImpl implements VentasService {
 			trVentaCobroRepository.save(ventaCobro);
 		}					
 
-		System.err.println("voy a guardar esto"+venta);
+		System.err.println("El descuento es de "+tvVentaDetalle.getDescuento());
+		
 		ventasRepository.save(venta);
 		
 		
@@ -748,6 +749,27 @@ public class VentasServiceImpl implements VentasService {
 	public void eliminarCobroIdVenta(Long idVenta) {
 		this.trVentaCobroRepository.deleteBynIdVenta(idVenta);
 		
+	}
+
+
+	@Override
+	public TvVentaDetalle guardarDescuento(TvVentaDetalle tvVentaDetalle) throws InterruptedException {
+		
+		TwVenta twVenta =new TwVenta();
+		
+		twVenta=ventasRepository.findBynId(tvVentaDetalle.getnId());
+		
+		twVenta.setDescuento(tvVentaDetalle.getDescuento());
+		
+		
+		ventasRepository.save(twVenta);
+		
+		
+		
+		
+		
+		
+		return tvVentaDetalle;
 	}
 
 	

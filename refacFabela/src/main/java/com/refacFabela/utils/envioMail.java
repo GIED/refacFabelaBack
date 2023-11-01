@@ -29,6 +29,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import com.refacFabela.utils.*;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
+
 @Component
 
 public class envioMail {
@@ -137,5 +142,40 @@ public class envioMail {
 		return siEnvio;
 
 	}
+	
+	public static void enviarCorreoEstandar(String destinatario, String asunto, String cuerpo) {
+        // Configuración de las propiedades
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+
+      
+
+        // Crear sesión con autenticación
+        Session session = Session.getInstance(properties, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password);
+            }
+        });
+
+        try {
+            // Crear mensaje
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
+            message.setSubject(asunto);
+            message.setText(cuerpo);
+
+            // Enviar el mensaje
+            Transport.send(message);
+
+            System.out.println("¡Correo enviado con éxito!");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

@@ -7,6 +7,7 @@ import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.ProductoDescuentoDto;
 import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.TvVentaDetalleDto;
+import com.refacFabela.dto.VentaProductoCancelaDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
@@ -89,7 +90,7 @@ public interface ProductosService {
 	public List<TwAjustesInventario> obtenerVentaProductoAjusteInventario(String fechaInicio, String fechaTermino);
 
 
-	public VentaProductoDto cacelarVentaProducto(VentaProductoDto ventaProductoDto);
+	public VentaProductoDto cacelarVentaProducto(VentaProductoCancelaDto ventaProductoCancelaDto);
 
 	public TwVentaProductosTraer ventaProductosTraer(TwVentaProductosTraer ventaProductoDto);
 

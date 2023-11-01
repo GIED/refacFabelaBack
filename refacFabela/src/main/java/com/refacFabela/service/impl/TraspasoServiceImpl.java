@@ -8,11 +8,14 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TwAjustesInventario;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.repository.ProductoBodegaRepository;
+import com.refacFabela.repository.ProductosRepository;
 import com.refacFabela.repository.TwAjusteInventarioRepository;
 import com.refacFabela.service.TraspasoService;
+import com.refacFabela.utils.envioMail;
 
 @Service
 public class TraspasoServiceImpl implements TraspasoService {
@@ -21,6 +24,8 @@ public class TraspasoServiceImpl implements TraspasoService {
 	private ProductoBodegaRepository productoBodegaRepository;
 	@Autowired
 	private TwAjusteInventarioRepository twAjusteInventarioRepository;
+	@Autowired
+	private ProductosRepository productosRepository;
 	
 	
 	@Override
@@ -47,10 +52,22 @@ public class TraspasoServiceImpl implements TraspasoService {
 
 	@Override
 	public TwAjustesInventario guardarAjusteInventario(TwAjustesInventario twAjustesInventario) {
-		 Date date = new Date();
+		
+		// Se asigna la fecha del movimiento
+		Date date = new Date();
 		twAjustesInventario.setsFecha(date);
 		
+		// Consulta del producto ajustado 
+		TcProducto tcProducto= new TcProducto();
+		tcProducto=productosRepository.findBynId(twAjustesInventario.getnIdProducto());
 		
+
+		// Envió de correo con el ajuste de inventario
+		String mensaje="Se realizó un ajuste de inventario del producto: "+tcProducto.getsNoParte()+"-"+tcProducto.getsProducto()+" Anterior: "+twAjustesInventario.getnCantidadAnterior()+" Cantidad Actual: "+twAjustesInventario.getnCantidadActual()+" Cantidad Ajustada: "+twAjustesInventario.getnTotalAjustado();
+		envioMail enviar=new envioMail();
+		enviar.enviarCorreoEstandar("fabela_mauricio@hotmail.com", "Ajuste de inventario", mensaje);		
+		
+		// Se guarda el ajuste 		
 		return twAjusteInventarioRepository.save(twAjustesInventario);
 	}
 

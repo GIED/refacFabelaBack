@@ -244,7 +244,7 @@ public class GeneraXml {
 	    	
 	    	PagoComplemento pago = new PagoComplemento();
 	    	
-	    	pago.createComplementoPago();
+	    	
 	    	
 	    	
 	       

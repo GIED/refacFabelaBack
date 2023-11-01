@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.refacFabela.dto.ProductoDescuentoDto;
+import com.refacFabela.dto.VentaProductoCancelaDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcCatalogogeneral;
@@ -523,7 +524,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	}
 
 	@Override
-	public VentaProductoDto cacelarVentaProducto(VentaProductoDto ventaProductoDto) {
+	public VentaProductoDto cacelarVentaProducto(VentaProductoCancelaDto ventaProductoCancelaDto) {
 				
 		TwVentasProducto twVentasProducto= new TwVentasProducto();	
 		List<TwVentasProducto> twListaVentasProducto= new ArrayList<TwVentasProducto>();	
@@ -535,25 +536,25 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		utils util= new utils();
 		TwCaja caja = new TwCaja();
 		
-		twVentasProducto=twProductosVentaRepository.obtenerProductoVenta(ventaProductoDto.getnIdVenta(), ventaProductoDto.getnIdProducto());		
+		twVentasProducto=twProductosVentaRepository.obtenerProductoVenta(ventaProductoCancelaDto.VentaProductoDto.getnIdVenta(), ventaProductoCancelaDto.VentaProductoDto.getnIdProducto());		
 		twVentasProducto.setnEstatus(0);	
-		ventaProductoDto.setnEstatus(0);
+		ventaProductoCancelaDto.VentaProductoDto.setnEstatus(0);
 		
 		/*Se gaurda la cancelación del produycto*/
-		twProductosVentaRepository.save(twVentasProducto);	
+		//twProductosVentaRepository.save(twVentasProducto);	
 		/*Se obtiene la caja activa*/
 		caja=cajaRepository.obtenerCajaVigente();	
 		/*Se obtiene el stock del producto en bodega*/
-		twProductobodega=productoBodegaRepository.obtenerProductoBodega(ventaProductoDto.getnIdProducto(), "LOCAL");
+		twProductobodega=productoBodegaRepository.obtenerProductoBodega(ventaProductoCancelaDto.VentaProductoDto.getnIdProducto(), "LOCAL");
 		/*Se obiene los datos generales de la venta*/
-		twVenta=ventasRepository.findBynId(ventaProductoDto.getnIdVenta());
+		twVenta=ventasRepository.findBynId(ventaProductoCancelaDto.VentaProductoDto.getnIdVenta());
 		
 		if (twProductobodega!=null) {
 			
 			
 			/*Se re integra el producto a la bodega*/
-			twProductobodega.setnCantidad(twProductobodega.getnCantidad()+ventaProductoDto.getnCantidad());			
-			productoBodegaRepository.save(twProductobodega);
+			twProductobodega.setnCantidad(twProductobodega.getnCantidad()+ventaProductoCancelaDto.VentaProductoDto.getnCantidad());			
+			//productoBodegaRepository.save(twProductobodega);
 			twVentaProductoCancela.setnIdVenta(twVentasProducto.getnIdVenta());
 			twVentaProductoCancela.setnIdProductos(twVentasProducto.getnIdProducto());
 			twVentaProductoCancela.setnCantidad(twVentasProducto.getnCantidad());
@@ -566,7 +567,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			twVentaProductoCancela.setnIdCaja(caja.getnId());
 			
 			
-			twSaldosRepository.save(twVentaProductoCancela);
+			//twSaldosRepository.save(twVentaProductoCancela);
 			
 				
 			if(twVenta.getnIdEstatusVenta()>1) {				
@@ -574,7 +575,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			if(twVenta.getnTipoPago()!=1L ) {
 				
 				twVenta.setnSaldo(true);				
-				ventasRepository.save(twVenta);			
+				//ventasRepository.save(twVenta);			
 				
 				
 			}
@@ -592,18 +593,18 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		
 		
 		
-		twListaVentasProducto=twProductosVentaRepository.findBynIdVenta(ventaProductoDto.getnIdVenta());
+		twListaVentasProducto=twProductosVentaRepository.findBynIdVenta(ventaProductoCancelaDto.VentaProductoDto.getnIdVenta());
 		
 		if(twListaVentasProducto.size()>0) {
 			
 			twVenta.setnIdEstatusVenta(6L);
-			ventasRepository.save(twVenta);
+			//ventasRepository.save(twVenta);
 			
 		}
 		else {
 			
 			twVenta.setnIdEstatusVenta(5L);
-			ventasRepository.save(twVenta);
+			//ventasRepository.save(twVenta);
 			
 		}
 		
@@ -619,13 +620,13 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			twSaldoUtilizado.setdFecha(fecha);
 			twSaldoUtilizado.setnEstatus(true);
 			
-			twSaldoUtilizadoRepository.save(twSaldoUtilizado);
+			//twSaldoUtilizadoRepository.save(twSaldoUtilizado);
 			
 				
 		}
 		
 		
-		return ventaProductoDto;
+		return ventaProductoCancelaDto.VentaProductoDto;
 	}
 
 	@Override
