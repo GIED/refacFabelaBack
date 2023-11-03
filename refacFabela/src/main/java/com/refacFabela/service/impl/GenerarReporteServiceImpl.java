@@ -53,6 +53,7 @@ import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.TwSaldoUtilizadoRepository;
 import com.refacFabela.repository.TwSaldosRepository;
+import com.refacFabela.repository.TwVentaProductoCancelaRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
@@ -111,6 +112,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	
 	@Autowired
 	private TwSaldoUtilizadoRepository twSaldoUtilizadoRepository;
+	
+	@Autowired
+	private TwVentaProductoCancelaRepository twVentaProductoCancelaRepository;
 	
 	
 
@@ -250,6 +254,11 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		List<TwAbono> listaAbonos=abonoVentaIdRepository.findBynIdVenta(nIdVenta);
 		List<TwSaldoUtilizado> listaSaldoUtilizado=twSaldoUtilizadoRepository.consultaSaldosUtilizados(nIdVenta);
 		List<TwSaldoUtilizadoDto> listaTwSaldoUtilizadoDto=new ArrayList<TwSaldoUtilizadoDto>();
+		TwVenta twVenta=ventasRepository.getById(nIdVenta);
+		TcCliente cliente=clientesRepository.buscarCliente(twVenta.getnIdCliente());
+		TcUsuario tcUsuario=usuariosRepository.getById(twVenta.getnIdUsuario());
+		 List<TwVentaProductoCancela>   listaTwVentaProductoCancela=  twVentaProductoCancelaRepository.findByVenta(nIdVenta);
+		
 	  
 
 		utils util=new utils();
@@ -258,13 +267,13 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
 		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
-		reporteVenta.setNombreCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRazonSocial());
-		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
-		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
+		reporteVenta.setNombreCliente(cliente.getsRazonSocial());
+		reporteVenta.setRfcCliente(cliente.getsRfc());
+		reporteVenta.setFolioVenta(twVenta.getnId());
 		reporteVenta.setFecha(new Date());
-		reporteVenta.setTipoPago(listaProductos.get(0).getTwVenta().getnTipoPago());
-		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
-		reporteVenta.setNombreVendedor(listaProductos.get(0).getTcUsuario().getsNombreUsuario());
+		reporteVenta.setTipoPago(twVenta.getnTipoPago());
+		reporteVenta.setDescuento(twVenta.getDescuento());
+		reporteVenta.setNombreVendedor(tcUsuario.getsNombreUsuario());
 		
 
 		List<ReporteVentaDto> listaProducto = new ArrayList<ReporteVentaDto>();
@@ -282,31 +291,23 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		}
 		
 
-		for (TwVentasProducto twVentaProducto : listaProductos) {
+		for (TwVentaProductoCancela twVentaProducto : listaTwVentaProductoCancela) {
 
 			ReporteVentaDto reporte = new ReporteVentaDto();
 
 			reporte.setCantidad(twVentaProducto.getnCantidad());
-			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
-			if(twVentaProducto.getnIdDescuento()>0 ) {
-				reporte.setNombreProducto(twVentaProducto.getTcProducto().getsProducto()+" - dto");
-				
-			}
-			else {
-				reporte.setNombreProducto(twVentaProducto.getTcProducto().getsProducto());
-				
-			}
-		
+			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());		
 			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
 			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnTotalUnitario()));
-			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnTotalPartida()));
+			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnPrecioPartida()));
 			reporte.setDescripcionCatSat(twVentaProducto.getTcProducto().getTcClavesat().getsDescripcion());
+			reporte.setNombreProducto(twVentaProducto.getTcProducto().getsProducto());
 			reporte.setCondicionEntrega("PRODUCTO CANCELADO");
 
 			listaProducto.add(reporte);
 
-			subtotal = subtotal + twVentaProducto.getnPrecioPartida();
-			iva = iva + twVentaProducto.getnIvaPartida();
+			subtotal = subtotal + twVentaProducto.getnPrecioUnitario();
+			iva = iva + twVentaProducto.getnIvaUnitario();
 
 		}
 		

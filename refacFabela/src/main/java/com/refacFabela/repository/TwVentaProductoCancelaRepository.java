@@ -15,5 +15,8 @@ public interface TwVentaProductoCancelaRepository extends JpaRepository<TwVentaP
 	@Query("Select c from TwVentaProductoCancela c where   DATE_FORMAT(c.dFecha, '%Y-%m-%d') BETWEEN  DATE_FORMAT(:fechaInicio, '%Y-%m-%d') and DATE_FORMAT(:fechaTermino, '%Y-%m-%d') ")
 	public List<TwVentaProductoCancela> findByBuscar(Date fechaInicio, Date fechaTermino);
 	
+	@Query("Select c from TwVentaProductoCancela c where   c.nIdVenta=:nIdVenta ")
+	public List<TwVentaProductoCancela> findByVenta(Long nIdVenta);
+	
 	
 }
