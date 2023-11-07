@@ -306,7 +306,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 			listaProducto.add(reporte);
 
-			subtotal = subtotal + twVentaProducto.getnPrecioUnitario();
+			subtotal = subtotal + twVentaProducto.getnPrecioPartida();
 			iva = iva + twVentaProducto.getnIvaUnitario();
 
 		}
@@ -336,8 +336,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		reporteVenta.setSubTotal(util.truncarDecimales(subtotal));
 		reporteVenta.setIvaTotal(util.truncarDecimales(iva));
-		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva));
-		saldoFinalSaldo= util.truncarDecimales(subtotal+iva-totalSaldoUsado);
+		reporteVenta.setTotal(util.truncarDecimales(subtotal));
+		saldoFinalSaldo= util.truncarDecimales(subtotal-totalSaldoUsado);
 		totalSaldoUsado=util.truncarDecimales(totalSaldoUsado);
 		
 

@@ -537,6 +537,8 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		TwVenta twVenta= new TwVenta();
 		utils util= new utils();
 		TwCaja caja = new TwCaja();
+		List<TrVentaCobro> listaTrVentaCobro=new ArrayList<TrVentaCobro>();
+
 		
 		twVentasProducto=twProductosVentaRepository.obtenerProductoVenta(ventaProductoCancelaDto.VentaProductoDto.getnIdVenta(), ventaProductoCancelaDto.VentaProductoDto.getnIdProducto());
 		
@@ -560,6 +562,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			productoBodegaRepository.save(twProductobodega);	
 			
 			/*Se guarda el producto cancelado en productos cancela*/
+			if(twVenta.getnIdEstatusVenta()>1) {
 			twVentaProductoCancela.setnIdVenta(twVentasProducto.getnIdVenta());
 			twVentaProductoCancela.setnIdProductos(twVentasProducto.getnIdProducto());
 			twVentaProductoCancela.setnCantidad(twVentasProducto.getnCantidad());
@@ -571,8 +574,9 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			twVentaProductoCancela.setdFecha(new Date());
 			twVentaProductoCancela.setnIdCaja(caja.getnId());			
 			twSaldosRepository.save(twVentaProductoCancela);
+			}
 			
-			if(twVenta.getnTipoPago()==1L) {
+			if(twVenta.getnTipoPago()==1L && twVenta.getnIdEstatusVenta()>1) {
 				Date fecha= new Date();				
 				twSaldoUtilizado.setnIdUsuario(twVenta.getnIdUsuario());
 				twSaldoUtilizado.setnIdCaja(caja.getnId());
@@ -605,7 +609,8 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		    twVentasProducto.setnIvaPartida(twVentasProductoCalculado.getnIvaPartida());
 		    twVentasProducto.setnTotalPartida(twVentasProductoCalculado.getnTotalPartida());
 		    /*Se gaurda la cancelación del producto*/
-			twProductosVentaRepository.save(twVentasProducto);			
+			twProductosVentaRepository.save(twVentasProducto);	
+			if(twVenta.getnIdEstatusVenta()>1) {
 			twVentasProductoCalculado=util.calcularPrecioGuardar(tcProducto, ventaProductoCancelaDto.nCancela);			
 			twVentaProductoCancela.setnIdVenta(twVentasProducto.getnIdVenta());
 			twVentaProductoCancela.setnIdProductos(twVentasProducto.getnIdProducto());
@@ -618,12 +623,13 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			twVentaProductoCancela.setdFecha(new Date());
 			twVentaProductoCancela.setnIdCaja(caja.getnId());
 			twSaldosRepository.save(twVentaProductoCancela);
+			}
 			
 			/*Se re integra el producto a la bodega*/
 			twProductobodega.setnCantidad(twProductobodega.getnCantidad()+ventaProductoCancelaDto.nCancela);			
 		    productoBodegaRepository.save(twProductobodega);
 			
-			if(twVenta.getnTipoPago()==1L) {
+			if(twVenta.getnTipoPago()==1L && twVenta.getnIdEstatusVenta()>1) {
 				Date fecha= new Date();
 				
 				twSaldoUtilizado.setnIdUsuario(twVenta.getnIdUsuario());
@@ -639,27 +645,35 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		
 		
 		/*Se cambia el estatus del saldo para generar el saldo a favor*/
-						
-			if(twVenta.getnIdEstatusVenta()>1) {			
-					if(twVenta.getnTipoPago()!=1L && twVenta.getnIdTipoVenta()!=3L ) {						
+		
+				
+		listaTrVentaCobro=trVentaCobroRepository.findBynIdVenta(twVenta.getnId());
+		System.err.println(listaTrVentaCobro);
+		if(listaTrVentaCobro.size()>0) {								
 						twVenta.setnSaldo(true);				
-						ventasRepository.save(twVenta);								
-					}				
+						ventasRepository.save(twVenta);	
+									
 			}
 			
 		
 		/*Se cabia el estatus de cancelación*/
 		
 		twListaVentasProducto=twProductosVentaRepository.findBynIdVenta(ventaProductoCancelaDto.VentaProductoDto.getnIdVenta());		
-		if(twListaVentasProducto.size()>0) {			
-			twVenta.setnIdEstatusVenta(6L);			
+		/*Se valida que este cobrada*/
+		if(twVenta.getnIdEstatusVenta()>1) {		
+				if(twListaVentasProducto.size()>0) {			
+					twVenta.setnIdEstatusVenta(6L);			
+				}
+				else {			
+					twVenta.setnIdEstatusVenta(5L);			
+				}					
 		}
-		else {			
-			twVenta.setnIdEstatusVenta(5L);			
-		}		
+		
+		if(twVenta.getnIdEstatusVenta()<2 && twListaVentasProducto.size()==0) {
+			twVenta.setnIdEstatusVenta(5L);		
+		}
+		
 		ventasRepository.save(twVenta);
-		
-		
 		return ventaProductoCancelaDto.VentaProductoDto;
 	}
 
