@@ -19,7 +19,9 @@ public interface TwProductosVentaRepository extends JpaRepository<TwVentasProduc
 	@Query("Select e from TwVentasProducto e where nId=:id and e.nEstatus=1")	
 	public TwVentasProducto obtenerPrpductosId(Long id);	
 	@Query("Select e from TwVentasProducto e where nIdVenta=:idVenta and nIdProducto=:idProducto and e.nEstatus=1")	
-	public TwVentasProducto obtenerProductoVenta(Long idVenta, Long idProducto);
+	public TwVentasProducto obtenerProductoVenta(Long idVenta, Long idProducto);	
+	@Query("Select e from TwVentasProducto e where e.nIdProducto=:id order by e.twVenta.nId desc")
+	public List<TwVentasProducto> findBynIdProducto(Long id);
 
 
 }

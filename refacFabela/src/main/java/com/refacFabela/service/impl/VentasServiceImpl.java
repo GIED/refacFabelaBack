@@ -142,6 +142,7 @@ public class VentasServiceImpl implements VentasService {
 		
 		if(ventaDto.getTipoPago()==1L){
 			twVenta.setnIdEstatusVenta(2L);
+			twVenta.setnIdFormaPago(22L);
 			
 		}	
 		

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TvTotalesGeneralesTablero;
+import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.model.VwVentaMesAno;
 import com.refacFabela.model.VwVentaProductoAno;
 import com.refacFabela.model.VwVentasAnoMesVendedores;
@@ -89,6 +90,19 @@ public class TableroController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener datos de venta del año de los vendedores" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/ventasProductoHistoria")
+	public List<TwVentasProducto> consultaVentasProducto( @RequestParam Long id) {
+		try {
+
+			return tableroService.consultaVentasProducto(id);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener las ventas del producto" + e);
 		}
 		return null;
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 
 import com.refacFabela.model.TvTotalesGeneralesTablero;
+import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.model.VwVentaMesAno;
 import com.refacFabela.model.VwVentaProductoAno;
 import com.refacFabela.model.VwVentasAnoMesVendedores;
@@ -16,4 +17,6 @@ public interface TableroService {
 	public List<VwVentaProductoAno> consultaVentaProductoAno(String ano);
 	public List<VwVentasAnoVendedor> consultaVentaAnoVendedor(String ano);
 	public List<VwVentasAnoMesVendedores> consultaVentaAnoMesVendedor(String ano, Long id);
+	public List<TwVentasProducto> consultaVentasProducto( Long id);
+
 }
