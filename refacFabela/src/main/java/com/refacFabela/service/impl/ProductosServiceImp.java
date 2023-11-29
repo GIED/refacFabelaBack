@@ -3,6 +3,7 @@ package com.refacFabela.service.impl;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -138,6 +139,7 @@ public class ProductosServiceImp implements ProductosService {
 	@Autowired
 	
 	private TwAjusteInventarioRepository twAjusteInventarioRepository;
+ 
 
 
 
@@ -394,14 +396,47 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	public TwAbono guardarAbono(TwAbono abonoDto) {
 		
 		
-	
 		abonoDto.setdFecha(new Date());
-	
-		
-		System.err.println(abonoDto);
-		
 		abonoVentaIdRepository.save(abonoDto);
-	
+		
+			
+		double total_venta=0.0;
+		double total_abonos=0.0;
+		
+		// Se consulta el total de la venta		
+		List<TwVentasProducto> twVentasProducto=twProductosVentaRepository.findBynIdVenta(abonoDto.getnIdVenta());
+		
+				for (int i = 0; i < twVentasProducto.size(); i++) {
+					total_venta+=twVentasProducto.get(i).getnTotalPartida();
+					
+					
+				}
+				System.err.println(total_venta);
+		// Se consulta el total de abonos 		
+		List<TwAbono> twAbono=abonoVentaIdRepository.abonosVenta(abonoDto.getnIdVenta());
+				
+				for (int i = 0; i < twAbono.size(); i++) {
+					total_abonos+=twAbono.get(i).getnAbono();
+					
+					
+				}
+				
+				System.err.println(total_abonos);
+				
+		//si el total de abonos es igual al total de la venta se registra la fecha de pago del crédito
+			if(total_venta==total_abonos) {
+				
+				Date fecha= new Date();	
+				
+				TwVenta twVenta=ventasRepository.findBynId(abonoDto.getnIdVenta());
+				
+				twVenta.setdFechaPagoCredito(fecha);
+				
+				ventasRepository.save(twVenta);
+				
+				
+			}
+			
 		return abonoDto ;
 	}
 
