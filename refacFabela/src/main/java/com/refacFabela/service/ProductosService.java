@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.CalculaPrecioDto;
 import com.refacFabela.dto.ProductoDescuentoDto;
 import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.TvVentaDetalleDto;
@@ -72,6 +73,8 @@ public interface ProductosService {
 	public String guardaVentaProducto(VentaProductoDto ventaProductoDto);
 
 	public List<TvVentaProductoMes> obtenerProductoVentaMesId(Long id);
+	
+	public TwVentasProducto obtenerVentaProductoId( Long nIdVenta, Long nIdProducto);
 
 	public List<TvVentaStock> obtenerVentasStockFecha(String dFechaInicio, String dFechaFinal);
 
@@ -97,6 +100,10 @@ public interface ProductosService {
 	public TwSaldoUtilizado guardarSaldoUtilizado(TwSaldoUtilizado twSaldoUtilizado);
 
 	public String consultaVentaProductoId(TwVentasProducto ventaProductoDto);
+	
+	public CalculaPrecioDto calcularNuevoPrecioAjustado(CalculaPrecioDto calculaPrecioDto);
+	
+	public TwVentasProducto actualizaVentaProducto(TwVentasProducto twVentasProducto);
 
 	public TwAbono guardarAbono(TwAbono abonoDto);
 

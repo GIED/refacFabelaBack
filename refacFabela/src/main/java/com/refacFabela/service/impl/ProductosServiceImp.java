@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.refacFabela.dto.CalculaPrecioDto;
 import com.refacFabela.dto.ProductoDescuentoDto;
 import com.refacFabela.dto.VentaProductoCancelaDto;
 import com.refacFabela.dto.VentaProductoDto;
@@ -139,6 +140,8 @@ public class ProductosServiceImp implements ProductosService {
 	@Autowired
 	
 	private TwAjusteInventarioRepository twAjusteInventarioRepository;
+	
+
  
 
 
@@ -817,6 +820,45 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			
 		} 
 	}
+
+	@Override
+	public TwVentasProducto obtenerVentaProductoId(Long nIdVenta, Long nIdProducto) {
+		
+		
+		
+		
+		return twProductosVentaRepository.obtenerProductoVenta(nIdVenta, nIdProducto);
+	}
+
+	@Override
+	public CalculaPrecioDto calcularNuevoPrecioAjustado(CalculaPrecioDto calculaPrecioDto) {
+		System.err.println(calculaPrecioDto);
+		TcProducto tcProducto=new TcProducto();
+		utils util =new utils();
+		TwVentasProducto twVentaProducto=new TwVentasProducto();
+		
+		tcProducto.setnPrecioSinIva(calculaPrecioDto.getPrecioUnitario());
+		
+		twVentaProducto=util.calcularPrecioGuardar(tcProducto, calculaPrecioDto.getCantidad());
+		
+		calculaPrecioDto.setIvaUnitario(twVentaProducto.getnIvaUnitario());
+		calculaPrecioDto.setTotalUnitario(twVentaProducto.getnTotalUnitario());
+		calculaPrecioDto.setPrecioPartida(twVentaProducto.getnPrecioPartida());
+		calculaPrecioDto.setIvaPartida(twVentaProducto.getnIvaPartida());
+		calculaPrecioDto.setTotalPartida(twVentaProducto.getnTotalPartida());
+		
+		
+		return calculaPrecioDto;
+	}
+
+	@Override
+	public TwVentasProducto actualizaVentaProducto(TwVentasProducto twVentasProducto) {
+		// TODO Auto-generated method stub
+		return twProductosVentaRepository.save(twVentasProducto);
+	}
+	
+	
+	
 	
 	
 

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.dto.AbonosDto;
+import com.refacFabela.dto.CalculaPrecioDto;
 import com.refacFabela.dto.ProductoDescuentoDto;
 import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.TvVentaDetalleDto;
@@ -259,6 +260,45 @@ public class VentasController {
 		return null;
 	}
 	
+	@GetMapping("/obtenerVentaProductoId")
+	public TwVentasProducto obtenerVentaProductoId(@RequestParam() Long nIdVenta, @RequestParam() Long nIdProducto) {
+
+		try {
+			return productosService.obtenerVentaProductoId(nIdVenta,nIdProducto);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos vendidos " + e);
+		}
+		return null;
+	}
+	
+	@PostMapping("/calcularNuevoPrecioAjustado")
+	public CalculaPrecioDto calcularNuevoPrecioAjustado(@RequestBody CalculaPrecioDto calculaPrecioDto) {
+
+		try {
+		
+			return productosService.calcularNuevoPrecioAjustado(calculaPrecioDto);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos vendidos por id" + e);
+		}
+		return null;
+	}
+	
+	@PostMapping("/actualizaVentaProducto")
+	public TwVentasProducto actualizaVentaProducto(@RequestBody TwVentasProducto twVentasProducto) {
+
+		try {
+		
+			return productosService.actualizaVentaProducto(twVentasProducto);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos vendidos por id" + e);
+		}
+		return null;
+	}
+	
+	
 	
 	
 	@PostMapping("/guardaVentaProductoId")
@@ -370,6 +410,8 @@ public class VentasController {
 		}
 		return null;
 	}
+	
+	
 	
 	@GetMapping("/obtenerProductosTraer")
 	public List<TwVentaProductosTraer> obtenerProductosTraerVenta(@RequestParam()  Long nIdVenta) {
