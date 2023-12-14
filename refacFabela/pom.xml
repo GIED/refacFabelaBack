@@ -109,6 +109,13 @@
 			<version>3.3.2</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/mx.com.inftel.sat/sat-cfdi -->
+<dependency>
+    <groupId>mx.com.inftel.sat</groupId>
+    <artifactId>sat-cfdi</artifactId>
+    <version>2023.04.28</version>
+</dependency>
+		
 		<dependency>
 			<groupId>com.factura</groupId>
 			<artifactId>factura4</artifactId>

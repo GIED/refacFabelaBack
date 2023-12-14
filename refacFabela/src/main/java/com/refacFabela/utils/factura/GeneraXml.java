@@ -20,7 +20,7 @@ import mx.grupocorasa.sat.cfd._40.Comprobante.Emisor;
 import mx.grupocorasa.sat.cfd._40.Comprobante.Impuestos;
 import mx.grupocorasa.sat.cfd._40.Comprobante.Receptor;
 import mx.grupocorasa.sat.cfd._40.ObjectFactory;
-import mx.grupocorasa.sat.common.Pagos20.Pagos;
+
 import mx.grupocorasa.sat.common.catalogos.CClaveUnidad;
 import mx.grupocorasa.sat.common.catalogos.CExportacion;
 import mx.grupocorasa.sat.common.catalogos.CFormaPago;
@@ -242,7 +242,7 @@ public class GeneraXml {
 	    	Complemento cps = of.createComprobanteComplemento();
 	                           
 	    	
-	    	PagoComplemento pago = new PagoComplemento();
+	   
 	    	
 	    	
 	    	

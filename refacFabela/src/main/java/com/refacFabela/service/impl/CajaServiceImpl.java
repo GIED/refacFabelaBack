@@ -8,10 +8,12 @@ import com.refacFabela.dto.BalanceCajaDto;
 import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvReporteDetalleVenta;
 import com.refacFabela.model.TwCaja;
+import com.refacFabela.model.TwGasto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvReporteDetalleVentaRepository;
+import com.refacFabela.repository.TwGastoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.CajaService;
 @Service
@@ -26,7 +28,9 @@ public class CajaServiceImpl implements CajaService {
 	@Autowired 
 	public TvReporteDetalleVentaRepository tvReporteDetalleVentaRepository;	
 	@Autowired 
-	public AbonoVentaIdRepository abonoVentaIdRepository;
+	public AbonoVentaIdRepository abonoVentaIdRepository;	
+	@Autowired 
+	public TwGastoRepository twGastoRepository;
 	
 
 	@Override
@@ -103,6 +107,24 @@ public class CajaServiceImpl implements CajaService {
 		
 		
 		return twCaja;
+	}
+
+
+	@Override
+	public List<TwGasto> obteberGastosCaja(Long nIdCaja) {		
+		return twGastoRepository.obtenerGastosCaja(nIdCaja);
+	}
+
+
+	@Override
+	public TwGasto guardarGasto(TwGasto twGasto) {
+		return twGastoRepository.save(twGasto);
+	}
+	
+	@Override
+	public TwGasto borrarGasto(TwGasto twGasto) {
+		twGastoRepository.delete(twGasto);
+		return null;
 	}
 
 	
