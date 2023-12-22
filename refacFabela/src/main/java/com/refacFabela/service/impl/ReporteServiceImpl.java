@@ -681,8 +681,37 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("entregasParciales",  balanceCajaDto.getTotalEntregasParciales());
 			params.put("listaVentaDetalle", balanceCajaDto.getTvReporteDetalleVenta());
 			params.put("totalReintegro", balanceCajaDto.getTotalReintegro());
+			params.put("totalGastos", balanceCajaDto.getTotalGastos());
+			params.put("listaGastos", balanceCajaDto.getListaGastos());
+			params.put("listaAbonos", balanceCajaDto.getListaAbonos());
+			params.put("listaCancelados", balanceCajaDto.getListaCancelados());
+			params.put("totalCredito", balanceCajaDto.getTotalCredito());
+			params.put("totalVenta", balanceCajaDto.getTotalVenta());
+			
+			
+			params.put("efectivoContado", balanceCajaDto.getEfectivoContado());
+			params.put("chequeContado", balanceCajaDto.getChequeContado());
+			params.put("transferenciaContado", balanceCajaDto.getTransferenciaContado());
+			params.put("tarjetaCreditoContado", balanceCajaDto.getTarjetaCreditoContado());
+			params.put("tarjetaDebitoContado", balanceCajaDto.getTarjetaDebitoContad());
+			params.put("condonacionContado", balanceCajaDto.getCondonacionContado());
+			
+			params.put("efectivoAbono", balanceCajaDto.getEfectivoAbono());
+			params.put("chequeAbono", balanceCajaDto.getChequeAbono());
+			params.put("transferenciaAbono", balanceCajaDto.getTransferenciaAbono());
+			params.put("tarjetaCreditoAbono", balanceCajaDto.getTarjetaCreditoAbono());
+			params.put("tarjetaDebitoAbono", balanceCajaDto.getTarjetaDebitoAbon());
+			params.put("condonacionAbono", balanceCajaDto.getCondonacionAbono());
+			params.put("saldoFavor", balanceCajaDto.getSaldosFavor());
+			params.put("totalCancela", balanceCajaDto.getTotalCancelado());
+			params.put("totalDescuento", balanceCajaDto.getTotalDescuento());
 
-
+			
+			System.err.println(balanceCajaDto.listaGastos);
+			
+			
+		
+			
 		
 			
 	        params.put("qr", getQR(("\nTotalventas: "+balanceCajaDto.getTotalVentas()+"\nTotal ventas: "+balanceCajaDto.getTotalIngresoVenta()+"\nTotal abonos: "+balanceCajaDto.getTotalIngresoAbonos()+"\nTotal ingreso: "+balanceCajaDto.getTotalGeneralIngresos())));

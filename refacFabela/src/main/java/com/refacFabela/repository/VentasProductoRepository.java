@@ -17,5 +17,8 @@ public interface VentasProductoRepository extends JpaRepository<TwVentasProducto
 	
 	@Query("Select c from TwVentasProducto c where c.nIdVenta= :idVenta and c.nEstatus=0 ")
 	public List<TwVentasProducto> buscarProductosCancelados(Long idVenta);
+	
+	@Query("Select c from TwVentasProducto c where c.twVenta.nIdCaja= :idCaja ")
+	public List<TwVentasProducto> buscarProductosVenta(Long idCaja);
 
 }

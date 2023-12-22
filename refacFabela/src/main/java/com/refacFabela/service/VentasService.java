@@ -5,6 +5,7 @@ import java.util.List;
 import com.refacFabela.dto.TvVentaDetalleDto;
 import com.refacFabela.dto.VentaDto;
 import com.refacFabela.model.TrVentaCobro;
+import com.refacFabela.model.TvReporteDetalleVenta;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentasFactura;
 import com.refacFabela.model.TwAbono;
@@ -28,6 +29,8 @@ public interface VentasService {
 	public TvVentaDetalle guardarDescuento(TvVentaDetalle tvVentaDetalle) throws InterruptedException;
 
 	public List<TwAbono> consultaAbonoVentaId(Long nId);
+	public List<TvReporteDetalleVenta> obtenerVentasDetalleCaja(Long nId);
+
 	public List<TvVentasFactura> consultaVentasParaFactura();
 	public List<TvVentasFactura> consultaVentasFacturadas();
 	public List<TrVentaCobro> consultarPagoId(Long idVenta);

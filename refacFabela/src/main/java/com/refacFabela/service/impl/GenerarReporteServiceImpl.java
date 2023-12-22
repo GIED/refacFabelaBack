@@ -14,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.ls.LSInput;
 
+import com.refacFabela.dto.AbonoDto;
 import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.BalanceCajaDto;
+import com.refacFabela.dto.CancelaVentaDto;
+import com.refacFabela.dto.GastosDto;
 import com.refacFabela.dto.PedidoDto;
 import com.refacFabela.dto.PedidoProductoDto;
 import com.refacFabela.dto.ProductoBodegaDto;
@@ -33,6 +36,7 @@ import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwCotizacionesProducto;
+import com.refacFabela.model.TwGasto;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwProductobodega;
@@ -50,6 +54,7 @@ import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvReporteCajaFormaPagoRepository;
 import com.refacFabela.repository.TvReporteDetalleVentaRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
+import com.refacFabela.repository.TwGastoRepository;
 import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.TwSaldoUtilizadoRepository;
 import com.refacFabela.repository.TwSaldosRepository;
@@ -116,6 +121,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	@Autowired
 	private TwVentaProductoCancelaRepository twVentaProductoCancelaRepository;
 	
+	@Autowired
+	private TwGastoRepository twGastoRepository;
 	
 
 	@Override
@@ -691,29 +698,135 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		Integer totalNoEntregadas=0;
 		Integer totalEntegasParciales=0;
 		Double totalReitegros=0.0;
+		Double totalGastos=0.0;
+		Double totalCredito=0.0;
+		Double totalVenta=0.0;
+		
+		// variables de contado
+		Double efectivoContado=0.0;
+		Double chequeContado=0.0;
+		Double transferenciaContado=0.0;
+		Double tarjetaCreditoContado=0.0;
+		Double tarjetaDebitoContado=0.0;
+		Double CondonacionContado=0.0;
+		
+		// variables de crédito
+		Double efectivoAbono=0.0;
+		Double chequeAbono=0.0;
+		Double transferenciaAbono=0.0;
+		Double tarjetaCreditoAbono=0.0;
+		Double tarjetaDebitoAbono=0.0;
+		Double CondonacionAbono=0.0; 
+		
+		Double totalCencela=0.0;
+		Double saldoFavor=0.0;
+		Double totalDescuento=0.0;
 
 		List<TrVentaCobro> trVentasCobro = trVentaCobroRepository.obtenerPagosCaja(nIdCaja);
 		List<TwAbono> twAbono = abonoVentaIdRepository.obtenerAbonosCaja(nIdCaja);
 		List<TvReporteDetalleVenta> trReporteDetalleVentas = tvReporteDetalleVentaRepository.obtenerVentasCajaReporte(nIdCaja);		
-		List<TvReporteCajaFormaPago> tvReporteCajaFormaPago=tvReporteCajaFormaPagoRepository.obtenerFormaPagoCaja(nIdCaja);		
+		List<TvReporteCajaFormaPago> tvReporteCajaFormaPago=tvReporteCajaFormaPagoRepository.obtenerFormaPagoCaja(nIdCaja);
+		List<TwVentaProductoCancela> listaTwVentaProductoCancela=twSaldosRepository.productosCanceladosCaja(nIdCaja);
+		List<TwVentasProducto> listaVentasProducto=ventasProductoRepository.buscarProductosVenta(nIdCaja);		
+		List<TwGasto> listaTwGastos=twGastoRepository.obtenerGastosCaja(nIdCaja);
 		 TwCaja caja = cajaRepository.getById(nIdCaja); 
 		 TcUsuario usuario = usuariosRepository.obtenerUsuario(caja.getTcUsuario().getnId());
-		 
+		List<GastosDto> auxListaGastos=new ArrayList<GastosDto>();
+		List <AbonoDto> auxListaAbonos= new ArrayList<AbonoDto>();
+		List <CancelaVentaDto> auxCancelaVenta= new ArrayList<CancelaVentaDto>();
+		List <TwVenta> listaVentas =ventasRepository.obtnerVentasIdCaja(nIdCaja);
+		
+		 //System.err.println(listaTwGastos);
 		 utils util=new utils();				
 		BalanceCajaDto balanceCajaDto= new BalanceCajaDto();	
 		totalReitegros=twSaldosRepository.totalCancela(nIdCaja);
 		totalReitegros=totalReitegros==null?0:totalReitegros;
-	
-		 
-		for (int i = 0; i < trVentasCobro.size(); i++) {			
-			totalIngresosVenta+= trVentasCobro.get(i).getnMonto();			
+		
+		for (int i = 0; i < listaTwGastos.size(); i++) {
+			
+			
+			 totalGastos+=listaTwGastos.get(i).getnMonto();
+			 GastosDto gastoDto=new GastosDto();		 
+			 gastoDto.setnId(listaTwGastos.get(i).getnId());
+			 gastoDto.setFecha(listaTwGastos.get(i).getdFecha());
+			 gastoDto.setDescripcion(listaTwGastos.get(i).getsDescripcion());
+			 gastoDto.setGasto(listaTwGastos.get(i).getTcGasto().getsGasto());
+			 gastoDto.setUsuario(listaTwGastos.get(i).getTcUsuario().getsNombreUsuario());
+			 gastoDto.setMonto(listaTwGastos.get(i).getnMonto());
+			 
+			 auxListaGastos.add(gastoDto);
+			
 			
 		}
 		
+	
+		 
+		for (int i = 0; i < trVentasCobro.size(); i++) {			
+			totalIngresosVenta+= trVentasCobro.get(i).getnMonto();				
+			
+			// Variables de contado POR TIPO DE PAGO
+			
+			if(trVentasCobro.get(i).getTwVenta().getnTipoPago()==0L && trVentasCobro.get(i).getnIdFormaPago()==1L ) {				
+				efectivoContado+=trVentasCobro.get(i).getnMonto();
+				System.err.println("Esto es lo que voy a cobrar"+trVentasCobro.get(i).getnMonto());
+			}
+			if(trVentasCobro.get(i).getTwVenta().getnTipoPago()==0L && trVentasCobro.get(i).getnIdFormaPago()==2L ) {				
+				chequeContado+=trVentasCobro.get(i).getnMonto();				
+			}
+			if(trVentasCobro.get(i).getTwVenta().getnTipoPago()==0L && trVentasCobro.get(i).getnIdFormaPago()==3L ) {				
+				transferenciaContado+=trVentasCobro.get(i).getnMonto();				
+			}
+			if(trVentasCobro.get(i).getTwVenta().getnTipoPago()==0L && trVentasCobro.get(i).getnIdFormaPago()==4L ) {				
+				tarjetaCreditoContado+=trVentasCobro.get(i).getnMonto();				
+			}
+			if(trVentasCobro.get(i).getTwVenta().getnTipoPago()==0L && trVentasCobro.get(i).getnIdFormaPago()==18L ) {				
+				tarjetaDebitoContado+=trVentasCobro.get(i).getnMonto();				
+			}			
+			if(trVentasCobro.get(i).getTwVenta().getnTipoPago()==0L && trVentasCobro.get(i).getnIdFormaPago()==11L ) {				
+				CondonacionAbono+=trVentasCobro.get(i).getnMonto();				
+			}			
+					
+		}
+		
 		for (int i = 0; i < twAbono.size(); i++) {			
-			totalIngresosAbono+= twAbono.get(i).getnAbono();			
+			totalIngresosAbono+= twAbono.get(i).getnAbono();
+			AbonoDto abonosDto=new AbonoDto();
+			abonosDto.setAbono(util.truncaValor(twAbono.get(i).getnAbono()));
+			abonosDto.setFechaAbono(twAbono.get(i).getdFecha());
+			abonosDto.setIdVenta(twAbono.get(i).getnIdVenta());
+			abonosDto.setFormaPago(twAbono.get(i).getTcFormapago().getsDescripcion());
+			abonosDto.setUsuario(twAbono.get(i).getTcUsuario().getsNombreUsuario());
+			abonosDto.setFechaVenta(twAbono.get(i).getTwVenta().getdFechaVenta());
+			
+			auxListaAbonos.add(abonosDto);
+			
+			//COBROS POR TIPO DE PAGO DE ABONOS
+			
+			if(twAbono.get(i).getTcFormapago().getnId()==1L) {	
+				efectivoAbono+=twAbono.get(i).getnAbono();				
+			}
+	        if(twAbono.get(i).getTcFormapago().getnId()==2L) {
+	        	chequeAbono+=twAbono.get(i).getnAbono();				
+			}
+	        if(twAbono.get(i).getTcFormapago().getnId()==3L) {				
+	        	transferenciaAbono+=twAbono.get(i).getnAbono();				
+
+			}
+	        if(twAbono.get(i).getTcFormapago().getnId()==4L) {				
+	        	tarjetaCreditoAbono+=twAbono.get(i).getnAbono();				
+
+			}
+	        if(twAbono.get(i).getTcFormapago().getnId()==18L) {				
+	        	tarjetaDebitoAbono+=twAbono.get(i).getnAbono();				
+
+			}
+	        if(twAbono.get(i).getTcFormapago().getnId()==11L) {				
+	        	CondonacionAbono+=twAbono.get(i).getnAbono();				
+
+			}
 			
 		}
+		
 		
 		for (int i = 0; i < trReporteDetalleVentas.size(); i++) {			
 			totalVentaCaja+= trReporteDetalleVentas.get(i).getnTotalVenta();	
@@ -729,22 +842,72 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				totalEntegasParciales+=1;
 			}
 			
+		}
+		
+		
+		
+		for (int i = 0; i < listaTwVentaProductoCancela.size(); i++) {
+			
 	
 			
+			CancelaVentaDto cancelaVentaDto=new CancelaVentaDto();
+			
+			cancelaVentaDto.setCantidad(listaTwVentaProductoCancela.get(i).getnCantidad());
+			cancelaVentaDto.setCliente(listaTwVentaProductoCancela.get(i).getTwVenta().getTcCliente().getsRazonSocial());
+			cancelaVentaDto.setFechaVenta(listaTwVentaProductoCancela.get(i).getTwVenta().getdFechaVenta());
+			cancelaVentaDto.setNoParte(listaTwVentaProductoCancela.get(i).getTcProducto().getsNoParte());
+			cancelaVentaDto.setProducto(listaTwVentaProductoCancela.get(i).getTcProducto().getsProducto());
+			cancelaVentaDto.setTotalCancela(listaTwVentaProductoCancela.get(i).getnPrecioPartida());
+			cancelaVentaDto.setUsuario(listaTwVentaProductoCancela.get(i).getTcUsuario().getsNombreUsuario());
+			cancelaVentaDto.setVenta(listaTwVentaProductoCancela.get(i).getnIdVenta());
+			
+			if(listaTwVentaProductoCancela.get(i).getTwVenta().getnTipoPago()==1L) {
+				cancelaVentaDto.setTipoPago("CRÉDITO");
+				
+			}
+			else {
+				cancelaVentaDto.setTipoPago("CONTADO");
+				
+			}
+			
+			if(listaTwVentaProductoCancela.get(i).getTwVenta().getnSaldo()==true) {
+				cancelaVentaDto.setSaldoFavor("SI");
+				saldoFavor+=listaTwVentaProductoCancela.get(i).getnPrecioPartida();
+				
+			}
+			else {
+				cancelaVentaDto.setSaldoFavor("NO");
+				
+			}
+			
+				totalCencela+=listaTwVentaProductoCancela.get(i).getnPrecioPartida();
+			
+			
+			
+			auxCancelaVenta.add(cancelaVentaDto);
+			
 		}
+		
+		for (int i = 0; i < listaVentasProducto.size(); i++) {		
+			
+			totalVenta+=listaVentasProducto.get(i).getnTotalPartida();			
+		}
+		
+		for (int i = 0; i < listaVentas.size(); i++) {
+			
+			totalDescuento+=listaVentas.get(i).getDescuento();
+			
+		}
+		
 		
 		
 		/*LLENAOD DE OBJETO BALANCE CAJA*/
 		balanceCajaDto.setCaja(caja.getnId());
 		balanceCajaDto.setFechaInicioCaja(util.formatoFecha(caja.getdFechaApertura()));
 		balanceCajaDto.setTotalIngresoVenta(totalIngresosVenta);
-		balanceCajaDto.setTotalIngresoAbonos(totalIngresosAbono);
-		System.err.println(balanceCajaDto);
-		System.err.println(totalIngresosVenta);
-		System.err.println(totalIngresosAbono);
-		System.err.println(totalReitegros);
-		balanceCajaDto.setTotalGeneralIngresos(totalIngresosVenta+totalIngresosAbono-totalReitegros);	
-		balanceCajaDto.setTotalVentas(totalVentaCaja);
+		balanceCajaDto.setTotalIngresoAbonos(totalIngresosAbono);		
+		balanceCajaDto.setTotalGeneralIngresos(util.truncaValor(totalIngresosVenta+totalIngresosAbono-totalReitegros)  );	
+		balanceCajaDto.setTotalVentas(util.truncaValor(totalVenta));
 		balanceCajaDto.setNoVentas(trReporteDetalleVentas.size());
 		balanceCajaDto.setNoAbonos(twAbono.size());
 		balanceCajaDto.setUsuarioCaja(usuario.getsNombreUsuario());
@@ -754,11 +917,39 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		balanceCajaDto.setFechaGeneraReporte(util.formatoFecha(new Date()));
 		balanceCajaDto.setTvReporteDetalleVenta(trReporteDetalleVentas);
 		balanceCajaDto.setTvReporteCajaFormaPago(tvReporteCajaFormaPago);
-		balanceCajaDto.setTotalReintegro(totalReitegros);
+		balanceCajaDto.setTotalReintegro(util.truncaValor(totalReitegros));
+		balanceCajaDto.setListaGastos(auxListaGastos);
+		balanceCajaDto.setTotalGastos(util.truncaValor(totalGastos));
+		balanceCajaDto.setListaAbonos(auxListaAbonos);
+		balanceCajaDto.setListaCancelados(auxCancelaVenta);
+		balanceCajaDto.setTotalCredito(totalCredito);
+		balanceCajaDto.setTotalVenta(util.truncaValor(totalVenta));	
 		
+		// variables de contado
+		balanceCajaDto.setEfectivoContado(util.truncaValor(efectivoContado));
+		balanceCajaDto.setChequeContado(util.truncaValor(chequeContado));
+		balanceCajaDto.setTransferenciaContado(util.truncaValor(transferenciaContado));
+		balanceCajaDto.setTarjetaCreditoContado(util.truncaValor(tarjetaCreditoContado));
+		balanceCajaDto.setTarjetaDebitoContad(util.truncaValor(tarjetaDebitoContado));
+		balanceCajaDto.setCondonacionContado(util.truncaValor(CondonacionContado));
 		
+		// variables de crédito
+		balanceCajaDto.setEfectivoAbono(util.truncaValor(efectivoAbono));
+		balanceCajaDto.setChequeAbono(util.truncaValor(chequeAbono));
+		balanceCajaDto.setTransferenciaAbono(util.truncaValor(transferenciaAbono));
+		balanceCajaDto.setTarjetaCreditoAbono(util.truncaValor(tarjetaCreditoAbono));
+		balanceCajaDto.setTarjetaDebitoAbon(util.truncaValor(tarjetaDebitoAbono));
+		balanceCajaDto.setCondonacionAbono(util.truncaValor(CondonacionAbono));
+		balanceCajaDto.setSaldosFavor(saldoFavor);
+		balanceCajaDto.setTotalCancelado(totalCencela);
+		balanceCajaDto.setTotalDescuento(totalDescuento);
+		
+		 
+		System.err.println(auxListaGastos.size());
+		System.err.println(auxListaAbonos.size());
+		System.err.println(auxCancelaVenta.size());
 
-
+		
 
 		return reporteService.generarReporteCajaPDF(balanceCajaDto);
 	}

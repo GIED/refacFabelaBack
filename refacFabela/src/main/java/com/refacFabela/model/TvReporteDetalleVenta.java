@@ -36,8 +36,7 @@ public class TvReporteDetalleVenta implements Serializable {
 		@Column(name = "s_tipo_venta")
 		private String sTipoVenta;
 		@Column(name = "s_tipo_pago") 
-		private String sTipoPago;
-		
+		private String sTipoPago;		
 		@Column(name = "d_inicio_credito")
 		private Date dInicioCredito;
 		@Column(name = "d_termino_credito") 

@@ -8,6 +8,7 @@ import com.refacFabela.model.TvReporteCajaFormaPago;
 import com.refacFabela.model.TvReporteDetalleVenta;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCaja;
+import com.refacFabela.model.TwGasto;
 import com.refacFabela.model.TwVenta;
 
 public class BalanceCajaDto {
@@ -28,14 +29,343 @@ public class BalanceCajaDto {
 	public Integer totalEntregasParciales;
 	public List<TvReporteCajaFormaPago> tvReporteCajaFormaPago;
 	public Double totalReintegro;
+	public List<GastosDto> listaGastos;
+	public Double totalGastos;
+	public List<AbonoDto> listaAbonos;
+	public List<CancelaVentaDto> listaCancelados;
+	public Double totalCredito;
+	public Double totalVenta;
 	
 	
+	public Double efectivoContado;
+	public Double chequeContado;
+	public Double transferenciaContado;
+	public Double tarjetaCreditoContado;
+	public Double tarjetaDebitoContad;
+	public Double CondonacionContado;
 	
+	// variables de crédito
+	public Double efectivoAbono;
+	public Double chequeAbono;
+	public Double transferenciaAbono;
+	public Double tarjetaCreditoAbono;
+	public Double tarjetaDebitoAbon;
+	public Double CondonacionAbono; 
+	
+	public Double totalCancelado;
+	public Double saldosFavor;
+	public Double totalDescuento;
 	
 	
 	public BalanceCajaDto() {
 		
 		
+	}
+	
+	
+	
+
+	public Double getTotalDescuento() {
+		return totalDescuento;
+	}
+
+
+
+
+	public void setTotalDescuento(Double totalDescuento) {
+		this.totalDescuento = totalDescuento;
+	}
+
+
+
+
+	public Double getTotalCancelado() {
+		return totalCancelado;
+	}
+
+
+
+
+	public void setTotalCancelado(Double totalCancelado) {
+		this.totalCancelado = totalCancelado;
+	}
+
+
+
+
+	public Double getSaldosFavor() {
+		return saldosFavor;
+	}
+
+
+
+
+	public void setSaldosFavor(Double saldosFavor) {
+		this.saldosFavor = saldosFavor;
+	}
+
+
+
+
+	public Double getTarjetaDebitoContad() {
+		return tarjetaDebitoContad;
+	}
+
+
+	public void setTarjetaDebitoContad(Double tarjetaDebitoContad) {
+		this.tarjetaDebitoContad = tarjetaDebitoContad;
+	}
+
+
+	public Double getTarjetaDebitoAbon() {
+		return tarjetaDebitoAbon;
+	}
+
+
+
+	public void setTarjetaDebitoAbon(Double tarjetaDebitoAbon) {
+		this.tarjetaDebitoAbon = tarjetaDebitoAbon;
+	}
+
+
+
+	public Double getEfectivoContado() {
+		return efectivoContado;
+	}
+
+	public void setEfectivoContado(Double efectivoContado) {
+		this.efectivoContado = efectivoContado;
+	}
+
+
+
+	public Double getChequeContado() {
+		return chequeContado;
+	}
+
+
+
+
+
+	public void setChequeContado(Double chequeContado) {
+		this.chequeContado = chequeContado;
+	}
+
+
+
+
+
+	public Double getTransferenciaContado() {
+		return transferenciaContado;
+	}
+
+
+
+
+
+	public void setTransferenciaContado(Double transferenciaContado) {
+		this.transferenciaContado = transferenciaContado;
+	}
+
+
+
+
+
+	public Double getTarjetaCreditoContado() {
+		return tarjetaCreditoContado;
+	}
+
+
+
+
+
+	public void setTarjetaCreditoContado(Double tarjetaCreditoContado) {
+		this.tarjetaCreditoContado = tarjetaCreditoContado;
+	}
+
+
+
+
+
+	
+
+
+
+
+	public Double getCondonacionContado() {
+		return CondonacionContado;
+	}
+
+
+
+
+
+	public void setCondonacionContado(Double condonacionContado) {
+		CondonacionContado = condonacionContado;
+	}
+
+
+
+
+
+	public Double getEfectivoAbono() {
+		return efectivoAbono;
+	}
+
+
+
+
+
+	public void setEfectivoAbono(Double efectivoAbono) {
+		this.efectivoAbono = efectivoAbono;
+	}
+
+
+
+
+
+	public Double getChequeAbono() {
+		return chequeAbono;
+	}
+
+
+
+
+
+	public void setChequeAbono(Double chequeAbono) {
+		this.chequeAbono = chequeAbono;
+	}
+
+
+
+
+
+	public Double getTransferenciaAbono() {
+		return transferenciaAbono;
+	}
+
+
+
+
+
+	public void setTransferenciaAbono(Double transferenciaAbono) {
+		this.transferenciaAbono = transferenciaAbono;
+	}
+
+
+
+
+
+	public Double getTarjetaCreditoAbono() {
+		return tarjetaCreditoAbono;
+	}
+
+
+
+
+
+	public void setTarjetaCreditoAbono(Double tarjetaCreditoAbono) {
+		this.tarjetaCreditoAbono = tarjetaCreditoAbono;
+	}
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+	public Double getCondonacionAbono() {
+		return CondonacionAbono;
+	}
+
+
+
+
+
+	public void setCondonacionAbono(Double condonacionAbono) {
+		CondonacionAbono = condonacionAbono;
+	}
+
+
+
+
+
+	public Double getTotalCredito() {
+		return totalCredito;
+	}
+
+
+
+	public void setTotalCredito(Double totalCredito) {
+		this.totalCredito = totalCredito;
+	}
+
+
+
+	public Double getTotalVenta() {
+		return totalVenta;
+	}
+
+
+
+	public void setTotalVenta(Double totalVenta) {
+		this.totalVenta = totalVenta;
+	}
+
+
+
+	public List<CancelaVentaDto> getListaCancelados() {
+		return listaCancelados;
+	}
+
+
+
+	public void setListaCancelados(List<CancelaVentaDto> listaCancelados) {
+		this.listaCancelados = listaCancelados;
+	}
+
+
+
+	public List<GastosDto> getListaGastos() {
+		return listaGastos;
+	}
+
+
+
+	public void setListaGastos(List<GastosDto> listaGastos) {
+		this.listaGastos = listaGastos;
+	}
+
+
+
+	public Double getTotalGastos() {
+		return totalGastos;
+	}
+
+
+
+
+
+	public List<AbonoDto> getListaAbonos() {
+		return listaAbonos;
+	}
+
+
+	public void setListaAbonos(List<AbonoDto> listaAbonos) {
+		this.listaAbonos = listaAbonos;
+	}
+
+
+	public void setTotalGastos(Double totalGastos) {
+		this.totalGastos = totalGastos;
 	}
 
 
@@ -296,19 +626,30 @@ public class BalanceCajaDto {
 
 
 
+	
+
+
+
+
+
 	@Override
 	public String toString() {
 		return "BalanceCajaDto [caja=" + caja + ", fechaInicioCaja=" + fechaInicioCaja + ", totalGeneralIngresos="
 				+ totalGeneralIngresos + ", totalVentas=" + totalVentas + ", totalIngresoAbonos=" + totalIngresoAbonos
-				+ ", totalIngresoVenta=" + totalIngresoVenta + ", usuarioCaja=" + usuarioCaja
-				+ ", tvReporteDetalleVenta=" + tvReporteDetalleVenta + ", fechaGeneraReporte=" + fechaGeneraReporte
-				+ ", totalEntregadas=" + totalEntregadas + ", totalNoEntregadas=" + totalNoEntregadas
-				+ ", totalEntregasParciales=" + totalEntregasParciales + ", tvReporteCajaFormaPago="
-				+ tvReporteCajaFormaPago + "]";
+				+ ", totalIngresoVenta=" + totalIngresoVenta + ", usuarioCaja=" + usuarioCaja + ", noVentas=" + noVentas
+				+ ", noAbonos=" + noAbonos + ", tvReporteDetalleVenta=" + tvReporteDetalleVenta
+				+ ", fechaGeneraReporte=" + fechaGeneraReporte + ", totalEntregadas=" + totalEntregadas
+				+ ", totalNoEntregadas=" + totalNoEntregadas + ", totalEntregasParciales=" + totalEntregasParciales
+				+ ", tvReporteCajaFormaPago=" + tvReporteCajaFormaPago + ", totalReintegro=" + totalReintegro
+				+ ", listaGastos=" + listaGastos + ", totalGastos=" + totalGastos + ", listaAbonos=" + listaAbonos
+				+ ", listaCancelados=" + listaCancelados + ", totalCredito=" + totalCredito + ", totalVenta="
+				+ totalVenta + ", efectivoContado=" + efectivoContado + ", chequeContado=" + chequeContado
+				+ ", transferenciaContado=" + transferenciaContado + ", tarjetaCreditoContado=" + tarjetaCreditoContado
+				+ ", tarjetaDebitoContad=" + tarjetaDebitoContad + ", CondonacionContado=" + CondonacionContado
+				+ ", efectivoAbono=" + efectivoAbono + ", chequeAbono=" + chequeAbono + ", transferenciaAbono="
+				+ transferenciaAbono + ", tarjetaCreditoAbono=" + tarjetaCreditoAbono + ", tarjetaDebitoAbon="
+				+ tarjetaDebitoAbon + ", CondonacionAbono=" + CondonacionAbono + "]";
 	}
-
-
-
 
 
 	public Double getTotalReintegro() {

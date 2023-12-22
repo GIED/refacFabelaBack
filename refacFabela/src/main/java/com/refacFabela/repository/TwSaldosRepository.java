@@ -18,4 +18,7 @@ public interface TwSaldosRepository extends JpaRepository<TwVentaProductoCancela
 	@Query("Select e from TwVentaProductoCancela e where e.nIdProductos=:id order by e.dFecha desc ") 
 	public List<TwVentaProductoCancela> productosCancelados(Long id);
 	
+	@Query("Select e from TwVentaProductoCancela e where e.nIdCaja=:id order by e.dFecha desc ") 
+	public List<TwVentaProductoCancela> productosCanceladosCaja(Long id);
+	
 }

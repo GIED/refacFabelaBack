@@ -11,6 +11,7 @@ import com.refacFabela.dto.VentaDto;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.ThStockProducto;
 import com.refacFabela.model.TrVentaCobro;
+import com.refacFabela.model.TvReporteDetalleVenta;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentasFactura;
 import com.refacFabela.model.TwAbono;
@@ -31,6 +32,7 @@ import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ThStockProductoRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
+import com.refacFabela.repository.TvReporteDetalleVentaRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.TwSaldoUtilizadoRepository;
@@ -90,6 +92,9 @@ public class VentasServiceImpl implements VentasService {
 	
 	@Autowired
 	private TwSaldoUtilizadoRepository twSaldoUtilizadoRepository;
+	
+	@Autowired
+	private TvReporteDetalleVentaRepository tvReporteDetalleVentaRepository;
 
 	
 	
@@ -498,7 +503,17 @@ public class VentasServiceImpl implements VentasService {
 	@Override
 	public List<TvVentaDetalleDto> consultaVentaDetalleIdEstatusVenta( Long nEstatusVenta) {
 		
-		List<TvVentaDetalle> ventas =tvVentaDetalleRepository.consultaVentaDetalleIdEstatusVenta( nEstatusVenta);
+		List<TvVentaDetalle> ventas=new ArrayList<TvVentaDetalle>();
+		
+		if(nEstatusVenta!=8L) {
+			 ventas =tvVentaDetalleRepository.consultaVentaDetalleIdEstatusVenta( nEstatusVenta);
+		}
+		else {
+			nEstatusVenta=1L;
+			 ventas =tvVentaDetalleRepository.consultaVentaDetalleIdEstatusVentaFechaCredito( nEstatusVenta);			
+		}
+		
+		
 		
 		List<TvVentaDetalleDto> ventasNew =new ArrayList<TvVentaDetalleDto>();
 		
@@ -771,6 +786,13 @@ public class VentasServiceImpl implements VentasService {
 		
 		
 		return tvVentaDetalle;
+	}
+
+
+	@Override
+	public List<TvReporteDetalleVenta> obtenerVentasDetalleCaja(Long nId) {
+		
+		return tvReporteDetalleVentaRepository.obtenerVentasCajaReporte(nId);
 	}
 
 	

@@ -25,6 +25,7 @@ import com.refacFabela.dto.VentaProductoCancelaDto;
 import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TrVentaCobro;
+import com.refacFabela.model.TvReporteDetalleVenta;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
@@ -181,6 +182,18 @@ public class VentasController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los Productos" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerVentasDetalleCaja") 
+	public List<TvReporteDetalleVenta> obtenerVentasDetalleCaja(@RequestParam() Long nId) {
+
+		try {
+			return ventasService.obtenerVentasDetalleCaja(nId);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener las ventas del día" + e);
 		}
 		return null;
 	}

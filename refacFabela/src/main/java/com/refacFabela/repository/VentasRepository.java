@@ -15,6 +15,8 @@ public interface VentasRepository extends JpaRepository<TwVenta, Long> {
 	public TwVenta findBynId(Long nIdVenta);	
 	@Query("Select e from TwVenta e where e.nIdCotizacion=:nIdCotizacion ")
 	public TwVenta obtnerVentaIdCotizacion(Long nIdCotizacion);
+	@Query("Select e from TwVenta e where e.nIdCaja=:nIdCaja ")
+	public List<TwVenta> obtnerVentasIdCaja(Long nIdCaja);
 	
 	
 }
