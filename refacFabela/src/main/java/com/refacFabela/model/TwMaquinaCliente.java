@@ -28,6 +28,8 @@ public class TwMaquinaCliente implements Serializable {
 		private String sMarca;
 		@Column(name = "s_observaciones")
 		private String sObservaciones;
+		@Column(name = "s_modelo")
+		private String sModelo;
 		
 		
 		public TwMaquinaCliente() {
@@ -72,6 +74,16 @@ public class TwMaquinaCliente implements Serializable {
 
 		public void setsMarca(String sMarca) {
 			this.sMarca = sMarca;
+		}
+
+
+		public String getsModelo() {
+			return sModelo;
+		}
+
+
+		public void setsModelo(String sModelo) {
+			this.sModelo = sModelo;
 		}
 
 

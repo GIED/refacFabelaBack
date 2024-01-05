@@ -23,6 +23,7 @@ import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvStockProductoHist;
+import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
@@ -53,6 +54,7 @@ import com.refacFabela.repository.ProductosAlternativosRepository;
 import com.refacFabela.repository.ProductosRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvStockProductoHistRepository;
+import com.refacFabela.repository.TvVentaDetalleRepository;
 import com.refacFabela.repository.TvVentasStockRepository;
 import com.refacFabela.repository.TwAjusteInventarioRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
@@ -115,7 +117,7 @@ public class ProductosServiceImp implements ProductosService {
 	@Autowired
 	private TwSaldosRepository twSaldosRepository;
 	@Autowired
-	private CajaRepository cajaRepository;
+	private CajaRepository cajaRepository;	
 	
 	@Autowired
 	private CatalogosRepository catalogosRepository;
@@ -137,10 +139,11 @@ public class ProductosServiceImp implements ProductosService {
 	@Autowired
 	private TwVentaProductoCancelaRepository twVentaProductoCancelaRepository;
 	
-	@Autowired
-	
+	@Autowired	
 	private TwAjusteInventarioRepository twAjusteInventarioRepository;
 	
+	@Autowired
+	private TvVentaDetalleRepository tvVentaDetalleRepository;
 
  
 
@@ -855,6 +858,18 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	public TwVentasProducto actualizaVentaProducto(TwVentasProducto twVentasProducto) {
 		// TODO Auto-generated method stub
 		return twProductosVentaRepository.save(twVentasProducto);
+	}
+
+	@Override
+	public TvVentaDetalle obtenerVentaDetalleId(Long nIdVenta) {
+		
+		return tvVentaDetalleRepository.consultaVentaDetalleId(nIdVenta);
+	}
+
+	@Override
+	public TrVentaCobro guardarVentaCobro(TrVentaCobro trVentaCobro) {
+		
+		return trVentaCobroRepository.save(trVentaCobro);
 	}
 	
 	

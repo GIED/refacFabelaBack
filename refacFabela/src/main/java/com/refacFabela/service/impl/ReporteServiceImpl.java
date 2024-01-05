@@ -330,6 +330,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal()+"\nTotal de productos: "+ listaProducto.size()).toString()));
 	         params.put("fechaVencimiento", fechaVencimiento);
 	         params.put("nombreVendedor", reporteVenta.getNombreVendedor());
+	         params.put("totalEntrega", reporteVenta.getTotalEntrega());
 	     	
 	         
 	         
@@ -561,6 +562,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("abonos", reporteVenta.getAbonos());			
 	        params.put("qr", getQR(("\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+cliente.getsRazonSocial()+"\nTotal: "+reporteVenta.getTotal().toString()+"\nTotal de Ventas a crédito: "+ listaAbomoVenta.size()).toString()));
 	        params.put("saldoFinal", (reporteVenta.getTotal()-reporteVenta.getAbonos()-reporteVenta.getDescuento()));
+	     
 	        		
 			
 			

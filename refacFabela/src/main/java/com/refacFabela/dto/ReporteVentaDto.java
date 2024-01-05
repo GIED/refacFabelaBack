@@ -36,12 +36,21 @@ public class ReporteVentaDto implements Serializable{
 	private String ubicacion;
 	private String noParte;
 	private String nombreVendedor;
+	private Integer totalEntrega;
 	
 	
 	
 	
 	
 	
+	public Integer getTotalEntrega() {
+		return totalEntrega;
+	}
+
+	public void setTotalEntrega(Integer totalEntrega) {
+		this.totalEntrega = totalEntrega;
+	}
+
 	public String getCorreo() {
 		return correo;
 	}

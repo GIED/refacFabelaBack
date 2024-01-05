@@ -36,6 +36,8 @@ public interface TvVentaDetalleRepository extends JpaRepository<TvVentaDetalle, 
 	@Query(value="Select * from tv_ventadetalle order by n_id desc limit 100",   nativeQuery = true) 
 	public List<TvVentaDetalle> findByTop();
 	
+	@Query("Select c from TvVentaDetalle c where c.nId=:nIdVenta")
+	public TvVentaDetalle consultaVentaDetalleId( long nIdVenta);
 	
 	
 }

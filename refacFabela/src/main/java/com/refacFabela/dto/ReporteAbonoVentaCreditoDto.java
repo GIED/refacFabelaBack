@@ -16,8 +16,15 @@ public class ReporteAbonoVentaCreditoDto {
 	public double avancePago;
 	public double descuento;
 	public List<AbonosDto> abonoDto;
+	public Boolean vencido;
 	
 	
+	public Boolean getVencido() {
+		return vencido;
+	}
+	public void setVencido(Boolean vencido) {
+		this.vencido = vencido;
+	}
 	public double getDescuento() {
 		return descuento;
 	}

@@ -15,6 +15,7 @@ import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvStockProductoHist;
+import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TvVentaProductoMes;
 import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
@@ -91,6 +92,8 @@ public interface ProductosService {
 	public List<TwVentaProductoCancela> obtenerVentaProductoCanela(String fechaInicio, String fechaTermino);
 	
 	public List<TwAjustesInventario> obtenerVentaProductoAjusteInventario(String fechaInicio, String fechaTermino);
+	
+	public TvVentaDetalle obtenerVentaDetalleId(Long nIdVenta);
 
 
 	public VentaProductoDto cacelarVentaProducto(VentaProductoCancelaDto ventaProductoCancelaDto);
@@ -98,6 +101,8 @@ public interface ProductosService {
 	public TwVentaProductosTraer ventaProductosTraer(TwVentaProductosTraer ventaProductoDto);
 
 	public TwSaldoUtilizado guardarSaldoUtilizado(TwSaldoUtilizado twSaldoUtilizado);
+	
+	public TrVentaCobro guardarVentaCobro(TrVentaCobro trVentaCobro);
 
 	public String consultaVentaProductoId(TwVentasProducto ventaProductoDto);
 	

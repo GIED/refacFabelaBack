@@ -51,6 +51,9 @@ public class TwAjustesInventario implements Serializable {
 	@Column(name = "s_fecha")
 	private Date sFecha;
 	
+	@Column(name = "s_motivo")
+	private String sMotivo;
+	
 	
 	@ManyToOne()
 	@JoinColumn(name = "n_id_usuario", referencedColumnName = "n_id", updatable = false, insertable = false)
@@ -184,6 +187,15 @@ public class TwAjustesInventario implements Serializable {
 
 	public void setnIdAnaquel(Long nIdAnaquel) {
 		this.nIdAnaquel = nIdAnaquel;
+	}	
+	
+
+	public String getsMotivo() {
+		return sMotivo;
+	}
+
+	public void setsMotivo(String sMotivo) {
+		this.sMotivo = sMotivo;
 	}
 
 	@Override

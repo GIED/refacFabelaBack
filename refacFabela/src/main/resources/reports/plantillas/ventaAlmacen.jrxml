@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
 	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="192"/>
+	<property name="ireport.y" value="114"/>
 	<subDataset name="listaProductos" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="cantidad" class="java.lang.Integer"/>
 		<field name="noIdentificacion" class="java.lang.Long"/>
@@ -30,6 +30,7 @@
 	<parameter name="fechaVencimiento" class="java.lang.String"/>
 	<parameter name="descuento" class="java.lang.Double"/>
 	<parameter name="nombreVendedor" class="java.lang.String"/>
+	<parameter name="totalEntrega" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -88,13 +89,6 @@
 				</textElement>
 				<text><![CDATA[LUGAR DE EXPEDICIÓN]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="420" y="121" width="132" height="16" uuid="f9d2f0cd-a5a5-47e0-abeb-1855f406b67d"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<text><![CDATA[Permanente]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="419" y="58" width="132" height="16" uuid="56f27b58-bb8b-464c-8865-53c231982582"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
@@ -105,7 +99,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[VIGENCIA]]></text>
+				<text><![CDATA[TOTAL PRODUCTOS]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="420" y="90" width="132" height="16" uuid="f23e8d6c-a9dd-4052-a95a-35f6f6ebb183"/>
@@ -143,11 +137,18 @@
 				<text><![CDATA[Vendedor:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="63" y="117" width="272" height="20" uuid="2593cabc-7416-4ef9-8294-edd13845d6c3"/>
+				<reportElement x="63" y="117" width="212" height="20" uuid="2593cabc-7416-4ef9-8294-edd13845d6c3"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombreVendedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="420" y="121" width="131" height="17" forecolor="#FFFFFF" backcolor="#CC0000" uuid="567c3e8b-fa4a-427f-a30e-3419d42c35a5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totalEntrega}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -216,7 +217,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Total Partida]]></text>
+				<text><![CDATA[Ubicación]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="482" y="19" width="73" height="20" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" uuid="67167c2c-c974-4d84-8862-412d127188fd"/>

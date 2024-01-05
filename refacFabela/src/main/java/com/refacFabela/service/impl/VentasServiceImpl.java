@@ -795,5 +795,12 @@ public class VentasServiceImpl implements VentasService {
 		return tvReporteDetalleVentaRepository.obtenerVentasCajaReporte(nId);
 	}
 
+
+	@Override
+	public TwVenta guardarVentaCompleta(TwVenta twVenta) {
+		
+		return ventasRepository.save(twVenta);
+	}
+
 	
 }

@@ -80,6 +80,9 @@ public class TvVentaDetalle implements Serializable {
 	@Column(name = "n_saldo")
 	private Boolean nSaldo;
 	
+	@Column(name = "n_vencido")
+	private Boolean nVencido;
+	
 	
 	
 	
@@ -129,6 +132,14 @@ public class TvVentaDetalle implements Serializable {
 
 
 
+
+	public Boolean getnVencido() {
+		return nVencido;
+	}
+
+	public void setnVencido(Boolean nVencido) {
+		this.nVencido = nVencido;
+	}
 
 	public TwCaja getTwCaja() {
 		return twCaja;

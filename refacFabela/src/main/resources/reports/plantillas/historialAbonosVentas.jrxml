@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="55"/>
+	<property name="ireport.y" value="336"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -80,6 +80,7 @@
 		<field name="avancePago" class="java.lang.Double"/>
 		<field name="abonoDto" class="java.util.List"/>
 		<field name="descuento" class="java.lang.Double"/>
+		<field name="vencido" class="java.lang.Boolean"/>
 	</subDataset>
 	<subDataset name="dataset1" uuid="c4ff5998-c412-4ef5-ac33-aebdc78515da">
 		<field name="abono" class="java.lang.Double"/>
@@ -188,7 +189,7 @@
 	<detail>
 		<band height="191" splitType="Stretch">
 			<componentElement>
-				<reportElement x="-1" y="0" width="555" height="182" uuid="3aac5f86-73ff-4c83-8971-334795e08c64"/>
+				<reportElement x="-1" y="0" width="555" height="182" backcolor="#CCCCCC" uuid="3aac5f86-73ff-4c83-8971-334795e08c64"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="listaVenta" uuid="a206f221-4436-46c5-b9cd-4b2376822fa5">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listaVenta})]]></dataSourceExpression>
@@ -487,7 +488,7 @@
 							<textFieldExpression><![CDATA[$F{saldoTotal}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="0" y="10" width="555" height="20" uuid="60ca189c-b663-4525-856d-d8c685b2c872"/>
+							<reportElement mode="Opaque" x="0" y="10" width="555" height="20" backcolor="#CCCCCC" uuid="60ca189c-b663-4525-856d-d8c685b2c872"/>
 							<textElement textAlignment="Center">
 								<font isBold="true"/>
 							</textElement>
@@ -500,6 +501,14 @@
 							</textElement>
 							<textFieldExpression><![CDATA["ABONOS DE LA VENTA NO. "+$F{idVenta}]]></textFieldExpression>
 						</textField>
+						<rectangle>
+							<reportElement x="1" y="77" width="554" height="3" backcolor="#CC0000" uuid="0e038294-9719-4379-a468-534baad29ae7">
+								<printWhenExpression><![CDATA[$F{vencido} == true ? new Boolean(true) : new Boolean(false)]]></printWhenExpression>
+							</reportElement>
+							<graphicElement>
+								<pen lineWidth="0.0"/>
+							</graphicElement>
+						</rectangle>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>

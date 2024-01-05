@@ -212,6 +212,20 @@ public class VentasController {
 		return null;
 	}
 	
+	@PostMapping("/guardarVentaCompleta")
+	
+	public TwVenta guardarVentaCompleta(@RequestBody TwVenta twVenta) {
+
+		try {		
+				
+			return ventasService.guardarVentaCompleta(twVenta);
+		} catch (Exception e) {
+
+			logger.error("Error al guardar la venta" + e);
+		}
+		return null;
+	}
+	
 	@PostMapping("/guardarVentaDetalle")
 	public TvVentaDetalle guardarVentaDescuento(@RequestBody TvVentaDetalle tvVentaDetalle) {
 
@@ -469,6 +483,15 @@ public class VentasController {
 		}
 		return null;
 	}
+	@PostMapping("/guardarVentaCobro")
+	public TrVentaCobro guardarVentaCobro(@RequestBody  TrVentaCobro TrVentaCobro) {
+		try {
+			return productosService.guardarVentaCobro(TrVentaCobro);
+		} catch (Exception e) {
+			logger.error("Error al guardar el cobro" + e);
+		}
+		return null;
+	}
 	
 	@GetMapping("/obtenerSaldosUtilizadosId")
 	public List<TwSaldoUtilizado> obtenerSaldosUtilizadosId(@RequestParam()  Long nIdVenta) {
@@ -514,6 +537,18 @@ public class VentasController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los saldos venta cancela" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerVentaDetalleId")
+	public TvVentaDetalle obtenerVentaDetalleId(@RequestParam()  Long nIdVenta) {
+
+		try {
+			return productosService.obtenerVentaDetalleId(nIdVenta);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener la consulta de la vista venta detalle" + e);
 		}
 		return null;
 	}

@@ -377,6 +377,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		double subtotal = 0.0;
 		double iva = 0.0;
 		double totalAbonos=0.0;
+		int totalProductosEntrga=0;
 		
 		for(TwAbono twAbono: listaAbonos) {
 			
@@ -393,6 +394,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			System.err.println("llegue a generar el archivo de ventas Almacen ");
 			
 			productoBodega=  productoBodegaRepository.obtenerProductoBodega(twVentaProducto.getTcProducto().getnId(),"LOCAL");
+			
+			totalProductosEntrga+=twVentaProducto.getnCantidad();
 
 			reporte.setCantidad(twVentaProducto.getnCantidad());
 			reporte.setNoIdentificacion(twVentaProducto.getTcProducto().getnId());
@@ -424,6 +427,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setSubTotal(util.truncarDecimales(subtotal));
 		reporteVenta.setIvaTotal(util.truncarDecimales(iva));
 		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva));
+		reporteVenta.setTotalEntrega(totalProductosEntrga);
 
 		return reporteService.generaVentaAlmacenPDF(reporteVenta, listaProducto, totalAbonos);
 	}
@@ -432,9 +436,20 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	public byte[] getVentaPedidoPDF(Long nIdVentaPedido) {
 		
 		List<TwVentasProducto> listaProductos = ventasProductoRepository.findBynIdVenta(nIdVentaPedido);
+		List<TrVentaCobro> listaVentaCobro= trVentaCobroRepository.findBynIdVenta(nIdVentaPedido);
+		double subtotal = 0.0;
+		double iva = 0.0;
+		double abonos=0.0;
+		
 		
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
 		utils util=new utils();
+		
+		
+		for (int i = 0; i < listaVentaCobro.size(); i++) {
+			
+			abonos+=listaVentaCobro.get(i).getnMonto();
+		}
 		
 		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
 		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
@@ -442,15 +457,14 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
 		reporteVenta.setFecha(listaProductos.get(0).getTwVenta().getdFechaVenta());
-		reporteVenta.setAnticipo(listaProductos.get(0).getTwVenta().getAnticipo());
+		reporteVenta.setAnticipo( util.truncarDecimales(abonos));
 		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
 		reporteVenta.setNombreVendedor(listaProductos.get(0).getTcUsuario().getsNombreUsuario());
 		
 		
 		List<ReporteVentaDto> listaProducto = new ArrayList<ReporteVentaDto>();
 		
-		double subtotal = 0.0;
-		double iva = 0.0;
+	
 		
 		
 		for (TwVentasProducto twVentaProducto : listaProductos) {
@@ -590,6 +604,15 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				ventaAbomo.setDescuento(util.truncarDecimales(listaVentaDetalle.getDescuento()));
 				totalGeneral=totalGeneral+listaVentaDetalle.getnTotalVenta();
 				descuento=descuento+listaVentaDetalle.getDescuento();
+				  Date fechaActual = new Date();
+				if(listaVentaDetalle.getnVencido()) {
+					ventaAbomo.setVencido(true);
+					
+				 } else {					
+					 ventaAbomo.setVencido(false);
+			     } 
+				
+				System.err.println(ventaAbomo.getVencido());
 
 				List<TwAbono> listaAbonos = new ArrayList<TwAbono>();
 				listaAbonos = abonoVentaIdRepository.findBynIdVenta(listaVentaDetalle.getnId());
@@ -742,8 +765,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		totalReitegros=twSaldosRepository.totalCancela(nIdCaja);
 		totalReitegros=totalReitegros==null?0:totalReitegros;
 		
-		for (int i = 0; i < listaTwGastos.size(); i++) {
-			
+		for (int i = 0; i < listaTwGastos.size(); i++) {			
 			
 			 totalGastos+=listaTwGastos.get(i).getnMonto();
 			 GastosDto gastoDto=new GastosDto();		 
@@ -841,6 +863,72 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			if(trReporteDetalleVentas.get(i).getsEstatusEntrega().equals("ENTREGADA PARCIAL")) {
 				totalEntegasParciales+=1;
 			}
+			
+			List<TrVentaCobro> listaTrVentaCobro=new ArrayList<TrVentaCobro>();
+			
+			listaTrVentaCobro=trVentaCobroRepository.findBynIdVenta(trReporteDetalleVentas.get(i).getnIdVenta());
+			String formapago="";
+			
+			if(listaTrVentaCobro.size()>1) {
+						
+				
+				for (int j = 0; j < listaTrVentaCobro.size(); j++) {
+					
+					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 1) {
+
+						formapago += "EF:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+					}
+					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 2) {
+
+						formapago += "CH:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+					}
+					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 3) {
+
+						formapago += "TE:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+					}
+					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 4) {
+
+						formapago += "TC:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+					}
+					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 11) {
+
+						formapago += "CO:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+					}
+					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 18) {
+
+						formapago += "TD:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+					}
+					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 20) {
+
+						formapago += "AN:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+					}
+					
+					
+					
+				}
+				
+				
+				
+				
+				
+			trReporteDetalleVentas.get(i).setsFormaPago(formapago);
+				
+			}
+			
+           
+			if(listaTrVentaCobro.size()==1) {
+										
+				for (int j = 0; j < listaTrVentaCobro.size(); j++) {
+								
+					formapago +=  listaTrVentaCobro.get(j).getTcFormapago().getsDescripcion() ;
+									
+				}
+						
+				
+			trReporteDetalleVentas.get(i).setsFormaPago(formapago);
+				
+			}
+			
 			
 		}
 		
