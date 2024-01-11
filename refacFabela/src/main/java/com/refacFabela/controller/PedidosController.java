@@ -17,6 +17,7 @@ import com.refacFabela.dto.PedidoDto;
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TvPedidoDetalle;
+import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.service.PedidosService;
 
@@ -50,6 +51,19 @@ public class PedidosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los pedidos registrados " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerPedidoId")
+	public TwPedido obtenerPedidoId(@RequestParam() Long nIdPedido) {
+		try {
+
+			return pedidosService.obtenerPedidoId(nIdPedido);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los pedido " + e);
 		}
 		return null;
 	}
@@ -101,6 +115,31 @@ public class PedidosController {
 
 		} catch (Exception e) {
 			logger.error("Error al borrar el pedido producto" + e);
+		}
+
+		return null;
+	}
+	
+	@PostMapping("/guardaPedidoGeneral")
+	public TwPedido guradaPedidoNuevo(@RequestBody TwPedido twPedido) {
+
+		try {
+			return pedidosService.guardaPedidoNuevo(twPedido);
+
+		} catch (Exception e) {
+			logger.error("Error al guaradar el pedido producto" + e);
+		}
+
+		return null;
+	}
+	@PostMapping("/guardaPedidoProducto")
+	public TwPedidoProducto guardaPedidoProducto(@RequestBody TwPedidoProducto twPedidoProducto) {
+
+		try {
+			return pedidosService.guardaPedidoProducto(twPedidoProducto);
+
+		} catch (Exception e) {
+			logger.error("Error al guaradar el pedido producto" + e);
 		}
 
 		return null;

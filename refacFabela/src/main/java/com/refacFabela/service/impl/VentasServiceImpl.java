@@ -783,8 +783,6 @@ public class VentasServiceImpl implements VentasService {
 		
 		
 		
-		
-		
 		return tvVentaDetalle;
 	}
 

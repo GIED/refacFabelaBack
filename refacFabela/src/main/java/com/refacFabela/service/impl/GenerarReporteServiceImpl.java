@@ -203,7 +203,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
 		reporteVenta.setFecha(listaProductos.get(0).getTwVenta().getdFechaVenta());
 		reporteVenta.setTipoPago(listaProductos.get(0).getTwVenta().getnTipoPago());
-		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
+		reporteVenta.setDescuento(util.truncaValor(listaProductos.get(0).getTwVenta().getDescuento()));
 		reporteVenta.setNombreVendedor(listaProductos.get(0).getTcUsuario().getsNombreUsuario());
 		
 
@@ -279,7 +279,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setFolioVenta(twVenta.getnId());
 		reporteVenta.setFecha(new Date());
 		reporteVenta.setTipoPago(twVenta.getnTipoPago());
-		reporteVenta.setDescuento(twVenta.getDescuento());
+		reporteVenta.setDescuento(util.truncaValor(twVenta.getDescuento()));
 		reporteVenta.setNombreVendedor(tcUsuario.getsNombreUsuario());
 		
 
@@ -332,9 +332,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			saldo.setnIdVentaUtilizado(saldoUtilizadoDto.getnIdVentaUtilizado());
 			
 			listaTwSaldoUtilizadoDto.add(saldo);
-			System.err.println(listaTwSaldoUtilizadoDto);
 			
-			totalSaldoUsado+=saldoUtilizadoDto.getnSaldoUtilizado();
+			
+			totalSaldoUsado+=util.truncaValor(saldoUtilizadoDto.getnSaldoUtilizado());
 			
 		}
 		
@@ -482,7 +482,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				
 			}
 		
-			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat());
+			reporte.setClaveSat(twVentaProducto.getTcProducto().getTcClavesat().getsClavesat()+'-'+twVentaProducto.getTcProducto().getTcClavesat().getsDescripcion());
 			reporte.setPrecioUnitario(util.truncarDecimales(twVentaProducto.getnTotalUnitario()));
 			reporte.setImporte(util.truncarDecimales(twVentaProducto.getnTotalPartida()));
 			
@@ -519,7 +519,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setFecha(listaProductos.get(0).getTwVenta().getdFechaVenta());
 		reporteVenta.setTipoPago(listaProductos.get(0).getTwVenta().getnTipoPago());
 		reporteVenta.setCorreo(listaProductos.get(0).getTwVenta().getTcCliente().getsCorreo());
-		reporteVenta.setDescuento(listaProductos.get(0).getTwVenta().getDescuento());
+		reporteVenta.setDescuento(util.truncaValor(listaProductos.get(0).getTwVenta().getDescuento()));
 		
 		
 
@@ -774,7 +774,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			 gastoDto.setDescripcion(listaTwGastos.get(i).getsDescripcion());
 			 gastoDto.setGasto(listaTwGastos.get(i).getTcGasto().getsGasto());
 			 gastoDto.setUsuario(listaTwGastos.get(i).getTcUsuario().getsNombreUsuario());
-			 gastoDto.setMonto(listaTwGastos.get(i).getnMonto());
+			 gastoDto.setMonto(util.truncarDecimales(listaTwGastos.get(i).getnMonto()) );
 			 
 			 auxListaGastos.add(gastoDto);
 			
@@ -790,7 +790,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			
 			if(trVentasCobro.get(i).getTwVenta().getnTipoPago()==0L && trVentasCobro.get(i).getnIdFormaPago()==1L ) {				
 				efectivoContado+=trVentasCobro.get(i).getnMonto();
-				System.err.println("Esto es lo que voy a cobrar"+trVentasCobro.get(i).getnMonto());
+				
 			}
 			if(trVentasCobro.get(i).getTwVenta().getnTipoPago()==0L && trVentasCobro.get(i).getnIdFormaPago()==2L ) {				
 				chequeContado+=trVentasCobro.get(i).getnMonto();				
@@ -876,31 +876,31 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 					
 					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 1) {
 
-						formapago += "EF:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+						formapago += "EF:" + util.truncaValor(listaTrVentaCobro.get(j).getnMonto()) + "/";
 					}
 					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 2) {
 
-						formapago += "CH:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+						formapago += "CH:" + util.truncaValor(listaTrVentaCobro.get(j).getnMonto()) + "/";
 					}
 					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 3) {
 
-						formapago += "TE:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+						formapago += "TE:" + util.truncaValor(listaTrVentaCobro.get(j).getnMonto()) + "/";
 					}
 					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 4) {
 
-						formapago += "TC:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+						formapago += "TC:" + util.truncaValor(listaTrVentaCobro.get(j).getnMonto()) + "/";
 					}
 					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 11) {
 
-						formapago += "CO:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+						formapago += "CO:" + util.truncaValor(listaTrVentaCobro.get(j).getnMonto()) + "/";
 					}
 					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 18) {
 
-						formapago += "TD:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+						formapago += "TD:" + util.truncaValor(listaTrVentaCobro.get(j).getnMonto()) + "/";
 					}
 					if (listaTrVentaCobro.get(j).getTcFormapago().getnId() == 20) {
 
-						formapago += "AN:" + listaTrVentaCobro.get(j).getnMonto() + "/";
+						formapago += "AN:" + util.truncaValor(listaTrVentaCobro.get(j).getnMonto()) + "/";
 					}
 					
 					
@@ -992,8 +992,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		/*LLENAOD DE OBJETO BALANCE CAJA*/
 		balanceCajaDto.setCaja(caja.getnId());
 		balanceCajaDto.setFechaInicioCaja(util.formatoFecha(caja.getdFechaApertura()));
-		balanceCajaDto.setTotalIngresoVenta(totalIngresosVenta);
-		balanceCajaDto.setTotalIngresoAbonos(totalIngresosAbono);		
+		balanceCajaDto.setTotalIngresoVenta(util.truncaValor(totalIngresosVenta));
+		balanceCajaDto.setTotalIngresoAbonos(util.truncaValor(totalIngresosAbono));		
 		balanceCajaDto.setTotalGeneralIngresos(util.truncaValor(totalIngresosVenta+totalIngresosAbono-totalReitegros)  );	
 		balanceCajaDto.setTotalVentas(util.truncaValor(totalVenta));
 		balanceCajaDto.setNoVentas(trReporteDetalleVentas.size());
@@ -1005,12 +1005,12 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		balanceCajaDto.setFechaGeneraReporte(util.formatoFecha(new Date()));
 		balanceCajaDto.setTvReporteDetalleVenta(trReporteDetalleVentas);
 		balanceCajaDto.setTvReporteCajaFormaPago(tvReporteCajaFormaPago);
-		balanceCajaDto.setTotalReintegro(util.truncaValor(totalReitegros));
+		balanceCajaDto.setTotalReintegro(util.truncaValor(util.truncaValor(totalReitegros)));
 		balanceCajaDto.setListaGastos(auxListaGastos);
 		balanceCajaDto.setTotalGastos(util.truncaValor(totalGastos));
 		balanceCajaDto.setListaAbonos(auxListaAbonos);
 		balanceCajaDto.setListaCancelados(auxCancelaVenta);
-		balanceCajaDto.setTotalCredito(totalCredito);
+		balanceCajaDto.setTotalCredito(util.truncaValor(totalCredito));
 		balanceCajaDto.setTotalVenta(util.truncaValor(totalVenta));	
 		
 		// variables de contado
@@ -1028,9 +1028,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		balanceCajaDto.setTarjetaCreditoAbono(util.truncaValor(tarjetaCreditoAbono));
 		balanceCajaDto.setTarjetaDebitoAbon(util.truncaValor(tarjetaDebitoAbono));
 		balanceCajaDto.setCondonacionAbono(util.truncaValor(CondonacionAbono));
-		balanceCajaDto.setSaldosFavor(saldoFavor);
-		balanceCajaDto.setTotalCancelado(totalCencela);
-		balanceCajaDto.setTotalDescuento(totalDescuento);
+		balanceCajaDto.setSaldosFavor(util.truncaValor(saldoFavor));
+		balanceCajaDto.setTotalCancelado(util.truncaValor(totalCencela));
+		balanceCajaDto.setTotalDescuento(util.truncaValor(totalDescuento));
 		
 		 
 		System.err.println(auxListaGastos.size());

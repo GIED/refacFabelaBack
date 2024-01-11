@@ -461,6 +461,7 @@ public class ReporteServiceImpl implements ReporteService {
 			  String nombreArchivo = "venta_pedido_"+reporteVenta.getFolioVenta();
 	          ruta="/opt/webserver/backEnd/refacFabela/";
 	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+	         utils util=new utils();
 			
 			//aqui van los parametros
 			params.put("logo", this.imagenHeader);
@@ -477,7 +478,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("anticipo", reporteVenta.getAnticipo());	
 			params.put("descuento", reporteVenta.getDescuento());
 	        params.put("qr", getQR(("Folio de venta por pedido: VP-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+(reporteVenta.getTotal()-reporteVenta.getAnticipo()-reporteVenta.getDescuento())+"\nTotal de productos: "+ listaProducto.size()).toString()));
-	        params.put("saldoFinal", reporteVenta.getTotal()-reporteVenta.getAnticipo());
+	        params.put("saldoFinal", util.truncarDecimales( reporteVenta.getTotal()-reporteVenta.getAnticipo()));
 	        params.put("nombreVendedor", reporteVenta.getNombreVendedor());
 	        
 			

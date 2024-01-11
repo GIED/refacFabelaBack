@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteCaja" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="19" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
-	<property name="ireport.zoom" value="5.0"/>
-	<property name="ireport.x" value="50"/>
-	<property name="ireport.y" value="1016"/>
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="68"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -589,35 +589,35 @@
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="302" y="34" width="72" height="15" uuid="5ba97fd0-e5e7-4a3f-b5f1-16795e6c63b2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{efectivoContado}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="302" y="51" width="72" height="15" uuid="3316fd23-194b-4ca4-b9c4-2c6193d54c11"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{chequeContado}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="302" y="68" width="72" height="15" uuid="206d62a4-9a01-4e3c-bf2e-38e4c9bc27a8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{transferenciaContado}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="302" y="85" width="72" height="15" uuid="1fef5b3a-f6b8-4007-807a-b4a001f24733"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{tarjetaCreditoContado}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="302" y="102" width="72" height="15" uuid="5878c4ac-c1ae-4316-906b-3c952ea190ff"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -770,7 +770,7 @@
 				</textElement>
 				<text><![CDATA[Saldos utilizados]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="302" y="119" width="72" height="15" uuid="743cade1-b36d-4700-b1d5-4f41d57cda71"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -919,7 +919,7 @@
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="302" y="136" width="72" height="15" uuid="e2503187-bf9e-4dad-ba7b-6c7ac9f23a79"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -989,14 +989,14 @@ $P{condonacionContado}]]></textFieldExpression>
 				</textElement>
 				<text><![CDATA[ABONOS]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="379" y="34" width="72" height="15" uuid="ec86af26-bda2-40c9-a6ad-bb10e0320d64"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{efectivoAbono}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="379" y="51" width="72" height="15" uuid="361f66a1-ce68-4293-8c0d-a1dbf0bb173a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -1009,14 +1009,14 @@ $P{condonacionContado}]]></textFieldExpression>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="379" y="68" width="72" height="15" uuid="f255686a-3e92-4a97-a827-ad9938c15c6f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{transferenciaAbono}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="379" y="85" width="72" height="15" uuid="f463a5ce-4b24-4600-b130-0c7483c0425b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -1042,14 +1042,14 @@ $P{condonacionContado}]]></textFieldExpression>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="379" y="102" width="72" height="15" uuid="ab31a21a-3977-42ee-8968-fcf53d04b6fa"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{tarjetaDebitoAbono}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="379" y="119" width="72" height="15" uuid="c47f6a6a-ca0a-4cab-bb26-77bf8a56b4fa"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -1062,7 +1062,7 @@ $P{condonacionContado}]]></textFieldExpression>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="379" y="136" width="72" height="15" uuid="4d5574a7-49b6-4b66-80d9-414a89d49bee"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -1080,14 +1080,14 @@ $P{condonacionAbono}]]></textFieldExpression>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="456" y="34" width="72" height="15" uuid="d94b9d3c-f8ab-41c3-b93d-1293adb34758"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{efectivoContado}+$P{efectivoAbono}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="456" y="136" width="63" height="15" backcolor="#99CC00" uuid="d027897a-3233-4790-8fbd-a71800f685f3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -1117,36 +1117,35 @@ $P{condonacionAbono}]]></textFieldExpression>
 					<pen lineColor="#C7C7C7"/>
 				</graphicElement>
 			</rectangle>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="456" y="68" width="72" height="15" uuid="9d976ccd-4930-466d-ba48-ab9603db0503"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{transferenciaContado}+$P{transferenciaAbono}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="456" y="102" width="72" height="15" uuid="5a1f4f27-3ea7-49a2-9f5d-ab9dc43b3e5f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{tarjetaDebitoContado}+$P{tarjetaDebitoAbono}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="456" y="119" width="72" height="15" uuid="4042a709-e7de-439e-8d49-68e1a4a5ab70"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{condonacionContado}+$P{condonacionAbono}
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{condonacionContado}+$P{condonacionAbono}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="456" y="51" width="72" height="15" uuid="3b50dbbe-a8aa-43d9-a9e9-d6d41cec372f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{chequeContado}+$P{chequeAbono}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="456" y="85" width="72" height="15" uuid="aee11c72-1c3b-4c04-96cb-5ae8a3afd002"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -1167,7 +1166,7 @@ $P{condonacionAbono}]]></textFieldExpression>
 				</textElement>
 				<text><![CDATA[Total ventas]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="118" y="34" width="94" height="15" uuid="78fbb767-15ad-460d-ae5a-9bab811338f3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -1181,7 +1180,7 @@ $P{condonacionAbono}]]></textFieldExpression>
 				</textElement>
 				<text><![CDATA[Total cancelaciones]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="119" y="51" width="93" height="15" uuid="59285e01-433b-4df7-9398-53c4fe6203c7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -1195,20 +1194,19 @@ $P{condonacionAbono}]]></textFieldExpression>
 				</textElement>
 				<text><![CDATA[Saldos a favor generados]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="119" y="68" width="93" height="15" uuid="81d08539-9ed3-47e8-9f46-967e95442f7e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{saldoFavor}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="119" y="85" width="93" height="15" uuid="fc01013a-0f63-49ed-8b8b-52517c54787d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{condonacionContado}+$P{condonacionAbono}
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{condonacionContado}+$P{condonacionAbono}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="15" y="85" width="104" height="16" uuid="7fbbebc7-d5c9-4e0a-bed3-ad8e9942829a"/>
@@ -1217,7 +1215,7 @@ $P{condonacionAbono}]]></textFieldExpression>
 				</textElement>
 				<text><![CDATA[Saldos a favor utilizados]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="119" y="102" width="93" height="15" uuid="178f749f-a31e-4ae1-95ed-8bed8b6cbe37"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -1238,7 +1236,7 @@ $P{condonacionAbono}]]></textFieldExpression>
 				</textElement>
 				<text><![CDATA[Gastos del día]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="73" y="119" width="45" height="15" uuid="e349e1a5-80f2-47c4-84f9-ec121ebc9916"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -1264,7 +1262,7 @@ $P{condonacionAbono}]]></textFieldExpression>
 				</textElement>
 				<text><![CDATA[Efectivo cierre]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="119" y="136" width="93" height="15" uuid="dc7233cb-f59c-4a1d-ab6b-b680515c15ae"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -1290,7 +1288,7 @@ $P{condonacionAbono}]]></textFieldExpression>
 				</textElement>
 				<text><![CDATA[Descuentos]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="167" y="119" width="45" height="15" uuid="b574e8ec-3303-4194-b530-2b687635f672"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>

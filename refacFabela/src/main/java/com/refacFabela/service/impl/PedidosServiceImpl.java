@@ -44,6 +44,7 @@ public class PedidosServiceImpl implements PedidosService {
 	private VentasRepository ventasRepository;
 	@Autowired
 	private TwHistoriaIngresoProductoRepository twHistoriaIngresoProductoRepository;
+	
   
 	
 	@Override
@@ -221,6 +222,25 @@ public class PedidosServiceImpl implements PedidosService {
 	public List<TvPedidoDetalle> obtenerPedidos() {
 		
 		return tvPedidoDetalleRepository.obtenerPedidosDetalle();
+	}
+
+	
+	@Override
+	public TwPedido guardaPedidoNuevo(TwPedido twPedido) {
+		
+		return twPedidoRepository.save(twPedido);
+	}
+
+	@Override
+	public TwPedidoProducto guardaPedidoProducto(TwPedidoProducto twPedidoProducto) {		
+		
+		return pedidosProductoRepository.save(twPedidoProducto);
+	}
+
+	@Override
+	public TwPedido obtenerPedidoId(Long nIdPedido) {
+		// TODO Auto-generated method stub
+		return twPedidoRepository.getById(nIdPedido);
 	}
 
 }

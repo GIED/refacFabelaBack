@@ -290,7 +290,7 @@
 							<textElement textAlignment="Justified" verticalAlignment="Middle">
 								<font size="8"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{nombreProducto}+"\nClave Prod. Serv.-"+$F{claveSat}+" "+$F{descripcionCatSat}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$F{nombreProducto}+"\nClave Prod. Serv.-"+$F{claveSat}]]></textFieldExpression>
 						</textField>
 						<textField pattern="#,##0.00">
 							<reportElement x="348" y="1" width="100" height="35" uuid="b50f4ed4-871e-4b56-93c6-41cf344da57e"/>
