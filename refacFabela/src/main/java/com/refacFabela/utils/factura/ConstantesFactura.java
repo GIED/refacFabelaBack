@@ -14,6 +14,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import com.refacFabela.model.TcDatosFactura;
+
 import mx.grupocorasa.sat.cfd._40.Comprobante;
 
 
@@ -171,8 +173,8 @@ public class ConstantesFactura {
 	        return xmlString;
 	    }
 	    
-	    public static void obtenerArchivoPdf(String cadena, String nombreArchivo) {
-	        File file = new File(ConstantesFactura.rutaPdf + nombreArchivo);
+	    public static void obtenerArchivoPdf(String cadena, String nombreArchivo, TcDatosFactura tcDatosFactura) {
+	        File file = new File(tcDatosFactura.getsRutaPdf() + nombreArchivo);
 
 	        try (FileOutputStream fos = new FileOutputStream(file);) {
 	            // To be short I use a corrupted PDF string, so make sure to use a valid one if you want to preview the PDF file

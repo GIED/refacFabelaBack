@@ -7,6 +7,7 @@ import java.util.Random;
 import org.apache.logging.log4j.util.PropertySource.Util;
 import org.springframework.stereotype.Component;
 
+import com.refacFabela.model.TcDatosFactura;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.model.factura.CabeceraPagosXml;
@@ -17,7 +18,7 @@ import com.refacFabela.utils.utils;
 @Component
 public class Transformar {
 	
-	   public CabeceraXml objCabecera(List<TwVentasProducto> productosVendidos, TwVenta twVenta, String cveCfdi) {
+	   public CabeceraXml objCabecera(List<TwVentasProducto> productosVendidos, TwVenta twVenta, String cveCfdi, TcDatosFactura tcDatosFactura) {
 
 	      
 
@@ -25,8 +26,8 @@ public class Transformar {
 	        
                 utils util =new utils();
 	        
-	            cabeceraXmlBean.setVersion(ConstantesFactura.version);
-	            cabeceraXmlBean.setSerie(ConstantesFactura.serie);
+	            cabeceraXmlBean.setVersion(tcDatosFactura.getsVersion());
+	            cabeceraXmlBean.setSerie(tcDatosFactura.getsSerie());
 	            cabeceraXmlBean.setFolio(twVenta.getnId().toString());
 	            cabeceraXmlBean.setFormaPago(twVenta.getTcFormapago().getsClave());
 	            cabeceraXmlBean.setCondicionesPago(ConstantesFactura.condicionesPago);
@@ -35,13 +36,13 @@ public class Transformar {
 	            cabeceraXmlBean.setTotal(String.valueOf(calcularTotal(productosVendidos)));
 	            cabeceraXmlBean.setTipoComprobante(ConstantesFactura.tipoComprobante);
 	            cabeceraXmlBean.setMetodoPago(ConstantesFactura.MetodoPago);
-	            cabeceraXmlBean.setLugarExpedicion(ConstantesFactura.lugarExpedicion);
-	            cabeceraXmlBean.setNoCertificado(ConstantesFactura.noCertificado);
-	            cabeceraXmlBean.setCertificado(ConstantesFactura.certificado);
+	            cabeceraXmlBean.setLugarExpedicion(tcDatosFactura.getsCodigoPostal());
+	            cabeceraXmlBean.setNoCertificado(tcDatosFactura.getsNoCertificado());
+	            cabeceraXmlBean.setCertificado(tcDatosFactura.getsCertificado());
 	            cabeceraXmlBean.setSello("");
-	            cabeceraXmlBean.setNombreEmisor(ConstantesFactura.nombreEmisor);
-	            cabeceraXmlBean.setRfcEmisor(ConstantesFactura.rfcEmisor);
-	            cabeceraXmlBean.setRegimenFiscal(ConstantesFactura.regimenFiscal);
+	            cabeceraXmlBean.setNombreEmisor(tcDatosFactura.getsNombreEmisor());
+	            cabeceraXmlBean.setRfcEmisor(tcDatosFactura.getsRfcEmisor());
+	            cabeceraXmlBean.setRegimenFiscal(tcDatosFactura.getsRegimenFiscal());
 	            cabeceraXmlBean.setUsoCFDI(cveCfdi);//valor que recibe del front
 	            cabeceraXmlBean.setNombreReceptor(twVenta.getTcCliente().getsRazonSocial());
 	            cabeceraXmlBean.setRfcReceptor(twVenta.getTcCliente().getsRfc());// cambiar por rfc de camp 

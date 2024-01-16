@@ -54,6 +54,9 @@ public class TcCliente implements Serializable {
 	
 	@Column(name="n_descuento")
 	private Boolean nDescuento;
+	
+	@Column(name="n_id_dato_factura")
+	private Long nIdDatoFactura;
 
 	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
@@ -71,6 +74,24 @@ public class TcCliente implements Serializable {
 		
 	
 	
+
+
+	public Long getnIdDatoFactura() {
+		return nIdDatoFactura;
+	}
+
+
+
+
+
+
+	public void setnIdDatoFactura(Long nIdDatoFactura) {
+		this.nIdDatoFactura = nIdDatoFactura;
+	}
+
+
+
+
 
 
 	public Integer getnIdRegimenFiscal() {

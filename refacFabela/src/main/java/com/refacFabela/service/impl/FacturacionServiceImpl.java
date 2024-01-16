@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.model.TcDatosFactura;
 import com.refacFabela.model.TwFacturacion;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
@@ -13,6 +14,7 @@ import com.refacFabela.model.factura.CabeceraXml;
 import com.refacFabela.model.factura.ConceptoXml;
 import com.refacFabela.model.factura.Impuesto;
 import com.refacFabela.repository.FacturaRepository;
+import com.refacFabela.repository.TcDatosFacturaRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.FacturacionService;
@@ -43,6 +45,9 @@ public class FacturacionServiceImpl implements FacturacionService {
 	@Autowired
 	private FacturaRepository FacturaRepository;
 	
+	@Autowired
+	private TcDatosFacturaRepository tcDatosFacturaRepository;
+	
 
 	@Override
 	public String venta(Long idVenta, String cveCfdi) throws Exception {
@@ -51,20 +56,22 @@ public class FacturacionServiceImpl implements FacturacionService {
 			
 			//System.out.println("llego");
 			
-			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);			
+			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);		
+			TcDatosFactura tcDatosFactura = tcDatosFacturaRepository.obtenerDatos(twVenta.getTcCliente().getnIdDatoFactura());
+			System.err.println(tcDatosFactura);
 			
 			if(twVenta.getnIdFacturacion()==0L) {
 			List<TwVentasProducto> productosVendidos = this.ventasProductoRepository.findBynIdVenta(idVenta);
 			
 			
-			CabeceraXml cabeceraXml = transformar.objCabecera(productosVendidos, twVenta, cveCfdi);
+			CabeceraXml cabeceraXml = transformar.objCabecera(productosVendidos, twVenta, cveCfdi, tcDatosFactura);
 			List<ConceptoXml> listaConceptos = transformar.listaConceptos(productosVendidos);
 			Impuesto impuesto = transformar.obtenerImpuestoTotal(productosVendidos);
 			
-			Comprobante xml = generarXml.createComprobante(cabeceraXml, listaConceptos, impuesto);
+			Comprobante xml = generarXml.createComprobante(cabeceraXml, listaConceptos, impuesto,tcDatosFactura);
 			
 			//timbramos xml
-	        timbrarXml.timbrarXml(xml, idVenta, cabeceraXml);
+	        timbrarXml.timbrarXml(xml, idVenta, cabeceraXml, tcDatosFactura);
 	        
 	        return "ok";
 	        }

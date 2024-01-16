@@ -39,6 +39,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.refacFabela.model.TcDatosFactura;
 import com.refacFabela.model.TwFacturacion;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.factura.CabeceraPagosXml;
@@ -68,14 +69,14 @@ public class TimbrarXml {
 	@Autowired
 	private VentasRepository ventasRepository;
 
-	public String timbrarXml(Comprobante xml, Long idVenta, CabeceraXml cabecera)
+	public String timbrarXml(Comprobante xml, Long idVenta, CabeceraXml cabecera, TcDatosFactura tcDatosFactura)
 			throws GeneralSecurityException, IOException, ParserConfigurationException, SAXException, Exception {
 		String xmlString = "";
 		String cadenaOriginal = "";
 		PrivateKey llavePrivada = null;
 		String selloDigital = "";
 
-		File key = new File(ConstantesFactura.rutaKey);
+		File key = new File(tcDatosFactura.getsRutaKey());
 
 		try {
 
@@ -83,9 +84,9 @@ public class TimbrarXml {
 
 			System.out.println("xml: " + xmlString);
 
-			cadenaOriginal = generarCadenaOriginal(xmlString);
+			cadenaOriginal = generarCadenaOriginal(xmlString, tcDatosFactura);
 			// obtener llave privada
-			llavePrivada = getPrivateKey(key, ConstantesFactura.passwordKey);
+			llavePrivada = getPrivateKey(key, tcDatosFactura.getsPasswordKey());
 
 			// obtener sello digital
 			selloDigital = generarSelloDigital(llavePrivada, cadenaOriginal);
@@ -101,9 +102,10 @@ public class TimbrarXml {
 			System.out.println("sali de transformar xml a string");
 
 			// mandamos xml a timbrar al webservice
-			if (consultaFolio() > 0) {
+			if (consultaFolioDinamico(tcDatosFactura) > 0) {
 				System.out.println("ENTRE A TIMBRAR");
-				procesarXml(consello, idVenta, cabecera, cadenaOriginal);
+				System.out.println(consello);
+				procesarXml(consello, idVenta, cabecera, cadenaOriginal,tcDatosFactura);
 			} else {
 				System.err.println("creditos insuficientes");
 			}
@@ -122,6 +124,7 @@ public class TimbrarXml {
 		String cadenaOriginal = "";
 		PrivateKey llavePrivada = null;
 		String selloDigital = "";
+		TcDatosFactura tcDatosFactura= new TcDatosFactura();
 
 		File key = new File(ConstantesFactura.rutaKey);
 
@@ -131,7 +134,7 @@ public class TimbrarXml {
 
 			System.out.println("xml: " + xmlString);
 
-			cadenaOriginal = generarCadenaOriginal(xmlString);
+			cadenaOriginal = generarCadenaOriginal(xmlString,tcDatosFactura);
 			// obtener llave privada
 			llavePrivada = getPrivateKey(key, ConstantesFactura.passwordKey);
 
@@ -164,9 +167,9 @@ public class TimbrarXml {
 
 	}
 
-	private static String generarCadenaOriginal(final String xml) throws TransformerException {
+	private static String generarCadenaOriginal(final String xml, TcDatosFactura tcDatosFactura) throws TransformerException {
 
-		StreamSource streamSource = new StreamSource(ConstantesFactura.cadenaOriginalXslt);
+		StreamSource streamSource = new StreamSource(tcDatosFactura.getsRutaCadenaOriginal());
 		TransformerFactory trasnformerFactory = TransformerFactory.newInstance();
 		Transformer xlsTranformer = trasnformerFactory.newTransformer(streamSource);
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -219,7 +222,7 @@ public class TimbrarXml {
 	}
 	
 	
-	private  void procesarXml(final String xml, Long idVenta, CabeceraXml cabecera, String cadenaOriginal) throws ParserConfigurationException, SAXException, IOException, TransformerException, Exception {
+	private  void procesarXml(final String xml, Long idVenta, CabeceraXml cabecera, String cadenaOriginal, TcDatosFactura tcDatosFactura) throws ParserConfigurationException, SAXException, IOException, TransformerException, Exception {
         RespuestaTFD33 Respuesta;
         
         utils util=new utils();
@@ -227,14 +230,14 @@ public class TimbrarXml {
 		
 		if(twVentaConsulta.getnIdFacturacion()==0L) {
 
-        Respuesta = timbrarCFDI(ConstantesFactura.usuarioFolios, ConstantesFactura.passwordFolios, xml, "TIMBRADO33");
+        Respuesta = timbrarCFDI(tcDatosFactura.getsUsuarioFolios(), tcDatosFactura.getsPasswordFolios(), xml, "TIMBRADO33");
        
        
         TwFacturacion twFacturacion = new TwFacturacion();
 
         if (Respuesta.isOperacionExitosa()) {
 
-            stringToDom(Respuesta.getXMLResultado().getValue(), idVenta);
+            stringToDom(Respuesta.getXMLResultado().getValue(), idVenta, tcDatosFactura);
 
             System.out.println("Operación exitosa");
             System.out.println(Respuesta.getXMLResultado().getValue());
@@ -253,6 +256,7 @@ public class TimbrarXml {
             twFacturacion.setS_selloSat(Respuesta.getTimbre().getValue().getSelloSAT().getValue()); 
             twFacturacion.setS_cadenaOriginal(cadenaOriginal);
             twFacturacion.setnEstatus(1);
+            twFacturacion.setnIdDatoFactura(tcDatosFactura.getnId());
                         
           
             twFacturacion = facturacionService.guardar(twFacturacion);
@@ -263,7 +267,7 @@ public class TimbrarXml {
             
             this.ventasService.updateStatusVenta(twVenta);
             
-            generarPdf(Respuesta.getTimbre().getValue().getUUID().getValue(), idVenta);
+            generarPdf(Respuesta.getTimbre().getValue().getUUID().getValue(), idVenta, tcDatosFactura );
             
             TwVenta venta=new TwVenta();
             
@@ -276,7 +280,7 @@ public class TimbrarXml {
             venta=ventasRepository.findBynId(idVenta);
            
             ruta=com.refacFabela.enums.TipoDoc.PDF_FACTURA.getPath();
-			rutaRaiz=ConstantesFactura.rutaRaiz;
+			rutaRaiz=tcDatosFactura.getsRutaRaiz();
             String nombreArchivo=venta.getnId().toString();  
             
             /*Envió de correo*/
@@ -421,14 +425,14 @@ public class TimbrarXml {
 		return cadena.replaceAll("\n", "");
 	}
 	
-	private static void generarPdf (String UUID, Long idventa){
+	private static void generarPdf (String UUID, Long idventa, TcDatosFactura tcDatosFactura){
         RespuestaTFD33 Respuesta;
         
         //Se declara una variable de tipo String para enviar el logo en Base 64
-        String logo64 =ConstantesFactura.logo64;
+        String logo64 =tcDatosFactura.getsLogo();
         String nombreArchivo= idventa+".pdf";
         // "Usuario" , "Contraseña", "UUID", "LogoBase64"
-        Respuesta = obtenerPDF(ConstantesFactura.usuarioFolios, ConstantesFactura.passwordFolios, UUID, logo64);
+        Respuesta = obtenerPDF(tcDatosFactura.getsUsuarioFolios(), tcDatosFactura.getsPasswordFolios(), UUID, logo64);
         
         //Se verifica el resultado
         if(Respuesta.isOperacionExitosa())
@@ -436,7 +440,7 @@ public class TimbrarXml {
             System.out.println("Resultado exitoso");
             String pdf;
             pdf = Respuesta.getPDFResultado().getValue();
-            ConstantesFactura.obtenerArchivoPdf(pdf, nombreArchivo);
+            ConstantesFactura.obtenerArchivoPdf(pdf, nombreArchivo, tcDatosFactura);
             System.out.println(pdf);
         }
         else
@@ -448,14 +452,14 @@ public class TimbrarXml {
     }
 
 
-	public static int consultaFolio() {
+	public static int consultaFolioDinamico(TcDatosFactura tcDatosFactura) {
 
 		int restantes = 0;
 
 		RespuestaCreditos Respuesta;
 
 		// Se invoca al método del WS
-		Respuesta = consultarCreditos(ConstantesFactura.usuarioFolios, ConstantesFactura.passwordFolios);
+		Respuesta = consultarCreditos(tcDatosFactura.getsUsuarioFolios(), tcDatosFactura.getsPasswordFolios());
 
 		// Se comprueba le operación
 		if (Respuesta.isOperacionExitosa()) {
@@ -480,11 +484,43 @@ public class TimbrarXml {
 		return restantes;
 	}
 	
-	private static void stringToDom(String xmlSource, Long idVenta)
+	public static int consultaFolio() {
+
+		int restantes = 0;
+
+		RespuestaCreditos Respuesta;
+
+		// Se invoca al método del WS
+		Respuesta = consultarCreditos(ConstantesFactura.usuarioFolios,ConstantesFactura.passwordFolios);
+
+		// Se comprueba le operación
+		if (Respuesta.isOperacionExitosa()) {
+			for (int i = 0; i < Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().size(); i++) {
+				  System.out.println("En Uso: " + Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).isEnUso().booleanValue());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getFechaActivacion().toString());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getFechaVencimiento().toString());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getPaquete().getValue());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbres().intValue());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresRestantes().intValue());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresUsados().intValue());
+	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).isVigente());
+	                  restantes=Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresRestantes().intValue();
+	                         System.out.println("RESTANTES :"+ restantes);
+			}
+
+		} else {
+			System.out.println("Hubo un error al realizar la consulta");
+			System.out.println(Respuesta.getMensajeError().getValue());
+		}
+
+		return restantes;
+	}
+	
+	private static void stringToDom(String xmlSource, Long idVenta, TcDatosFactura tcDatosFactura)
             throws SAXException, ParserConfigurationException, IOException, TransformerConfigurationException, TransformerException {
         // Parse the given input
         String nombreArchivo= idVenta+".xml";
-        String rutaComprobante = ConstantesFactura.rutaxmlTimbrado+nombreArchivo;
+        String rutaComprobante = tcDatosFactura.getsRutaXml()+nombreArchivo;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(xmlSource)));

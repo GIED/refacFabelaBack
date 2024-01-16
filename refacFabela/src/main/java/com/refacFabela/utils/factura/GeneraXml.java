@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.refacFabela.model.TcDatosFactura;
 import com.refacFabela.model.factura.CabeceraPagosXml;
 import com.refacFabela.model.factura.CabeceraXml;
 import com.refacFabela.model.factura.ConceptoXml;
@@ -37,7 +38,7 @@ import mx.grupocorasa.sat.common.catalogos.CUsoCFDI;
 @Component
 public class GeneraXml {
 	
-	   public  Comprobante createComprobante(CabeceraXml cabeceraXml, List<ConceptoXml> listaConceptos, Impuesto impuesto) throws Exception {
+	   public  Comprobante createComprobante(CabeceraXml cabeceraXml, List<ConceptoXml> listaConceptos, Impuesto impuesto, TcDatosFactura tcDatosFactura) throws Exception {
 	        
 	        System.out.println("cabeceraXml: "+cabeceraXml.toString());
 	        System.out.println("listaConceptos: "+listaConceptos.toString());

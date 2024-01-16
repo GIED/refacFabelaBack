@@ -29,6 +29,9 @@ public class TwFacturacion implements Serializable {
 	private String s_selloSat;
 	
 	private String s_cadenaOriginal;
+	
+	@Column(name = "n_id_dato_factura")
+	private Long nIdDatoFactura;
 
 	@Column(name = "s_uuid")
 	private String sUuid;
@@ -38,6 +41,18 @@ public class TwFacturacion implements Serializable {
 
 	public Long getnId() {
 		return nId;
+	}
+	
+	
+
+	
+
+	public Long getnIdDatoFactura() {
+		return nIdDatoFactura;
+	}
+
+	public void setnIdDatoFactura(Long nIdDatoFactura) {
+		this.nIdDatoFactura = nIdDatoFactura;
 	}
 
 	public void setnId(Long nId) {
