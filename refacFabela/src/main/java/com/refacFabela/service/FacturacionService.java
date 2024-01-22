@@ -10,6 +10,6 @@ public interface FacturacionService {
 	
 	public TwFacturacion guardar(TwFacturacion twFacturacion);
 	
-	public int consultaCreditos();
+	public int consultaCreditos(Long nDatoFactura);
 
 }

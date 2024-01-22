@@ -57,18 +57,17 @@ public class FacturacionServiceImpl implements FacturacionService {
 			//System.out.println("llego");
 			
 			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);		
-			TcDatosFactura tcDatosFactura = tcDatosFacturaRepository.obtenerDatos(twVenta.getTcCliente().getnIdDatoFactura());
-			System.err.println(tcDatosFactura);
+			TcDatosFactura tcDatosFactura = tcDatosFacturaRepository.obtenerDatos(twVenta.getTcCliente().getnIdDatoFactura());			
 			
 			if(twVenta.getnIdFacturacion()==0L) {
-			List<TwVentasProducto> productosVendidos = this.ventasProductoRepository.findBynIdVenta(idVenta);
-			
+			List<TwVentasProducto> productosVendidos = this.ventasProductoRepository.findBynIdVenta(idVenta);	
 			
 			CabeceraXml cabeceraXml = transformar.objCabecera(productosVendidos, twVenta, cveCfdi, tcDatosFactura);
 			List<ConceptoXml> listaConceptos = transformar.listaConceptos(productosVendidos);
 			Impuesto impuesto = transformar.obtenerImpuestoTotal(productosVendidos);
 			
 			Comprobante xml = generarXml.createComprobante(cabeceraXml, listaConceptos, impuesto,tcDatosFactura);
+			System.err.println("Sali de aquí");
 			
 			//timbramos xml
 	        timbrarXml.timbrarXml(xml, idVenta, cabeceraXml, tcDatosFactura);
@@ -124,9 +123,11 @@ public String complemento(Long idVenta, String cveCfdi) throws Exception {
 	}
 
 	@Override
-	public int consultaCreditos() {
+	public int consultaCreditos(Long nDatoFactura) {
 		
-		return TimbrarXml.consultaFolio();
+		TcDatosFactura tcDatosFactura=tcDatosFacturaRepository.obtenerDatos(nDatoFactura);
+		
+		return TimbrarXml.consultaFolio(tcDatosFactura);
 	}
 	
 	

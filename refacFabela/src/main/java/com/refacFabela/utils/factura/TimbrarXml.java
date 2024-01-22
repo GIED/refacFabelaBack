@@ -77,16 +77,22 @@ public class TimbrarXml {
 		String selloDigital = "";
 
 		File key = new File(tcDatosFactura.getsRutaKey());
+		System.err.println(tcDatosFactura.getsRutaKey());
 
 		try {
 
 			xmlString = ConstantesFactura.xmltoString(xml);
+			System.err.println(key);
 
 			System.out.println("xml: " + xmlString);
 
 			cadenaOriginal = generarCadenaOriginal(xmlString, tcDatosFactura);
+			System.err.println("Sali de generar la cadena original"+cadenaOriginal);
 			// obtener llave privada
+			System.err.println(tcDatosFactura.getsPasswordKey());
 			llavePrivada = getPrivateKey(key, tcDatosFactura.getsPasswordKey());
+			System.err.println("sali de generar la llaveprivada");
+			
 
 			// obtener sello digital
 			selloDigital = generarSelloDigital(llavePrivada, cadenaOriginal);
@@ -152,7 +158,7 @@ public class TimbrarXml {
 			System.out.println("sali de transformar xml a string");
 
 			// mandamos xml a timbrar al webservice
-			if (consultaFolio() > 0) {
+			if (consultaFolio(tcDatosFactura ) > 0) {
 				System.out.println("ENTRE A TIMBRAR");
 				procesarPagoXml(consello, idVenta, cabecera, cadenaOriginal);
 			} else {
@@ -185,9 +191,11 @@ public class TimbrarXml {
 
 	}
 
-	private static PrivateKey getPrivateKey(final File keyFile, final String password)
-			throws GeneralSecurityException, IOException {
+	private static PrivateKey getPrivateKey(final File keyFile, final String password) throws GeneralSecurityException, IOException {
+		
+		System.err.println(keyFile);
 		FileInputStream in = new FileInputStream(keyFile);
+		
 		PKCS8Key pkcs8 = new PKCS8Key(in, password.toCharArray());
 		byte[] decrypted = pkcs8.getDecryptedBytes();
 		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(decrypted);
@@ -484,14 +492,14 @@ public class TimbrarXml {
 		return restantes;
 	}
 	
-	public static int consultaFolio() {
+	public static int consultaFolio(TcDatosFactura tcDatosFactura) {
 
 		int restantes = 0;
 
 		RespuestaCreditos Respuesta;
 
 		// Se invoca al método del WS
-		Respuesta = consultarCreditos(ConstantesFactura.usuarioFolios,ConstantesFactura.passwordFolios);
+		Respuesta = consultarCreditos(tcDatosFactura.getsUsuarioFolios(),tcDatosFactura.getsPasswordFolios());
 
 		// Se comprueba le operación
 		if (Respuesta.isOperacionExitosa()) {

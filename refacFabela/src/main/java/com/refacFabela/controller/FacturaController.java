@@ -105,11 +105,11 @@ public class FacturaController {
 	}
 	
 	@GetMapping(value = "consultaCreditos")
-	public int consultaCreditos() {
+	public int consultaCreditos(@RequestParam(required = true) Long nDatoFactura) {
 		
 		try {
 			
-			return this.facturaService.consultaCreditos();
+			return this.facturaService.consultaCreditos(nDatoFactura);
 		} catch (Exception e) {
 			logger.error("Error al consultar creditos ", e);
 			return 0;

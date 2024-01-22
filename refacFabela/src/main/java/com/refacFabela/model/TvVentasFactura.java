@@ -55,6 +55,17 @@ public class TvVentasFactura implements Serializable {
 	@Column(name = "n_totalVenta")
 	private Double nTotalVenta;
 	
+	@Column(name = "n_id_dato_factura")
+	private Long nIdDatoFactura;
+	
+	@Column(name = "s_nombre_emisor")
+	private String sNombreEmisor;
+	
+	@Column(name = "s_rfc_emisor")
+	private String sRfcEmisor;
+	
+	
+	
 	
 	
 	
@@ -93,6 +104,62 @@ public class TvVentasFactura implements Serializable {
 
 	public TvVentasFactura() {
 		
+	}
+
+
+
+
+
+	public Long getnIdDatoFactura() {
+		return nIdDatoFactura;
+	}
+
+
+
+
+
+	public void setnIdDatoFactura(Long nIdDatoFactura) {
+		this.nIdDatoFactura = nIdDatoFactura;
+	}
+
+
+
+
+
+	public String getsNombreEmisor() {
+		return sNombreEmisor;
+	}
+
+
+
+
+
+	public void setsNombreEmisor(String sNombreEmisor) {
+		this.sNombreEmisor = sNombreEmisor;
+	}
+
+
+
+
+
+	public String getsRfcEmisor() {
+		return sRfcEmisor;
+	}
+
+
+
+
+
+	public void setsRfcEmisor(String sRfcEmisor) {
+		this.sRfcEmisor = sRfcEmisor;
+	}
+
+
+
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 

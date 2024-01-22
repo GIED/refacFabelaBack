@@ -76,7 +76,7 @@ public class GeneraXml {
 	              
 	        xml.setLugarExpedicion(cabeceraXml.getLugarExpedicion());// codigo postal 
 	        xml.setExportacion(CExportacion.fromValue(cabeceraXml.getExportacion()));
-	        System.err.println(LocalDateTime.now());
+	       
 
 	        //EMISOR
 	        xml.setEmisor(createEmisor(of, cabeceraXml));
