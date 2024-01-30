@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.refacFabela.dto.DatoFacturaDto;
 import com.refacFabela.dto.fechaDto;
 import com.refacFabela.model.TcAnaquel;
 import com.refacFabela.model.TcBodega;
@@ -83,6 +84,19 @@ public class CatalogosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener catalogo de clave sat " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/catalogosDatoFactura")
+	public List<DatoFacturaDto> catalogosDatoFactura() {
+		try {
+
+			return catalagosService.catalogosDatoFactura();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de dato factura " + e);
 		}
 		return null;
 	}
@@ -269,7 +283,7 @@ public class CatalogosController {
 	}
 	
 	@GetMapping("/catalogoCp")
-	public List<TcCp> consultaCp(@RequestParam String cp) {
+	public TcCp consultaCp(@RequestParam String cp) {
 		try {
 
 			return catalagosService.catalagoCp(cp);

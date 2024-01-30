@@ -77,40 +77,41 @@ public class TimbrarXml {
 		String selloDigital = "";
 
 		File key = new File(tcDatosFactura.getsRutaKey());
-		System.err.println(tcDatosFactura.getsRutaKey());
+		
 
 		try {
 
 			xmlString = ConstantesFactura.xmltoString(xml);
-			System.err.println(key);
+			//System.err.println(key);
 
-			System.out.println("xml: " + xmlString);
+			//System.out.println("xml: " + xmlString);
 
 			cadenaOriginal = generarCadenaOriginal(xmlString, tcDatosFactura);
-			System.err.println("Sali de generar la cadena original"+cadenaOriginal);
+			//System.err.println("Sali de generar la cadena original"+cadenaOriginal);
 			// obtener llave privada
-			System.err.println(tcDatosFactura.getsPasswordKey());
+			//System.err.println(tcDatosFactura.getsPasswordKey());
 			llavePrivada = getPrivateKey(key, tcDatosFactura.getsPasswordKey());
-			System.err.println("sali de generar la llaveprivada");
+			//System.err.println("sali de generar la llaveprivada");
 			
 
 			// obtener sello digital
 			selloDigital = generarSelloDigital(llavePrivada, cadenaOriginal);
-			System.out.println("sali a geerar sello digital");
+			//System.out.println("sali a geerar sello digital");
 			String SelloModificado = quitarSaltos(selloDigital);
-			System.out.println("sali a  sello digital modificado");
+			//System.out.println("sali a  sello digital modificado");
 
 			// Agregamos sello al xml
 			xml.setSello(SelloModificado);
-			System.out.println("sali de agregar sello xml");
+			//System.out.println("sali de agregar sello xml");
 
 			String consello = ConstantesFactura.xmltoString(xml);
-			System.out.println("sali de transformar xml a string");
+			//System.out.println("sali de transformar xml a string");
 
 			// mandamos xml a timbrar al webservice
 			if (consultaFolioDinamico(tcDatosFactura) > 0) {
 				System.out.println("ENTRE A TIMBRAR");
-				System.out.println(consello);
+				System.out.println("Este es el xml que se va a facturar:"+consello);
+				
 				procesarXml(consello, idVenta, cabecera, cadenaOriginal,tcDatosFactura);
 			} else {
 				System.err.println("creditos insuficientes");
@@ -312,6 +313,7 @@ public class TimbrarXml {
             System.out.println("Hubo un error en la operación");
             System.out.println(Respuesta.getCodigoRespuesta().getValue());
             System.out.println(Respuesta.getMensajeErrorDetallado().getValue());
+           
         }
          
         if (Respuesta.getCodigoConfirmacion().getValue() != null) {

@@ -57,7 +57,7 @@ public class GeneraXml {
 	        System.err.println(LocalDateTime.now());
 	        xml.setFecha(oneHourAgo);
 	        xml.setFormaPago(CFormaPago.fromValue(cabeceraXml.getFormaPago()));
-	        xml.setCondicionesDePago(cabeceraXml.getCondicionesPago());
+	       
 	        System.err.println( xml.getCondicionesDePago());
 	        xml.setSubTotal(new BigDecimal(cabeceraXml.getSubTotal()));
 	        //xml.setDescuento(new BigDecimal("100.00"));
@@ -69,9 +69,11 @@ public class GeneraXml {
 	        // Se cambia el metodo de pago si la forma de pago es por definir a PPD
 	        if(cabeceraXml.getFormaPago().equals("99")) {
 	        	 xml.setMetodoPago(CMetodoPago.fromValue("PPD"));
+	        	 xml.setCondicionesDePago("Pago en parcialidades o diferido");
 	        }
 	        else {
 	        	 xml.setMetodoPago(CMetodoPago.fromValue(ConstantesFactura.MetodoPago));
+	        	 xml.setCondicionesDePago(cabeceraXml.getCondicionesPago());
 	        }  
 	              
 	        xml.setLugarExpedicion(cabeceraXml.getLugarExpedicion());// codigo postal 

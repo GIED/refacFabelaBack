@@ -1,6 +1,7 @@
 package com.refacFabela.service;
 
 import com.refacFabela.model.TwFacturacion;
+import com.refacFabela.model.factura.CabeceraPagosXml;
 
 public interface FacturacionService {
 	
@@ -11,5 +12,6 @@ public interface FacturacionService {
 	public TwFacturacion guardar(TwFacturacion twFacturacion);
 	
 	public int consultaCreditos(Long nDatoFactura);
+
 
 }

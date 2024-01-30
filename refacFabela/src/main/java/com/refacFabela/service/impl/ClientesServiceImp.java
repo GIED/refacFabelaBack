@@ -36,6 +36,8 @@ public class ClientesServiceImp implements ClienteService {
 			
 		}
 		
+	System.err.println("esto es lo que voy a guardar"+tcCliente);
+		
 		return clientesRepository.save(tcCliente);
 	}
 

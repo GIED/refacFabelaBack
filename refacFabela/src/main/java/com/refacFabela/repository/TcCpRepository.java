@@ -11,7 +11,7 @@ import com.refacFabela.model.TcCp;
 @Repository
 public interface TcCpRepository extends JpaRepository<TcCp, Long> {
 	
-	@Query("Select c from TcCp c where c.sCp like :cp% order by c.sCp asc")
-	public List<TcCp> obtenerCp(String cp);
+	@Query("Select c from TcCp c where c.sCp = :cp order by c.sCp asc")
+	public TcCp obtenerCp(String cp);
 
 }

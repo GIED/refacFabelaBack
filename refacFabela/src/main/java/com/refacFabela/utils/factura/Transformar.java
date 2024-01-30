@@ -8,6 +8,7 @@ import org.apache.logging.log4j.util.PropertySource.Util;
 import org.springframework.stereotype.Component;
 
 import com.refacFabela.model.TcDatosFactura;
+import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.model.factura.CabeceraPagosXml;
@@ -18,24 +19,36 @@ import com.refacFabela.utils.utils;
 @Component
 public class Transformar {
 	
-	   public CabeceraXml objCabecera(List<TwVentasProducto> productosVendidos, TwVenta twVenta, String cveCfdi, TcDatosFactura tcDatosFactura) {
+	   public CabeceraXml objCabecera(List<TwVentasProducto> productosVendidos, TwVenta twVenta, String cveCfdi, TcDatosFactura tcDatosFactura, List<TrVentaCobro> listaVentaCobro) {
 
 	      
 
 	        CabeceraXml cabeceraXmlBean = new CabeceraXml();
 	        
                 utils util =new utils();
+                
+                /*Se verifica que no tenga más de un metodo de pago y que el pago en efectivo no sea mayor a 2000, de lo contrario sale por definir*/
+                if(listaVentaCobro.size()>1 || ((calcularTotal(productosVendidos)>=2000) && (twVenta.getTcFormapago().getnId()==1L) )) {
+                	cabeceraXmlBean.setFormaPago("99");
+                	cabeceraXmlBean.setMetodoPago("Pago en parcialidades o diferido");
+                }
+                else {
+                	cabeceraXmlBean.setFormaPago(twVenta.getTcFormapago().getsClave());
+                	cabeceraXmlBean.setMetodoPago(ConstantesFactura.MetodoPago);
+                	
+                }
+                
+                
 	        
 	            cabeceraXmlBean.setVersion(tcDatosFactura.getsVersion());
 	            cabeceraXmlBean.setSerie(tcDatosFactura.getsSerie());
-	            cabeceraXmlBean.setFolio(twVenta.getnId().toString());
-	            cabeceraXmlBean.setFormaPago(twVenta.getTcFormapago().getsClave());
+	            cabeceraXmlBean.setFolio(twVenta.getnId().toString());	            
 	            cabeceraXmlBean.setCondicionesPago(ConstantesFactura.condicionesPago);
 	            cabeceraXmlBean.setSubTotal(String.valueOf(calculaSubTotal(productosVendidos)));
 	            cabeceraXmlBean.setMoneda(ConstantesFactura.moneda);
 	            cabeceraXmlBean.setTotal(String.valueOf(calcularTotal(productosVendidos)));
 	            cabeceraXmlBean.setTipoComprobante(ConstantesFactura.tipoComprobante);
-	            cabeceraXmlBean.setMetodoPago(ConstantesFactura.MetodoPago);
+	            
 	            cabeceraXmlBean.setLugarExpedicion(tcDatosFactura.getsCodigoPostal());
 	            cabeceraXmlBean.setNoCertificado(tcDatosFactura.getsNoCertificado());
 	            cabeceraXmlBean.setCertificado(tcDatosFactura.getsCertificado());
@@ -48,7 +61,7 @@ public class Transformar {
 	            cabeceraXmlBean.setRfcReceptor(twVenta.getTcCliente().getsRfc());// cambiar por rfc de camp 
 	            cabeceraXmlBean.setEmailReceptor(twVenta.getTcCliente().getsCorreo());// cambiar por email camp
 	            cabeceraXmlBean.setRegimenFiscalReceptor(twVenta.getTcCliente().getTcRegimenFiscal().getsCveRegimen());
-	            cabeceraXmlBean.setDomicilioFiscalReceptor(twVenta.getTcCliente().getnCp().toString());
+	            cabeceraXmlBean.setDomicilioFiscalReceptor(twVenta.getTcCliente().getTcCp().getsCp());
 	            cabeceraXmlBean.setExportacion(ConstantesFactura.exportacion);
 	        
 
@@ -83,7 +96,7 @@ public class Transformar {
 	            cabeceraXmlBean.setRfcReceptor(twVenta.getTcCliente().getsRfc());// cambiar por rfc de camp 
 	            cabeceraXmlBean.setEmailReceptor(twVenta.getTcCliente().getsCorreo());// cambiar por email camp
 	            cabeceraXmlBean.setRegimenFiscalReceptor(twVenta.getTcCliente().getTcRegimenFiscal().getsCveRegimen());
-	            cabeceraXmlBean.setDomicilioFiscalReceptor(twVenta.getTcCliente().getnCp().toString());
+	            cabeceraXmlBean.setDomicilioFiscalReceptor(twVenta.getTcCliente().getTcCp().getsCp());
 	            cabeceraXmlBean.setExportacion(ConstantesFactura.exportacion);
 	        
 

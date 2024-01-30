@@ -47,13 +47,16 @@ public class TcCliente implements Serializable {
 	private Long nIdUsuario;
 	
 	@Column(name="n_cp")
-	private Integer nCp;
+	private Long nCp;
 	
 	@Column(name="n_idRegimenFiscal")
 	private Integer nIdRegimenFiscal;
 	
 	@Column(name="n_descuento")
 	private Boolean nDescuento;
+	
+	@Column(name="n_datos_validados")
+	private Boolean nDatosValidados;
 	
 	@Column(name="n_id_dato_factura")
 	private Long nIdDatoFactura;
@@ -66,50 +69,27 @@ public class TcCliente implements Serializable {
 	@JoinColumn(name = "n_idRegimenFiscal", insertable=false, updatable=false)
 	private TcRegimenFiscal tcRegimenFiscal;
 	
+	@ManyToOne
+	@JoinColumn(name = "n_cp", insertable=false, updatable=false)
+	private TcCp tcCp;
 	
-
 	public TcCliente() {
 	}
 	
-		
-	
-	
-
-
 	public Long getnIdDatoFactura() {
 		return nIdDatoFactura;
 	}
-
-
-
-
-
-
 	public void setnIdDatoFactura(Long nIdDatoFactura) {
 		this.nIdDatoFactura = nIdDatoFactura;
 	}
-
-
-
-
-
 
 	public Integer getnIdRegimenFiscal() {
 		return nIdRegimenFiscal;
 	}
 
-
-
-
-
-
 	public void setnIdRegimenFiscal(Integer nIdRegimenFiscal) {
 		this.nIdRegimenFiscal = nIdRegimenFiscal;
 	}
-
-
-
-
 
 
 	public TcRegimenFiscal getTcRegimenFiscal() {
@@ -117,17 +97,9 @@ public class TcCliente implements Serializable {
 	}
 
 
-
-
-
-
 	public void setTcRegimenFiscal(TcRegimenFiscal tcRegimenFiscal) {
 		this.tcRegimenFiscal = tcRegimenFiscal;
 	}
-
-
-
-
 
 
 	public Long getnId() {
@@ -237,27 +209,20 @@ public class TcCliente implements Serializable {
 	}
 
 
-	public Integer getnCp() {
+
+	public Long getnCp() {
 		return nCp;
 	}
 
 
-	public void setnCp(Integer nCp) {
+	public void setnCp(Long nCp) {
 		this.nCp = nCp;
 	}
-
-
-
-
 
 
 	public Boolean getnDescuento() {
 		return nDescuento;
 	}
-
-
-
-
 
 
 	public void setnDescuento(Boolean nDescuento) {
@@ -266,15 +231,26 @@ public class TcCliente implements Serializable {
 
 
 
+	public TcCp getTcCp() {
+		return tcCp;
+	}
 
 
 
 
+	public void setTcCp(TcCp tcCp) {
+		this.tcCp = tcCp;
+	}
 
-	
-	
-	
-	
+	public Boolean getnDatosValidados() {
+		return nDatosValidados;
+	}
+
+	public void setnDatosValidados(Boolean nDatosValidados) {
+		this.nDatosValidados = nDatosValidados;
+	}
+
+
 	
 
 }

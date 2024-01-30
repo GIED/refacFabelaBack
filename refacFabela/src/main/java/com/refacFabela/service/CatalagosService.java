@@ -2,6 +2,7 @@ package com.refacFabela.service;
 
 import java.util.List;
 
+import com.refacFabela.dto.DatoFacturaDto;
 import com.refacFabela.dto.fechaDto;
 import com.refacFabela.model.TcAnaquel;
 import com.refacFabela.model.TcBodega;
@@ -26,6 +27,7 @@ public interface CatalagosService {
 	public TcCatalogogeneral actualizarTipoCambio(TcCatalogogeneral ccCatalogogeneral);
 	public  TcCatalogogeneral consultaTipoCambioId(TcCatalogogeneral ccCatalogogeneral);
 	public List<TcClavesat> catalogoClaveSat();
+	public List<DatoFacturaDto> catalogosDatoFactura();
 	public List<TcCategoriaGeneral> catalogoCategoriaGeneral();
 	public List<TcCategoria> catalogoCategoriaId(int id);
 	public List<TcGanancia> catalogoGanancia();
@@ -39,7 +41,7 @@ public interface CatalagosService {
 	public TwCaja cajaActiva();
 	public List<TcTipoVenta> catalagoTipoVenta();
 	public TcEstatusVenta catalagoEstatusVentaId(Long nId);
-	public List<TcCp> catalagoCp(String cp);
+	public TcCp catalagoCp(String cp);
 	public List<TcRegimenFiscal> catalagoRegimenFiscal();
 	public fechaDto fechaActual();
 	public List<TcMarca> catalogoMarca();

@@ -28,6 +28,7 @@ import com.refacFabela.dto.ReporteVentaDto;
 import com.refacFabela.dto.TwSaldoUtilizadoDto;
 import com.refacFabela.enums.TipoDoc;
 import com.refacFabela.model.TcCliente;
+import com.refacFabela.model.TcDatosFactura;
 import com.refacFabela.model.TcUsuario;
 import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvReporteCajaFormaPago;
@@ -35,6 +36,7 @@ import com.refacFabela.model.TvReporteDetalleVenta;
 import com.refacFabela.model.TvVentaDetalle;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCaja;
+import com.refacFabela.model.TwCotizaciones;
 import com.refacFabela.model.TwCotizacionesProducto;
 import com.refacFabela.model.TwGasto;
 import com.refacFabela.model.TwPedido;
@@ -48,8 +50,10 @@ import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.CotizacionProductoRepository;
+import com.refacFabela.repository.CotizacionRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
+import com.refacFabela.repository.TcDatosFacturaRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvReporteCajaFormaPagoRepository;
 import com.refacFabela.repository.TvReporteDetalleVentaRepository;
@@ -124,17 +128,34 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	@Autowired
 	private TwGastoRepository twGastoRepository;
 	
+	@Autowired
+	private TcDatosFacturaRepository tcDatosFacturaRepository;
+	
+	@Autowired
+	private CotizacionRepository cotizacionRepository;
+	
 
 	@Override
 	public byte[] getCotizacionPDF(Long nIdCotizacion) {
 
 		List<TwCotizacionesProducto> listaProductos = cotizacionProductoRepository.findBynIdCotizacion(nIdCotizacion);
+		TwCotizaciones twCotizaciones=cotizacionRepository.getById(nIdCotizacion);		
+		TcDatosFactura tcDatosFactura =tcDatosFacturaRepository.getById(twCotizaciones.getTcCliente().getnIdDatoFactura());
 
 		ReporteCotizacionDto reporteCotizacion = new ReporteCotizacionDto();
 		utils util=new utils();
+		
+		if(tcDatosFactura.getnId()==1L) {
+			reporteCotizacion.setNombreEmpresa("Refacciones Fabela");
+			
+		}
+		else {
+			reporteCotizacion.setNombreEmpresa(tcDatosFactura.getsNombreEmisor());			
+		}
 
-		reporteCotizacion.setNombreEmpresa("Refacciones Fabela");
-		reporteCotizacion.setRfcEmpresa("FAMJ810312FY6");
+		
+		reporteCotizacion.setRfcEmpresa(tcDatosFactura.getsRfcEmisor());
+	
 		reporteCotizacion.setNombreCliente(listaProductos.get(0).getTwCotizaciones().getTcCliente().getsRazonSocial());
 		reporteCotizacion.setRfcCliente(listaProductos.get(0).getTwCotizaciones().getTcCliente().getsRfc());
 		reporteCotizacion.setFolioCotizacion(listaProductos.get(0).getTwCotizaciones().getnId());
@@ -192,12 +213,23 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		List<TwVentasProducto> listaProductos = ventasProductoRepository.findBynIdVenta(nIdVenta);
 		List<TwAbono> listaAbonos=abonoVentaIdRepository.findBynIdVenta(nIdVenta);
+		TwVenta twVenta=ventasRepository.findBynId(nIdVenta);		
+		TcDatosFactura tcDatosFactura =tcDatosFacturaRepository.getById(twVenta.getTcCliente().getnIdDatoFactura());
+		
 		utils util=new utils();
 
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
+		
+		if(tcDatosFactura.getnId()==1L) {
+			reporteVenta.setNombreEmpresa("Refacciones Fabela");
+			
+		}
+		else {
+			reporteVenta.setNombreEmpresa(tcDatosFactura.getsNombreEmisor());			
+		}
 
-		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
-		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
+		
+		reporteVenta.setRfcEmpresa(tcDatosFactura.getsRfcEmisor());
 		reporteVenta.setNombreCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRazonSocial());
 		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
@@ -260,8 +292,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		List<TwVentasProducto> listaProductos = ventasProductoRepository.buscarProductosCancelados(nIdVenta);
 		List<TwAbono> listaAbonos=abonoVentaIdRepository.findBynIdVenta(nIdVenta);
 		List<TwSaldoUtilizado> listaSaldoUtilizado=twSaldoUtilizadoRepository.consultaSaldosUtilizados(nIdVenta);
-		List<TwSaldoUtilizadoDto> listaTwSaldoUtilizadoDto=new ArrayList<TwSaldoUtilizadoDto>();
+		List<TwSaldoUtilizadoDto> listaTwSaldoUtilizadoDto=new ArrayList<TwSaldoUtilizadoDto>();		
 		TwVenta twVenta=ventasRepository.getById(nIdVenta);
+		TcDatosFactura tcDatosFactura =tcDatosFacturaRepository.getById(twVenta.getTcCliente().getnIdDatoFactura());
 		TcCliente cliente=clientesRepository.buscarCliente(twVenta.getnIdCliente());
 		TcUsuario tcUsuario=usuariosRepository.getById(twVenta.getnIdUsuario());
 		 List<TwVentaProductoCancela>   listaTwVentaProductoCancela=  twVentaProductoCancelaRepository.findByVenta(nIdVenta);
@@ -271,9 +304,15 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		utils util=new utils();
 
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
+		if(tcDatosFactura.getnId()==1L) {
+			reporteVenta.setNombreEmpresa("Refacciones Fabela");
+			
+		}
+		else {
+			reporteVenta.setNombreEmpresa(tcDatosFactura.getsNombreEmisor());			
+		}
 
-		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
-		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
+		reporteVenta.setRfcEmpresa(tcDatosFactura.getsRfcEmisor());
 		reporteVenta.setNombreCliente(cliente.getsRazonSocial());
 		reporteVenta.setRfcCliente(cliente.getsRfc());
 		reporteVenta.setFolioVenta(twVenta.getnId());
@@ -358,11 +397,21 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		List<TwVentasProducto> listaProductos = ventasProductoRepository.findBynIdVenta(nIdVenta);
 		List<TwAbono> listaAbonos=abonoVentaIdRepository.findBynIdVenta(nIdVenta);
 		utils util=new utils();
+		TwVenta twVenta=ventasRepository.findBynId(nIdVenta);		
+		TcDatosFactura tcDatosFactura =tcDatosFacturaRepository.getById(twVenta.getTcCliente().getnIdDatoFactura());
 
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
 
-		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
-		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
+		if(tcDatosFactura.getnId()==1L) {
+			reporteVenta.setNombreEmpresa("Refacciones Fabela");
+			
+		}
+		else {
+			reporteVenta.setNombreEmpresa(tcDatosFactura.getsNombreEmisor());			
+		}
+
+		
+		reporteVenta.setRfcEmpresa(tcDatosFactura.getsRfcEmisor());
 		reporteVenta.setNombreCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRazonSocial());
 		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
@@ -437,6 +486,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		
 		List<TwVentasProducto> listaProductos = ventasProductoRepository.findBynIdVenta(nIdVentaPedido);
 		List<TrVentaCobro> listaVentaCobro= trVentaCobroRepository.findBynIdVenta(nIdVentaPedido);
+		TwVenta twVenta=ventasRepository.findBynId(nIdVentaPedido);		
+		TcDatosFactura tcDatosFactura =tcDatosFacturaRepository.getById(twVenta.getTcCliente().getnIdDatoFactura());
 		double subtotal = 0.0;
 		double iva = 0.0;
 		double abonos=0.0;
@@ -451,8 +502,16 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			abonos+=listaVentaCobro.get(i).getnMonto();
 		}
 		
-		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
-		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
+		if(tcDatosFactura.getnId()==1L) {
+			reporteVenta.setNombreEmpresa("Refacciones Fabela");
+			
+		}
+		else {
+			reporteVenta.setNombreEmpresa(tcDatosFactura.getsNombreEmisor());			
+		}
+
+		
+		reporteVenta.setRfcEmpresa(tcDatosFactura.getsRfcEmisor());			
 		reporteVenta.setNombreCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRazonSocial());
 		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
@@ -507,12 +566,22 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	public byte[] getAbonoVentaIdPDF(Long nIdVenta) {
 
 		List<TwVentasProducto> listaProductos = ventasProductoRepository.findBynIdVenta(nIdVenta);
+		TwVenta twVenta=ventasRepository.findBynId(nIdVenta);		
+		TcDatosFactura tcDatosFactura =tcDatosFacturaRepository.getById(twVenta.getTcCliente().getnIdDatoFactura());
 
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
 		utils util=new utils();
 
-		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
-		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
+		if(tcDatosFactura.getnId()==1L) {
+			reporteVenta.setNombreEmpresa("Refacciones Fabela");
+			
+		}
+		else {
+			reporteVenta.setNombreEmpresa(tcDatosFactura.getsNombreEmisor());			
+		}
+
+		
+		reporteVenta.setRfcEmpresa(tcDatosFactura.getsRfcEmisor());	
 		reporteVenta.setNombreCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRazonSocial());
 		reporteVenta.setRfcCliente(listaProductos.get(0).getTwVenta().getTcCliente().getsRfc());
 		reporteVenta.setFolioVenta(listaProductos.get(0).getTwVenta().getnId());
@@ -583,6 +652,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		
 		 List<TvVentaDetalle> listaVentaDetalleCredito =tvVentaDetalleRepository.consultaVentaDetalleId(nIdCliente, 1);
 		List<ReporteAbonoVentaCreditoDto> listaReporteVentaAbomo = new ArrayList<ReporteAbonoVentaCreditoDto>();
+		TcCliente tcCliente=clientesRepository.getById(nIdCliente);
+		TcDatosFactura tcDatosFactura =tcDatosFacturaRepository.getById(tcCliente.getnIdDatoFactura());
 	
 	           double totalGeneral=0.0;
 	           double descuento=0.0;
@@ -643,8 +714,16 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		
 		ReporteVentaDto reporteVenta = new ReporteVentaDto();
 
-		reporteVenta.setNombreEmpresa("Refaccionaria Fabela");
-		reporteVenta.setRfcEmpresa("FAMJ810312FY6");
+		if(tcDatosFactura.getnId()==1L) {
+			reporteVenta.setNombreEmpresa("Refacciones Fabela");
+			
+		}
+		else {
+			reporteVenta.setNombreEmpresa(tcDatosFactura.getsNombreEmisor());			
+		}
+
+		
+		reporteVenta.setRfcEmpresa(tcDatosFactura.getsRfcEmisor());	
 		reporteVenta.setTotal(util.truncarDecimales(totalGeneral));
 		reporteVenta.setDescuento(util.truncarDecimales(descuento));
 		reporteVenta.setAbonos(util.truncarDecimales(totalAbonos));

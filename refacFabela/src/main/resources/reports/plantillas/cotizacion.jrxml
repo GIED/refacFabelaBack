@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
 	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="720"/>
 	<subDataset name="listaProductos" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="cantidad" class="java.lang.Integer"/>
 		<field name="noIdentificacion" class="java.lang.Long"/>
@@ -32,11 +32,11 @@
 	<title>
 		<band height="129" splitType="Stretch">
 			<image>
-				<reportElement x="0" y="0" width="128" height="75" uuid="da303162-f17d-4d92-b70d-701caddb5807"/>
+				<reportElement x="0" y="15" width="143" height="80" uuid="da303162-f17d-4d92-b70d-701caddb5807"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="127" y="0" width="272" height="20" uuid="7604a697-7851-486d-b53b-b78bb1f2344a"/>
+				<reportElement x="143" y="0" width="272" height="20" uuid="7604a697-7851-486d-b53b-b78bb1f2344a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Georgia" size="12" isBold="true"/>
 				</textElement>
@@ -69,21 +69,21 @@
 				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="127" y="44" width="272" height="20" uuid="6fb4bdd8-d2ed-4d02-878a-ebec0c02d167"/>
+				<reportElement x="143" y="44" width="272" height="20" uuid="6fb4bdd8-d2ed-4d02-878a-ebec0c02d167"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Georgia" size="12" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[CLIENTE]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="127" y="64" width="272" height="20" uuid="89187289-9490-498a-9d12-f33eede3bf4e"/>
+				<reportElement x="143" y="64" width="272" height="20" uuid="89187289-9490-498a-9d12-f33eede3bf4e"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombreCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="128" y="84" width="272" height="20" uuid="4c5bb5c8-34ca-43b2-8c01-341ee693a439"/>
+				<reportElement x="143" y="84" width="272" height="20" uuid="4c5bb5c8-34ca-43b2-8c01-341ee693a439"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
@@ -104,19 +104,12 @@
 				<text><![CDATA[Toluca de Lerdo, México]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="127" y="32" width="272" height="12" uuid="1435ab0b-442d-4dd8-856e-18ac03108417"/>
-				<textElement textAlignment="Center">
+				<reportElement x="143" y="20" width="272" height="20" uuid="1435ab0b-442d-4dd8-856e-18ac03108417"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{rfcEmpresa}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="127" y="20" width="272" height="12" uuid="0d257b7c-e38e-4b76-82eb-353d99c7d9b1"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false"/>
-				</textElement>
-				<text><![CDATA[JESUS ALEJANDRO FABELA MARTINEZ]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="422" y="95" width="132" height="16" uuid="77279cd7-4ef7-4740-ba20-52e3cff5e9bc"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -446,7 +439,9 @@
 				<text><![CDATA[TOTAL:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="259" y="112" width="141" height="44" uuid="d6716aef-d630-4c42-88d5-60d12c286cd5"/>
+				<reportElement x="259" y="112" width="141" height="44" uuid="d6716aef-d630-4c42-88d5-60d12c286cd5">
+					<printWhenExpression><![CDATA[$P{rfcEmpresa}.equals("FAMJ810312FY6")]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -457,15 +452,28 @@ Sucursal: 0131
 Clabe interbancaria: 00 24 200 131 82 56 96 52]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="112" width="143" height="44" uuid="26332a9c-8b46-41e7-abab-77e3bfcf6fa5"/>
+				<reportElement x="411" y="112" width="143" height="44" uuid="26332a9c-8b46-41e7-abab-77e3bfcf6fa5">
+					<printWhenExpression><![CDATA[$P{rfcEmpresa}.equals("FAMJ810312FY6")]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Bancomer
 No. de cuenta: 04 75 13 44 98
-Clabe interbancaria :01 24 200 047 51 34 49 80 Tarjeta para depósitos - Bancomer
-4152 3136 9962 8504]]></text>
+Clabe interbancaria :01 24 200 047 51 34 49 80 ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="335" y="112" width="143" height="44" uuid="6f9e10ae-b640-45c1-9174-4b2cd6750e1e">
+					<printWhenExpression><![CDATA[$P{rfcEmpresa}.equals("CJE210818NY8")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Bancomer
+No. de cuenta: 0119140727
+Clabe interbancaria :012420001191407273]]></text>
 			</staticText>
 		</band>
 	</lastPageFooter>

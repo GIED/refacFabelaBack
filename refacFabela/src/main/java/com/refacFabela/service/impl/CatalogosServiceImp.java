@@ -1,5 +1,6 @@
 package com.refacFabela.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.dto.DatoFacturaDto;
 import com.refacFabela.dto.fechaDto;
 import com.refacFabela.model.TcAnaquel;
 import com.refacFabela.model.TcBodega;
@@ -15,6 +17,7 @@ import com.refacFabela.model.TcCategoria;
 import com.refacFabela.model.TcCategoriaGeneral;
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TcCp;
+import com.refacFabela.model.TcDatosFactura;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
@@ -39,6 +42,7 @@ import com.refacFabela.repository.CatalogoNivelesRepository;
 import com.refacFabela.repository.CatalogosRepository;
 import com.refacFabela.repository.CategoriaGeneralRepository;
 import com.refacFabela.repository.TcCpRepository;
+import com.refacFabela.repository.TcDatosFacturaRepository;
 import com.refacFabela.repository.TcGastoRepository;
 import com.refacFabela.repository.TcMarcaRepository;
 import com.refacFabela.repository.TcRegimenFiscalRepository;
@@ -83,6 +87,8 @@ public class CatalogosServiceImp implements CatalagosService {
 	
 	@Autowired
 	private TcGastoRepository tcGastoRepository;
+	@Autowired
+	private TcDatosFacturaRepository tcDatosFacturaRepository;
 
 	@Override
 	public TcCatalogogeneral actualizarTipoCambio(TcCatalogogeneral ccCatalogogeneral) {
@@ -181,7 +187,7 @@ public class CatalogosServiceImp implements CatalagosService {
 	}
 
 	@Override
-	public List<TcCp> catalagoCp(String cp) {
+	public TcCp catalagoCp(String cp) {
 		
 		return tcCpRepository.obtenerCp(cp);
 	}
@@ -221,6 +227,30 @@ public class CatalogosServiceImp implements CatalagosService {
 		
 		
 		return tcGastoRepository.findAll() ;
+	}
+
+	@Override
+	public List<DatoFacturaDto> catalogosDatoFactura() {
+		
+		
+		List<DatoFacturaDto> ListaDatoFacturaDto=new ArrayList<DatoFacturaDto>();
+		
+		List<TcDatosFactura> listaDatosFacturas=tcDatosFacturaRepository.findAll();
+		
+		for (int i = 0; i < listaDatosFacturas.size(); i++) {
+			DatoFacturaDto datoFacturaDto=new DatoFacturaDto();			
+			datoFacturaDto.setnId(listaDatosFacturas.get(i).getnId());
+			datoFacturaDto.setsRazonSocial(listaDatosFacturas.get(i).getsNombreEmisor());
+			datoFacturaDto.setsRfc(listaDatosFacturas.get(i).getsRfcEmisor());
+			
+			ListaDatoFacturaDto.add(datoFacturaDto);
+			
+		}
+		
+		
+		
+		
+		return ListaDatoFacturaDto;
 	}
 
 	

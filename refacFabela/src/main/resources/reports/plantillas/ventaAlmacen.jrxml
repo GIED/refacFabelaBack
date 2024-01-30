@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
 	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="114"/>
+	<property name="ireport.y" value="0"/>
 	<subDataset name="listaProductos" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="cantidad" class="java.lang.Integer"/>
 		<field name="noIdentificacion" class="java.lang.Long"/>
@@ -37,49 +37,42 @@
 	<title>
 		<band height="138" splitType="Stretch">
 			<textField>
-				<reportElement x="129" y="94" width="272" height="20" uuid="b68e4c90-83ec-4929-b421-708e5f4491c6"/>
+				<reportElement x="148" y="94" width="272" height="20" uuid="b68e4c90-83ec-4929-b421-708e5f4491c6"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{rfcCliente}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="128" y="74" width="272" height="20" uuid="61b2d64d-ac46-4fd4-b78f-f797870e8aee"/>
+				<reportElement x="147" y="74" width="272" height="20" uuid="61b2d64d-ac46-4fd4-b78f-f797870e8aee"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombreCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="128" y="42" width="272" height="12" uuid="1a75ac5a-ee45-43c5-85b7-f80489ecb76e"/>
-				<textElement textAlignment="Center">
+				<reportElement x="147" y="30" width="272" height="20" uuid="1a75ac5a-ee45-43c5-85b7-f80489ecb76e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{rfcEmpresa}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="128" y="30" width="272" height="12" uuid="b60ff935-5ef7-44a0-8e1f-3dc6ddef3e70"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false"/>
-				</textElement>
-				<text><![CDATA[JESUS ALEJANDRO FABELA MARTINEZ]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="128" y="10" width="272" height="20" uuid="84f6d898-dee9-4327-aea4-cfa49dee4e5f"/>
+				<reportElement x="147" y="10" width="272" height="20" uuid="84f6d898-dee9-4327-aea4-cfa49dee4e5f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Georgia" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombreEmpresa}.toUpperCase()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="128" y="54" width="272" height="20" uuid="36afb027-a8ef-4448-9a31-a3e06305bacc"/>
+				<reportElement x="147" y="54" width="272" height="20" uuid="36afb027-a8ef-4448-9a31-a3e06305bacc"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Georgia" size="12" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[CLIENTE]]></text>
 			</staticText>
 			<image>
-				<reportElement x="0" y="10" width="128" height="75" uuid="f4c729d6-c749-40e0-ac03-8baa18ad53b2"/>
+				<reportElement x="0" y="25" width="147" height="80" uuid="f4c729d6-c749-40e0-ac03-8baa18ad53b2"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<staticText>
