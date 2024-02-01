@@ -71,6 +71,7 @@ public class TvVentasFactura implements Serializable {
 	
 	
 	
+	
 	@ManyToOne
 	@JoinColumn(name = "n_idCliente", updatable = false, insertable = false )
 	private TcCliente tcCliente;
