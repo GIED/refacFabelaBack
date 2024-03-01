@@ -287,16 +287,19 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	
 	if(cliente.getnDescuento().equals(true)) {
 		
-		for (int i = 0; i < twProductosAlternativo.size(); i++) {
+		for (int i = 0; i < twProductosAlternativo.size(); i++) {					
+			twProductosAlternativo.get(i).setTcProductoAlternativo(util.calcularPrecio(twProductosAlternativo.get(i).getTcProductoAlternativo(), tipoCambio.getnValor(), 0.0, 1, true));
+	     }		
+	}
+	else {	
 		
-			
-			twProductosAlternativo.get(i).setTcProductoAlternativo(util.calcularPrecio(twProductosAlternativo.get(i).getTcProductoAlternativo(), tipoCambio.getnValor(), 0.0, 1, true));;
-			
+         for (int j = 0; j < twProductosAlternativo.size(); j++) {			
+			twProductosAlternativo.get(j).setTcProductoAlternativo(util.calcularPrecio(twProductosAlternativo.get(j).getTcProductoAlternativo(), tipoCambio.getnValor(), 0.0, 1, false));		
 		}
 		
 	}
 	
-	System.err.println(twProductosAlternativo);
+	
 	
 	
 	
@@ -512,7 +515,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		
 		TcProducto tcProducto=new TcProducto();
 		tcProducto=productoDescuentoDto.getTcProducto();
-		
+		System.err.println("entre a calcular el precio del producto");
 		
 		tcProducto=util.calcularPrecio(tcProducto, tipoCambio.getnValor(),0.0,1, descuento);
 		

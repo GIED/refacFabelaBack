@@ -19,6 +19,9 @@ public interface TwCotizacionesRepository extends JpaRepository<TwCotizacionesDe
 	@Query(value="Select * from tv_cotizacionDetalle where (d_fecha + INTERVAL 25 DAY) >= SYSDATE()  order by n_id desc ",   nativeQuery = true) 
 	public List<TwCotizacionesDetalle> findByBuscar2();
 	
+	@Query(value="Select * from tv_cotizacionDetalle where (d_fecha + INTERVAL 25 DAY) >= SYSDATE() and n_idCliente=:Cliente order by n_id desc ",   nativeQuery = true) 
+	public List<TwCotizacionesDetalle> findByCotizacionesCliente(Long Cliente);
+	
 
 
 }

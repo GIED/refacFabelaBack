@@ -182,6 +182,14 @@ public class CotizacionServiceImpl implements CotizacionService {
 		return cotizacionProductoRepository.findByIdClienteProducto(nIdCliente, nIdProducto);
 	}
 
+	
+	
+	@Override
+	public List<TwCotizacionesDetalle> consultaCotizacionesClienteVigente(Long nIdCliente) {
+		
+		return twCotizacionesRepository.findByCotizacionesCliente(nIdCliente) ;
+	}
+
 
 
 	

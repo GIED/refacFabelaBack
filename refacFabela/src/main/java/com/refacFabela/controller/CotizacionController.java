@@ -106,4 +106,21 @@ public class CotizacionController {
 		}
 		return null;
 	}
+	
+	
+	@GetMapping("/consultaCotizacionesClienteVigente")
+	public List<TwCotizacionesDetalle> consultaCotizacionesClienteVigente(@RequestParam Long nIdCliente) {
+
+		try {			
+			return cotizacionService.consultaCotizacionesClienteVigente(nIdCliente);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener las cotizaciones vigentes " + e);
+		}
+		return null;
+	}
+	
+	
+	
+	
 }
