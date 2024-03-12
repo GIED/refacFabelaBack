@@ -1,10 +1,17 @@
 package com.refacFabela.service.impl;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.refacFabela.dto.SubirFacturaDto;
+import com.refacFabela.enums.TipoDoc;
 import com.refacFabela.model.TcDatosFactura;
 import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TwFacturacion;
@@ -20,6 +27,8 @@ import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.FacturacionService;
+import com.refacFabela.utils.subirArchivo;
+import com.refacFabela.utils.utils;
 import com.refacFabela.utils.factura.GeneraXml;
 import com.refacFabela.utils.factura.TimbrarXml;
 import com.refacFabela.utils.factura.Transformar;
@@ -135,6 +144,40 @@ public String complemento(Long idVenta, String cveCfdi) throws Exception {
 		TcDatosFactura tcDatosFactura=tcDatosFacturaRepository.obtenerDatos(nDatoFactura);
 		
 		return TimbrarXml.consultaFolio(tcDatosFactura);
+	}
+
+	@Override
+	public SubirFacturaDto subirArchivo(MultipartFile file, MultipartFile fileXml, String venta, String uuid) throws Exception {
+		
+		
+		try {
+			
+			subirArchivo subir =new subirArchivo();
+			SubirFacturaDto subirFacturaDto=new SubirFacturaDto();
+			
+		System.err.println(TipoDoc.PDF_FACTURA.getPath());
+			
+			if(subir.subirArchivoFactura(file, 20000L, TipoDoc.PDF_FACTURA.getPath())) {
+				subirFacturaDto.setMensaje("Se guardo el documento");
+				return subirFacturaDto;
+				
+			}
+			else {
+				subirFacturaDto.setMensaje("No se guardo el documento");
+				return subirFacturaDto;
+			}
+			
+			
+			
+			
+		
+			
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+		
+		
+		
 	}
 	
 	

@@ -6,7 +6,8 @@ public enum TipoDoc {
 		
 	
 	PDF_FACTURA(ConstantesFactura.rutaPdf), 
-	XML_FACTURA(ConstantesFactura.rutaxmlTimbrado);
+	XML_FACTURA(ConstantesFactura.rutaxmlTimbrado),
+	PDF_PROVEEDOR(ConstantesFactura.rutaPdfProveedor);
 	
 
 	
