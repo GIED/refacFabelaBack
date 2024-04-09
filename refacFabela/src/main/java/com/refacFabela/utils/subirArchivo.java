@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class subirArchivo {
 	
 	
-public boolean subirArchivoFactura(MultipartFile file,  Long nombreArchivo, String ruta) throws Exception {
+public boolean subirArchivoFactura(MultipartFile file,  Integer nombreArchivo, String ruta) throws Exception {
 		
 		
 		try {

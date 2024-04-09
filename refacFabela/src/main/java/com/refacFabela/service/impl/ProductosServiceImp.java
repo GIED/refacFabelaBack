@@ -433,7 +433,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 				System.err.println(total_abonos);
 				
 		//si el total de abonos es igual al total de la venta se registra la fecha de pago del crédito
-			if(total_venta==total_abonos) {
+			if((total_venta-total_abonos)<0.19) {
 				
 				Date fecha= new Date();	
 				

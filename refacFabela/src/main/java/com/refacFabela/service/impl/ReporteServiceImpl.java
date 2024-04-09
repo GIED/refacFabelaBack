@@ -168,7 +168,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("fecha", reporteVenta.getFecha());
 	         params.put("subTotal", reporteVenta.getSubTotal());
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
-	         params.put("total", reporteVenta.getTotal() - reporteVenta.getDescuento()-totalAbono);
+	         params.put("total", reporteVenta.getTotal());
 	         params.put("listaProductos", listaProducto);
 	         params.put("descuento", reporteVenta.getDescuento());
 	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal()+"\nTotal de productos: "+ listaProducto.size()).toString()));

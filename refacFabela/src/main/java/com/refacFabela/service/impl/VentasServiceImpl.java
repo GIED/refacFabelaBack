@@ -2,6 +2,7 @@ package com.refacFabela.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -771,17 +772,10 @@ public class VentasServiceImpl implements VentasService {
 	@Override
 	public TvVentaDetalle guardarDescuento(TvVentaDetalle tvVentaDetalle) throws InterruptedException {
 		
-		TwVenta twVenta =new TwVenta();
-		
-		twVenta=ventasRepository.findBynId(tvVentaDetalle.getnId());
-		
-		twVenta.setDescuento(tvVentaDetalle.getDescuento());
-		
-		
-		ventasRepository.save(twVenta);
-		
-		
-		
+		TwVenta twVenta =new TwVenta();		
+		twVenta=ventasRepository.findBynId(tvVentaDetalle.getnId());		
+		twVenta.setDescuento(tvVentaDetalle.getDescuento());		
+		 ventasRepository.save(twVenta);		
 		
 		return tvVentaDetalle;
 	}

@@ -157,15 +157,40 @@ public String complemento(Long idVenta, String cveCfdi) throws Exception {
 			
 		System.err.println(TipoDoc.PDF_FACTURA.getPath());
 			
-			if(subir.subirArchivoFactura(file, 20000L, TipoDoc.PDF_FACTURA.getPath())) {
-				subirFacturaDto.setMensaje("Se guardo el documento");
+			if(subir.subirArchivoFactura(file, Integer.valueOf(venta), TipoDoc.PDF_FACTURA.getPath()) && subir.subirArchivoFactura(fileXml, Integer.valueOf(venta), TipoDoc.XML_FACTURA.getPath())) {
+				subirFacturaDto.setMensaje("Se guardaron los documentos");
+				
+				TwVenta twVentas= new TwVenta();
+				TwFacturacion twFacturacion= new TwFacturacion();
+				
+				twVentas=ventaRepository.findBynId( Long.parseLong(venta));
+				
+				twFacturacion.setsUuid(uuid);
+				twFacturacion.setnEstatus(1);
+				twFacturacion.setnIdDatoFactura(1L);
+				twFacturacion.setN_idVenta( Long.parseLong(venta));
+				
+				twFacturacion=FacturaRepository.save(twFacturacion);
+				
+				twVentas.setnIdFacturacion(twFacturacion.getnId());
+				
+				ventaRepository.save(twVentas);
+				
+				
+				
+				
+				
+				
 				return subirFacturaDto;
+				
 				
 			}
 			else {
-				subirFacturaDto.setMensaje("No se guardo el documento");
+				subirFacturaDto.setMensaje("No se guardaron los documentos");
 				return subirFacturaDto;
 			}
+			
+			
 			
 			
 			

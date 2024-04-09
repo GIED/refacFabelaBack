@@ -282,7 +282,14 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		reporteVenta.setSubTotal(util.truncarDecimales(subtotal));
 		reporteVenta.setIvaTotal(util.truncarDecimales(iva));
-		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva));
+		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva-reporteVenta.getDescuento()-totalAbonos));
+		System.err.println("Este es el total"+reporteVenta.getTotal());
+		
+		if(reporteVenta.getTotal()<0.02) {
+			
+			reporteVenta.setTotal(0.0);
+			
+		}
 
 		return reporteService.generaVentaPDF(reporteVenta, listaProducto, totalAbonos);
 	}
@@ -556,6 +563,14 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setIvaTotal(util.truncarDecimales(iva));
 		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva));
 		
+	    if(reporteVenta.getTotal()<0.02) {
+			
+			reporteVenta.setTotal(0.0);
+			
+		}
+		
+		
+		
 		return reporteService.generaVentaPedidoPDF(reporteVenta, listaProducto);
 	}
 
@@ -609,6 +624,11 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setSubTotal(util.truncarDecimales(subtotal));
 		reporteVenta.setIvaTotal(util.truncarDecimales(iva));
 		reporteVenta.setTotal(util.truncarDecimales(subtotal+iva));
+		
+		if(reporteVenta.getTotal()<0.02) {
+			reporteVenta.setTotal(0.0);
+			
+		}
 		
 		List<TwAbono> listaAbonos =abonoVentaIdRepository.findBynIdVenta(nIdVenta);
 		
@@ -727,6 +747,11 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setTotal(util.truncarDecimales(totalGeneral));
 		reporteVenta.setDescuento(util.truncarDecimales(descuento));
 		reporteVenta.setAbonos(util.truncarDecimales(totalAbonos));
+	    if(reporteVenta.getTotal()<0.02) {
+			
+			reporteVenta.setTotal(0.0);
+			
+		}
 				
 		return reporteService.generaAbonoVentaClientePDF(cliente, listaReporteVentaAbomo,reporteVenta);
 	
