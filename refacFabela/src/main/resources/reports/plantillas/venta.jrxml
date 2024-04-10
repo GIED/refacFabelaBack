@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="28" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
 	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="648"/>
@@ -346,84 +346,84 @@
 	<lastPageFooter>
 		<band height="187">
 			<staticText>
-				<reportElement x="210" y="57" width="179" height="20" uuid="85d05d8c-4bfc-408a-8724-cfcc498a71d4"/>
+				<reportElement x="210" y="45" width="179" height="20" uuid="85d05d8c-4bfc-408a-8724-cfcc498a71d4"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SUBTOTAL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="210" y="96" width="179" height="20" uuid="3124ffee-f70c-4de6-9fed-761e0c3c45c7"/>
+				<reportElement x="210" y="84" width="179" height="20" uuid="3124ffee-f70c-4de6-9fed-761e0c3c45c7"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[DESCUENTO]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="411" y="57" width="132" height="20" uuid="9c3c0239-5db0-4279-9904-8d5fd71e001e"/>
+				<reportElement x="411" y="45" width="132" height="20" uuid="9c3c0239-5db0-4279-9904-8d5fd71e001e"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["$ "+$P{subTotal}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="411" y="76" width="132" height="20" uuid="0576e01f-b9e8-4848-8150-d922d76085be"/>
+				<reportElement x="411" y="64" width="132" height="20" uuid="0576e01f-b9e8-4848-8150-d922d76085be"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["$ "+$P{ivaTotal}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
-				<reportElement x="411" y="96" width="132" height="20" uuid="402621c4-95fb-43c6-83bd-05e7e4b964f8"/>
+				<reportElement x="411" y="84" width="132" height="20" uuid="402621c4-95fb-43c6-83bd-05e7e4b964f8"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ "+$P{descuento}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="210" y="76" width="178" height="20" uuid="826c7741-d29f-4902-842a-0b2cd373fcd9"/>
+				<reportElement x="210" y="64" width="178" height="20" uuid="826c7741-d29f-4902-842a-0b2cd373fcd9"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TRASLADO IVA TASA 0.16000]]></text>
 			</staticText>
 			<image>
-				<reportElement x="0" y="5" width="259" height="147" uuid="f46844c0-a280-4cad-8e25-9583ed2395aa"/>
+				<reportElement x="0" y="5" width="232" height="119" uuid="f46844c0-a280-4cad-8e25-9583ed2395aa"/>
 				<imageExpression><![CDATA[$P{qr}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="209" y="37" width="179" height="20" uuid="df1be9d4-31c9-4d33-8ec2-2a9cdb3f20c1"/>
+				<reportElement x="209" y="25" width="179" height="20" uuid="df1be9d4-31c9-4d33-8ec2-2a9cdb3f20c1"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MONEDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="37" width="132" height="20" uuid="cb55f2fd-d077-49d0-be00-ae143ab9d1a3"/>
+				<reportElement x="411" y="25" width="132" height="20" uuid="cb55f2fd-d077-49d0-be00-ae143ab9d1a3"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[MXN - PESO MEXICANO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="17" width="132" height="20" uuid="69c30589-4991-452e-a851-09b31f73a2c6"/>
+				<reportElement x="411" y="5" width="132" height="20" uuid="69c30589-4991-452e-a851-09b31f73a2c6"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[CONTADO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="209" y="17" width="179" height="20" uuid="99cd8618-ed3d-4194-a66b-aad482e11b19"/>
+				<reportElement x="209" y="5" width="179" height="20" uuid="99cd8618-ed3d-4194-a66b-aad482e11b19"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CONDICIONES DE PAGO]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
-				<reportElement x="411" y="116" width="132" height="20" uuid="03538aa7-8d40-4115-9fc9-c1fddf22e7d6"/>
+				<reportElement x="411" y="104" width="132" height="20" uuid="03538aa7-8d40-4115-9fc9-c1fddf22e7d6"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ "+$P{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="210" y="116" width="179" height="20" uuid="0cc388a5-7693-4f16-9d2f-d1ece580fbf2"/>
+				<reportElement x="210" y="104" width="179" height="20" uuid="0cc388a5-7693-4f16-9d2f-d1ece580fbf2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -439,6 +439,13 @@
 				</textElement>
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="3" y="130" width="549" height="37" uuid="6b829917-0403-4972-b056-c9c1da1fb434"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA["No se aceptan cambios ni devoluciones en partes eléctricas ni en ventas por pedido. Los cambios solo se realizarán durante los primeros 5 días hábiles después de la venta, conservando los empaques originales en buen estado y libres de contaminantes. Para solicitar un cambio, se requiere presentar el comprobante de compra, y el producto será evaluado por nuestro equipo técnico. La garantía cubre defectos de fabricación, pero no daños por mal uso, negligencia o accidentes. Para más información, contáctenos a través de nuestro servicio de atención al cliente."]]></text>
+			</staticText>
 		</band>
 	</lastPageFooter>
 	<summary>

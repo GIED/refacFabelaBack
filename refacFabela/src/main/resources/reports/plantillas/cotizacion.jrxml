@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="28" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
 	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="720"/>
+	<property name="ireport.y" value="699"/>
 	<subDataset name="listaProductos" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="cantidad" class="java.lang.Integer"/>
 		<field name="noIdentificacion" class="java.lang.Long"/>
@@ -355,91 +355,91 @@
 	<lastPageFooter>
 		<band height="192">
 			<staticText>
-				<reportElement x="275" y="50" width="125" height="15" uuid="c4c7255b-e7f8-4dcf-b068-cdc608d652e7"/>
+				<reportElement x="275" y="32" width="125" height="15" uuid="c4c7255b-e7f8-4dcf-b068-cdc608d652e7"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SUBTOTAL:]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="410" y="50" width="93" height="15" uuid="2902fdd0-660e-427d-bd71-acdfef5fbe0b"/>
+				<reportElement x="410" y="32" width="93" height="15" uuid="2902fdd0-660e-427d-bd71-acdfef5fbe0b"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ "+$P{subTotal}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="410" y="65" width="93" height="15" uuid="fdc89c24-8731-45af-ba4f-efa0a825c126"/>
+				<reportElement x="410" y="47" width="93" height="15" uuid="fdc89c24-8731-45af-ba4f-efa0a825c126"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ "+$P{ivaTotal}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="410" y="80" width="93" height="15" uuid="2ace9480-d9ff-49c6-bc83-63f25492c261"/>
+				<reportElement x="410" y="62" width="93" height="15" uuid="2ace9480-d9ff-49c6-bc83-63f25492c261"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ "+$P{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="275" y="65" width="124" height="15" uuid="8c466bad-dd5c-4e1c-98cb-08b373104593"/>
+				<reportElement x="275" y="47" width="124" height="15" uuid="8c466bad-dd5c-4e1c-98cb-08b373104593"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TRASLADO IVA TASA 0.16000:]]></text>
 			</staticText>
 			<image>
-				<reportElement x="0" y="9" width="259" height="147" uuid="e034b11c-4a50-4997-807f-0e8f322871f3"/>
+				<reportElement x="0" y="2" width="259" height="119" uuid="e034b11c-4a50-4997-807f-0e8f322871f3"/>
 				<imageExpression><![CDATA[$P{qr}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="275" y="35" width="125" height="15" uuid="d9cbc79c-3209-44cb-b253-6f2b35b2f5ce"/>
+				<reportElement x="275" y="17" width="125" height="15" uuid="d9cbc79c-3209-44cb-b253-6f2b35b2f5ce"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MONEDA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="35" width="93" height="15" uuid="44576df5-5bca-45b7-8487-6ccd6b7a8131"/>
+				<reportElement x="411" y="17" width="93" height="15" uuid="44576df5-5bca-45b7-8487-6ccd6b7a8131"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MXN - PESO MEXICANO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="20" width="93" height="15" uuid="54cc1164-7d49-46af-ab38-21f2e3e2c0b2"/>
+				<reportElement x="411" y="2" width="93" height="15" uuid="54cc1164-7d49-46af-ab38-21f2e3e2c0b2"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CONTADO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="275" y="20" width="125" height="15" uuid="952efdef-b90a-42de-b899-41506ba6fd79"/>
+				<reportElement x="275" y="2" width="125" height="15" uuid="952efdef-b90a-42de-b899-41506ba6fd79"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CONDICIONES DE PAGO:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="1" y="167" width="555" height="20" backcolor="#010101" uuid="4fee53a4-614b-4438-b334-d67a9cdf4bcf"/>
+				<reportElement x="0" y="169" width="555" height="20" backcolor="#010101" uuid="4fee53a4-614b-4438-b334-d67a9cdf4bcf"/>
 			</rectangle>
 			<textField>
-				<reportElement x="1" y="167" width="555" height="20" forecolor="#FEFEFE" uuid="959a8602-8fcc-4142-9d1e-9bd1b326b81f"/>
+				<reportElement x="0" y="169" width="555" height="20" forecolor="#FEFEFE" uuid="959a8602-8fcc-4142-9d1e-9bd1b326b81f"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="275" y="80" width="125" height="15" uuid="8ad7861d-ede6-4090-b74e-bb0023313f64"/>
+				<reportElement x="275" y="62" width="125" height="15" uuid="8ad7861d-ede6-4090-b74e-bb0023313f64"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="259" y="112" width="141" height="44" uuid="d6716aef-d630-4c42-88d5-60d12c286cd5">
+				<reportElement x="259" y="77" width="141" height="44" uuid="d6716aef-d630-4c42-88d5-60d12c286cd5">
 					<printWhenExpression><![CDATA[$P{rfcEmpresa}.equals("FAMJ810312FY6")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -447,12 +447,11 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Banamex
-No. de cuenta: 82 56 965
-Sucursal: 0131
-Clabe interbancaria: 00 24 200 131 82 56 96 52]]></text>
+No. de cuenta: 86 39 387
+Clabe interbancaria: 0024 417 019 86 39 38 78]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="112" width="143" height="44" uuid="26332a9c-8b46-41e7-abab-77e3bfcf6fa5">
+				<reportElement x="411" y="77" width="143" height="44" uuid="26332a9c-8b46-41e7-abab-77e3bfcf6fa5">
 					<printWhenExpression><![CDATA[$P{rfcEmpresa}.equals("FAMJ810312FY6")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -464,7 +463,7 @@ No. de cuenta: 04 75 13 44 98
 Clabe interbancaria :01 24 200 047 51 34 49 80 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="335" y="112" width="143" height="44" uuid="6f9e10ae-b640-45c1-9174-4b2cd6750e1e">
+				<reportElement x="335" y="77" width="143" height="44" uuid="6f9e10ae-b640-45c1-9174-4b2cd6750e1e">
 					<printWhenExpression><![CDATA[$P{rfcEmpresa}.equals("CJE210818NY8")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -474,6 +473,13 @@ Clabe interbancaria :01 24 200 047 51 34 49 80 ]]></text>
 				<text><![CDATA[Bancomer
 No. de cuenta: 0119140727
 Clabe interbancaria :012420001191407273]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="132" width="549" height="37" uuid="8b2d36cf-c01a-4e7f-94b1-3295970ebd68"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA["No se aceptan cambios ni devoluciones en partes eléctricas ni en ventas por pedido. Los cambios solo se realizarán durante los primeros 5 días hábiles después de la venta, conservando los empaques originales en buen estado y libres de contaminantes. Para solicitar un cambio, se requiere presentar el comprobante de compra, y el producto será evaluado por nuestro equipo técnico. La garantía cubre defectos de fabricación, pero no daños por mal uso, negligencia o accidentes. Para más información, contáctenos a través de nuestro servicio de atención al cliente."]]></text>
 			</staticText>
 		</band>
 	</lastPageFooter>
