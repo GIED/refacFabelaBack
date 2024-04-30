@@ -481,6 +481,18 @@ public class ReporteServiceImpl implements ReporteService {
 	        params.put("saldoFinal", util.truncarDecimales( reporteVenta.getTotal()-reporteVenta.getAnticipo()));
 	        params.put("nombreVendedor", reporteVenta.getNombreVendedor());
 	        
+	        if(reporteVenta.getIdPedido()!=null) {
+	        	
+	        	params.put("idPedido", reporteVenta.getIdPedido());
+	        	
+	        }
+	        else
+	        {
+	        	params.put("idPedido", 0L);
+	        	
+	        }
+		
+	        
 			
 			
 			

@@ -28,6 +28,7 @@
 	<parameter name="saldoFinal" class="java.lang.Double" isForPrompting="false"/>
 	<parameter name="descuento" class="java.lang.Double"/>
 	<parameter name="nombreVendedor" class="java.lang.String"/>
+	<parameter name="idPedido" class="java.lang.Long"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -79,25 +80,11 @@
 				</textElement>
 				<text><![CDATA[LUGAR DE EXPEDICIÓN]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="420" y="121" width="132" height="16" uuid="08b84d36-2d0c-487b-8687-1587c2ee7325"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<text><![CDATA[3 días naturales]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="419" y="58" width="132" height="16" uuid="eb672b9b-505d-4213-8276-e2885cb7d0ce"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="419" y="105" width="132" height="16" uuid="1118b167-3316-4724-8208-e72a577bb5d8"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[VIGENCIA]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="420" y="90" width="132" height="16" uuid="8f5dd0b5-05bb-43b2-a1b7-3fe67c57b148"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -139,6 +126,13 @@
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombreVendedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="421" y="106" width="132" height="16" uuid="c0454143-8a7b-4777-871c-dce2ed992427"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PEDIDO-"+$P{idPedido}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

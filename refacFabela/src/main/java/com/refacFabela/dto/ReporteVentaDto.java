@@ -37,12 +37,21 @@ public class ReporteVentaDto implements Serializable{
 	private String noParte;
 	private String nombreVendedor;
 	private Integer totalEntrega;
+	private Long idPedido;
 	
 	
 	
 	
 	
 	
+	public Long getIdPedido() {
+		return idPedido;
+	}
+
+	public void setIdPedido(Long idPedido) {
+		this.idPedido = idPedido;
+	}
+
 	public Integer getTotalEntrega() {
 		return totalEntrega;
 	}

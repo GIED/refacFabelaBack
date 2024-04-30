@@ -568,6 +568,27 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			reporteVenta.setTotal(0.0);
 			
 		}
+	    
+	    if(twVenta.getnIdTipoVenta()==3L) {
+	    	
+	    	TwPedido twPedido=new TwPedido();
+	    	
+	    	twPedido=twPedidoRepository.pedido(nIdVentaPedido);
+	    	
+	    	if(twPedido!=null) {	    	
+	    	reporteVenta.setIdPedido(twPedido.getnId());
+	    	}
+	    	else {
+	    		reporteVenta.setIdPedido(null);
+	    		
+	    	}
+	    	
+	    }
+	    else {
+	    	
+	    	reporteVenta.setIdPedido(null);
+	    	
+	    }
 		
 		
 		

@@ -41,6 +41,17 @@ public class TraspasosController {
 		
 	}
 	
+	@PostMapping("/movimientoInterno2")
+	public ResponseEntity<?> guardar2(@RequestBody() TwProductobodega twProductobodega){
+		
+		Map<String, Object>  response = new HashMap<>();
+		
+		response.put("twProductobodega", this.traspasoService.guardar2(twProductobodega));
+				
+		return new ResponseEntity<Map<String , Object>>(response, HttpStatus.ACCEPTED);
+		
+	}
+	
 	@PostMapping("/movimientoExterno")
 	public ResponseEntity<?> guardarExterno(@RequestBody() List<TwProductobodega> twProductoBodega){
 		

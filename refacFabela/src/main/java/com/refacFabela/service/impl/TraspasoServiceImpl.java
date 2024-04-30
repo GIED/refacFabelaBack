@@ -35,10 +35,21 @@ public class TraspasoServiceImpl implements TraspasoService {
 		TwProductobodega pb =new TwProductobodega();
 		
 		pb=productoBodegaRepository.obtenerStockBodega(productoBodega.getnIdProducto(), productoBodega.getnIdBodega());
+		productoBodega.setnCantidad(pb.getnCantidad());
+		
+		return this.productoBodegaRepository.save(productoBodega);
+	}
+	@Transactional
+	public TwProductobodega guardar2(TwProductobodega productoBodega) {
+		
+		TwProductobodega pb =new TwProductobodega();
+		
+		pb=productoBodegaRepository.obtenerStockBodega(productoBodega.getnIdProducto(), productoBodega.getnIdBodega());
 		productoBodega.setnCantidad(productoBodega.getnCantidad());
 		
 		return this.productoBodegaRepository.save(productoBodega);
 	}
+
 
 
 	@Override
