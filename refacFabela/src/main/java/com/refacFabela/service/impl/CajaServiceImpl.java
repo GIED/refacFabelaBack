@@ -32,6 +32,7 @@ public class CajaServiceImpl implements CajaService {
 	@Autowired 
 	public TwGastoRepository twGastoRepository;
 	
+	
 
 	@Override
 	public TwCaja obtenerCajaActiva() {
@@ -125,6 +126,16 @@ public class CajaServiceImpl implements CajaService {
 	public TwGasto borrarGasto(TwGasto twGasto) {
 		twGastoRepository.delete(twGasto);
 		return null;
+	}
+
+
+	@Override
+	public TwCaja consultaCaja(Long nidCaja) {
+		
+		TwCaja twCaja=new TwCaja();
+		twCaja=cajaRepository.getById(nidCaja);
+		
+		return twCaja   ;
 	}
 
 	

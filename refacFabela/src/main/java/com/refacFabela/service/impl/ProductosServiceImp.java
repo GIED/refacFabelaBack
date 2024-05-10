@@ -330,6 +330,10 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		newProducto.setnEstatus(twProductosAlternativo.getTcProductoAlternativo().getnEstatus());
 		newProducto.setdFecha(new Date());
 		newProducto.setnIdclavesat(twProductosAlternativo.getTcProductoAlternativo().getnIdclavesat());
+		newProducto.setnIdMarca(twProductosAlternativo.getTcProductoAlternativo().getnIdMarca());
+		newProducto.setnIdDescuento(twProductosAlternativo.getTcProductoAlternativo().getnIdDescuento());
+		newProducto.setsIdBar(twProductosAlternativo.getTcProductoAlternativo().getsIdBar());
+
 		
 		// Se manda calcular el precio final, precio sin iva y precio peso del producto
 		newProducto = utilisServiceImp.calcularPrecio(newProducto);

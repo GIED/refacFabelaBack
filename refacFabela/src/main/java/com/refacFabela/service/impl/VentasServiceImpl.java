@@ -588,6 +588,9 @@ public class VentasServiceImpl implements VentasService {
 		
 		return ventasNew;
 	}
+	
+	
+
 
 	@Override
 	public TvVentaDetalle guardarVentaDetalle(TvVentaDetalle tvVentaDetalle) throws InterruptedException {

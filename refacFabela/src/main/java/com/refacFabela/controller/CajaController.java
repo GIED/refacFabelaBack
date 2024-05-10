@@ -96,7 +96,18 @@ public class CajaController {
 		return null;
 	}
 
-	
+	@GetMapping("/consultarCajaId")
+	public TwCaja consultaCaja(@RequestParam Long nIdCaja) {
+		try {
+
+			return cajaService.consultaCaja(nIdCaja);
+
+		} catch (Exception e) {
+
+			logger.error("Error al aperturar la nueva caja " + e);
+		}
+		return null;
+	}
 	
 
 }
