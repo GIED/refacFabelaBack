@@ -44,7 +44,12 @@ public class TwVentaProductoCancela  implements Serializable {
 	@Column(name = "d_fecha")
 	private Date dFecha;	
 	@Column(name = "n_idCaja")
-	private Long nIdCaja;
+	private Long nIdCaja;	
+	@Column(name = "n_total_penaliza")
+	private Double penaliza;
+	@Column(name = "s_motivo")
+	private String sMotivo;
+	
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "n_idCaja", updatable = false, insertable = false, nullable = false)
@@ -64,6 +69,32 @@ public class TwVentaProductoCancela  implements Serializable {
 	
 	public TwVentaProductoCancela() {
 		
+	}
+
+
+
+
+	public String getsMotivo() {
+		return sMotivo;
+	}
+
+
+
+
+	public void setsMotivo(String sMotivo) {
+		this.sMotivo = sMotivo;
+	}
+
+
+
+
+	public Double getPenaliza() {
+		return penaliza;
+	}
+
+
+	public void setPenaliza(Double penaliza) {
+		this.penaliza = penaliza;
 	}
 
 

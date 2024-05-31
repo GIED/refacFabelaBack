@@ -76,6 +76,23 @@ public class FacturaController {
 		}
 	}
 	
+	@GetMapping("cancelaFactura")
+	public ResponseEntity<?> cancelaFactura(@RequestParam(required = false) Long nIdVenta , String cveCfdi) throws Exception {
+		
+		Map<String, Object> response = new HashMap();
+		
+		if (facturaService.cancelaFactura(nIdVenta, cveCfdi).equals("ok")) {
+			
+			response.put("mensaje", "Facturacancelada");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+			
+		}else {		
+			
+			response.put("mensaje", "error al facturar la venta");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	@GetMapping("complemento")
 	public ResponseEntity<?> complemento(@RequestParam(required = false) Long nIdVenta , String cveCfdi) throws Exception {
 		

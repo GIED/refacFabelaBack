@@ -573,7 +573,9 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 
 	@Override
 	public VentaProductoDto cacelarVentaProducto(VentaProductoCancelaDto ventaProductoCancelaDto) {
-				
+		
+		System.err.println(ventaProductoCancelaDto);
+		
 		TwVentasProducto twVentasProducto= new TwVentasProducto();	
 		List<TwVentasProducto> twListaVentasProducto= new ArrayList<TwVentasProducto>();	
 		TwProductobodega twProductobodega = new TwProductobodega();
@@ -585,6 +587,12 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		TwVenta twVenta= new TwVenta();
 		utils util= new utils();
 		TwCaja caja = new TwCaja();
+		
+		Double totalUnitario=0.0;
+		Double totalPartida=0.0;
+		
+		
+		
 		List<TrVentaCobro> listaTrVentaCobro=new ArrayList<TrVentaCobro>();
 
 		
@@ -603,21 +611,46 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			twVentasProducto.setnEstatus(0);	
 			ventaProductoCancelaDto.VentaProductoDto.setnEstatus(0);
 			/*Se gaurda la cancelación del produycto*/
-			twProductosVentaRepository.save(twVentasProducto);
+			//twProductosVentaRepository.save(twVentasProducto);
 			
 			/*Se re integra el producto a la bodega*/
 			twProductobodega.setnCantidad(twProductobodega.getnCantidad()+ventaProductoCancelaDto.VentaProductoDto.getnCantidad());			
-			productoBodegaRepository.save(twProductobodega);	
+			//productoBodegaRepository.save(twProductobodega);	
 			
 			/*Se guarda el producto cancelado en productos cancela*/
 			if(twVenta.getnIdEstatusVenta()>1) {
+				
+		    /*verificamos si hay penalización*/
+				if(ventaProductoCancelaDto.penaliza) {
+					
+					totalUnitario=twVentasProducto.getnTotalUnitario()-(twVentasProducto.getnTotalUnitario()*0.20);
+					totalPartida=twVentasProducto.getnTotalPartida()-(twVentasProducto.getnTotalPartida()*0.20);	
+					
+					twVentaProductoCancela.setnPrecioUnitario(util.truncaValor(totalUnitario/1.16));
+					twVentaProductoCancela.setnIvaUnitario(util.truncaValor(((totalUnitario/1.16))*0.16));
+					twVentaProductoCancela.setnTotalUnitario(util.truncaValor(totalUnitario));
+					twVentaProductoCancela.setnPrecioPartida(util.truncaValor(totalPartida));
+					twVentaProductoCancela.setPenaliza(util.truncaValor( twVentasProducto.getnTotalPartida()-totalPartida));
+				
+					
+				}
+				else {
+					
+					twVentaProductoCancela.setnPrecioUnitario(twVentasProducto.getnPrecioUnitario());
+					twVentaProductoCancela.setnIvaUnitario(twVentasProducto.getnIvaUnitario());
+					twVentaProductoCancela.setnTotalUnitario(twVentasProducto.getnTotalUnitario());
+					twVentaProductoCancela.setnPrecioPartida(twVentasProducto.getnTotalPartida());
+				
+					
+					
+				}
+				
+				
 			twVentaProductoCancela.setnIdVenta(twVentasProducto.getnIdVenta());
 			twVentaProductoCancela.setnIdProductos(twVentasProducto.getnIdProducto());
 			twVentaProductoCancela.setnCantidad(twVentasProducto.getnCantidad());
-			twVentaProductoCancela.setnPrecioUnitario(twVentasProducto.getnPrecioUnitario());
-			twVentaProductoCancela.setnIvaUnitario(twVentasProducto.getnIvaUnitario());
-			twVentaProductoCancela.setnTotalUnitario(twVentasProducto.getnTotalUnitario());
-			twVentaProductoCancela.setnPrecioPartida(twVentasProducto.getnTotalPartida());
+			twVentaProductoCancela.setsMotivo(ventaProductoCancelaDto.sMotivo);
+		
 			twVentaProductoCancela.setnIdUsuario(twVentasProducto.getnIdUsuario());
 			twVentaProductoCancela.setdFecha(new Date());
 			twVentaProductoCancela.setnIdCaja(caja.getnId());			
@@ -633,7 +666,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 				twSaldoUtilizado.setnSaldoUtilizado(twVentasProducto.getnTotalPartida());
 				twSaldoUtilizado.setdFecha(fecha);
 				twSaldoUtilizado.setnEstatus(true);				
-				twSaldoUtilizadoRepository.save(twSaldoUtilizado);					
+			twSaldoUtilizadoRepository.save(twSaldoUtilizado);					
 			}			
 		}
 		else {
@@ -657,16 +690,40 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		    twVentasProducto.setnIvaPartida(twVentasProductoCalculado.getnIvaPartida());
 		    twVentasProducto.setnTotalPartida(twVentasProductoCalculado.getnTotalPartida());
 		    /*Se gaurda la cancelación del producto*/
-			twProductosVentaRepository.save(twVentasProducto);	
+		    twProductosVentaRepository.save(twVentasProducto);	
 			if(twVenta.getnIdEstatusVenta()>1) {
 			twVentasProductoCalculado=util.calcularPrecioGuardar(tcProducto, ventaProductoCancelaDto.nCancela);			
 			twVentaProductoCancela.setnIdVenta(twVentasProducto.getnIdVenta());
 			twVentaProductoCancela.setnIdProductos(twVentasProducto.getnIdProducto());
 			twVentaProductoCancela.setnCantidad(ventaProductoCancelaDto.nCancela);
-			twVentaProductoCancela.setnPrecioUnitario(twVentasProductoCalculado.getnPrecioUnitario());
-			twVentaProductoCancela.setnIvaUnitario(twVentasProductoCalculado.getnIvaUnitario());
-			twVentaProductoCancela.setnTotalUnitario(twVentasProductoCalculado.getnTotalUnitario());
-			twVentaProductoCancela.setnPrecioPartida(twVentasProductoCalculado.getnTotalPartida());
+			
+			if(ventaProductoCancelaDto.penaliza) {
+				
+				totalUnitario=twVentasProducto.getnTotalUnitario()-(twVentasProducto.getnTotalUnitario()*0.20);
+				totalPartida=twVentasProducto.getnTotalPartida()-(twVentasProducto.getnTotalPartida()*0.20);	
+				
+				twVentaProductoCancela.setnPrecioUnitario(util.truncaValor(totalUnitario/1.16));
+				twVentaProductoCancela.setnIvaUnitario(util.truncaValor(((totalUnitario/1.16))*0.16));
+				twVentaProductoCancela.setnTotalUnitario(util.truncaValor(totalUnitario));
+				twVentaProductoCancela.setnPrecioPartida(util.truncaValor(totalPartida));
+				twVentaProductoCancela.setPenaliza(util.truncaValor( twVentasProducto.getnTotalPartida()-totalPartida));
+			
+				
+			}
+			else {
+				
+				twVentaProductoCancela.setnPrecioUnitario(twVentasProducto.getnPrecioUnitario());
+				twVentaProductoCancela.setnIvaUnitario(twVentasProducto.getnIvaUnitario());
+				twVentaProductoCancela.setnTotalUnitario(twVentasProducto.getnTotalUnitario());
+				twVentaProductoCancela.setnPrecioPartida(twVentasProducto.getnTotalPartida());
+			
+				
+				
+			}
+			
+			
+
+		    twVentaProductoCancela.setsMotivo(ventaProductoCancelaDto.sMotivo);
 			twVentaProductoCancela.setnIdUsuario(twVentasProducto.getnIdUsuario());
 			twVentaProductoCancela.setdFecha(new Date());
 			twVentaProductoCancela.setnIdCaja(caja.getnId());
@@ -675,7 +732,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			
 			/*Se re integra el producto a la bodega*/
 			twProductobodega.setnCantidad(twProductobodega.getnCantidad()+ventaProductoCancelaDto.nCancela);			
-		    productoBodegaRepository.save(twProductobodega);
+		    //productoBodegaRepository.save(twProductobodega);
 			
 			if(twVenta.getnTipoPago()==1L && twVenta.getnIdEstatusVenta()>1) {
 				Date fecha= new Date();

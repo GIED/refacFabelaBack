@@ -9,6 +9,7 @@ import com.refacFabela.model.factura.CabeceraPagosXml;
 public interface FacturacionService {
 	
 	public String venta(Long idVenta, String cveCfdi) throws Exception;
+	public String cancelaFactura(Long idVenta, String cveCfdi) throws Exception;
 	
 	public String complemento(Long idVenta, String cveCfdi) throws Exception;
 	

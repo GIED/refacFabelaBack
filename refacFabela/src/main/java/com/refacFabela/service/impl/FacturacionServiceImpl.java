@@ -100,6 +100,34 @@ public class FacturacionServiceImpl implements FacturacionService {
 		
 	}
 	
+public String cancelaFactura(Long idVenta, String cveCfdi) throws Exception {
+		
+		try {
+			
+			//System.out.println("llego");
+			
+			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);		
+			
+			
+			if(twVenta.getnIdFacturacion()==0L) {
+			
+				
+				
+				
+				
+	        
+	        return "ok";
+	        }
+			else {
+				return "Ya se facturó";
+			}
+			
+		}catch (Exception e) {
+			return "Error al facturar";
+		}
+		
+	}
+	
 public String complemento(Long idVenta, String cveCfdi) throws Exception {
 		
 		try {

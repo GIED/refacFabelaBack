@@ -49,6 +49,9 @@ import com.refacFabela.service.FacturacionService;
 import com.refacFabela.service.VentasService;
 import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
+import com.refacFabela.ws.com.microsoft.schemas._2003._10.serialization.arrays.ArrayOfstring;
+import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.ArrayOfDetalleCFDICancelacion;
+import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.RespuestaCancelacion;
 import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.RespuestaCreditos;
 import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.RespuestaTFD33;
 import com.refacFabela.ws.org.tempuri.IWSCFDI33;
@@ -561,6 +564,13 @@ public class TimbrarXml {
         WSCFDI33 service = new WSCFDI33();
         IWSCFDI33 port = service.getSoapHttpEndpoint();
         return port.timbrarCFDI(usuario, password, cadenaXML, referencia);
+    }
+	
+
+    private static RespuestaCancelacion cancelarCFDI(java.lang.String usuario, java.lang.String password, java.lang.String rFCEmisor, ArrayOfDetalleCFDICancelacion listaCFDI, java.lang.String clavePrivadaBase64, java.lang.String passwordClavePrivada) {
+        WSCFDI33 service = new WSCFDI33();
+        IWSCFDI33 port = service.getSoapHttpEndpoint();
+        return port.cancelarCFDI(usuario, password, rFCEmisor, listaCFDI, clavePrivadaBase64, passwordClavePrivada);
     }
 
 }
