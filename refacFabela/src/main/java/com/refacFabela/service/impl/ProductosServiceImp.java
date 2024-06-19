@@ -935,6 +935,13 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		
 		return trVentaCobroRepository.save(trVentaCobro);
 	}
+
+	@Override
+	public List<TwVentaProductoCancela> obtenerVentaProductoCancelaId(Long nIdVenta) {		
+		
+		
+		return twVentaProductoCancelaRepository.findByVenta(nIdVenta);
+	}
 	
 	
 	

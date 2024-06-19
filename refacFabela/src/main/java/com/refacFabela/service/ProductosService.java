@@ -94,6 +94,8 @@ public interface ProductosService {
 	public List<TwAjustesInventario> obtenerVentaProductoAjusteInventario(String fechaInicio, String fechaTermino);
 	
 	public TvVentaDetalle obtenerVentaDetalleId(Long nIdVenta);
+	
+	public List<TwVentaProductoCancela> obtenerVentaProductoCancelaId(Long nIdVenta);
 
 
 	public VentaProductoDto cacelarVentaProducto(VentaProductoCancelaDto ventaProductoCancelaDto);

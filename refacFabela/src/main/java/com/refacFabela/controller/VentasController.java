@@ -552,5 +552,17 @@ public class VentasController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/obtenerVentaProductosCancelaId")
+	public List<TwVentaProductoCancela> obtenerVentaProductosCancelaId(@RequestParam()  Long nIdVenta) {
+
+		try {
+			return productosService.obtenerVentaProductoCancelaId(nIdVenta);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos cancelados" + e);
+		}
+		return null;
+	}
 
 }
