@@ -18,11 +18,13 @@ import com.refacFabela.model.TcCategoriaGeneral;
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TcCp;
 import com.refacFabela.model.TcDatosFactura;
+import com.refacFabela.model.TcEstatusFacturaProveedor;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
 import com.refacFabela.model.TcGasto;
 import com.refacFabela.model.TcMarca;
+import com.refacFabela.model.TcMoneda;
 import com.refacFabela.model.TcNivel;
 import com.refacFabela.model.TcRegimenFiscal;
 import com.refacFabela.model.TcTipoVenta;
@@ -43,8 +45,10 @@ import com.refacFabela.repository.CatalogosRepository;
 import com.refacFabela.repository.CategoriaGeneralRepository;
 import com.refacFabela.repository.TcCpRepository;
 import com.refacFabela.repository.TcDatosFacturaRepository;
+import com.refacFabela.repository.TcEstatusFacturaProveedorRepository;
 import com.refacFabela.repository.TcGastoRepository;
 import com.refacFabela.repository.TcMarcaRepository;
+import com.refacFabela.repository.TcMonedaRepository;
 import com.refacFabela.repository.TcRegimenFiscalRepository;
 import com.refacFabela.service.CatalagosService;
 import com.refacFabela.utils.utils;
@@ -89,6 +93,11 @@ public class CatalogosServiceImp implements CatalagosService {
 	private TcGastoRepository tcGastoRepository;
 	@Autowired
 	private TcDatosFacturaRepository tcDatosFacturaRepository;
+	@Autowired
+	private TcMonedaRepository tcMonedaRepository;
+	
+	@Autowired
+	private TcEstatusFacturaProveedorRepository tcEstatusFacturaProveedorRepository;
 
 	@Override
 	public TcCatalogogeneral actualizarTipoCambio(TcCatalogogeneral ccCatalogogeneral) {
@@ -104,14 +113,15 @@ public class CatalogosServiceImp implements CatalagosService {
 
 	@Override
 	public List<TcClavesat> catalogoClaveSat() {
+		
 
-		return catalogoClaveSatRepository.findAll();
+		return catalogoClaveSatRepository.obtenerClaveSat();
 	}
 
 	@Override
 	public List<TcCategoriaGeneral> catalogoCategoriaGeneral() {
 
-		return categoriaGeneralRepository.findAll();
+		return categoriaGeneralRepository.findAll(Sort.by(Sort.Direction.ASC, "sCategoriaGeneral"));
 	}
 
 	@Override
@@ -164,6 +174,8 @@ public class CatalogosServiceImp implements CatalagosService {
 
 	@Override
 	public List<TcTipoVenta> catalagoTipoVenta() {
+		
+		
 
 		return catalagoTipoVentaRepository.findAll();
 	}
@@ -221,7 +233,7 @@ public class CatalogosServiceImp implements CatalagosService {
 	}
 	
 	@Override
-	public List<TcGasto> catalogoGasto() {		
+	public List<TcGasto> catalogoGasto() {	
 			
 		
 		
@@ -251,6 +263,17 @@ public class CatalogosServiceImp implements CatalagosService {
 		
 		
 		return ListaDatoFacturaDto;
+	}
+
+	@Override
+	public List<TcMoneda> catalogoMoneda() {
+		
+		return tcMonedaRepository.findBynEstatus(1);
+	}
+
+	@Override
+	public List<TcEstatusFacturaProveedor> catalogoEstatusFacturaProveedor() {
+		return tcEstatusFacturaProveedorRepository.findBynEstatus(1);
 	}
 
 	

@@ -58,4 +58,12 @@ public class TcClavesat implements Serializable {
 		this.sDescripcion = sDescripcion;
 	}
 
+	@Override
+	public String toString() {
+		return "TcClavesat [nId=" + nId + ", nEstatus=" + nEstatus + ", sClavesat=" + sClavesat + ", sDescripcion="
+				+ sDescripcion + "]\n";
+	}
+	
+	
+
 }

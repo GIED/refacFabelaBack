@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="28" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="729"/>
 	<subDataset name="listaProductos" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="cantidad" class="java.lang.Integer"/>
 		<field name="noIdentificacion" class="java.lang.Long"/>
@@ -37,35 +37,35 @@
 			<textField>
 				<reportElement x="129" y="94" width="272" height="20" uuid="b86c24e4-a709-474f-ac41-06ab28cadff3"/>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{rfcCliente}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="128" y="74" width="272" height="20" uuid="7b9644e1-d6b4-4b3b-99b3-4552fadb6c6e"/>
 				<textElement textAlignment="Center">
-					<font size="8" isBold="false" isUnderline="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombreCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="129" y="30" width="272" height="20" uuid="548eac7e-c1d0-4870-9f1c-f2f117578a0a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{rfcEmpresa}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="128" y="10" width="272" height="20" uuid="43ed276a-3521-4f1a-b399-15179a18b4e4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Georgia" size="12" isBold="true"/>
+					<font fontName="SansSerif" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombreEmpresa}.toUpperCase()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="128" y="54" width="272" height="20" uuid="78c7a8a4-5780-4028-b9b4-cd3e4dca716a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Georgia" size="12" isBold="true" isItalic="false"/>
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[CLIENTE]]></text>
 			</staticText>
@@ -76,61 +76,63 @@
 			<staticText>
 				<reportElement x="419" y="74" width="132" height="16" uuid="ee504447-22fc-43da-9cc9-2bb83938709b"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[LUGAR DE EXPEDICIÓN]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="419" y="58" width="132" height="16" uuid="eb672b9b-505d-4213-8276-e2885cb7d0ce"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="420" y="90" width="132" height="16" uuid="8f5dd0b5-05bb-43b2-a1b7-3fe67c57b148"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Toluca de Lerdo, México]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="419" y="26" width="132" height="16" uuid="421b772b-89cb-4a34-985e-527b997e8124"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["VP-"+$P{folioVenta}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="419" y="42" width="132" height="16" uuid="2dd0f18e-c6bc-494d-811f-a0989f592844"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[FECHA DE EMISIÓN]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="419" y="10" width="132" height="16" uuid="49745e81-8b79-41f6-b996-7084e7886c11"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[NO. VENTA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="1" y="120" width="61" height="20" uuid="a99b6cae-443d-425e-9711-a43d332ec781"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Georgia" size="10" isBold="true" isItalic="false"/>
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Vendedor:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="61" y="120" width="272" height="20" uuid="f9cb6678-d412-4243-904a-308cfaf10226"/>
 				<textElement verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombreVendedor}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="421" y="106" width="132" height="16" uuid="c0454143-8a7b-4777-871c-dce2ed992427"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["PEDIDO-"+$P{idPedido}]]></textFieldExpression>
 			</textField>
@@ -147,7 +149,7 @@
 			<staticText>
 				<reportElement x="-1" y="10" width="554" height="16" forecolor="#F3F1F1" uuid="428b057d-9a18-474a-91ca-4225d22cb134"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Georgia" size="8" isBold="false" isItalic="false" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[CONCEPTOS]]></text>
 			</staticText>
@@ -184,7 +186,7 @@
 			<staticText>
 				<reportElement x="-1" y="27" width="63" height="19" forecolor="#FEFEFE" uuid="aa5e8f63-eb37-4b26-9b55-58f651495d46"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
 				</textElement>
 				<text><![CDATA[Cantidad]]></text>
@@ -192,28 +194,28 @@
 			<staticText>
 				<reportElement x="62" y="28" width="82" height="19" forecolor="#FFFFFF" uuid="572f82c1-5e88-4e92-a81e-d22aa876d570"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Identificador]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="447" y="28" width="106" height="20" forecolor="#FFFFFF" uuid="9644ea40-a91a-4de7-a09c-7b1861f38fa2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Total Partida]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="346" y="28" width="100" height="20" forecolor="#FFFFFF" uuid="dfd2af64-2939-4bf0-98af-9928b4f2a332"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Precio Unitario]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="145" y="28" width="200" height="20" forecolor="#FFFFFF" uuid="f9d491c3-6727-4cd4-8d26-6cbaa43722fa"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Producto]]></text>
 			</staticText>
@@ -261,35 +263,35 @@
 						<textField>
 							<reportElement x="0" y="0" width="63" height="35" uuid="73e713a0-6eed-436d-b2e8-d63db337d225"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font size="8"/>
+								<font fontName="SansSerif" size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="64" y="1" width="82" height="34" uuid="9668e25e-b574-4bcd-ad66-822bf0ca3a28"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font size="8"/>
+								<font fontName="SansSerif" size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{noIdentificacion}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
 							<reportElement x="147" y="1" width="200" height="35" uuid="b107bf3c-bd3a-4115-a882-5095366870ab"/>
 							<textElement textAlignment="Justified" verticalAlignment="Middle">
-								<font size="8"/>
+								<font fontName="SansSerif" size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{nombreProducto}+"\nClave Prod. Serv.-"+$F{claveSat}]]></textFieldExpression>
 						</textField>
 						<textField pattern="#,##0.00">
 							<reportElement x="348" y="1" width="100" height="35" uuid="b50f4ed4-871e-4b56-93c6-41cf344da57e"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font size="8"/>
+								<font fontName="SansSerif" size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
 						</textField>
 						<textField pattern="#,##0.00">
 							<reportElement x="449" y="0" width="106" height="35" uuid="2cecc215-c104-4829-8632-af6646bed84a"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font size="8"/>
+								<font fontName="SansSerif" size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
 						</textField>
@@ -308,143 +310,189 @@
 			</rectangle>
 			<textField>
 				<reportElement x="0" y="0" width="555" height="20" forecolor="#FEFEFE" uuid="cbe0c318-f4ce-4ec1-86c8-17878d4c42fc"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="220">
+		<band height="209">
 			<staticText>
-				<reportElement x="210" y="40" width="179" height="20" uuid="d7d3ba3a-1991-450f-acec-36716551a824"/>
+				<reportElement x="209" y="38" width="179" height="17" uuid="d7d3ba3a-1991-450f-acec-36716551a824"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SUBTOTAL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="210" y="79" width="180" height="20" uuid="1f86462f-a988-4f23-a529-729d207b642f"/>
+				<reportElement x="209" y="72" width="180" height="17" uuid="1f86462f-a988-4f23-a529-729d207b642f"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="412" y="40" width="135" height="20" uuid="e9f016eb-c387-4380-928c-214eb507d14b"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["$ "+$P{subTotal}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="412" y="59" width="135" height="20" uuid="1e4e7c21-2921-424c-9727-5c2656b743d1"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["$ "+$P{ivaTotal}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="412" y="79" width="135" height="20" uuid="849a370a-d8d1-44e9-860b-0604173ca3ea"/>
+				<reportElement x="422" y="38" width="124" height="17" uuid="e9f016eb-c387-4380-928c-214eb507d14b"/>
 				<textElement verticalAlignment="Middle">
-					<font isBold="false"/>
+					<font fontName="SansSerif" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$P{total}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{subTotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="422" y="55" width="124" height="17" uuid="1e4e7c21-2921-424c-9727-5c2656b743d1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ivaTotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="422" y="72" width="124" height="17" uuid="849a370a-d8d1-44e9-860b-0604173ca3ea"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="210" y="59" width="180" height="20" uuid="af252b6d-b821-4749-99f7-9e698e053236"/>
+				<reportElement x="209" y="55" width="180" height="17" uuid="af252b6d-b821-4749-99f7-9e698e053236"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TRASLADO IVA TASA 0.16000]]></text>
 			</staticText>
 			<image>
-				<reportElement x="1" y="0" width="259" height="147" uuid="8c876da8-b31b-41d7-b610-69e96ac16098"/>
+				<reportElement x="1" y="13" width="243" height="127" uuid="8c876da8-b31b-41d7-b610-69e96ac16098"/>
 				<imageExpression><![CDATA[$P{qr}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="210" y="20" width="180" height="20" uuid="c2814ac9-8867-4f11-8ca3-3df992b1c6ec"/>
+				<reportElement x="209" y="21" width="180" height="17" uuid="c2814ac9-8867-4f11-8ca3-3df992b1c6ec"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MONEDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="412" y="20" width="135" height="20" uuid="51b183db-5b89-4651-b685-0ffecf2b573e"/>
+				<reportElement x="411" y="21" width="135" height="17" uuid="51b183db-5b89-4651-b685-0ffecf2b573e"/>
 				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[MXN - PESO MEXICANO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="412" y="0" width="135" height="20" uuid="ee98c2ae-7ed0-4385-9cb7-bfde0f5a7d98"/>
+				<reportElement x="411" y="4" width="135" height="17" uuid="ee98c2ae-7ed0-4385-9cb7-bfde0f5a7d98"/>
 				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[CONTADO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="210" y="0" width="180" height="20" uuid="e9283d4a-e095-42d3-9b7c-85472c841522"/>
+				<reportElement x="209" y="4" width="180" height="17" uuid="e9283d4a-e095-42d3-9b7c-85472c841522"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CONDICIONES DE PAGO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="210" y="99" width="180" height="20" uuid="5f939d5b-1256-4479-9a49-69c123d056f6"/>
+				<reportElement x="209" y="89" width="180" height="17" uuid="5f939d5b-1256-4479-9a49-69c123d056f6"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ANTICIPO]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="412" y="99" width="135" height="20" uuid="9925b442-6c9c-4be3-a73d-422f6d6d6a68"/>
+				<reportElement x="422" y="89" width="124" height="17" uuid="9925b442-6c9c-4be3-a73d-422f6d6d6a68"/>
 				<textElement verticalAlignment="Middle">
-					<font isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$P{anticipo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{anticipo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
-				<reportElement x="412" y="119" width="135" height="20" uuid="2b66d8cb-02c1-471a-9534-eb01b3d7a022"/>
+				<reportElement x="422" y="106" width="124" height="17" uuid="2b66d8cb-02c1-471a-9534-eb01b3d7a022"/>
 				<textElement verticalAlignment="Middle">
-					<font isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$P{descuento}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{descuento}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="210" y="119" width="180" height="20" uuid="0fb4416a-671b-44cb-976a-5a5451ef795d"/>
+				<reportElement x="209" y="106" width="180" height="17" uuid="0fb4416a-671b-44cb-976a-5a5451ef795d"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[DESCUENTO]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="1" y="200" width="555" height="20" backcolor="#010101" uuid="c0fa350f-7301-49cd-9e0f-6b063f08233b"/>
+				<reportElement x="1" y="186" width="555" height="20" backcolor="#010101" uuid="c0fa350f-7301-49cd-9e0f-6b063f08233b"/>
 			</rectangle>
 			<textField>
-				<reportElement x="1" y="200" width="555" height="20" forecolor="#FEFEFE" uuid="a05aac35-411d-4b7d-881b-fe5a9ad11b72"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
+				<reportElement x="1" y="186" width="555" height="20" forecolor="#FEFEFE" uuid="a05aac35-411d-4b7d-881b-fe5a9ad11b72"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="210" y="139" width="180" height="20" uuid="c1a3fc35-24de-4b57-862e-e5bd064729d5"/>
+				<reportElement x="209" y="123" width="180" height="17" uuid="c1a3fc35-24de-4b57-862e-e5bd064729d5"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SALDO FINAL]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
-				<reportElement x="412" y="139" width="135" height="20" uuid="88acbdf4-5e18-4298-a468-ac3633378ee4"/>
+				<reportElement x="422" y="123" width="124" height="17" uuid="88acbdf4-5e18-4298-a468-ac3633378ee4"/>
 				<textElement verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$P{saldoFinal}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{saldoFinal}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="2" y="165" width="549" height="37" uuid="eddf6973-6a32-4343-bb8e-71a4e88a9e63"/>
+				<reportElement x="1" y="149" width="549" height="37" uuid="eddf6973-6a32-4343-bb8e-71a4e88a9e63"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
-					<font size="6" isBold="true"/>
+					<font fontName="SansSerif" size="6" isBold="true"/>
 				</textElement>
 				<text><![CDATA["No se aceptan cambios ni devoluciones en partes eléctricas ni en ventas por pedido. Los cambios solo se realizarán durante los primeros 5 días hábiles después de la venta, conservando los empaques originales en buen estado y libres de contaminantes. Para solicitar un cambio, se requiere presentar el comprobante de compra, y el producto será evaluado por nuestro equipo técnico. La garantía cubre defectos de fabricación, pero no daños por mal uso, negligencia o accidentes. Para más información, contáctenos a través de nuestro servicio de atención al cliente."]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="38" width="11" height="17" uuid="9e87afb2-6b7d-4cf8-8409-44b93ca35b86"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="55" width="11" height="17" uuid="3976f3d9-2c5a-486e-a9d6-d3938096fd39"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="72" width="11" height="17" uuid="9ecc9588-e7ec-4894-a370-e031c2e29cdf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="89" width="11" height="17" uuid="7e5da388-fc68-4db1-ac2c-34391be1db69"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="106" width="11" height="17" uuid="8ec6c1b6-6230-4f11-92f6-8f452286f8f3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="123" width="11" height="17" uuid="3c851167-fdf8-447f-9a81-354b0669fdd8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
 			</staticText>
 		</band>
 	</lastPageFooter>

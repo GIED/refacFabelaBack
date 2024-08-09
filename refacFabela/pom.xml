@@ -134,8 +134,24 @@
 			<artifactId>jaxws-api</artifactId>
 			<version>2.3.0</version>
 		</dependency>
-
-
+<!-- para la consulta de tipo de cambio -->
+   <!-- Dependencia para Apache HttpClient -->
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>4.5.13</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore</artifactId>
+        <version>4.4.14</version>
+    </dependency>
+    <!-- Jackson Databind -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.12.3</version>
+    </dependency>
 
 
 	</dependencies>

@@ -29,6 +29,7 @@ public class ReporteCotizacionDto implements Serializable{
 	private String correo;
 	private String condicionEntrega;
 	private String nombreVendedor;
+	private String noParte;
 	
 	
 	
@@ -173,6 +174,14 @@ public class ReporteCotizacionDto implements Serializable{
 
 	public void setNombreVendedor(String nombreVendedor) {
 		this.nombreVendedor = nombreVendedor;
+	}
+
+	public String getNoParte() {
+		return noParte;
+	}
+
+	public void setNoParte(String noParte) {
+		this.noParte = noParte;
 	}
 	
 	

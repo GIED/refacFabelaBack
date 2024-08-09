@@ -24,11 +24,13 @@ import com.refacFabela.model.TcCategoria;
 import com.refacFabela.model.TcCategoriaGeneral;
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TcCp;
+import com.refacFabela.model.TcEstatusFacturaProveedor;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcGanancia;
 import com.refacFabela.model.TcGasto;
 import com.refacFabela.model.TcMarca;
+import com.refacFabela.model.TcMoneda;
 import com.refacFabela.model.TcNivel;
 import com.refacFabela.model.TcRegimenFiscal;
 import com.refacFabela.model.TcTipoVenta;
@@ -343,6 +345,32 @@ public class CatalogosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener catalogo gastos " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/catalogoMoneda")
+	public List<TcMoneda> catalogoMoneda() {
+		try {
+
+			return catalagosService.catalogoMoneda();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener las monedas " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/catalogoEstatusFacturaProveedor")
+	public List<TcEstatusFacturaProveedor> catalogoEstatusFacturaProveedor() {
+		try {
+
+			return catalagosService.catalogoEstatusFacturaProveedor();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener el catalogo de estatus factura proveedor " + e);
 		}
 		return null;
 	}
