@@ -50,4 +50,10 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 		return exchangeRate;
 	}
 
+	@Override
+	public TwFacturasProveedor guardarFacturaProveedor(TwFacturasProveedor factura) {
+		// TODO Auto-generated method stub
+		return twFacturasProveedorRepository.save(factura);
+	}
+
 }

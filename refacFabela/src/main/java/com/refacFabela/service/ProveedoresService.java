@@ -5,6 +5,7 @@ import java.util.List;
 
 
 import com.refacFabela.model.TcProveedore;
+import com.refacFabela.model.TwFacturasProveedor;
 
 public interface ProveedoresService {
 	

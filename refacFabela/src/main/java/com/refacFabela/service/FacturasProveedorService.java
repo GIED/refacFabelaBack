@@ -12,6 +12,8 @@ public interface FacturasProveedorService {
 	public List<TwFacturasProveedor> obtenetFacturasProveedor(Long id);
 	public List<VwFacturaProveedorBalance> obtenetBalanceProveedores();
 	public DataSerie obtenetTipoCambioBM();
+	public TwFacturasProveedor guardarFacturaProveedor(TwFacturasProveedor factura);
+
 
 
 

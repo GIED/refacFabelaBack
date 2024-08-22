@@ -3,9 +3,11 @@ package com.refacFabela.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.model.TcProveedore;
+import com.refacFabela.model.TwFacturasProveedor;
 import com.refacFabela.repository.ProveedoresRepository;
 import com.refacFabela.service.ProveedoresService;
 
@@ -14,6 +16,7 @@ public class ProveedoresServiceImp implements ProveedoresService {
 
 	@Autowired
 	private ProveedoresRepository proveedoresRepository;
+
 
 	@Override
 	public List<TcProveedore> obtenerProveedores() {
@@ -38,5 +41,7 @@ public class ProveedoresServiceImp implements ProveedoresService {
 		proveedoresRepository.deleteById(id);
 		return "El producto fue eliminado";
 	}
+
+
 
 }

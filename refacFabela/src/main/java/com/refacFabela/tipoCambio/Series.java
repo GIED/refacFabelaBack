@@ -49,7 +49,7 @@ public class Series {
 
         try (CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build()) {
         	
-        	Date fechaDia=new Date();
+        	/*Date fechaDia=new Date();
         	String fechaConsulta="";
         	try {
 				fechaConsulta=fecha(fechaDia,-1);
@@ -57,8 +57,8 @@ public class Series {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-            HttpGet getMethod = new HttpGet(URL+fechaConsulta+"/"+fechaConsulta);
+			} */
+            HttpGet getMethod = new HttpGet(URL+"/oportuno");
             getMethod.setHeader("Content-Type", "application/json");
             getMethod.setHeader("Bmx-Token", TOKEN);
             HttpResponse httResponse = httpclient.execute(getMethod);
