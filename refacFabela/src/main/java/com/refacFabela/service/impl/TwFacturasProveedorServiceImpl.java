@@ -31,9 +31,9 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 	}
 
 	@Override
-	public List<TwFacturasProveedor> obtenetFacturasProveedor(Long id) {
+	public List<TwFacturasProveedor> obtenetFacturasProveedor(Long nIdProveedor, Long nIdMoneda) {
 		// TODO Auto-generated method stub
-		return twFacturasProveedorRepository.findBynIdProveedor(id);
+		return twFacturasProveedorRepository.findBynIdProveedor(nIdProveedor, nIdMoneda);
 	}
 
 	@Override

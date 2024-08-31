@@ -9,7 +9,7 @@ import com.refacFabela.tipoCambio.DataSerie;
 public interface FacturasProveedorService {
 	
 	public List<TwFacturasProveedor> obtenetTodas();
-	public List<TwFacturasProveedor> obtenetFacturasProveedor(Long id);
+	public List<TwFacturasProveedor> obtenetFacturasProveedor(Long nIdProveedor, Long nIdMoneda);
 	public List<VwFacturaProveedorBalance> obtenetBalanceProveedores();
 	public DataSerie obtenetTipoCambioBM();
 	public TwFacturasProveedor guardarFacturaProveedor(TwFacturasProveedor factura);

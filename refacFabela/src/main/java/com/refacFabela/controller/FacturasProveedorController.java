@@ -49,11 +49,11 @@ public class FacturasProveedorController {
 	
 	
 	@GetMapping("/obtenerFacturasProveedor")
-	public List<TwFacturasProveedor> obtenerFacturasProveedor(HttpServletResponse response, @RequestParam() Long id) {
+	public List<TwFacturasProveedor> obtenerFacturasProveedor(HttpServletResponse response, @RequestParam() Long nIdProveedor, @RequestParam() Long nIdMoneda) {
 
 		try {
 			
-			return facturasProveedorService.obtenetFacturasProveedor(id);
+			return facturasProveedorService.obtenetFacturasProveedor(nIdProveedor, nIdMoneda);
 
 		} catch (Exception e) {
 			logger.error("Error al recuperar las facturas del proveedor" + e);
