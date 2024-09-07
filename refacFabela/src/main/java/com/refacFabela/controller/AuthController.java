@@ -1,8 +1,6 @@
 package com.refacFabela.controller;
 
 import java.text.ParseException;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,8 +9,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,17 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.refacFabela.dto.JwtDto;
 import com.refacFabela.dto.LoginUsuario;
 import com.refacFabela.dto.Mensaje;
-import com.refacFabela.dto.NuevoUsuario;
-import com.refacFabela.enums.RolNombre;
 import com.refacFabela.jwt.JwtProvider;
-import com.refacFabela.model.TcRol;
-import com.refacFabela.model.TcUsuario;
-import com.refacFabela.service.RolService;
-import com.refacFabela.service.UsuarioService;
 
 @RestController
 @RequestMapping("/auth")

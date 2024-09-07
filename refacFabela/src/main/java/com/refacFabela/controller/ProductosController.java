@@ -17,13 +17,10 @@ import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
 import com.refacFabela.model.TvStockProductoHist;
-import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwVentaProductoCancela;
-import com.refacFabela.model.TwVentasProducto;
-import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.service.impl.UtilisServiceImp;
 

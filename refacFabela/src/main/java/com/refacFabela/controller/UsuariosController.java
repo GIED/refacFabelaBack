@@ -1,16 +1,12 @@
 package com.refacFabela.controller;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.refacFabela.dto.Mensaje;
 import com.refacFabela.dto.NuevoUsuario;
-import com.refacFabela.enums.RolNombre;
-import com.refacFabela.model.TcRol;
 import com.refacFabela.model.TcUsuario;
-import com.refacFabela.service.RolService;
 import com.refacFabela.service.UsuarioService;
 
 @RestController

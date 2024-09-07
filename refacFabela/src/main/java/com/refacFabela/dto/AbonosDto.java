@@ -1,7 +1,6 @@
 package com.refacFabela.dto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class AbonosDto implements Serializable {
 

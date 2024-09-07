@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-
-import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TvTotalesGeneralesTablero;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.model.VwVentaMesAno;

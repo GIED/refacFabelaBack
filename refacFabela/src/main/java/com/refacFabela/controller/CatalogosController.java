@@ -2,8 +2,6 @@ package com.refacFabela.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +34,6 @@ import com.refacFabela.model.TcRegimenFiscal;
 import com.refacFabela.model.TcTipoVenta;
 import com.refacFabela.model.TcUsocfdi;
 import com.refacFabela.model.TwCaja;
-import com.refacFabela.repository.TcMarcaRepository;
 import com.refacFabela.service.CajaService;
 import com.refacFabela.service.CatalagosService;
 

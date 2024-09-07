@@ -3,7 +3,6 @@ package com.refacFabela.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.refacFabela.model.TcCliente;
+import com.refacFabela.model.TwAbono;
+import com.refacFabela.model.TwAbonoFacturaProveedor;
 import com.refacFabela.model.TwFacturasProveedor;
 import com.refacFabela.model.VwFacturaProveedorBalance;
-import com.refacFabela.service.FacturacionService;
 import com.refacFabela.service.FacturasProveedorService;
 import com.refacFabela.tipoCambio.DataSerie;
 
@@ -95,6 +94,33 @@ public class FacturasProveedorController {
 		try {
 
 			return facturasProveedorService.guardarFacturaProveedor(twFacturasProveedor);
+		} catch (Exception e) {
+
+			logger.error("Error al guargar la factura del proveedor" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerFacturasProveedorBalance")
+	public List<BalanceAbonoProveedor> obtenerFacturasProveedorBalance(HttpServletResponse response, @RequestParam() Long nIdProveedor, @RequestParam() Long nIdMoneda) {
+
+		try {
+			
+			return facturasProveedorService.obtenetFacturasProveedorBalance(nIdProveedor, nIdMoneda);
+
+		} catch (Exception e) {
+			logger.error("Error al recuperar las facturas del proveedor balance" + e);
+		}
+
+		return null;
+	}
+	
+	@PostMapping("/guardarAbonoFactura")
+	public TwAbonoFacturaProveedor guardarAbono(@RequestBody TwAbonoFacturaProveedor twFacturasProveedor) {
+
+		try {
+
+			return facturasProveedorService.guardarAbonoFacturaProveedor(twFacturasProveedor);
 		} catch (Exception e) {
 
 			logger.error("Error al guargar la factura del proveedor" + e);

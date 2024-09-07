@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TwCotizacionesDetalle;
@@ -37,7 +35,6 @@ import com.refacFabela.model.TwPagoComprobanteInternet;
 import com.refacFabela.service.ClienteService;
 import com.refacFabela.service.CotizacionService;
 import com.refacFabela.service.VentaInternetService;
-import com.refacFabela.utils.utils;
 
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST })

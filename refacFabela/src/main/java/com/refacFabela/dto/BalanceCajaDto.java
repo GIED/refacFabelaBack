@@ -1,15 +1,8 @@
 package com.refacFabela.dto;
 
-import java.util.Date;
 import java.util.List;
-
-import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TvReporteCajaFormaPago;
 import com.refacFabela.model.TvReporteDetalleVenta;
-import com.refacFabela.model.TwAbono;
-import com.refacFabela.model.TwCaja;
-import com.refacFabela.model.TwGasto;
-import com.refacFabela.model.TwVenta;
 
 public class BalanceCajaDto {
 	
