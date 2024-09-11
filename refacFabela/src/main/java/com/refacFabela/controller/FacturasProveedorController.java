@@ -128,6 +128,62 @@ public class FacturasProveedorController {
 		return null;
 	}
 	
+	@GetMapping("/obtenerAbonosFactura")
+	public List<TwAbonoFacturaProveedor> obtenerAbonos(HttpServletResponse response, @RequestParam() Long nIdFactura) {
+
+		try {
+			
+			return facturasProveedorService.obtenetAbonosFactura(nIdFactura);
+
+		} catch (Exception e) {
+			logger.error("Error al recuperar los abonos de la factura del proveedor" + e);
+		}
+
+		return null;
+	}
+	
+	@GetMapping("/obtenerBalanceFactura")
+	public BalanceAbonoProveedor obtenerBalanceFactura(HttpServletResponse response, @RequestParam() Long nIdFactura) {
+
+		try {
+			
+			return facturasProveedorService.obtenerBalanceFactura(nIdFactura);
+
+		} catch (Exception e) {
+			logger.error("Error al recuperar los abonos de la factura del proveedor" + e);
+		}
+
+		return null;
+	}
+	
+	@GetMapping("/obtenerFacturaProveedor")
+	public TwFacturasProveedor obtenerFacturaProveedor(HttpServletResponse response, @RequestParam() Long nIdFactura) {
+
+		try {
+			
+			return facturasProveedorService.obtenerFactura(nIdFactura);
+
+		} catch (Exception e) {
+			logger.error("Error al recuperar los abonos de la factura del proveedor" + e);
+		}
+
+		return null;
+	}
+	
+	@GetMapping("/obtenerFacturaProveedorBalanceActivas")
+	public List<BalanceAbonoProveedor> obtenerFacturaProveedorBalanceActivas() {
+
+		try {
+			
+			return facturasProveedorService.obtenerFacturasSinPagar();
+
+		} catch (Exception e) {
+			logger.error("Error al recuperar los abonos de la factura del proveedor" + e);
+		}
+
+		return null;
+	}
+	
 	
 
 }

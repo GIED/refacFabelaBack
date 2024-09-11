@@ -11,5 +11,11 @@ public interface BalanceFacturaProveedorRepository extends JpaRepository<Balance
 	
 	@Query("Select c from BalanceAbonoProveedor c where c.twFacturasProveedor.nIdProveedor=:nIdProveedor and c.twFacturasProveedor.nIdMoneda=:nIdMoneda and c.twFacturasProveedor.dFechaPagoFactura is null ")
 	public List<BalanceAbonoProveedor> findByBalance(Long nIdProveedor, Long nIdMoneda);
+	
+	@Query("Select c from BalanceAbonoProveedor c where c.twFacturasProveedor.nId=:nIdFactura ")
+	public BalanceAbonoProveedor findByBalanceFactura(Long nIdFactura);
+	
+	@Query("Select c from BalanceAbonoProveedor c where c.twFacturasProveedor.nEstatusFacturaProveedor=1 and c.twFacturasProveedor.dFechaPagoFactura is null ")
+	public List<BalanceAbonoProveedor> findByFactutasSinPagar();
 
 }

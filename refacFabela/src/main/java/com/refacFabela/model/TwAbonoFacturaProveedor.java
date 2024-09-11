@@ -48,7 +48,7 @@ public class TwAbonoFacturaProveedor implements Serializable {
 	    
 	    
 	    @ManyToOne()
-		@JoinColumn(name = "n_id", referencedColumnName = "n_id", updatable = false, insertable = false)
+		@JoinColumn(name = "n_id_factura_proveedor", referencedColumnName = "n_id", updatable = false, insertable = false)
 		private TwFacturasProveedor twFacturasProveedor;
 	    
 	    

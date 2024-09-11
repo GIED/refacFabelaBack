@@ -70,4 +70,28 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 		return twAbonoFacturaProveedorRepository.save(abono);
 	}
 
+	@Override
+	public List<TwAbonoFacturaProveedor> obtenetAbonosFactura(Long nIdFactura) {
+		// TODO Auto-generated method stub
+		return twAbonoFacturaProveedorRepository.buscarAbono(nIdFactura);
+	}
+
+	@Override
+	public BalanceAbonoProveedor obtenerBalanceFactura(Long nIdFactura) {
+	
+		return balanceFacturaProveedorRepository.findByBalanceFactura(nIdFactura);
+	}
+
+	@Override
+	public TwFacturasProveedor obtenerFactura(Long nIdFactura) {
+		// TODO Auto-generated method stub
+		return twFacturasProveedorRepository.findBynId(nIdFactura);
+	}
+
+	@Override
+	public List<BalanceAbonoProveedor> obtenerFacturasSinPagar() {
+		// TODO Auto-generated method stub
+		return balanceFacturaProveedorRepository.findByFactutasSinPagar() ;
+	}
+
 }
