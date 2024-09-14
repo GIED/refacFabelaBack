@@ -53,8 +53,15 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 
 	@Override
 	public DataSerie obtenetTipoCambioBM() {
-		
-		DataSerie exchangeRate = Series.getExchangeRate();
+		Series ser=new Series();
+		DataSerie exchangeRate;
+		try {
+			exchangeRate = ser.getFirstDataSerie();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			exchangeRate=null;
+		}
 		
 		return exchangeRate;
 	}
