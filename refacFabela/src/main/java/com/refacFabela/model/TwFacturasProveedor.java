@@ -57,6 +57,9 @@ public class TwFacturasProveedor implements Serializable {
 	@Column(name = "s_nota")
 	private String  sNota;
 	
+	@Column(name = "n_id_razon_social")
+	private Long  nIdRazonSocial;
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "n_id_proveedor", insertable=false, updatable=false)
@@ -75,6 +78,7 @@ public class TwFacturasProveedor implements Serializable {
 	@JoinColumn(name = "n_estatus_factura_proveedor", insertable=false, updatable=false)
 	private TcEstatusFacturaProveedor TcEstatusFacturaProveedor;
 	
+		
 	
 	
 	
@@ -83,6 +87,15 @@ public class TwFacturasProveedor implements Serializable {
 	
 	
 	
+	
+
+	public Long getnIdRazonSocial() {
+		return nIdRazonSocial;
+	}
+
+	public void setnIdRazonSocial(Long nIdRazonSocial) {
+		this.nIdRazonSocial = nIdRazonSocial;
+	}
 
 	public Long getnId() {
 		return nId;
