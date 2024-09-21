@@ -11,6 +11,7 @@ import com.refacFabela.model.TcCategoria;
 import com.refacFabela.model.TcCategoriaGeneral;
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TcCp;
+import com.refacFabela.model.TcCuentaBancaria;
 import com.refacFabela.model.TcEstatusFacturaProveedor;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
@@ -49,6 +50,7 @@ public interface CatalagosService {
 	public List<TcMarca> catalogoMarca();
 	public List<TcGasto> catalogoGasto();
 	public List<TcMoneda> catalogoMoneda();
+	public List<TcCuentaBancaria> consultarCuentasBancariasRazon(Long nIdRazonSoacial);
 	public List<TcEstatusFacturaProveedor> catalogoEstatusFacturaProveedor();
 
 }

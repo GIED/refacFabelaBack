@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwAbonoFacturaProveedor;
 import com.refacFabela.model.TwFacturasProveedor;
 import com.refacFabela.model.VwFacturaProveedorBalance;

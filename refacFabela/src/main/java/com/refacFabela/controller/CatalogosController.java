@@ -22,6 +22,7 @@ import com.refacFabela.model.TcCategoria;
 import com.refacFabela.model.TcCategoriaGeneral;
 import com.refacFabela.model.TcClavesat;
 import com.refacFabela.model.TcCp;
+import com.refacFabela.model.TcCuentaBancaria;
 import com.refacFabela.model.TcEstatusFacturaProveedor;
 import com.refacFabela.model.TcEstatusVenta;
 import com.refacFabela.model.TcFormapago;
@@ -368,6 +369,19 @@ public class CatalogosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener el catalogo de estatus factura proveedor " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/getCuentasBanciariasRazon")
+	public List<TcCuentaBancaria> catalogoMoneda(@RequestParam Long nIdRazonSocial) {
+		try {
+
+			return catalagosService.consultarCuentasBancariasRazon(nIdRazonSocial);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener las monedas " + e);
 		}
 		return null;
 	}

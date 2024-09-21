@@ -46,15 +46,39 @@ public class TwAbonoFacturaProveedor implements Serializable {
 	    @Column(name = "n_id_forma_pago")
 	    private Integer nIdFormaPago;  // ID de la forma de pago
 	    
+	    @Column(name = "n_id_cuenta_bancaria")
+	    private Long nIdCuentaBancaria;  // ID de la forma de pago
+	    
 	    
 	    @ManyToOne()
 		@JoinColumn(name = "n_id_factura_proveedor", referencedColumnName = "n_id", updatable = false, insertable = false)
 		private TwFacturasProveedor twFacturasProveedor;
 	    
+	    @ManyToOne()
+	 		@JoinColumn(name = "n_id_cuenta_bancaria", referencedColumnName = "n_id", updatable = false, insertable = false)
+	 		private TcCuentaBancaria TcCuentaBancaria;
+	    
 	    
 	    
 
-	    public TwFacturasProveedor getTwFacturasProveedor() {
+	
+		public Long getnIdCuentaBancaria() {
+			return nIdCuentaBancaria;
+		}
+
+		public void setnIdCuentaBancaria(Long nIdCuentaBancaria) {
+			this.nIdCuentaBancaria = nIdCuentaBancaria;
+		}
+
+		public TcCuentaBancaria getTcCuentaBancaria() {
+			return TcCuentaBancaria;
+		}
+
+		public void setTcCuentaBancaria(TcCuentaBancaria tcCuentaBancaria) {
+			TcCuentaBancaria = tcCuentaBancaria;
+		}
+
+		public TwFacturasProveedor getTwFacturasProveedor() {
 			return twFacturasProveedor;
 		}
 
