@@ -60,6 +60,9 @@ public class TwFacturasProveedor implements Serializable {
 	@Column(name = "n_id_razon_social")
 	private Long  nIdRazonSocial;
 	
+	@Column(name = "n_especial")
+	private Boolean  nEspecial;
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "n_id_proveedor", insertable=false, updatable=false)
@@ -88,6 +91,14 @@ public class TwFacturasProveedor implements Serializable {
 	
 	
 	
+
+	public Boolean getnEspecial() {
+		return nEspecial;
+	}
+
+	public void setnEspecial(Boolean nEspecial) {
+		this.nEspecial = nEspecial;
+	}
 
 	public Long getnIdRazonSocial() {
 		return nIdRazonSocial;
