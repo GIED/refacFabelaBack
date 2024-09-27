@@ -12,6 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -48,6 +52,7 @@ public class TwFacturasProveedor implements Serializable {
 	@Column(name = "d_fecha_pago_factura")
 	private Date dFechaPagoFactura;
 	
+	@JsonSerialize(using = ToStringSerializer.class)
 	@Column(name = "n_monto_factura", precision = 20, scale=2)
 	private BigDecimal nMontoFactura;
 	

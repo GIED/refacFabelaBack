@@ -14,6 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 @Entity
 @Table(name="tw_abono_factura_proveedor")
 @NamedQuery(name = "TwAbonoFacturaProveedor.findAll", query = "SELECT t FROM TwAbonoFacturaProveedor t")
@@ -27,7 +30,8 @@ public class TwAbonoFacturaProveedor implements Serializable {
 
 	    @Column(name = "n_id_factura_proveedor")
 	    private Long nIdFacturaProveedor;  // Factura Proveedor
-
+	   
+	    @JsonSerialize(using = ToStringSerializer.class)
 	    @Column(name = "n_monto_abono", precision = 10, scale = 2)
 	    private BigDecimal nMontoAbono;  // Monto del abono
 
