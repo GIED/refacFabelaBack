@@ -113,6 +113,20 @@ public class FacturasProveedorController {
 		return null;
 	}
 	
+	@GetMapping("/obtenerFacturasProveedorBalanceHitoria")
+	public List<BalanceAbonoProveedor> obtenerFacturasProveedorBalanceHistoria(HttpServletResponse response, @RequestParam() Long nIdProveedor, @RequestParam() Long nIdMoneda) {
+
+		try {
+			
+			return facturasProveedorService.obtenetFacturasProveedorBalanceHistoria(nIdProveedor, nIdMoneda);
+
+		} catch (Exception e) {
+			logger.error("Error al recuperar las facturas del proveedor balance" + e);
+		}
+
+		return null;
+	}
+	
 	@PostMapping("/guardarAbonoFactura")
 	public TwAbonoFacturaProveedor guardarAbono(@RequestBody TwAbonoFacturaProveedor twFacturasProveedor) {
 

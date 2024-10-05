@@ -44,6 +44,11 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 		// TODO Auto-generated method stub
 		return balanceFacturaProveedorRepository.findByBalance(nIdProveedor, nIdMoneda);
 	}
+	@Override
+	public List<BalanceAbonoProveedor> obtenetFacturasProveedorBalanceHistoria(Long nIdProveedor, Long nIdMoneda) {
+		// TODO Auto-generated method stub
+		return balanceFacturaProveedorRepository.findByBalanceHistoria(nIdProveedor, nIdMoneda);
+	}
 
 	@Override
 	public List<VwFacturaProveedorBalance> obtenetBalanceProveedores() {		

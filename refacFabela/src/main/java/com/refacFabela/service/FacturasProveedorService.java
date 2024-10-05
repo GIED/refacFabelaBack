@@ -13,6 +13,8 @@ public interface FacturasProveedorService {
 	public List<TwFacturasProveedor> obtenetTodas();
 	public List<TwFacturasProveedor> obtenetFacturasProveedor(Long nIdProveedor, Long nIdMoneda);
 	public List<BalanceAbonoProveedor> obtenetFacturasProveedorBalance(Long nIdProveedor, Long nIdMoneda);
+	public List<BalanceAbonoProveedor> obtenetFacturasProveedorBalanceHistoria(Long nIdProveedor, Long nIdMoneda);
+
 	public List<TwAbonoFacturaProveedor> obtenetAbonosFactura(Long nIdFactura);
 	public List<VwFacturaProveedorBalance> obtenetBalanceProveedores();
 	public BalanceAbonoProveedor obtenerBalanceFactura(Long nIdFactura);
