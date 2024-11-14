@@ -1,8 +1,12 @@
 package com.refacFabela.model;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "vw_producto_meta_compra")
@@ -66,9 +70,9 @@ public class VwProductoMetaCompra {
 
     @Column(name = "n_stock_maximo_requerido")
     private Integer nStockMaximoRequerido;
-
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "d_ultima_fecha_compra")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date dUltimaFechaCompra;
 
     @Column(name = "n_stock_sugerido")
@@ -76,6 +80,11 @@ public class VwProductoMetaCompra {
 
     @Column(name = "n_sugerencia_compra")
     private Integer nSugerenciaCompra;
+    
+    @OneToMany
+    @JoinColumn(name = "n_idproducto", referencedColumnName = "n_id") // Define la FK sin modificar ProductoBodega
+    private List<TwProductobodega> twProductoBodega;
+
 
     // Constructor sin argumentos
     public VwProductoMetaCompra() {
@@ -256,6 +265,16 @@ public class VwProductoMetaCompra {
 	public void setnSugerenciaCompra(Integer nSugerenciaCompra) {
 		this.nSugerenciaCompra = nSugerenciaCompra;
 	}
+
+	public List<TwProductobodega> getTwProductoBodega() {
+		return twProductoBodega;
+	}
+
+	public void setTwProductoBodega(List<TwProductobodega> twProductoBodega) {
+		this.twProductoBodega = twProductoBodega;
+	}
+
+	
 
     
     
