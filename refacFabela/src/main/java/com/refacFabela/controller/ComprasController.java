@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.refacFabela.dto.VentaCotizacionProductoAnoDto;
 import com.refacFabela.model.VwProductoMetaCompra;
 import com.refacFabela.service.ComprasService;
 
@@ -40,6 +42,20 @@ public class ComprasController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los productos vendidos " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/ventaCotizaProdAno")
+	public List<VentaCotizacionProductoAnoDto> ventaCotizaProdAno(HttpServletResponse response, Integer idProducto) {
+		try {			
+		
+
+			return comprasService.obtenerVentaCotizacionProductoAnoDto( idProducto);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos vendidos cotizados ano " + e);
 		}
 		return null;
 	}
