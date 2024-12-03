@@ -49,7 +49,7 @@ public class VentasCotizacionesProductoAnoRepository {
                      "        YEAR(cot.d_fecha) " +
                      ") cot ON c.s_ano = cot.ano " +
                      "ORDER BY " +
-                     "    c.s_ano";
+                     "    c.s_ano desc";
 
         Query query = entityManager.createNativeQuery(sql);
         query.setParameter("n_idProductos", n_idProductos);
