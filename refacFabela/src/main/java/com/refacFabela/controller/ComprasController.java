@@ -59,6 +59,21 @@ public class ComprasController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/productosVendidosCotizadosIdProducto")
+	public List<VwProductoMetaCompra> productosVendidosCotizadosIdProducto(HttpServletResponse response, Long idProducto) {
+		try {
+
+			return comprasService.obtenerProductosVendidosIdProducto(idProducto);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener el pruducto" + e);
+		}
+		return null;
+	}
+	
+	
 
 
 	

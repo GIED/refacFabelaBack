@@ -10,6 +10,9 @@ public interface ComprasService {
 	
 	public List<VwProductoMetaCompra> obtenerProductosVendidosFechaCompra(String FechaIncio, String FechaTermino);
 	public List<VentaCotizacionProductoAnoDto> obtenerVentaCotizacionProductoAnoDto(Integer idProducto);
+	public List<VwProductoMetaCompra>  obtenerProductosVendidosIdProducto(Long idProducto);
+
+
 
 
 }

@@ -42,6 +42,11 @@ public class ProveedoresServiceImp implements ProveedoresService {
 		return "El producto fue eliminado";
 	}
 
+	@Override
+	public List<TcProveedore> consultaProveedorLike(String busqueda) {
+		return proveedoresRepository.findProveedorLike(busqueda);
+	}
+
 
 
 }

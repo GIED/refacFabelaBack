@@ -12,6 +12,7 @@ public interface ProveedoresService {
 	public List<TcProveedore> obtenerProveedores();
 	public TcProveedore guardaProveedor(TcProveedore tcProveedores);
 	public TcProveedore consultaProveedorId(Long id);
+	public List<TcProveedore> consultaProveedorLike(String busqueda);
 	public String eliminaProveedor(Long id);
 
 }

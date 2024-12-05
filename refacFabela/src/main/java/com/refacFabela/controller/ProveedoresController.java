@@ -46,6 +46,18 @@ public class ProveedoresController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/consultarProveedoresLike")
+	public List<TcProveedore> consultarProveedoresLike(HttpServletResponse response, @RequestParam() String busqueda) {
+
+		try {
+			return proveedoresService.consultaProveedorLike(busqueda);
+
+		} catch (Exception e) {
+			logger.error("Error al consultar Proveedor like" + e);
+		}
+		return null;
+	}
 
 	@PostMapping("/guardarProveedores")
 	public TcProveedore guardarProveedores(@RequestBody TcProveedore tcProveedores) {
