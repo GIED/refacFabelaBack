@@ -1,21 +1,16 @@
 package com.refacFabela.controller;
 
-import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.refacFabela.dto.VentaCotizacionProductoAnoDto;
+import com.refacFabela.model.TwCarritoCompraPedido;
 import com.refacFabela.model.VwProductoMetaCompra;
 import com.refacFabela.service.ComprasService;
 
@@ -69,6 +64,21 @@ public class ComprasController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener el pruducto" + e);
+		}
+		return null;
+	}
+	
+	
+	
+	@GetMapping("/productosCarritoCompraUsuario")
+	public List<TwCarritoCompraPedido> productosCarritoCompraUsuario(HttpServletResponse response, Long idUsuario) {
+		try {
+
+			return comprasService.obtenerProductosCarritoCompraUsuario(idUsuario);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener el pruducto carrito compra" + e);
 		}
 		return null;
 	}
