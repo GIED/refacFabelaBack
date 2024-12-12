@@ -14,8 +14,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
-@Table(name = "tw_carrito_compra_producto")
+@Table(name = "tw_carrito_compra_pedido")
 public class TwCarritoCompraPedido {
 	
 	@Id
@@ -31,14 +33,19 @@ public class TwCarritoCompraPedido {
     
     @Column(name = "n_id_producto")
     private Long nIdProducto;
+    
+    @Column(name = "n_id_proveedor")
+    private Long nIdProveedor;
 
     @Column(name = "n_cantidad")
     private Integer nCantidad;
-
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "d_fecha_registro")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dFechaRegistro;
-
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "d_fecha_llegada")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dFechaLlegada;
@@ -53,6 +60,10 @@ public class TwCarritoCompraPedido {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "n_id_producto", referencedColumnName = "n_id", insertable = false, updatable = false)
     private TcProducto tcProducto;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "n_id_proveedor", referencedColumnName = "n_id", insertable = false, updatable = false)
+    private TcProveedore TcProveedor;
     
     public TwCarritoCompraPedido() {
     	
@@ -145,6 +156,24 @@ public class TwCarritoCompraPedido {
 				+ ", dFechaLlegada=" + dFechaLlegada + ", nEstatus=" + nEstatus + ", twUsuario=" + twUsuario
 				+ ", tcProducto=" + tcProducto + "]";
 	}
+
+	public Long getnIdProveedor() {
+		return nIdProveedor;
+	}
+
+	public void setnIdProveedor(Long nIdProveedor) {
+		this.nIdProveedor = nIdProveedor;
+	}
+
+	public TcProveedore getTcProveedor() {
+		return TcProveedor;
+	}
+
+	public void setTcProveedor(TcProveedore tcProveedor) {
+		TcProveedor = tcProveedor;
+	}
+
+
     
     
 
