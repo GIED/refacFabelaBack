@@ -11,6 +11,9 @@ public interface ComprasService {
 	public List<VentaCotizacionProductoAnoDto> obtenerVentaCotizacionProductoAnoDto(Integer idProducto);
 	public List<VwProductoMetaCompra>  obtenerProductosVendidosIdProducto(Long idProducto);
 	public List<TwCarritoCompraPedido>  obtenerProductosCarritoCompraUsuario(Long idUsuario);
+	public Boolean  borrarProductosCarritoCompraUsuario(Long nId);
+	public TwCarritoCompraPedido  guardarProductosCarritoCompraUsuario(TwCarritoCompraPedido twCarritoCompraPedido);
+
 
 
 

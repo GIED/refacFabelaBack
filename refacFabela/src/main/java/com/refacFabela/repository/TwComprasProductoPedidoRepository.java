@@ -12,5 +12,5 @@ public interface TwComprasProductoPedidoRepository extends JpaRepository<TwCarri
 	@Query("select c from TwCarritoCompraPedido c where c.nIdUsuario=:nIdUsuario ")
 	public List<TwCarritoCompraPedido> obtenerCarritoProductosPedido(Long nIdUsuario);
 	
-
+	public void deleteById(Long id);
 }

@@ -7,10 +7,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.dto.VentaCotizacionProductoAnoDto;
 import com.refacFabela.model.TwCarritoCompraPedido;
+import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.VwProductoMetaCompra;
 import com.refacFabela.service.ComprasService;
 
@@ -27,10 +30,7 @@ public class ComprasController {
 	
 	@GetMapping("/productosVendidosFechaCompra")
 	public List<VwProductoMetaCompra> productosVendidosFechaCompra(HttpServletResponse response, String FechaIncio, String FechaTermino) {
-		try {
-			
-			System.err.println(FechaIncio);
-			System.err.println(FechaTermino);
+		try {	
 
 			return comprasService.obtenerProductosVendidosFechaCompra( FechaIncio, FechaTermino);
 
@@ -80,6 +80,34 @@ public class ComprasController {
 
 			logger.error("Error al obtener el pruducto carrito compra" + e);
 		}
+		return null;
+	}
+	
+	
+	@PostMapping("/guardarProductoCarritoCompraUsuario")
+	public TwCarritoCompraPedido guardarPedidoProductoUsuario(@RequestBody TwCarritoCompraPedido twCarritoCompraPedido) {
+
+		try {
+			return comprasService.guardarProductosCarritoCompraUsuario(twCarritoCompraPedido);
+
+		} catch (Exception e) {
+			logger.error("Error al guardar el producto carrito pedido" + e);
+		}
+
+		return null;
+	}
+	
+	
+	@GetMapping("/borrarProductoCarritoCompraUsuario")
+	public Boolean borrarPedidoProductoUsuario(HttpServletResponse response, Long nId) {
+
+		try {
+			return comprasService.borrarProductosCarritoCompraUsuario(nId);
+
+		} catch (Exception e) {
+			logger.error("Error al borrar el producto carrito" + e);
+		}
+
 		return null;
 	}
 	
