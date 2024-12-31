@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.dto.VentaCotizacionProductoAnoDto;
 import com.refacFabela.model.TwCarritoCompraPedido;
-import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.VwProductoMetaCompra;
 import com.refacFabela.service.ComprasService;
 
