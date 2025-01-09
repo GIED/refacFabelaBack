@@ -812,19 +812,8 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 					pedidoProductoDto.setFechaRecibida(null);
 				}
 				pedidoProductoDto.setPrecio(twPedidoProducto.getTcProducto().getnPrecio());
-				
-				 switch (twPedidoProducto.getTcProducto().getnEstatus()) 
-			        {   
-				        case 0:  estatus = "PEDIDO REALIZADO";
-	                    break;	                    
-			            case 1:  estatus = "PEDIDO RECIBIDO";
-			                     break;
-			            case 2:  estatus = "PEDIDO CANCELADO";
-			                     break;			          
-			           
-			        }
-				
-				pedidoProductoDto.setEstatus(estatus);				
+						
+				pedidoProductoDto.setEstatus(twPedidoProducto.getTcEstatusPedidoProducto().getsEstatus());				
 				// SE AGREGA EL OBJETO A LA LISTA 
 				System.err.println(pedidoProductoDto);
 				

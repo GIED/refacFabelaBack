@@ -42,6 +42,8 @@ public class TvPedidoDetalle implements Serializable {
 	private Long nIdVenta;
 	
 	
+	
+	
 		
 	public TvPedidoDetalle() {
 		

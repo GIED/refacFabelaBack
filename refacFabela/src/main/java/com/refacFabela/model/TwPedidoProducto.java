@@ -40,7 +40,7 @@ public class TwPedidoProducto implements Serializable {
 	private Date dFechaRecibida;
 	
 	@Column(name = "n_estatus")
-	private Boolean nEstatus;	
+	private Integer nEstatus;	
 	
 	@Column(name = "s_observaciones")
 	private String sObservaciones;	
@@ -68,6 +68,12 @@ public class TwPedidoProducto implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "n_idPedido",  insertable = false, updatable = false)
 	private TwPedido twPedido;
+	
+	@ManyToOne
+	@JoinColumn(name = "n_estatus",  insertable = false, updatable = false)
+	private TcEstatusPedidoProducto tcEstatusPedidoProducto;
+	
+	
 
 
 	public TwPedidoProducto() {
@@ -163,16 +169,12 @@ public class TwPedidoProducto implements Serializable {
 		this.dFechaRecibida = dFechaRecibida;
 	}
 
-
-	
-
-
-	public Boolean getnEstatus() {
+	public Integer getnEstatus() {
 		return nEstatus;
 	}
 
 
-	public void setnEstatus(Boolean nEstatus) {
+	public void setnEstatus(Integer nEstatus) {
 		this.nEstatus = nEstatus;
 	}
 
@@ -255,6 +257,16 @@ public class TwPedidoProducto implements Serializable {
 				+ ", dFechaRecibida=" + dFechaRecibida + ", nEstatus=" + nEstatus + ", sObservaciones=" + sObservaciones
 				+ ", nIdUsuario=" + nIdUsuario + ", nIdPedido=" + nIdPedido + ", tcProducto=" + tcProducto
 				+ ", tcProveedore=" + tcProveedore + ", tcUsuario=" + tcUsuario + ", twPedido=" + twPedido + "]";
+	}
+
+
+	public TcEstatusPedidoProducto getTcEstatusPedidoProducto() {
+		return tcEstatusPedidoProducto;
+	}
+
+
+	public void setTcEstatusPedidoProducto(TcEstatusPedidoProducto tcEstatusPedidoProducto) {
+		this.tcEstatusPedidoProducto = tcEstatusPedidoProducto;
 	}
 
 	

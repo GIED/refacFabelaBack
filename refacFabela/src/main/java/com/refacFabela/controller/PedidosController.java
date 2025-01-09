@@ -128,6 +128,10 @@ public class PedidosController {
 
 		return null;
 	}
+	
+	
+	
+	
 	@PostMapping("/guardaPedidoProducto")
 	public TwPedidoProducto guardaPedidoProducto(@RequestBody TwPedidoProducto twPedidoProducto) {
 
@@ -138,6 +142,33 @@ public class PedidosController {
 			logger.error("Error al guaradar el pedido producto" + e);
 		}
 
+		return null;
+	}
+	
+	
+	@GetMapping("/obteneCarritoPedidoUsuario")
+	public List<TwPedidoProducto> obteneCarritoPedido(@RequestParam() Long nIdUsuario) {
+		try {
+
+			return pedidosService.obtenerPedidoCarritoUsuario(nIdUsuario);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos de carrito usuario " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/borrarPedidoProductoId")
+	public Boolean borrarPedidoProductoId(@RequestParam() Long nId) {
+		try {
+
+			return pedidosService.borrarProductoPedidoId(nId);
+
+		} catch (Exception e) {
+
+			logger.error("Error  " + e);
+		}
 		return null;
 	}
 	

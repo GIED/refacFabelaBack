@@ -240,8 +240,9 @@ public class VentasServiceImpl implements VentasService {
 				twPedidoProducto.setnIdProveedor(ventaDto.getListaValidada().get(i).getnIdProveedor());
 				twPedidoProducto.setnIdUsuario(ventaDto.getIdUsuario());
 				twPedidoProducto.setnIdPedido(respuesta.getnId());	
-				//twPedidoProducto.setnEstatus(false);
+				twPedidoProducto.setnEstatus(2);
 				
+				System.err.println(twPedidoProducto);
 				pedidosProductoRepository.save(twPedidoProducto);
 				
 				

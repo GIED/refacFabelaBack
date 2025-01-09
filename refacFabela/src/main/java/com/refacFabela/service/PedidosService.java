@@ -19,6 +19,8 @@ public interface PedidosService {
 	public TwPedido guardaPedidoNuevo(TwPedido twPedido);
 	public TwPedidoProducto guardaPedidoProducto(TwPedidoProducto twPedidoProducto);
 	public TwPedidoProducto ingresoProducto(TwPedidoProducto twPedidoProducto);
+	public List<TwPedidoProducto> obtenerPedidoCarritoUsuario(Long nIdUsuario);
+	public Boolean borrarProductoPedidoId(Long nId);
 
 
 }

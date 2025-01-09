@@ -116,23 +116,20 @@ public class PedidosServiceImpl implements PedidosService {
 	    if (twPedidoProducto.getTwPedido().getTwVenta() == null) {
 			
 			productoBodega = productoBodegaRepository.obtenerProductoBodega(twPedidoProducto.getnIdProducto(), "LOCAL");
-			System.err.println(pedidioProductoIngreso.getnCantidaRecibida());
-			System.err.println(twPedidoProducto.getnCantidaRecibida());
+		
 			
 		
 			
 			if(twPedidoProducto.getnCantidaRecibida()==0) {
-				System.err.println("entre");
+			
 	
 			productoBodega.setnCantidad(productoBodega.getnCantidad() + twPedidoProducto.getnCantidaRecibida());
 			}
 			else {
 				
-				System.err.println(pedidioProductoIngreso.getnCantidaRecibida());
-				System.err.println(twPedidoProducto.getnCantidaRecibida());
-				System.err.println(productoBodega.getnCantidad() + pedidioProductoIngreso.getnCantidaRecibida() - twPedidoProducto.getnCantidaRecibida());
+				
 				productoBodega.setnCantidad(productoBodega.getnCantidad() +  twPedidoProducto.getnCantidaRecibida() - pedidioProductoIngreso.getnCantidaRecibida() );
-				System.err.println(productoBodega);
+				
 							
 			}
 			productoBodegaRepository.save(productoBodega);
@@ -148,7 +145,7 @@ public class PedidosServiceImpl implements PedidosService {
 
 		for (int i = 0; i < listaTwPedidoProducto.size(); i++) {
 
-			if (listaTwPedidoProducto.get(i).getnEstatus() == true) {
+			if (listaTwPedidoProducto.get(i).getnEstatus() == 3 || listaTwPedidoProducto.get(i).getnEstatus() == 4) {
 				totalProductosIngreso = totalProductosIngreso + 1;
 			}
 
@@ -241,6 +238,22 @@ public class PedidosServiceImpl implements PedidosService {
 	public TwPedido obtenerPedidoId(Long nIdPedido) {
 		// TODO Auto-generated method stub
 		return twPedidoRepository.getById(nIdPedido);
+	}
+
+	@Override
+	public List<TwPedidoProducto> obtenerPedidoCarritoUsuario(Long nIdUsuario) {
+		// TODO Auto-generated method stub
+		return pedidosProductoRepository.obtenerProductosCarritoPedidoUsuario(nIdUsuario);
+	}
+
+	@Override
+	public Boolean  borrarProductoPedidoId(Long nId) {		
+		if (pedidosProductoRepository.existsById(nId)) {
+	        pedidosProductoRepository.deleteById(nId);
+	        return !pedidosProductoRepository.existsById(nId);
+	    } else {
+	        return false;
+	    }
 	}
 
 }
