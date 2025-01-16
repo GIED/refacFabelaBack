@@ -942,6 +942,12 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		
 		return twVentaProductoCancelaRepository.findByVenta(nIdVenta);
 	}
+
+	@Override
+	public TcProducto obtenerProductoBeanId(Long nId) {
+		
+		return productosRepository.getById(nId);
+	}
 	
 	
 	

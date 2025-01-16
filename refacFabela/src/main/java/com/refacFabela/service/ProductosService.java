@@ -37,6 +37,9 @@ public interface ProductosService {
 	public TcProducto obtenerProductoNoParte(String No_Parte);
 	
 	public List<TcProducto> obtenerProductoId(Long nId);
+	
+	public TcProducto obtenerProductoBeanId(Long nId);
+
 
 	public List<TcProducto> obtenerProductoLike(String Producto);
 

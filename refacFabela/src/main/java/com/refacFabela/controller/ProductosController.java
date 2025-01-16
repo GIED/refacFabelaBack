@@ -68,6 +68,18 @@ public class ProductosController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/obtenerProductoBeanId")
+	public TcProducto obtenerProductoBeanId(@RequestParam() Long nId) {
+
+		try {
+			return productosService.obtenerProductoBeanId(nId);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener el producto" + e);
+		}
+		return null;
+	}
 
 	@PostMapping("/simuladorPrecioProducto")
 	public TcProducto simuladorPrecioProducto(@RequestBody TcProducto tcProducto) {
