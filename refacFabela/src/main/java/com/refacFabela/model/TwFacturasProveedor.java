@@ -68,6 +68,9 @@ public class TwFacturasProveedor implements Serializable {
 	@Column(name = "n_especial")
 	private Boolean  nEspecial;
 	
+	@Column(name = "n_estatus_ingreso_almacen")
+	private Boolean  nEstatusIngresoAlmacen;
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "n_id_proveedor", insertable=false, updatable=false)
@@ -96,6 +99,14 @@ public class TwFacturasProveedor implements Serializable {
 	
 	
 	
+
+	public Boolean getnEstatusIngresoAlmacen() {
+		return nEstatusIngresoAlmacen;
+	}
+
+	public void setnEstatusIngresoAlmacen(Boolean nEstatusIngresoAlmacen) {
+		this.nEstatusIngresoAlmacen = nEstatusIngresoAlmacen;
+	}
 
 	public Boolean getnEspecial() {
 		return nEspecial;
@@ -245,9 +256,13 @@ public class TwFacturasProveedor implements Serializable {
 				+ ", dFechaInicioFactura=" + dFechaInicioFactura + ", dFechaTerminoFactura=" + dFechaTerminoFactura
 				+ ", nIdUsuario=" + nIdUsuario + ", nEstatusFacturaProveedor=" + nEstatusFacturaProveedor
 				+ ", dFechaPagoFactura=" + dFechaPagoFactura + ", nMontoFactura=" + nMontoFactura + ", nIdMoneda="
-				+ nIdMoneda + ", sNota=" + sNota + ", TcProveedore=" + TcProveedore + ", TcUsuario=" + TcUsuario
-				+ ", TcMoneda=" + TcMoneda + ", TcEstatusFacturaProveedor=" + TcEstatusFacturaProveedor + "]";
+				+ nIdMoneda + ", sNota=" + sNota + ", nIdRazonSocial=" + nIdRazonSocial + ", nEspecial=" + nEspecial
+				+ ", nEstatusIngresoAlmacen=" + nEstatusIngresoAlmacen + ", TcProveedore=" + TcProveedore
+				+ ", TcUsuario=" + TcUsuario + ", TcMoneda=" + TcMoneda + ", TcEstatusFacturaProveedor="
+				+ TcEstatusFacturaProveedor + "]";
 	}
+
+	
 
 	
 	

@@ -20,6 +20,9 @@ public interface TwFacturasProveedorRepository extends JpaRepository<TwFacturasP
 	@Query("Select c from TwFacturasProveedor c where c.nId=:nIdFactura ")
 	public TwFacturasProveedor findBynId(Long nIdFactura);
 	
+	@Query("Select c from TwFacturasProveedor c where c.nEstatusIngresoAlmacen=0  ")
+	public List<TwFacturasProveedor> findBynEstatusFacturaIngreso();
+	
 	
 	
 

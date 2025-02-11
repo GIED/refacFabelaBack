@@ -44,6 +44,20 @@ public class FacturasProveedorController {
 		return null;
 	}
 	
+	@GetMapping("/obtenerFacturasPendienteIngreso")
+	public List<TwFacturasProveedor> obtenerFacturasPendienteIngreso() {
+
+		try {
+			
+			return facturasProveedorService.obtenetPendienteIngreso();
+
+		} catch (Exception e) {
+			logger.error("Error al recuperar todas las facturtas pendientes de ingreso" + e);
+		}
+
+		return null;
+	}
+	
 	
 	@GetMapping("/obtenerFacturasProveedor")
 	public List<TwFacturasProveedor> obtenerFacturasProveedor(HttpServletResponse response, @RequestParam() Long nIdProveedor, @RequestParam() Long nIdMoneda) {

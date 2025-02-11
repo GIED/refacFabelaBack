@@ -106,4 +106,10 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 		return balanceFacturaProveedorRepository.findByFactutasSinPagar() ;
 	}
 
+	@Override
+	public List<TwFacturasProveedor> obtenetPendienteIngreso() {
+		// TODO Auto-generated method stub
+		return twFacturasProveedorRepository.findBynEstatusFacturaIngreso();
+	}
+
 }
