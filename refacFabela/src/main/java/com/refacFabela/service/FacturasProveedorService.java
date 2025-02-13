@@ -11,6 +11,7 @@ import com.refacFabela.tipoCambio.DataSerie;
 public interface FacturasProveedorService {
 	
 	public List<TwFacturasProveedor> obtenetTodas();
+	public List<TwFacturasProveedor> obtenetPendienteIngreso();
 	public List<TwFacturasProveedor> obtenetFacturasProveedor(Long nIdProveedor, Long nIdMoneda);
 	public List<BalanceAbonoProveedor> obtenetFacturasProveedorBalance(Long nIdProveedor, Long nIdMoneda);
 	public List<BalanceAbonoProveedor> obtenetFacturasProveedorBalanceHistoria(Long nIdProveedor, Long nIdMoneda);
