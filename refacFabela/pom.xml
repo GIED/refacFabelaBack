@@ -153,11 +153,7 @@
         <version>2.12.3</version>
     </dependency>
     
-    <dependency>
-  <groupId>mx.grupocorasa.cfdibase</groupId>
-  <artifactId>cfdi-base</artifactId>
-  <version>4.0.18</version>
-</dependency>
+
     
 
 
