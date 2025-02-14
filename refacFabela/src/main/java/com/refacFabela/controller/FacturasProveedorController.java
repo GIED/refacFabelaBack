@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.model.TwAbonoFacturaProveedor;
 import com.refacFabela.model.TwFacturasProveedor;
+import com.refacFabela.model.VwFacturaProductoBalance;
 import com.refacFabela.model.VwFacturaProveedorBalance;
 import com.refacFabela.service.FacturasProveedorService;
 import com.refacFabela.tipoCambio.DataSerie;
@@ -205,6 +206,20 @@ public class FacturasProveedorController {
 
 		} catch (Exception e) {
 			logger.error("Error al recuperar los abonos de la factura del proveedor" + e);
+		}
+
+		return null;
+	}
+	
+	
+	@GetMapping("/obtenerFacturaProductoBalanceEstatus")
+	public List<VwFacturaProductoBalance> obtenerFacturaProductoBalanceEstatus(HttpServletResponse response, @RequestParam() Integer nEstatusAlmacen) {
+
+		try {			
+			return facturasProveedorService.obtenerVwFacturaProductoBalanceEstatus(nEstatusAlmacen);
+
+		} catch (Exception e) {
+			logger.error("Error al recuperar las facturas por estatus" + e);
 		}
 
 		return null;

@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import com.refacFabela.controller.BalanceAbonoProveedor;
 import com.refacFabela.model.TwAbonoFacturaProveedor;
 import com.refacFabela.model.TwFacturasProveedor;
+import com.refacFabela.model.VwFacturaProductoBalance;
 import com.refacFabela.model.VwFacturaProveedorBalance;
 import com.refacFabela.repository.TwFacturasProveedorRepository;
+import com.refacFabela.repository.VwFacturaProductoBalanceRepository;
 import com.refacFabela.repository.VwFacturaProveedorBalanceRepository;
 import com.refacFabela.service.FacturasProveedorService;
 import com.refacFabela.tipoCambio.DataSerie;
@@ -28,6 +30,8 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 	private BalanceFacturaProveedorRepository balanceFacturaProveedorRepository;
 	@Autowired
 	private TwAbonoFacturaProveedorRepository twAbonoFacturaProveedorRepository;
+	@Autowired
+	private VwFacturaProductoBalanceRepository vwFacturaProductoBalanceRepository;
 	
 	@Override
 	public List<TwFacturasProveedor> obtenetTodas() {
@@ -110,6 +114,12 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 	public List<TwFacturasProveedor> obtenetPendienteIngreso() {
 		// TODO Auto-generated method stub
 		return twFacturasProveedorRepository.findBynEstatusFacturaIngreso();
+	}
+
+	@Override
+	public List<VwFacturaProductoBalance> obtenerVwFacturaProductoBalanceEstatus(Integer nEstatusAlmacen) {
+		// TODO Auto-generated method stub
+		return vwFacturaProductoBalanceRepository.obtenerFacturasEstatusAlmacen(nEstatusAlmacen);
 	}
 
 }
