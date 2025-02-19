@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.refacFabela.controller.BalanceAbonoProveedor;
 import com.refacFabela.model.TwAbonoFacturaProveedor;
+import com.refacFabela.model.TwFacturaProveedorProducto;
 import com.refacFabela.model.TwFacturasProveedor;
 import com.refacFabela.model.VwFacturaProductoBalance;
 import com.refacFabela.model.VwFacturaProveedorBalance;
@@ -22,6 +23,8 @@ public interface FacturasProveedorService {
 	public TwFacturasProveedor obtenerFactura(Long nIdFactura);
 	public List<BalanceAbonoProveedor> obtenerFacturasSinPagar();
 	public List<VwFacturaProductoBalance> obtenerVwFacturaProductoBalanceEstatus(Integer nEstatusAlmacen);
+	public List<TwFacturaProveedorProducto> getTwFacturaProveedorProductoId(Long nIdFactura);
+	public TwFacturaProveedorProducto saveTwFacturaProveedorProductoId(TwFacturaProveedorProducto twFacturaProveedorProducto);
 	public DataSerie obtenetTipoCambioBM();
 	public TwFacturasProveedor guardarFacturaProveedor(TwFacturasProveedor factura);
 	public TwAbonoFacturaProveedor guardarAbonoFacturaProveedor(TwAbonoFacturaProveedor abono);

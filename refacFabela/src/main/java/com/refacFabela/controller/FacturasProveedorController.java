@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TwAbonoFacturaProveedor;
+import com.refacFabela.model.TwFacturaProveedorProducto;
 import com.refacFabela.model.TwFacturasProveedor;
 import com.refacFabela.model.VwFacturaProductoBalance;
 import com.refacFabela.model.VwFacturaProveedorBalance;
@@ -220,6 +223,31 @@ public class FacturasProveedorController {
 
 		} catch (Exception e) {
 			logger.error("Error al recuperar las facturas por estatus" + e);
+		}
+
+		return null;
+	}
+	
+	@GetMapping("/getProductoFacturaId")
+	public List<TwFacturaProveedorProducto> getProductoFacturaId(HttpServletResponse response, @RequestParam() Long nIdFactura) {
+
+		try {			
+			return facturasProveedorService.getTwFacturaProveedorProductoId(nIdFactura);
+
+		} catch (Exception e) {
+			logger.error("Error al recuperar los productos de la factura" + e);
+		}
+
+		return null;
+	}
+	@PostMapping("/saveProductoFactura")
+	public TwFacturaProveedorProducto saveProductoFactura(@RequestBody TwFacturaProveedorProducto twFacturaProveedorProducto) {
+
+		try {			
+			return facturasProveedorService.saveTwFacturaProveedorProductoId(twFacturaProveedorProducto);
+
+		} catch (Exception e) {
+			logger.error("Error al recuperar los productos de la factura" + e);
 		}
 
 		return null;
