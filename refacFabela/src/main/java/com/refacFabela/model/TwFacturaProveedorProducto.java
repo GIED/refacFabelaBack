@@ -2,7 +2,9 @@ package com.refacFabela.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "tw_factura_proveedor_producto")
@@ -25,8 +27,8 @@ public class TwFacturaProveedorProducto {
     @Column(name = "n_cantidad")
     private Integer nCantidad;
 
-    @Column(name = "d_fecha_registro")
-    private LocalDateTime dFechaRegistro;
+    @Column(name = "d_fecha_registro" , columnDefinition = "TIMESTAMP(3)")
+    private Instant   dFechaRegistro;
 
     @Column(name = "d_fecha_cierre_ingreso")
     private LocalDateTime dFechaCierreIngreso;  
@@ -98,11 +100,11 @@ public class TwFacturaProveedorProducto {
 		this.nCantidad = nCantidad;
 	}
 
-	public LocalDateTime getdFechaRegistro() {
+	public Instant getdFechaRegistro() {
 		return dFechaRegistro;
 	}
 
-	public void setdFechaRegistro(LocalDateTime dFechaRegistro) {
+	public void setdFechaRegistro(Instant dFechaRegistro) {
 		this.dFechaRegistro = dFechaRegistro;
 	}
 
