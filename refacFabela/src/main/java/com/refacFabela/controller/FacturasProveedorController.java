@@ -2,7 +2,9 @@ package com.refacFabela.controller;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -260,15 +262,15 @@ public class FacturasProveedorController {
 	}
 	
 	@GetMapping("/deleteProductoFactura")
-    public ResponseEntity<String> deleteProductoFactura(@RequestParam Long nId) {
-        try {
-            facturasProveedorService.borrarProductoFactura(nId);
-            return new ResponseEntity<>("Producto eliminado exitosamente", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error al eliminar el producto de la factura: " + e.getMessage(), e);
-            return new ResponseEntity<>("Error al eliminar el producto", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+	public ResponseEntity<Boolean> deleteProductoFactura(@RequestParam Long nId) {
+	    try {
+	        facturasProveedorService.borrarProductoFactura(nId);
+	        return new ResponseEntity<>(true, HttpStatus.OK);
+	    } catch (Exception e) {
+	        logger.error("Error al eliminar el producto de la factura: " + e.getMessage(), e);
+	        return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
 	
 	
 
