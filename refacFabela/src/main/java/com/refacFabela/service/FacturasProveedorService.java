@@ -28,5 +28,7 @@ public interface FacturasProveedorService {
 	public DataSerie obtenetTipoCambioBM();
 	public TwFacturasProveedor guardarFacturaProveedor(TwFacturasProveedor factura);
 	public TwAbonoFacturaProveedor guardarAbonoFacturaProveedor(TwAbonoFacturaProveedor abono);
+	 void borrarProductoFactura(Long nId);
+	
 
 }

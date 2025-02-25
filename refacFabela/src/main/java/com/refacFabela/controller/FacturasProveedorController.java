@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -255,6 +258,17 @@ public class FacturasProveedorController {
 
 		return null;
 	}
+	
+	@GetMapping("/deleteProductoFactura")
+    public ResponseEntity<String> deleteProductoFactura(@RequestParam Long nId) {
+        try {
+            facturasProveedorService.borrarProductoFactura(nId);
+            return new ResponseEntity<>("Producto eliminado exitosamente", HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error al eliminar el producto de la factura: " + e.getMessage(), e);
+            return new ResponseEntity<>("Error al eliminar el producto", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 	
 	
 

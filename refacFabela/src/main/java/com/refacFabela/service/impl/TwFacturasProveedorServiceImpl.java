@@ -137,4 +137,11 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 		return twFacturaProveedorProductoRepository.save(twFacturaProveedorProducto);
 	}
 
+	@Override
+	public void borrarProductoFactura(Long nId) {
+
+		twFacturaProveedorProductoRepository.deleteById(nId);
+		
+	}
+
 }
