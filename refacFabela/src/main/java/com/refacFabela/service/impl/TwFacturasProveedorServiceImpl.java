@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import com.refacFabela.controller.BalanceAbonoProveedor;
 import com.refacFabela.model.TwAbonoFacturaProveedor;
 import com.refacFabela.model.TwFacturaProveedorProducto;
+import com.refacFabela.model.TwFacturaProveedorProductoIngreso;
 import com.refacFabela.model.TwFacturasProveedor;
 import com.refacFabela.model.VwFacturaProductoBalance;
 import com.refacFabela.model.VwFacturaProveedorBalance;
+import com.refacFabela.repository.TwFacturaProveedorProductoIngresoRepository;
 import com.refacFabela.repository.TwFacturaProveedorProductoRepository;
 import com.refacFabela.repository.TwFacturasProveedorRepository;
 import com.refacFabela.repository.VwFacturaProductoBalanceRepository;
@@ -36,6 +38,8 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 	private VwFacturaProductoBalanceRepository vwFacturaProductoBalanceRepository;
 	@Autowired
 	private TwFacturaProveedorProductoRepository twFacturaProveedorProductoRepository;
+	@Autowired
+	private TwFacturaProveedorProductoIngresoRepository twFacturaProveedorProductoIngresoRepository;
 	
 	@Override
 	public List<TwFacturasProveedor> obtenetTodas() {
@@ -142,6 +146,16 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 
 		twFacturaProveedorProductoRepository.deleteById(nId);
 		
+	}
+
+	@Override
+	public List<TwFacturaProveedorProductoIngreso> getTwFacturaProveedorProductoIngresoId(Long nId) {
+		return twFacturaProveedorProductoIngresoRepository.obtenerFacturaProductoIngreso(nId);
+	}
+
+	@Override
+	public TwFacturaProveedorProductoIngreso saveTwFacturaProveedorProductoIngreso(TwFacturaProveedorProductoIngreso twFacturaProveedorProductoIngreso) {
+		return twFacturaProveedorProductoIngresoRepository.save(twFacturaProveedorProductoIngreso);
 	}
 
 }

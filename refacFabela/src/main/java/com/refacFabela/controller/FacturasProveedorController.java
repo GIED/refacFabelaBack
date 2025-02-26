@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TwAbonoFacturaProveedor;
 import com.refacFabela.model.TwFacturaProveedorProducto;
+import com.refacFabela.model.TwFacturaProveedorProductoIngreso;
 import com.refacFabela.model.TwFacturasProveedor;
 import com.refacFabela.model.VwFacturaProductoBalance;
 import com.refacFabela.model.VwFacturaProveedorBalance;
@@ -271,6 +272,28 @@ public class FacturasProveedorController {
 	        return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
+	
+	 @GetMapping("/obtenerProductoFacturaIngreso")
+	    public ResponseEntity<List<TwFacturaProveedorProductoIngreso>> obtenerProductoFacturaIngreso(@RequestParam Long nId) {
+	        try {
+	            List<TwFacturaProveedorProductoIngreso> productos = facturasProveedorService.getTwFacturaProveedorProductoIngresoId(nId);
+	            return new ResponseEntity<>(productos, HttpStatus.OK);
+	        } catch (Exception e) {
+	            logger.error("Error al obtener el ingreso " + e.getMessage(), e);
+	            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
+	    }
+	 
+	 @PostMapping("/saveProductoFacturaIngreso")
+	    public ResponseEntity<TwFacturaProveedorProductoIngreso> saveProductoFacturaIngreso(@RequestBody TwFacturaProveedorProductoIngreso twFacturaProveedorProductoIngreso) {
+	        try {
+	            TwFacturaProveedorProductoIngreso productos = facturasProveedorService.saveTwFacturaProveedorProductoIngreso(twFacturaProveedorProductoIngreso);
+	            return new ResponseEntity<>(productos, HttpStatus.OK);
+	        } catch (Exception e) {
+	            logger.error("Error al guardar el ingreso del producto " + e.getMessage(), e);
+	            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
+	    }
 	
 	
 
