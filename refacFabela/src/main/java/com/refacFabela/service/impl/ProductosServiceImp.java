@@ -59,6 +59,7 @@ import com.refacFabela.repository.TvVentasStockRepository;
 import com.refacFabela.repository.TwAjusteInventarioRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwMaquinaClienteRepository;
+import com.refacFabela.repository.TwProductoBodegaRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.TwSaldoUtilizadoRepository;
 
@@ -144,6 +145,9 @@ public class ProductosServiceImp implements ProductosService {
 	
 	@Autowired
 	private TvVentaDetalleRepository tvVentaDetalleRepository;
+	
+	@Autowired
+	private TwProductoBodegaRepository twProductoBodegaRepository;
 
  
 
@@ -948,19 +952,14 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		
 		return productosRepository.getById(nId);
 	}
-	
-	
-	
-	
-	
+
+	@Override
+	public TwProductobodega guardarProductoBodega(TwProductobodega twProductobodega) {
+		
+		return twProductoBodegaRepository.save(twProductobodega);
+	}
 
 	
-	/*private ProductoDto convertirAProductoDto(final TcProducto tcProducto) {
-		
-		ModelMapper modelMapper = new ModelMapper();
-		
-		return modelMapper.map(tcProducto, ProductoDto.class);
-		
-	}*/
+	
 
 }

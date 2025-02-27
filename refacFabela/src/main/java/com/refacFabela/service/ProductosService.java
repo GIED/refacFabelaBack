@@ -56,6 +56,8 @@ public interface ProductosService {
 	public List<TwProductobodega> consultaProductoBodega(Long id);
 	
 	public TwProductobodega consultaProductoBod(Long id, Long nIdBodega);
+	
+	public TwProductobodega guardarProductoBodega(TwProductobodega twProductobodega);
 
 
 	public List<TwProductobodega> obtenerInventaroEsp(Long idBodega, Long idAnaquel, Long idNivel);

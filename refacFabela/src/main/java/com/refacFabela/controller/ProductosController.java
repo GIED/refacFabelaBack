@@ -178,6 +178,18 @@ public class ProductosController {
 		}
 		return null;
 	}
+	
+	@PostMapping("/guardarProductoBodega")
+	public TwProductobodega guardarProductoBodega(@RequestBody TwProductobodega twProductobodega) {
+
+		try {
+			return productosService.guardarProductoBodega(twProductobodega);
+		} catch (Exception e) {
+
+			logger.error("Error al guardar producto factura" + e);
+		}
+		return null;
+	}
 
 	@GetMapping("/obtenerInventarioEsp")
 	public List<TwProductobodega> obtenerInventaroEsp(@RequestParam() Long idBodega, @RequestParam() Long idAnaquel,
@@ -218,8 +230,7 @@ public class ProductosController {
 	}
 
 	@PostMapping("/guardarProductoAlternativo")
-	public TwProductosAlternativo obtenerProductosNoParteLike(
-			@RequestBody TwProductosAlternativo twProductosAlternativo) {
+	public TwProductosAlternativo obtenerProductosNoParteLike(@RequestBody TwProductosAlternativo twProductosAlternativo) {
 
 		try {
 
