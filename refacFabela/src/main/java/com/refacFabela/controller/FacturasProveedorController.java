@@ -252,7 +252,7 @@ public class FacturasProveedorController {
 	public TwFacturaProveedorProducto saveProductoFactura(@RequestBody TwFacturaProveedorProducto twFacturaProveedorProducto) {
 
 		try {		
-			
+			System.err.println(twFacturaProveedorProducto);
 			return facturasProveedorService.saveTwFacturaProveedorProductoId(twFacturaProveedorProducto);
 
 		} catch (Exception e) {
@@ -287,6 +287,7 @@ public class FacturasProveedorController {
 	 @PostMapping("/saveProductoFacturaIngreso")
 	    public ResponseEntity<TwFacturaProveedorProductoIngreso> saveProductoFacturaIngreso(@RequestBody TwFacturaProveedorProductoIngreso twFacturaProveedorProductoIngreso) {
 	        try {
+	        	System.err.println(twFacturaProveedorProductoIngreso);
 	            TwFacturaProveedorProductoIngreso productos = facturasProveedorService.saveTwFacturaProveedorProductoIngreso(twFacturaProveedorProductoIngreso);
 	            return new ResponseEntity<>(productos, HttpStatus.OK);
 	        } catch (Exception e) {
