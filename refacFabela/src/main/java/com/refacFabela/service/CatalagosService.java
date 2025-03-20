@@ -21,6 +21,7 @@ import com.refacFabela.model.TcMarca;
 import com.refacFabela.model.TcMoneda;
 import com.refacFabela.model.TcNivel;
 import com.refacFabela.model.TcRegimenFiscal;
+import com.refacFabela.model.TcTipoProveedor;
 import com.refacFabela.model.TcTipoVenta;
 import com.refacFabela.model.TcUsocfdi;
 import com.refacFabela.model.TwCaja;
@@ -52,5 +53,7 @@ public interface CatalagosService {
 	public List<TcMoneda> catalogoMoneda();
 	public List<TcCuentaBancaria> consultarCuentasBancariasRazon(Long nIdRazonSoacial);
 	public List<TcEstatusFacturaProveedor> catalogoEstatusFacturaProveedor();
+	public List<TcTipoProveedor> getTipoProveedor();
+
 
 }

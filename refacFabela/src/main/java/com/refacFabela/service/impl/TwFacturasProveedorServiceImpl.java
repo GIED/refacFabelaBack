@@ -12,6 +12,8 @@ import com.refacFabela.model.TwFacturaProveedorProductoIngreso;
 import com.refacFabela.model.TwFacturasProveedor;
 import com.refacFabela.model.VwFacturaProductoBalance;
 import com.refacFabela.model.VwFacturaProveedorBalance;
+import com.refacFabela.repository.BalanceFacturaProveedorRepository;
+import com.refacFabela.repository.TwAbonoFacturaProveedorRepository;
 import com.refacFabela.repository.TwFacturaProveedorProductoIngresoRepository;
 import com.refacFabela.repository.TwFacturaProveedorProductoRepository;
 import com.refacFabela.repository.TwFacturasProveedorRepository;

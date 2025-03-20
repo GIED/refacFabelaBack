@@ -1,4 +1,4 @@
-package com.refacFabela.service.impl;
+package com.refacFabela.repository;
 
 import java.util.List;
 
