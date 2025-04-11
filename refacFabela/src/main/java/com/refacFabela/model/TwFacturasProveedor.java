@@ -69,7 +69,7 @@ public class TwFacturasProveedor implements Serializable {
 	private Boolean  nEspecial;
 	
 	@Column(name = "n_estatus_ingreso_almacen")
-	private Boolean  nEstatusIngresoAlmacen;
+	private Integer  nEstatusIngresoAlmacen;
 	
 	
 	@ManyToOne
@@ -92,19 +92,12 @@ public class TwFacturasProveedor implements Serializable {
 		
 	
 	
-	
-	
-	
-	
-	
-	
-	
 
-	public Boolean getnEstatusIngresoAlmacen() {
+	public Integer getnEstatusIngresoAlmacen() {
 		return nEstatusIngresoAlmacen;
 	}
 
-	public void setnEstatusIngresoAlmacen(Boolean nEstatusIngresoAlmacen) {
+	public void setnEstatusIngresoAlmacen(Integer nEstatusIngresoAlmacen) {
 		this.nEstatusIngresoAlmacen = nEstatusIngresoAlmacen;
 	}
 
