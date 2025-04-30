@@ -118,17 +118,16 @@ public class VentasServiceImpl implements VentasService {
 	@Override
 	public TwVenta guardarVenta(VentaDto ventaDto) {
 
-		System.out.println(ventaDto);
-
+		/*Declaración de objetos*/
+		
 		TwVenta twVenta = new TwVenta();
 		utils utils=new utils();
 		TwPedido twPedido=new TwPedido();
-		TwPedido respuesta=new TwPedido();
-		
-		TcCliente tcCliente= new TcCliente();
-		
+		TwPedido respuesta=new TwPedido();		
+		TcCliente tcCliente= new TcCliente();		
 		tcCliente=clientesRepository.buscarCliente(ventaDto.getIdCliente());
-
+		
+		/*Llenado de objeto venta*/
 		twVenta.setnIdCliente(ventaDto.getIdCliente());
 		twVenta.setnIdUsuario(ventaDto.getIdUsuario());
 		twVenta.setsFolioVenta(ventaDto.getsFolioVenta());
@@ -137,33 +136,35 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setdFechaInicioCredito(ventaDto.getFechaIniCredito());
 		twVenta.setdFechaTerminoCredito(ventaDto.getFechaFinCredito());		
 		twVenta.setnSaldo(false);
-		System.err.println(ventaDto.getTipoPago());
-				
+		twVenta.setnIdFacturacion(0L);
+		twVenta.setnIdCaja(utils.cajaActivaId(cajaRepository.obtenerCajaVigente()));
+		twVenta.setnIdCotizacion(ventaDto.getTwCotizacion().getnId());
+		twVenta.setAnticipo(ventaDto.getAnticipo());
+		twVenta.setDescuento(0.0);	
+		/*Se integra la fecha de la venta del producto*/
 		twVenta.setdFechaVenta(new Date());
+		
+		
+		/* Para las ventas por internet
 		if (twVenta.getnIdTipoVenta() == 2L) {
 			twVenta.setnIdEstatusVenta(2L);
 		}else {
 			twVenta.setnIdEstatusVenta(1L);			
-		}
+		} */
 		
+		/*Si las ventas es a crédito */
 		if(ventaDto.getTipoPago()==1L){
 			twVenta.setnIdEstatusVenta(2L);
 			twVenta.setnIdFormaPago(22L);
 			
 		}	
-		
-		twVenta.setnIdFacturacion(0L);
-		twVenta.setnIdCaja(utils.cajaActivaId(cajaRepository.obtenerCajaVigente()));
-		twVenta.setnIdCotizacion(ventaDto.getTwCotizacion().getnId());
-		twVenta.setAnticipo(ventaDto.getAnticipo());
-		twVenta.setDescuento(0.0);
-		
-		System.err.println(twVenta);
 	
-
+        /*Se guarga la venta en tw_venta*/
 		TwVenta ventaRegistrada = new TwVenta();
 		ventaRegistrada = ventasRepository.save(twVenta);
-
+        
+		
+		/*Se guarda recorre la lista validada*/
 
 		for (int i= 0 ; i < ventaDto.getListaValidada().size(); i++) {
 
@@ -174,6 +175,9 @@ public class VentasServiceImpl implements VentasService {
 			twVentaProducto.setnIdVenta(ventaRegistrada.getnId());
 			twVentaProducto.setnIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
 			twVentaProducto.setnCantidad(ventaDto.getListaValidada().get(i).getnCantidad());
+			twVentaProducto.setnEstatusEntregaAlmacen(0);
+			twVentaProducto.setnIdUsuario(ventaDto.getIdUsuario());
+			twVentaProducto.setnEstatus(1); 
 			if(tcCliente.getnDescuento()) {
 			twVentaProducto.setnIdDescuento(ventaDto.getListaValidada().get(i).getTcProducto().getnIdDescuento());
 			}
@@ -183,9 +187,7 @@ public class VentasServiceImpl implements VentasService {
 				
 			}
 			
-			twVentaProducto.setnEstatusEntregaAlmacen(0);
-			twVentaProducto.setnIdUsuario(ventaDto.getIdUsuario());
-			twVentaProducto.setnEstatus(1); 
+		
 			/*condición de entrega*/
 			
 			twProductobodega=productoBodegaRepository.obtenerProductoBodega(ventaDto.getListaValidada().get(i).getnIdProducto(), "LOCAL");
@@ -203,9 +205,7 @@ public class VentasServiceImpl implements VentasService {
 				
 			}
 			
-			System.err.println("Esto es lo que se estará guardando"+twVentaProducto);
-			
-			
+				
 			TwVentasProducto twVentaProductoNew = this.ventasProductoRepository.save(twVentaProducto);
 			
 			if (twVenta.getnIdTipoVenta()== 1L) {
@@ -231,6 +231,8 @@ public class VentasServiceImpl implements VentasService {
 			
 			for (int i = 0; i < ventaDto.getListaValidada().size(); i++) {
 				TwPedidoProducto twPedidoProducto=new TwPedidoProducto();
+				List<TwProductobodega> twProductoBodega=new ArrayList<TwProductobodega>();
+
 				
 			    twPedidoProducto.setsClavePedido(respuesta.getsCvePedido());
 				twPedidoProducto.setdFechaPedido(new Date());
@@ -240,9 +242,19 @@ public class VentasServiceImpl implements VentasService {
 				twPedidoProducto.setnIdProveedor(ventaDto.getListaValidada().get(i).getnIdProveedor());
 				twPedidoProducto.setnIdUsuario(ventaDto.getIdUsuario());
 				twPedidoProducto.setnIdPedido(respuesta.getnId());	
-				twPedidoProducto.setnEstatus(2);
+				twPedidoProducto.setnEstatus(2);	
+				twProductoBodega=productoBodegaRepository.findBynIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
 				
-				System.err.println(twPedidoProducto);
+				for (int j = 0; j < twProductoBodega.size(); j++) {
+					if(twProductoBodega.get(j).getTcBodega().getnId().equals(1L)) {
+						
+						twProductoBodega.get(j).setnCantidad(-ventaDto.getListaValidada().get(i).getnCantidad());
+						productoBodegaRepository.save(twProductoBodega.get(j)); 					
+						
+					}
+					
+				}
+			
 				pedidosProductoRepository.save(twPedidoProducto);
 				
 				
