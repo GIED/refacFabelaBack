@@ -11,6 +11,7 @@ import com.refacFabela.model.TwPedidoProducto;
 public interface PedidosService {
 	
 	public List<TwPedidoProducto> obtenerPedidosRegistrados(Long nIdPedido);
+	public List<TwPedidoProducto> obtenerProductosIdPedido(Long nIdProducto);
 	public List<TvPedidoDetalle> obtenerPedidosEstatus(Long nEstatus);
 	public List<TvPedidoDetalle> obtenerPedidos();
 	public TwPedido obtenerPedidoId(Long nIdPedido);

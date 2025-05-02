@@ -256,4 +256,10 @@ public class PedidosServiceImpl implements PedidosService {
 	    }
 	}
 
+	@Override
+	public List<TwPedidoProducto> obtenerProductosIdPedido(Long nIdProducto) {
+		// TODO Auto-generated method stub
+		return pedidosProductoRepository.obtenerProductosIdPedido(nIdProducto);
+	}
+
 }

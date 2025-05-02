@@ -14,6 +14,9 @@ public interface PedidosProductoRepository extends JpaRepository<TwPedidoProduct
 	@Query("Select c from TwPedidoProducto c where c.nIdPedido= :nIdPedido")
 	List<TwPedidoProducto> obtenerPedidosRegistrados(Long nIdPedido);
 	
+	@Query("Select c from TwPedidoProducto c where c.nIdProducto=:nIdProducto and c.nEstatus=2 and c.twPedido.nEstatus=0 " )
+	List<TwPedidoProducto> obtenerProductosIdPedido(Long nIdProducto);
+	
 	@Query("Select c from TwPedidoProducto c where c.nIdUsuario= :nIdUsuario and nIdPedido is null and nEstatus=1")
 	List<TwPedidoProducto> obtenerProductosCarritoPedidoUsuario(Long nIdUsuario);
 	

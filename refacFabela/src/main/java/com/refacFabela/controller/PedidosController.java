@@ -38,6 +38,19 @@ public class PedidosController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/obtenerProductosIdPedidos")
+	public List<TwPedidoProducto> obtenerProductosIdPedidos(@RequestParam() Long nIdProducto) {
+		try {
+
+			return pedidosService.obtenerProductosIdPedido(nIdProducto);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los pedidos registrados " + e);
+		}
+		return null;
+	}
 	@GetMapping("/obtenerPedidosEstatus")
 	public List<TvPedidoDetalle> obtenerPedidosEstatus(@RequestParam() Long nEstatus) {
 		try {
