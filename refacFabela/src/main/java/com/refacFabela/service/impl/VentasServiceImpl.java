@@ -244,7 +244,7 @@ public class VentasServiceImpl implements VentasService {
 				twPedidoProducto.setnIdPedido(respuesta.getnId());	
 				twPedidoProducto.setnEstatus(2);	
 				twProductoBodega=productoBodegaRepository.findBynIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
-				
+				/*
 				for (int j = 0; j < twProductoBodega.size(); j++) {
 					if(twProductoBodega.get(j).getTcBodega().getnId().equals(1L)) {
 						
@@ -253,7 +253,7 @@ public class VentasServiceImpl implements VentasService {
 						
 					}
 					
-				}
+				}*/
 			
 				pedidosProductoRepository.save(twPedidoProducto);
 				

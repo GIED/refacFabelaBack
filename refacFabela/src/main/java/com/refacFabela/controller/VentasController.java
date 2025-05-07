@@ -26,6 +26,7 @@ import com.refacFabela.model.TvVentaStock;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwAjustesInventario;
 import com.refacFabela.model.TwMaquinaCliente;
+import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwSaldoUtilizado;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentaProductoCancela;
@@ -315,6 +316,19 @@ public class VentasController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener los productos vendidos por id" + e);
+		}
+		return null;
+	}
+	
+	@PostMapping("/guardaIngresoPedidoProducto")
+	public TwPedidoProducto guardaIngresoPedidoProducto(@RequestBody TwPedidoProducto twVentasProducto) {
+
+		try {
+		
+			return productosService.pedidoProductoIngreso(twVentasProducto);
+		} catch (Exception e) {
+
+			logger.error("Error al guardar el ingreso pedido producto" + e);
 		}
 		return null;
 	}

@@ -22,6 +22,7 @@ import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwAjustesInventario;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwMaquinaCliente;
+import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwSaldoUtilizado;
@@ -116,6 +117,9 @@ public interface ProductosService {
 	public CalculaPrecioDto calcularNuevoPrecioAjustado(CalculaPrecioDto calculaPrecioDto);
 	
 	public TwVentasProducto actualizaVentaProducto(TwVentasProducto twVentasProducto);
+	
+	public TwPedidoProducto pedidoProductoIngreso(TwPedidoProducto wPedidoProducto);
+
 
 	public TwAbono guardarAbono(TwAbono abonoDto);
 

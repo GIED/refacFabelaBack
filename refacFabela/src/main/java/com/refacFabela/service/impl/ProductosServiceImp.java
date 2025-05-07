@@ -31,6 +31,7 @@ import com.refacFabela.model.TwAjustesInventario;
 import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwMaquinaCliente;
+import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwSaldoUtilizado;
@@ -957,6 +958,12 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	public TwProductobodega guardarProductoBodega(TwProductobodega twProductobodega) {
 		
 		return twProductoBodegaRepository.save(twProductobodega);
+	}
+
+	@Override
+	public TwPedidoProducto pedidoProductoIngreso(TwPedidoProducto wPedidoProducto) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	
