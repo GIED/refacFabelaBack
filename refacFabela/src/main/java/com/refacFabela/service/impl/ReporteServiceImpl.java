@@ -102,7 +102,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         // Cierre de output stream
 	         pos.flush();
 	         pos.close();
-	         
+	         /*
 	         envioMail enviar=new envioMail();
 				enviar.enviarCorreo(reporteCotizacion.getCorreo(), 
 						"Cotización_"+reporteCotizacion.getFolioCotizacion(),
@@ -110,7 +110,7 @@ public class ReporteServiceImpl implements ReporteService {
 						ruta,
 						nombreArchivo,
 						1
-						);			
+						);	*/		
 	         // Se recuperan los bytes correspondientes al reporte
 	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
 
