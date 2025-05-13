@@ -27,6 +27,7 @@ import com.refacFabela.model.TwAbonoFacturaProveedor;
 import com.refacFabela.model.TwFacturaProveedorProducto;
 import com.refacFabela.model.TwFacturaProveedorProductoIngreso;
 import com.refacFabela.model.TwFacturasProveedor;
+import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.VwFacturaProductoBalance;
 import com.refacFabela.model.VwFacturaProveedorBalance;
 import com.refacFabela.service.FacturasProveedorService;
@@ -295,6 +296,19 @@ public class FacturasProveedorController {
 	            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	        }
 	    }
+	 
+		@GetMapping("/descuentaVentasPedido")
+		public List<TwProductobodega> descuentaVentasPedido(HttpServletResponse response, @RequestParam() Long nIdProducto) {
+
+			try {			
+				return facturasProveedorService.descontarVentasPedido(nIdProducto);
+
+			} catch (Exception e) {
+				logger.error("Error al recuperar los productos de la factura" + e);
+			}
+
+			return null;
+		}
 	
 	
 

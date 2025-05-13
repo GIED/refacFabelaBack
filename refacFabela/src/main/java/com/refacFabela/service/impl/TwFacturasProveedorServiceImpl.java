@@ -1,5 +1,7 @@
 package com.refacFabela.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +12,20 @@ import com.refacFabela.model.TwAbonoFacturaProveedor;
 import com.refacFabela.model.TwFacturaProveedorProducto;
 import com.refacFabela.model.TwFacturaProveedorProductoIngreso;
 import com.refacFabela.model.TwFacturasProveedor;
+import com.refacFabela.model.TwPedido;
+import com.refacFabela.model.TwPedidoProducto;
+import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.VwFacturaProductoBalance;
 import com.refacFabela.model.VwFacturaProveedorBalance;
 import com.refacFabela.repository.BalanceFacturaProveedorRepository;
+import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.TwAbonoFacturaProveedorRepository;
 import com.refacFabela.repository.TwFacturaProveedorProductoIngresoRepository;
 import com.refacFabela.repository.TwFacturaProveedorProductoRepository;
 import com.refacFabela.repository.TwFacturasProveedorRepository;
+import com.refacFabela.repository.TwPedidoProductoRepository;
+import com.refacFabela.repository.TwPedidoRepository;
+import com.refacFabela.repository.TwProductoBodegaRepository;
 import com.refacFabela.repository.VwFacturaProductoBalanceRepository;
 import com.refacFabela.repository.VwFacturaProveedorBalanceRepository;
 import com.refacFabela.service.FacturasProveedorService;
@@ -42,6 +51,12 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 	private TwFacturaProveedorProductoRepository twFacturaProveedorProductoRepository;
 	@Autowired
 	private TwFacturaProveedorProductoIngresoRepository twFacturaProveedorProductoIngresoRepository;
+	@Autowired
+	private TwProductoBodegaRepository twProductoBodegaRepository;
+	@Autowired
+	private PedidosProductoRepository pedidosProductoRepository;
+	@Autowired
+	private TwPedidoRepository twPedidoRepository;
 	
 	@Override
 	public List<TwFacturasProveedor> obtenetTodas() {
@@ -159,5 +174,121 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 	public TwFacturaProveedorProductoIngreso saveTwFacturaProveedorProductoIngreso(TwFacturaProveedorProductoIngreso twFacturaProveedorProductoIngreso) {
 		return twFacturaProveedorProductoIngresoRepository.save(twFacturaProveedorProductoIngreso);
 	}
+
+	@Override
+	public List<TwProductobodega> descontarVentasPedido(Long nIdProducto) {
+		
+		//Declaracion de varibles
+		List<TwProductobodega> listaProductoBodega= new ArrayList<TwProductobodega>();
+		List<TwPedidoProducto> listaPedidoProducto= new ArrayList<TwPedidoProducto>();		
+		Integer totalbodegas=0;
+		Integer pendienteVentaPedido=0;
+		
+		//consulta de pedidos e inventario
+		listaProductoBodega=twProductoBodegaRepository.productoBogas(nIdProducto);
+		listaPedidoProducto=pedidosProductoRepository.obtenerProductosIdPedido(nIdProducto);
+		
+		//sumatoria pedidos producto e inventario
+		totalbodegas = listaProductoBodega.stream().mapToInt(producto -> producto.getnCantidad()).sum();		
+		pendienteVentaPedido = listaPedidoProducto.stream().mapToInt(pedido -> pedido.getnCantidadPedida() - pedido.getnCantidaRecibida()).sum();
+
+		
+		// se hacen los descuentos de las bodegas
+		surtirPedidos(listaProductoBodega,listaPedidoProducto);
+		
+		
+		
+		
+		
+		
+		System.err.println(listaProductoBodega);
+		System.err.println(listaPedidoProducto);
+		
+		System.err.println(totalbodegas);
+		System.err.println(pendienteVentaPedido);
+		
+		
+		
+		return listaProductoBodega=twProductoBodegaRepository.productoBogas(nIdProducto);
+	}
+	
+	
+	
+	public void surtirPedidos(List<TwProductobodega> bodegas, List<TwPedidoProducto> pedidos) {
+		
+		
+		
+		System.err.println("EL TOTAL DE PEDIDOS A RECORRER ES DE:" + pedidos.size());
+
+		for (TwPedidoProducto pedido : pedidos) {
+			
+			TwPedido twPedido=new TwPedido();
+			Integer pedidosPendientes=0;
+			
+			System.err.println("ENTRE AL RECORRER EL PEDIDO:"+ pedido.getnId());
+
+			int cuotaRestante = pedido.getnCantidadPedida() - pedido.getnCantidaRecibida();
+			System.err.println("ESTE ES LA CUOTA RESTANTE:"+cuotaRestante);
+
+			for (TwProductobodega bodega : bodegas) {
+				System.err.println("ENTRE AL RECORRER LA BODEGA:"+ bodega.getTcBodega().getsBodega());
+				if (cuotaRestante <= 0) {
+					break;
+				}
+
+				int inventarioBodega = bodega.getnCantidad();
+
+				if (inventarioBodega >= cuotaRestante) {
+					bodega.setnCantidad(inventarioBodega - cuotaRestante);
+					pedido.setnCantidaRecibida(pedido.getnCantidadPedida());
+					pedido.setnEstatus(1);
+					
+					pedidosProductoRepository.save(pedido);
+					twProductoBodegaRepository.save(bodega);
+
+					System.err.println("esto queda en la bodega:" + bodega.getnCantidad());
+					System.err.println("asi queda el pedido:" + pedido);
+
+					cuotaRestante = 0;
+				} else {
+					bodega.setnCantidad(0);
+					pedido.setnCantidaRecibida(pedido.getnCantidaRecibida() + inventarioBodega);
+					System.err.println("esto queda en la bodega:" + bodega);
+					System.err.println("asi queda el pedido:" + bodega);
+					pedidosProductoRepository.save(pedido);
+					twProductoBodegaRepository.save(bodega);
+
+					cuotaRestante -= inventarioBodega;
+					
+				}
+				
+			}
+			
+			if (cuotaRestante > 0) {
+				System.out.println("No hay suficiente inventario para surtir el pedido: " + pedido.getnId());
+			} else {
+				System.out.println("Pedido surtido: " + pedido.getnId());
+			}
+			
+			pedidosPendientes=pedidosProductoRepository.obtenerTotalProductosPendinetes(pedido.getnIdPedido());
+			
+			if(pedidosPendientes==0) {
+				twPedido=twPedidoRepository.pedidoId(pedido.getnIdPedido());
+				twPedido.setnEstatus(0L);
+				 twPedido.setdFechaPedidoCierre(new Date());				 
+				 twPedidoRepository.save(twPedido);
+				
+			}
+			
+
+		}
+
+	}
+	
+	
+	
+	
+	
+	
 
 }
