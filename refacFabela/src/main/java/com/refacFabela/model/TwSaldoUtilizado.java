@@ -1,5 +1,6 @@
 package com.refacFabela.model;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,10 +28,10 @@ public class TwSaldoUtilizado implements Serializable {
 	private Long nIdVenta;
 
 	@Column(name = "n_saldo_total")
-	private Double nSaldoTotal;
+	private BigDecimal nSaldoTotal;
 
 	@Column(name = "n_saldo_utilizado")
-	private Double nSaldoUtilizado;
+	private BigDecimal nSaldoUtilizado;
 	
 	@Column(name = "n_id_usuario")
 	private Long nIdUsuario;
@@ -77,19 +78,20 @@ public class TwSaldoUtilizado implements Serializable {
 		this.nIdVenta = nIdVenta;
 	}
 
-	public Double getnSaldoTotal() {
+
+	public BigDecimal getnSaldoTotal() {
 		return nSaldoTotal;
 	}
 
-	public void setnSaldoTotal(Double nSaldoTotal) {
+	public void setnSaldoTotal(BigDecimal nSaldoTotal) {
 		this.nSaldoTotal = nSaldoTotal;
 	}
 
-	public Double getnSaldoUtilizado() {
+	public BigDecimal getnSaldoUtilizado() {
 		return nSaldoUtilizado;
 	}
 
-	public void setnSaldoUtilizado(Double nSaldoUtilizado) {
+	public void setnSaldoUtilizado(BigDecimal nSaldoUtilizado) {
 		this.nSaldoUtilizado = nSaldoUtilizado;
 	}
 

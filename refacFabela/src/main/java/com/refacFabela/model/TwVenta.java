@@ -1,6 +1,8 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -55,10 +57,10 @@ public class TwVenta implements Serializable {
 	private Long nIdCotizacion;
 	
 	@Column(name = "nAnticipo")
-	private Double anticipo;
+	private BigDecimal anticipo;
 	
 	@Column(name = "nDescuento")
-	private Double descuento;
+	private BigDecimal descuento;
 	
 	@Column(name = "n_idFormaPago")
 	private Long  nIdFormaPago;
@@ -121,14 +123,7 @@ public class TwVenta implements Serializable {
 	}
 
 
-	public Double getDescuento() {
-		return descuento;
-	}
-
-
-	public void setDescuento(Double descuento) {
-		this.descuento = descuento;
-	}
+	
 
 
 	public TwVenta() {
@@ -332,16 +327,28 @@ public class TwVenta implements Serializable {
 	}
 
 
-	public Double getAnticipo() {
+	
+	
+
+
+	public BigDecimal getAnticipo() {
 		return anticipo;
 	}
 
 
-	public void setAnticipo(Double anticipo) {
+	public void setAnticipo(BigDecimal anticipo) {
 		this.anticipo = anticipo;
 	}
-	
-	
+
+
+	public BigDecimal getDescuento() {
+		return descuento;
+	}
+
+
+	public void setDescuento(BigDecimal descuento) {
+		this.descuento = descuento;
+	}
 
 
 	public Boolean getnSaldo() {

@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -29,7 +30,7 @@ public class TrVentaCobro implements Serializable {
 	@Column(name = "n_id_caja")
 	private Long nIdCaja;
 	@Column(name = "n_monto")
-	private Double nMonto;
+	private BigDecimal nMonto;
 	@Column(name = "d_fecha")
 	private Date dFecha;
 	@Column(name = "n_estatus")
@@ -74,11 +75,13 @@ public class TrVentaCobro implements Serializable {
 		this.nIdCaja = nIdCaja;
 	}
 
-	public Double getnMonto() {
+	
+
+	public BigDecimal getnMonto() {
 		return nMonto;
 	}
 
-	public void setnMonto(Double nMonto) {
+	public void setnMonto(BigDecimal nMonto) {
 		this.nMonto = nMonto;
 	}
 

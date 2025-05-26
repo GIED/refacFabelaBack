@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -39,6 +40,7 @@ import com.refacFabela.dto.TwSaldoUtilizadoDto;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.service.ReporteService;
+import com.refacFabela.utils.DateTimeUtil;
 import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
 import com.refacFabela.utils.factura.ConstantesFactura;
@@ -79,12 +81,14 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("nombreCliente", reporteCotizacion.getNombreCliente());
 	         params.put("rfcCliente", reporteCotizacion.getRfcCliente());
 	         params.put("folioCotizacion", reporteCotizacion.getFolioCotizacion());
-	         params.put("fecha", reporteCotizacion.getFecha());
+	         params.put("fecha", DateTimeUtil.convertirFecha(reporteCotizacion.getFecha()) );
 	         params.put("subTotal", reporteCotizacion.getSubTotal());
 	         params.put("ivaTotal", reporteCotizacion.getIvaTotal());
 	         params.put("total", reporteCotizacion.getTotal());
 	         params.put("listaProductos", listaProducto);
 	         params.put("nombreVendedor", reporteCotizacion.getNombreVendedor());
+	         
+	         
 
 	         
 	         params.put("qr", getQR(("Folio de cotización: C-"+reporteCotizacion.getFolioCotizacion()+"\nRFC cliente: "+reporteCotizacion.getRfcCliente()+"\nRazón Social: "+reporteCotizacion.getNombreCliente()+"\nTotal: "+reporteCotizacion.getTotal().toString()+"\nTotal de productos: "+ listaProducto.size()).toString()));
@@ -135,7 +139,7 @@ public class ReporteServiceImpl implements ReporteService {
 	
 	
 	@Override
-	public byte[] generaVentaPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto, double totalAbono) {
+	public byte[] generaVentaPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto, BigDecimal totalAbono) {
 		try {
 			String ruta="";
 			if(reporteVenta.getTipoPago()==1) {
@@ -213,7 +217,7 @@ public class ReporteServiceImpl implements ReporteService {
 	}
 	
 	@Override
-	public byte[] generaSaldoFavorPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto, double totalAbono,  double saldoFinalSaldo, double totalSaldoUsado, List<TwSaldoUtilizadoDto> listaTwSaldoUtilizadoDto ) {
+	public byte[] generaSaldoFavorPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto, BigDecimal totalAbono,  BigDecimal saldoFinalSaldo, BigDecimal totalSaldoUsado, List<TwSaldoUtilizadoDto> listaTwSaldoUtilizadoDto ) {
 		try {
 			String ruta="";
 			
@@ -243,7 +247,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("fecha", reporteVenta.getFecha());
 	         params.put("subTotal", reporteVenta.getSubTotal());
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
-	         params.put("total", reporteVenta.getTotal() - reporteVenta.getDescuento()-totalAbono);
+	         params.put("total",  reporteVenta.getTotal().subtract(reporteVenta.getDescuento()).subtract(totalAbono));
 	         params.put("listaProductos", listaProducto);
 	         params.put("descuento", reporteVenta.getDescuento());
 	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal()+"\nTotal de productos: "+ listaProducto.size()).toString()));
@@ -293,7 +297,7 @@ public class ReporteServiceImpl implements ReporteService {
 	}
 	
 	@Override
-	public byte[] generaVentaAlmacenPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto, double totalAbono) {
+	public byte[] generaVentaAlmacenPDF(ReporteVentaDto reporteVenta, List<ReporteVentaDto> listaProducto, BigDecimal totalAbono) {
 		try {
 			String ruta="";
 			System.err.println("LLEGUE A GENERAR EL ARCHIVO ");
@@ -324,7 +328,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("fecha", reporteVenta.getFecha());
 	         params.put("subTotal", reporteVenta.getSubTotal());
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
-	         params.put("total", reporteVenta.getTotal() - reporteVenta.getDescuento()-totalAbono);
+	         params.put("total",  reporteVenta.getTotal().subtract(reporteVenta.getDescuento()).subtract(totalAbono));
 	         params.put("listaProductos", listaProducto);
 	         params.put("descuento", reporteVenta.getDescuento());
 	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+reporteVenta.getTotal()+"\nTotal de productos: "+ listaProducto.size()).toString()));
@@ -367,7 +371,7 @@ public class ReporteServiceImpl implements ReporteService {
 	      return null;
 	}
 	
-	public byte[] generaAbonoVentaPDF(ReporteVentaDto reporteVenta, List<AbonosDto> listaAbono, double abonos) {
+	public byte[] generaAbonoVentaPDF(ReporteVentaDto reporteVenta, List<AbonosDto> listaAbono, BigDecimal abonos) {
 		try {
 			String ruta="";
 			
@@ -401,12 +405,16 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
 	         params.put("total", reporteVenta.getTotal());
 	         params.put("listaAbonos", listaAbono);	    
-	         params.put("qr", getQR(("Folio de venta: V-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+(reporteVenta.getTotal()-reporteVenta.getDescuento())+"\nTotal de Abonos: "+ listaAbono.size()).toString()));
-	         params.put("fechaVencimiento", fechaVencimiento);
+	         params.put("qr", getQR(
+	        		    "Folio de venta: V-" + reporteVenta.getFolioVenta() +
+	        		    "\nRFC cliente: " + reporteVenta.getRfcCliente() +
+	        		    "\nRazón Social: " + reporteVenta.getNombreCliente() +
+	        		    "\nTotal: " + reporteVenta.getTotal().subtract(reporteVenta.getDescuento()) +
+	        		    "\nTotal de Abonos: " + listaAbono.size()
+	        		));	         params.put("fechaVencimiento", fechaVencimiento);
 	         params.put("totalAbonos", abonos);
 	         params.put("descuento", reporteVenta.getDescuento());
-	         params.put("saldoFinal", reporteVenta.getTotal()-abonos - reporteVenta.getDescuento());
-	         
+	         params.put("saldoFinal", reporteVenta.getTotal().subtract(abonos).subtract(reporteVenta.getDescuento()));	         
 	         
 	         
 	         
@@ -477,8 +485,15 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("listaProductos", listaProducto);
 			params.put("anticipo", reporteVenta.getAnticipo());	
 			params.put("descuento", reporteVenta.getDescuento());
-	        params.put("qr", getQR(("Folio de venta por pedido: VP-"+reporteVenta.getFolioVenta()+"\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+reporteVenta.getNombreCliente()+"\nTotal: "+(reporteVenta.getTotal()-reporteVenta.getAnticipo()-reporteVenta.getDescuento())+"\nTotal de productos: "+ listaProducto.size()).toString()));
-	        params.put("saldoFinal", util.truncarDecimales( reporteVenta.getTotal()-reporteVenta.getAnticipo()));
+			params.put("qr", getQR(
+				    "Folio de venta por pedido: VP-" + reporteVenta.getFolioVenta() +
+				    "\nRFC cliente: " + reporteVenta.getRfcCliente() +
+				    "\nRazón Social: " + reporteVenta.getNombreCliente() +
+				    "\nTotal: " + reporteVenta.getTotal()
+				        .subtract(reporteVenta.getAnticipo())
+				        .subtract(reporteVenta.getDescuento()) +
+				    "\nTotal de productos: " + listaProducto.size()
+				));	        params.put("saldoFinal", DateTimeUtil.truncarDosDecimales(reporteVenta.getTotal().subtract(reporteVenta.getAnticipo())));
 	        params.put("nombreVendedor", reporteVenta.getNombreVendedor());
 	        
 	        if(reporteVenta.getIdPedido()!=null) {
@@ -574,8 +589,11 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("listaVenta", listaAbomoVenta);
 			params.put("abonos", reporteVenta.getAbonos());			
 	        params.put("qr", getQR(("\nRFC cliente: "+reporteVenta.getRfcCliente()+"\nRazón Social: "+cliente.getsRazonSocial()+"\nTotal: "+reporteVenta.getTotal().toString()+"\nTotal de Ventas a crédito: "+ listaAbomoVenta.size()).toString()));
-	        params.put("saldoFinal", (reporteVenta.getTotal()-reporteVenta.getAbonos()-reporteVenta.getDescuento()));
-	     
+	        params.put("saldoFinal", 
+	        	    reporteVenta.getTotal()
+	        	        .subtract(reporteVenta.getAbonos())
+	        	        .subtract(reporteVenta.getDescuento())
+	        	);	     
 	        		
 			
 			
@@ -685,12 +703,12 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("listaFormaPago", balanceCajaDto.getTvReporteCajaFormaPago());
 			params.put("caja",  balanceCajaDto.getCaja());
 			params.put("fechaEmicion",  balanceCajaDto.getFechaGeneraReporte());
-			params.put("totalIngresoVentas", util.truncarDecimales(balanceCajaDto.getTotalIngresoVenta()) );
-			params.put("totalIngresoAbonos",  util.truncarDecimales(balanceCajaDto.getTotalIngresoAbonos()) );
-			params.put("totalIngresoGeneral",  util.truncarDecimales(balanceCajaDto.getTotalGeneralIngresos()) );
+			params.put("totalIngresoVentas", DateTimeUtil.truncarDosDecimales(balanceCajaDto.getTotalIngresoVenta()) );
+			params.put("totalIngresoAbonos",  DateTimeUtil.truncarDosDecimales(balanceCajaDto.getTotalIngresoAbonos()) );
+			params.put("totalIngresoGeneral",  DateTimeUtil.truncarDosDecimales(balanceCajaDto.getTotalGeneralIngresos()) );
 			params.put("noVentas",  balanceCajaDto.getNoVentas());
 			params.put("noAbonos",  balanceCajaDto.getNoAbonos());
-			params.put("totalVentas",  util.truncarDecimales(balanceCajaDto.getTotalVentas()));
+			params.put("totalVentas",  DateTimeUtil.truncarDosDecimales(balanceCajaDto.getTotalVentas()));
 			params.put("entregadas",  balanceCajaDto.getTotalEntregadas());
 			params.put("noEntregadas",  balanceCajaDto.getTotalNoEntregadas());
 			params.put("entregasParciales",  balanceCajaDto.getTotalEntregasParciales());
@@ -814,6 +832,11 @@ public class ReporteServiceImpl implements ReporteService {
 		return null;
 	}
 
+	
+	
+	
+
+	
 
 	
 

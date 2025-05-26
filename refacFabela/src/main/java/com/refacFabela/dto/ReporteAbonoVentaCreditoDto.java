@@ -1,5 +1,6 @@
 package com.refacFabela.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ReporteAbonoVentaCreditoDto {
@@ -10,11 +11,11 @@ public class ReporteAbonoVentaCreditoDto {
 	public String fechaVenta;
 	public String fechaInicioCredito;
 	public String fechaTerminoCredito;
-	public double totalVenta;
-	public double totalAbono;
-	public double saldoTotal;
-	public double avancePago;
-	public double descuento;
+	public BigDecimal totalVenta;
+	public BigDecimal totalAbono;
+	public BigDecimal saldoTotal;
+	public BigDecimal avancePago;
+	public BigDecimal descuento;
 	public List<AbonosDto> abonoDto;
 	public Boolean vencido;
 	
@@ -25,12 +26,7 @@ public class ReporteAbonoVentaCreditoDto {
 	public void setVencido(Boolean vencido) {
 		this.vencido = vencido;
 	}
-	public double getDescuento() {
-		return descuento;
-	}
-	public void setDescuento(double descuento) {
-		this.descuento = descuento;
-	}
+	
 	public Long getIdCliente() {
 		return idCliente;
 	}
@@ -68,29 +64,38 @@ public class ReporteAbonoVentaCreditoDto {
 	public void setFechaTerminoCredito(String fechaTerminoCredito) {
 		this.fechaTerminoCredito = fechaTerminoCredito;
 	}
-	public double getTotalVenta() {
+	
+	
+	
+	public BigDecimal getTotalVenta() {
 		return totalVenta;
 	}
-	public void setTotalVenta(double totalVenta) {
+	public void setTotalVenta(BigDecimal totalVenta) {
 		this.totalVenta = totalVenta;
 	}
-	public double getTotalAbono() {
+	public BigDecimal getTotalAbono() {
 		return totalAbono;
 	}
-	public void setTotalAbono(double totalAbono) {
+	public void setTotalAbono(BigDecimal totalAbono) {
 		this.totalAbono = totalAbono;
 	}
-	public double getSaldoTotal() {
+	public BigDecimal getSaldoTotal() {
 		return saldoTotal;
 	}
-	public void setSaldoTotal(double saldoTotal) {
+	public void setSaldoTotal(BigDecimal saldoTotal) {
 		this.saldoTotal = saldoTotal;
 	}
-	public double getAvancePago() {
+	public BigDecimal getAvancePago() {
 		return avancePago;
 	}
-	public void setAvancePago(double avancePago) {
+	public void setAvancePago(BigDecimal avancePago) {
 		this.avancePago = avancePago;
+	}
+	public BigDecimal getDescuento() {
+		return descuento;
+	}
+	public void setDescuento(BigDecimal descuento) {
+		this.descuento = descuento;
 	}
 	public List<AbonosDto> getAbonoDto() {
 		return abonoDto;

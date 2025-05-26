@@ -1,6 +1,7 @@
 package com.refacFabela.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class AbonosDto implements Serializable {
 
@@ -9,7 +10,7 @@ public class AbonosDto implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Long id;	
-	private Double abono;
+	private BigDecimal abono;
 	private String usuario;
 	private String fecha;
 	private String formaPago;
@@ -19,10 +20,13 @@ public class AbonosDto implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Double getAbono() {
+	
+	
+	
+	public BigDecimal getAbono() {
 		return abono;
 	}
-	public void setAbono(Double abono) {
+	public void setAbono(BigDecimal abono) {
 		this.abono = abono;
 	}
 	public String getUsuario() {

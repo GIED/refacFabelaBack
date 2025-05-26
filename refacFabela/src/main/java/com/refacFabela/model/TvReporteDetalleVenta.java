@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -44,19 +45,19 @@ public class TvReporteDetalleVenta implements Serializable {
 		@Column(name = "s_nombre_usuario" )
 		private String sNombreUsuario;
 		@Column(name = "n_anticipo") 
-		private Double nAnticipo;
+		private BigDecimal nAnticipo;
 		@Column(name = "n_id_forma_pago" )
 		private Long nIdFormaPago;
 		@Column(name = "s_forma_pago" )
 		private String sFormaPago;
 		@Column(name = "n_descuento" )
-		private Double nDescuento;
+		private BigDecimal nDescuento;
 		@Column(name = "n_total_venta")
-		private Double nTotalVenta;
+		private BigDecimal nTotalVenta;
 		@Column(name = "n_total_pago_caja_nota")
-		private Double nTotalPagoCajaNota;
+		private BigDecimal nTotalPagoCajaNota;
 		@Column(name = "n_saldo_final_venta" )
-		private Double nSaldoFinalVenta;
+		private BigDecimal nSaldoFinalVenta;
 		@Column(name = "s_estatus_entrega")		
 		private String sEstatusEntrega;
 		
@@ -64,169 +65,247 @@ public class TvReporteDetalleVenta implements Serializable {
 			
 		}
 
-		public Long getnIdCaja() {
-			return nIdCaja;
-		}
-
-		public void setnIdCaja(Long nIdCaja) {
-			this.nIdCaja = nIdCaja;
-		}
-
-		public String getsRfc() {
-			return sRfc;
-		}
-
-		public void setsRfc(String sRfc) {
-			this.sRfc = sRfc;
-		}
-
-		public String getsRazonSocial() {
-			return sRazonSocial;
-		}
-
-		public void setsRazonSocial(String sRazonSocial) {
-			this.sRazonSocial = sRazonSocial;
-		}
-
-		public Long getnEstatusVenta() {
-			return nEstatusVenta;
-		}
-
-		public void setnEstatusVenta(Long nEstatusVenta) {
-			this.nEstatusVenta = nEstatusVenta;
-		}
-
-		public Date getdFechaVenta() {
-			return dFechaVenta;
-		}
-
-		public void setdFechaVenta(Date dFechaVenta) {
-			this.dFechaVenta = dFechaVenta;
-		}
-
-		public String getsTipoVenta() {
-			return sTipoVenta;
-		}
-
-		public void setsTipoVenta(String sTipoVenta) {
-			this.sTipoVenta = sTipoVenta;
-		}
-
-	
-
-		public String getsTipoPago() {
-			return sTipoPago;
-		}
-
-		public void setsTipoPago(String sTipoPago) {
-			this.sTipoPago = sTipoPago;
-		}
+		
 
 		public Long getnIdVenta() {
 			return nIdVenta;
 		}
 
+
+
 		public void setnIdVenta(Long nIdVenta) {
 			this.nIdVenta = nIdVenta;
 		}
 
-		public Date getdInicioCredito() {
-			return dInicioCredito;
+
+
+		public Long getnIdCaja() {
+			return nIdCaja;
 		}
 
-		public void setdInicioCredito(Date dInicioCredito) {
-			this.dInicioCredito = dInicioCredito;
+
+
+		public void setnIdCaja(Long nIdCaja) {
+			this.nIdCaja = nIdCaja;
 		}
 
-		public Date getdTerminoCredito() {
-			return dTerminoCredito;
+
+
+		public String getsRfc() {
+			return sRfc;
 		}
 
-		public void setdTerminoCredito(Date dTerminoCredito) {
-			this.dTerminoCredito = dTerminoCredito;
+
+
+		public void setsRfc(String sRfc) {
+			this.sRfc = sRfc;
 		}
 
-		public String getsNombreUsuario() {
-			return sNombreUsuario;
+
+
+		public String getsRazonSocial() {
+			return sRazonSocial;
 		}
 
-		public void setsNombreUsuario(String sNombreUsuario) {
-			this.sNombreUsuario = sNombreUsuario;
+
+
+		public void setsRazonSocial(String sRazonSocial) {
+			this.sRazonSocial = sRazonSocial;
 		}
 
-		public Double getnAnticipo() {
-			return nAnticipo;
+
+
+		public Long getnEstatusVenta() {
+			return nEstatusVenta;
 		}
 
-		public void setnAnticipo(Double nAnticipo) {
-			this.nAnticipo = nAnticipo;
+
+
+		public void setnEstatusVenta(Long nEstatusVenta) {
+			this.nEstatusVenta = nEstatusVenta;
 		}
 
-		public Long getnIdFormaPago() {
-			return nIdFormaPago;
-		}
 
-		public void setnIdFormaPago(Long nIdFormaPago) {
-			this.nIdFormaPago = nIdFormaPago;
-		}
-
-		public String getsFormaPago() {
-			return sFormaPago;
-		}
-
-		public void setsFormaPago(String sFormaPago) {
-			this.sFormaPago = sFormaPago;
-		}
-
-		public Double getnDescuento() {
-			return nDescuento;
-		}
-
-		public void setnDescuento(Double nDescuento) {
-			this.nDescuento = nDescuento;
-		}
-
-		public Double getnTotalVenta() {
-			return nTotalVenta;
-		}
-
-		public void setnTotalVenta(Double nTotalVenta) {
-			this.nTotalVenta = nTotalVenta;
-		}
-
-		public Double getnTotalPagoCajaNota() {
-			return nTotalPagoCajaNota;
-		}
-
-		public void setnTotalPagoCajaNota(Double nTotalPagoCajaNota) {
-			this.nTotalPagoCajaNota = nTotalPagoCajaNota;
-		}
-
-		public Double getnSaldoFinalVenta() {
-			return nSaldoFinalVenta;
-		}
-
-		public void setnSaldoFinalVenta(Double nSaldoFinalVenta) {
-			this.nSaldoFinalVenta = nSaldoFinalVenta;
-		}
-
-		public String getsEstatusEntrega() {
-			return sEstatusEntrega;
-		}
-
-		public void setsEstatusEntrega(String sEstatusEntrega) {
-			this.sEstatusEntrega = sEstatusEntrega;
-		}
-		
-		
 
 		public String getsEstatusVenta() {
 			return sEstatusVenta;
 		}
 
+
+
 		public void setsEstatusVenta(String sEstatusVenta) {
 			this.sEstatusVenta = sEstatusVenta;
 		}
+
+
+
+		public Date getdFechaVenta() {
+			return dFechaVenta;
+		}
+
+
+
+		public void setdFechaVenta(Date dFechaVenta) {
+			this.dFechaVenta = dFechaVenta;
+		}
+
+
+
+		public String getsTipoVenta() {
+			return sTipoVenta;
+		}
+
+
+
+		public void setsTipoVenta(String sTipoVenta) {
+			this.sTipoVenta = sTipoVenta;
+		}
+
+
+
+		public String getsTipoPago() {
+			return sTipoPago;
+		}
+
+
+
+		public void setsTipoPago(String sTipoPago) {
+			this.sTipoPago = sTipoPago;
+		}
+
+
+
+		public Date getdInicioCredito() {
+			return dInicioCredito;
+		}
+
+
+
+		public void setdInicioCredito(Date dInicioCredito) {
+			this.dInicioCredito = dInicioCredito;
+		}
+
+
+
+		public Date getdTerminoCredito() {
+			return dTerminoCredito;
+		}
+
+
+
+		public void setdTerminoCredito(Date dTerminoCredito) {
+			this.dTerminoCredito = dTerminoCredito;
+		}
+
+
+
+		public String getsNombreUsuario() {
+			return sNombreUsuario;
+		}
+
+
+
+		public void setsNombreUsuario(String sNombreUsuario) {
+			this.sNombreUsuario = sNombreUsuario;
+		}
+
+
+
+		public BigDecimal getnAnticipo() {
+			return nAnticipo;
+		}
+
+
+
+		public void setnAnticipo(BigDecimal nAnticipo) {
+			this.nAnticipo = nAnticipo;
+		}
+
+
+
+		public Long getnIdFormaPago() {
+			return nIdFormaPago;
+		}
+
+
+
+		public void setnIdFormaPago(Long nIdFormaPago) {
+			this.nIdFormaPago = nIdFormaPago;
+		}
+
+
+
+		public String getsFormaPago() {
+			return sFormaPago;
+		}
+
+
+
+		public void setsFormaPago(String sFormaPago) {
+			this.sFormaPago = sFormaPago;
+		}
+
+
+
+		public BigDecimal getnDescuento() {
+			return nDescuento;
+		}
+
+
+
+		public void setnDescuento(BigDecimal nDescuento) {
+			this.nDescuento = nDescuento;
+		}
+
+
+
+		public BigDecimal getnTotalVenta() {
+			return nTotalVenta;
+		}
+
+
+
+		public void setnTotalVenta(BigDecimal nTotalVenta) {
+			this.nTotalVenta = nTotalVenta;
+		}
+
+
+
+		public BigDecimal getnTotalPagoCajaNota() {
+			return nTotalPagoCajaNota;
+		}
+
+
+
+		public void setnTotalPagoCajaNota(BigDecimal nTotalPagoCajaNota) {
+			this.nTotalPagoCajaNota = nTotalPagoCajaNota;
+		}
+
+
+
+		public BigDecimal getnSaldoFinalVenta() {
+			return nSaldoFinalVenta;
+		}
+
+
+
+		public void setnSaldoFinalVenta(BigDecimal nSaldoFinalVenta) {
+			this.nSaldoFinalVenta = nSaldoFinalVenta;
+		}
+
+
+
+		public String getsEstatusEntrega() {
+			return sEstatusEntrega;
+		}
+
+
+
+		public void setsEstatusEntrega(String sEstatusEntrega) {
+			this.sEstatusEntrega = sEstatusEntrega;
+		}
+
+
 
 		@Override
 		public String toString() {

@@ -1,5 +1,6 @@
 package com.refacFabela.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -140,7 +141,7 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setnIdCaja(utils.cajaActivaId(cajaRepository.obtenerCajaVigente()));
 		twVenta.setnIdCotizacion(ventaDto.getTwCotizacion().getnId());
 		twVenta.setAnticipo(ventaDto.getAnticipo());
-		twVenta.setDescuento(0.0);	
+		twVenta.setDescuento(BigDecimal.ZERO);	
 		/*Se integra la fecha de la venta del producto*/
 		twVenta.setdFechaVenta(new Date());
 		
@@ -535,7 +536,7 @@ public class VentasServiceImpl implements VentasService {
 		for (TvVentaDetalle detalleVenta : ventas) {
 			
 			TvVentaDetalleDto ventaDetalleNew =new TvVentaDetalleDto();
-			double totalPagos = 0.0;
+			BigDecimal totalPagos =BigDecimal.ZERO;
 			
 			ventaDetalleNew.setnId(detalleVenta.getnId());
 			ventaDetalleNew.setnIdCliente(detalleVenta.getnIdCliente());
@@ -551,7 +552,7 @@ public class VentasServiceImpl implements VentasService {
 			if (detalleVenta.getnAnticipo() != null) {
 				ventaDetalleNew.setnAnticipo(detalleVenta.getnAnticipo());				
 			}else {
-				ventaDetalleNew.setnAnticipo(0.0);				
+				ventaDetalleNew.setnAnticipo(BigDecimal.ZERO);				
 				
 			}
 			
@@ -561,20 +562,20 @@ public class VentasServiceImpl implements VentasService {
 			
 			if (listaVentaCobro.size()>0) {
 				
-				ventaDetalleNew.setnTotalAbono((double) listaVentaCobro.size());		
+				ventaDetalleNew.setnTotalAbono(BigDecimal.valueOf(listaVentaCobro.size()) );		
 				
 				for (int i = 0; i < listaVentaCobro.size(); i++) {
 					
-					totalPagos=totalPagos+listaVentaCobro.get(i).getnMonto();
+					totalPagos=totalPagos.add(listaVentaCobro.get(i).getnMonto()) ;
 				}
 				
-				ventaDetalleNew.setnSaldoTotal(ventaDetalleNew.getnTotalVenta()-totalPagos);
+				ventaDetalleNew.setnSaldoTotal(ventaDetalleNew.getnTotalVenta().subtract(totalPagos));
 				ventaDetalleNew.setnAvancePago(totalPagos);
  				
 			}else {
-				ventaDetalleNew.setnTotalAbono(0.0);	
+				ventaDetalleNew.setnTotalAbono(BigDecimal.ZERO);	
 				ventaDetalleNew.setnSaldoTotal(ventaDetalleNew.getnTotalVenta());
-				ventaDetalleNew.setnAvancePago(0.0);
+				ventaDetalleNew.setnAvancePago(BigDecimal.ZERO);
 			}
 			
 			
@@ -619,14 +620,18 @@ public class VentasServiceImpl implements VentasService {
 		
 		venta.setDescuento(tvVentaDetalle.getDescuento());
 				
-		if(tvVentaDetalle.getnTotalVenta()==tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo() || (tvVentaDetalle.getnTotalVenta()-(tvVentaDetalle.getnAvancePago()+tvVentaDetalle.getnAnticipo()))<=0.01 ||  tvVentaDetalle.getnTotalVenta()-tvVentaDetalle.getnAnticipo()-tvVentaDetalle.getnSaldoFavor()<=0.1) {
-			
-			cambio=true;
-			
-		}
-		else {
-			cambio=false;
-		}
+		 cambio = 
+			    tvVentaDetalle.getnTotalVenta().compareTo(
+			        tvVentaDetalle.getnAvancePago().add(tvVentaDetalle.getnAnticipo())
+			    ) == 0
+			    || tvVentaDetalle.getnTotalVenta().subtract(
+			        tvVentaDetalle.getnAvancePago().add(tvVentaDetalle.getnAnticipo())
+			    ).compareTo(BigDecimal.ZERO) == 0
+			    || tvVentaDetalle.getnTotalVenta().subtract(
+			        tvVentaDetalle.getnAnticipo()
+			    ).subtract(
+			        tvVentaDetalle.getnSaldoFavor()
+			    ).compareTo(BigDecimal.ZERO) == 0;
 		
 		
 		
@@ -658,7 +663,7 @@ public class VentasServiceImpl implements VentasService {
 		
 		if(venta.getTcTipoVenta().getnId()!=3) {
 			
-			if(tvVentaDetalle.getnSaldoFavor()>0) {
+			if(tvVentaDetalle.getnSaldoFavor().compareTo(BigDecimal.ZERO) > 0) {
 				System.err.println("Entre a guardar los datos del pago");
 				ventaCobro.setnIdVenta(venta.getnId());
 				ventaCobro.setnIdCaja(venta.getnIdCaja());

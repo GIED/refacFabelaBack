@@ -1,5 +1,7 @@
 package com.refacFabela.dto;
 
+import java.math.BigDecimal;
+
 public class PedidoProductoDto {
 	
 	private String noParte;
@@ -7,7 +9,7 @@ public class PedidoProductoDto {
 	private String fechaPedido;
 	private String fechaRecibida;
 	private int cantidad;
-	private Double precio;
+	private BigDecimal precio;
 	private String estatus;
 	private String proveedor;
 	
@@ -41,12 +43,7 @@ public class PedidoProductoDto {
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
-	public Double getPrecio() {
-		return precio;
-	}
-	public void setPrecio(Double precio) {
-		this.precio = precio;
-	}
+	
 	public String getEstatus() {
 		return estatus;
 	}
@@ -56,6 +53,12 @@ public class PedidoProductoDto {
 	
 	
 	
+	public BigDecimal getPrecio() {
+		return precio;
+	}
+	public void setPrecio(BigDecimal precio) {
+		this.precio = precio;
+	}
 	public String getProveedor() {
 		return proveedor;
 	}

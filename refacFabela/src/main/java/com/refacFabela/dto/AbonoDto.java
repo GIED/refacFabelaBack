@@ -1,12 +1,13 @@
 package com.refacFabela.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class AbonoDto {
 	
 	Long idVenta;
 	Date fechaVenta;
-	Double abono;
+	BigDecimal abono;
 	String formaPago;
 	String usuario;
 	Date fechaAbono;
@@ -37,12 +38,14 @@ public class AbonoDto {
 	}
 
 
-	public Double getAbono() {
+	
+
+	public BigDecimal getAbono() {
 		return abono;
 	}
 
 
-	public void setAbono(Double abono) {
+	public void setAbono(BigDecimal abono) {
 		this.abono = abono;
 	}
 

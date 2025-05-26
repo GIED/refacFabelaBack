@@ -1,8 +1,9 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import javax.persistence.*;
-import java.util.Date;
+
 
 @Entity
 @Table(name = "tw_cotizaciones")
@@ -21,9 +22,9 @@ public class TwCotizaciones implements Serializable {
 	@Column(name = "n_idUsuario")
 	private Long nIdUsuario;
 
-	@Temporal(TemporalType.DATE)
+	
 	@Column(name = "d_fecha")
-	private Date dFecha;
+	private LocalDateTime dFecha;
 
 	@Column(name = "n_estatus")
 	private int nEstatus;
@@ -68,11 +69,13 @@ public class TwCotizaciones implements Serializable {
 		this.nIdUsuario = nIdUsuario;
 	}
 
-	public Date getdFecha() {
+	
+
+	public LocalDateTime getdFecha() {
 		return dFecha;
 	}
 
-	public void setdFecha(Date dFecha) {
+	public void setdFecha(LocalDateTime dFecha) {
 		this.dFecha = dFecha;
 	}
 

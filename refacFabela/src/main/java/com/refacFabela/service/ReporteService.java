@@ -1,5 +1,6 @@
 package com.refacFabela.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.refacFabela.dto.AbonosDto;
@@ -17,10 +18,10 @@ import com.refacFabela.model.TwProductobodega;
 public interface ReporteService {
 	
 	 byte[] generaCotizacionPDF(ReporteCotizacionDto reporteCotizacion,  List<ReporteCotizacionDto> listaProducto); 
-	 byte[] generaVentaPDF(ReporteVentaDto reporteVenta,  List<ReporteVentaDto> listaProducto, double totalAbono);
-	 byte[] generaSaldoFavorPDF(ReporteVentaDto reporteVenta,  List<ReporteVentaDto> listaProducto, double totalAbono,  double saldoFinalSaldo, double totalSaldoUsado, List<TwSaldoUtilizadoDto> listaTwSaldoUtilizadoDto);
-	 byte[] generaVentaAlmacenPDF(ReporteVentaDto reporteVenta,  List<ReporteVentaDto> listaProducto, double totalAbono);
-	 byte[] generaAbonoVentaPDF(ReporteVentaDto reporteVenta,  List<AbonosDto> listaProducto, double totalAbonos);
+	 byte[] generaVentaPDF(ReporteVentaDto reporteVenta,  List<ReporteVentaDto> listaProducto, BigDecimal totalAbono);
+	 byte[] generaSaldoFavorPDF(ReporteVentaDto reporteVenta,  List<ReporteVentaDto> listaProducto, BigDecimal totalAbono,  BigDecimal saldoFinalSaldo, BigDecimal totalSaldoUsado, List<TwSaldoUtilizadoDto> listaTwSaldoUtilizadoDto);
+	 byte[] generaVentaAlmacenPDF(ReporteVentaDto reporteVenta,  List<ReporteVentaDto> listaProducto, BigDecimal totalAbono);
+	 byte[] generaAbonoVentaPDF(ReporteVentaDto reporteVenta,  List<AbonosDto> listaProducto, BigDecimal totalAbonos);
 	 byte[] generaAbonoVentaClientePDF(TcCliente cliente,  List<ReporteAbonoVentaCreditoDto> listaAbonoVenta, ReporteVentaDto reporteVenta);	 
 	 byte[] generaVentaPedidoPDF(ReporteVentaDto reporteVenta,  List<ReporteVentaDto> listaProducto);	 
 	 byte[] generaPedidoPDF(TwPedido twPedido,  List<PedidoProductoDto> listaPedidoProducto);

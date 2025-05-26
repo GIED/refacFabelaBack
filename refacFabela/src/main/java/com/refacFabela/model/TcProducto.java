@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -35,7 +36,7 @@ public class TcProducto implements Serializable {
 	private Long nIdCategoria;
 
 	@Column(name = "n_precio")
-	private Double nPrecio;
+	private BigDecimal nPrecio;
 
 	@Column(name = "s_descripcion")
 	private String sDescripcion;
@@ -62,19 +63,19 @@ public class TcProducto implements Serializable {
 	private Long nIdclavesat;
 
 	@Column(name = "n_precio_peso")
-	private Double nPrecioPeso;
+	private BigDecimal nPrecioPeso;
 
 	@Column(name = "n_precio_sin_iva")
-	private Double nPrecioSinIva;
+	private BigDecimal nPrecioSinIva;
 
 	@Column(name = "n_precio_con_iva")
-	private Double nPrecioConIva;
+	private BigDecimal nPrecioConIva;
 	
 	@Column(name = "s_id_bar")
 	private String sIdBar;
 	
 	@Column(name = "n_precio_iva")
-	private Double nPrecioIva;
+	private BigDecimal nPrecioIva;
 	
 	@Column(name = "n_id_descuento")
 	private Long nIdDescuento;
@@ -146,29 +147,42 @@ public class TcProducto implements Serializable {
 		this.nId = nId;
 	}
 
-	public Double getnPrecioPeso() {
+	
+
+	public BigDecimal getnPrecioPeso() {
 		return nPrecioPeso;
 	}
 
-	public void setnPrecioPeso(Double nPrecioPeso) {
+
+	public void setnPrecioPeso(BigDecimal nPrecioPeso) {
 		this.nPrecioPeso = nPrecioPeso;
 	}
 
-	public Double getnPrecioSinIva() {
+
+	public BigDecimal getnPrecioSinIva() {
 		return nPrecioSinIva;
 	}
 
-	public void setnPrecioSinIva(Double nPrecioSinIva) {
+
+	public void setnPrecioSinIva(BigDecimal nPrecioSinIva) {
 		this.nPrecioSinIva = nPrecioSinIva;
 	}
 
-	public Double getnPrecioConIva() {
+
+	public BigDecimal getnPrecioConIva() {
 		return nPrecioConIva;
 	}
 
-	public void setnPrecioConIva(Double nPrecioConIva) {
+
+	public void setnPrecioConIva(BigDecimal nPrecioConIva) {
 		this.nPrecioConIva = nPrecioConIva;
 	}
+
+
+	public void setnPrecioIva(BigDecimal nPrecioIva) {
+		this.nPrecioIva = nPrecioIva;
+	}
+
 
 	public Date getdFecha() {
 		return dFecha;
@@ -202,13 +216,17 @@ public class TcProducto implements Serializable {
 		this.nIdCategoria = nIdCategoria;
 	}
 
-	public Double getnPrecio() {
+
+
+	public BigDecimal getnPrecio() {
 		return nPrecio;
 	}
 
-	public void setnPrecio(Double nPrecio) {
+
+	public void setnPrecio(BigDecimal nPrecio) {
 		this.nPrecio = nPrecio;
 	}
+
 
 	public String getsDescripcion() {
 		return sDescripcion;
@@ -325,19 +343,10 @@ public class TcProducto implements Serializable {
 	}
 	
 	
-	
 
-
-	public Double getnPrecioIva() {
+	public BigDecimal getnPrecioIva() {
 		return nPrecioIva;
 	}
-
-
-	public void setnPrecioIva(Double nPrecioIva) {
-		this.nPrecioIva = nPrecioIva;
-	}
-	
-	
 
 
 	public Long getnIdDescuento() {

@@ -1,5 +1,6 @@
 package com.refacFabela.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 import com.refacFabela.model.TvReporteCajaFormaPago;
 import com.refacFabela.model.TvReporteDetalleVenta;
@@ -8,10 +9,10 @@ public class BalanceCajaDto {
 	
 	public Long caja;
 	public String fechaInicioCaja;
-	public Double totalGeneralIngresos;
-	public Double totalVentas;
-	public Double totalIngresoAbonos;
-	public Double totalIngresoVenta;
+	public BigDecimal totalGeneralIngresos;
+	public BigDecimal totalVentas;
+	public BigDecimal totalIngresoAbonos;
+	public BigDecimal totalIngresoVenta;
 	public String usuarioCaja;
 	public Integer noVentas;
 	public Integer noAbonos;
@@ -21,33 +22,33 @@ public class BalanceCajaDto {
 	public Integer totalNoEntregadas;
 	public Integer totalEntregasParciales;
 	public List<TvReporteCajaFormaPago> tvReporteCajaFormaPago;
-	public Double totalReintegro;
+	public BigDecimal totalReintegro;
 	public List<GastosDto> listaGastos;
-	public Double totalGastos;
+	public BigDecimal totalGastos;
 	public List<AbonoDto> listaAbonos;
 	public List<CancelaVentaDto> listaCancelados;
-	public Double totalCredito;
-	public Double totalVenta;
+	public BigDecimal totalCredito;
+	public BigDecimal totalVenta;
 	
 	
-	public Double efectivoContado;
-	public Double chequeContado;
-	public Double transferenciaContado;
-	public Double tarjetaCreditoContado;
-	public Double tarjetaDebitoContad;
-	public Double CondonacionContado;
+	public BigDecimal efectivoContado;
+	public BigDecimal chequeContado;
+	public BigDecimal transferenciaContado;
+	public BigDecimal tarjetaCreditoContado;
+	public BigDecimal tarjetaDebitoContad;
+	public BigDecimal CondonacionContado;
 	
 	// variables de crédito
-	public Double efectivoAbono;
-	public Double chequeAbono;
-	public Double transferenciaAbono;
-	public Double tarjetaCreditoAbono;
-	public Double tarjetaDebitoAbon;
-	public Double CondonacionAbono; 
+	public BigDecimal efectivoAbono;
+	public BigDecimal chequeAbono;
+	public BigDecimal transferenciaAbono;
+	public BigDecimal tarjetaCreditoAbono;
+	public BigDecimal tarjetaDebitoAbon;
+	public BigDecimal CondonacionAbono; 
 	
-	public Double totalCancelado;
-	public Double saldosFavor;
-	public Double totalDescuento;
+	public BigDecimal totalCancelado;
+	public BigDecimal saldosFavor;
+	public BigDecimal totalDescuento;
 	
 	
 	public BalanceCajaDto() {
@@ -58,125 +59,7 @@ public class BalanceCajaDto {
 	
 	
 
-	public Double getTotalDescuento() {
-		return totalDescuento;
-	}
-
-
-
-
-	public void setTotalDescuento(Double totalDescuento) {
-		this.totalDescuento = totalDescuento;
-	}
-
-
-
-
-	public Double getTotalCancelado() {
-		return totalCancelado;
-	}
-
-
-
-
-	public void setTotalCancelado(Double totalCancelado) {
-		this.totalCancelado = totalCancelado;
-	}
-
-
-
-
-	public Double getSaldosFavor() {
-		return saldosFavor;
-	}
-
-
-
-
-	public void setSaldosFavor(Double saldosFavor) {
-		this.saldosFavor = saldosFavor;
-	}
-
-
-
-
-	public Double getTarjetaDebitoContad() {
-		return tarjetaDebitoContad;
-	}
-
-
-	public void setTarjetaDebitoContad(Double tarjetaDebitoContad) {
-		this.tarjetaDebitoContad = tarjetaDebitoContad;
-	}
-
-
-	public Double getTarjetaDebitoAbon() {
-		return tarjetaDebitoAbon;
-	}
-
-
-
-	public void setTarjetaDebitoAbon(Double tarjetaDebitoAbon) {
-		this.tarjetaDebitoAbon = tarjetaDebitoAbon;
-	}
-
-
-
-	public Double getEfectivoContado() {
-		return efectivoContado;
-	}
-
-	public void setEfectivoContado(Double efectivoContado) {
-		this.efectivoContado = efectivoContado;
-	}
-
-
-
-	public Double getChequeContado() {
-		return chequeContado;
-	}
-
-
-
-
-
-	public void setChequeContado(Double chequeContado) {
-		this.chequeContado = chequeContado;
-	}
-
-
-
-
-
-	public Double getTransferenciaContado() {
-		return transferenciaContado;
-	}
-
-
-
-
-
-	public void setTransferenciaContado(Double transferenciaContado) {
-		this.transferenciaContado = transferenciaContado;
-	}
-
-
-
-
-
-	public Double getTarjetaCreditoContado() {
-		return tarjetaCreditoContado;
-	}
-
-
-
-
-
-	public void setTarjetaCreditoContado(Double tarjetaCreditoContado) {
-		this.tarjetaCreditoContado = tarjetaCreditoContado;
-	}
-
-
+	
 
 
 
@@ -185,181 +68,9 @@ public class BalanceCajaDto {
 
 
 
-	public Double getCondonacionContado() {
-		return CondonacionContado;
-	}
-
-
-
-
-
-	public void setCondonacionContado(Double condonacionContado) {
-		CondonacionContado = condonacionContado;
-	}
-
-
-
-
-
-	public Double getEfectivoAbono() {
-		return efectivoAbono;
-	}
-
-
-
-
-
-	public void setEfectivoAbono(Double efectivoAbono) {
-		this.efectivoAbono = efectivoAbono;
-	}
-
-
-
-
-
-	public Double getChequeAbono() {
-		return chequeAbono;
-	}
-
-
-
-
-
-	public void setChequeAbono(Double chequeAbono) {
-		this.chequeAbono = chequeAbono;
-	}
-
-
-
-
-
-	public Double getTransferenciaAbono() {
-		return transferenciaAbono;
-	}
-
-
-
-
-
-	public void setTransferenciaAbono(Double transferenciaAbono) {
-		this.transferenciaAbono = transferenciaAbono;
-	}
-
-
-
-
-
-	public Double getTarjetaCreditoAbono() {
-		return tarjetaCreditoAbono;
-	}
-
-
-
-
-
-	public void setTarjetaCreditoAbono(Double tarjetaCreditoAbono) {
-		this.tarjetaCreditoAbono = tarjetaCreditoAbono;
-	}
-
-
-
-
-
-
-
-
-
 	
 
-
-
-
-
-	public Double getCondonacionAbono() {
-		return CondonacionAbono;
-	}
-
-
-
-
-
-	public void setCondonacionAbono(Double condonacionAbono) {
-		CondonacionAbono = condonacionAbono;
-	}
-
-
-
-
-
-	public Double getTotalCredito() {
-		return totalCredito;
-	}
-
-
-
-	public void setTotalCredito(Double totalCredito) {
-		this.totalCredito = totalCredito;
-	}
-
-
-
-	public Double getTotalVenta() {
-		return totalVenta;
-	}
-
-
-
-	public void setTotalVenta(Double totalVenta) {
-		this.totalVenta = totalVenta;
-	}
-
-
-
-	public List<CancelaVentaDto> getListaCancelados() {
-		return listaCancelados;
-	}
-
-
-
-	public void setListaCancelados(List<CancelaVentaDto> listaCancelados) {
-		this.listaCancelados = listaCancelados;
-	}
-
-
-
-	public List<GastosDto> getListaGastos() {
-		return listaGastos;
-	}
-
-
-
-	public void setListaGastos(List<GastosDto> listaGastos) {
-		this.listaGastos = listaGastos;
-	}
-
-
-
-	public Double getTotalGastos() {
-		return totalGastos;
-	}
-
-
-
-
-
-	public List<AbonoDto> getListaAbonos() {
-		return listaAbonos;
-	}
-
-
-	public void setListaAbonos(List<AbonoDto> listaAbonos) {
-		this.listaAbonos = listaAbonos;
-	}
-
-
-	public void setTotalGastos(Double totalGastos) {
-		this.totalGastos = totalGastos;
-	}
+	
 
 
 
@@ -373,6 +84,22 @@ public class BalanceCajaDto {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public void setCaja(Long caja) {
 		this.caja = caja;
 	}
@@ -381,175 +108,17 @@ public class BalanceCajaDto {
 
 
 
-	
 
 
 
-	public Double getTotalGeneralIngresos() {
-		return totalGeneralIngresos;
-	}
 
 
 
 
 
-	public void setTotalGeneralIngresos(Double totalGeneralIngresos) {
-		this.totalGeneralIngresos = totalGeneralIngresos;
-	}
 
 
 
-
-
-	public Double getTotalVentas() {
-		return totalVentas;
-	}
-
-
-
-
-
-	public void setTotalVentas(Double totalVentas) {
-		this.totalVentas = totalVentas;
-	}
-
-
-
-
-
-	public Double getTotalIngresoAbonos() {
-		return totalIngresoAbonos;
-	}
-
-
-
-
-
-	public void setTotalIngresoAbonos(Double totalIngresoAbonos) {
-		this.totalIngresoAbonos = totalIngresoAbonos;
-	}
-
-
-
-
-
-	public Double getTotalIngresoVenta() {
-		return totalIngresoVenta;
-	}
-
-
-
-
-
-	public void setTotalIngresoVenta(Double totalIngresoVenta) {
-		this.totalIngresoVenta = totalIngresoVenta;
-	}
-
-
-
-
-
-	public String getUsuarioCaja() {
-		return usuarioCaja;
-	}
-
-
-
-
-
-	public void setUsuarioCaja(String usuarioCaja) {
-		this.usuarioCaja = usuarioCaja;
-	}
-
-
-
-
-
-	public List<TvReporteDetalleVenta> getTvReporteDetalleVenta() {
-		return tvReporteDetalleVenta;
-	}
-
-
-
-
-
-	public void setTvReporteDetalleVenta(List<TvReporteDetalleVenta> tvReporteDetalleVenta) {
-		this.tvReporteDetalleVenta = tvReporteDetalleVenta;
-	}
-
-
-
-
-
-	
-
-
-
-
-	
-
-
-
-
-	public Integer getTotalEntregadas() {
-		return totalEntregadas;
-	}
-
-
-
-
-
-	public void setTotalEntregadas(Integer totalEntregadas) {
-		this.totalEntregadas = totalEntregadas;
-	}
-
-
-
-
-
-	public Integer getTotalNoEntregadas() {
-		return totalNoEntregadas;
-	}
-
-
-
-
-
-	public void setTotalNoEntregadas(Integer totalNoEntregadas) {
-		this.totalNoEntregadas = totalNoEntregadas;
-	}
-
-
-
-
-
-	public Integer getTotalEntregasParciales() {
-		return totalEntregasParciales;
-	}
-
-
-
-
-
-	public void setTotalEntregasParciales(Integer totalEntregasParciales) {
-		this.totalEntregasParciales = totalEntregasParciales;
-	}
-
-
-
-
-
-	public List<TvReporteCajaFormaPago> getTvReporteCajaFormaPago() {
-		return tvReporteCajaFormaPago;
-	}
-
-
-
-
-
-	public void setTvReporteCajaFormaPago(List<TvReporteCajaFormaPago> tvReporteCajaFormaPago) {
-		this.tvReporteCajaFormaPago = tvReporteCajaFormaPago;
-	}
 
 
 
@@ -563,6 +132,22 @@ public class BalanceCajaDto {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public void setFechaInicioCaja(String fechaInicioCaja) {
 		this.fechaInicioCaja = fechaInicioCaja;
 	}
@@ -571,17 +156,257 @@ public class BalanceCajaDto {
 
 
 
-	public String getFechaGeneraReporte() {
-		return fechaGeneraReporte;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTotalGeneralIngresos() {
+		return totalGeneralIngresos;
 	}
 
 
 
 
 
-	public void setFechaGeneraReporte(String fechaGeneraReporte) {
-		this.fechaGeneraReporte = fechaGeneraReporte;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalGeneralIngresos(BigDecimal totalGeneralIngresos) {
+		this.totalGeneralIngresos = totalGeneralIngresos;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTotalVentas() {
+		return totalVentas;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalVentas(BigDecimal totalVentas) {
+		this.totalVentas = totalVentas;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTotalIngresoAbonos() {
+		return totalIngresoAbonos;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalIngresoAbonos(BigDecimal totalIngresoAbonos) {
+		this.totalIngresoAbonos = totalIngresoAbonos;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTotalIngresoVenta() {
+		return totalIngresoVenta;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalIngresoVenta(BigDecimal totalIngresoVenta) {
+		this.totalIngresoVenta = totalIngresoVenta;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public String getUsuarioCaja() {
+		return usuarioCaja;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setUsuarioCaja(String usuarioCaja) {
+		this.usuarioCaja = usuarioCaja;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -595,9 +420,41 @@ public class BalanceCajaDto {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public void setNoVentas(Integer noVentas) {
 		this.noVentas = noVentas;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -611,6 +468,22 @@ public class BalanceCajaDto {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public void setNoAbonos(Integer noAbonos) {
 		this.noAbonos = noAbonos;
 	}
@@ -619,7 +492,1361 @@ public class BalanceCajaDto {
 
 
 
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public List<TvReporteDetalleVenta> getTvReporteDetalleVenta() {
+		return tvReporteDetalleVenta;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTvReporteDetalleVenta(List<TvReporteDetalleVenta> tvReporteDetalleVenta) {
+		this.tvReporteDetalleVenta = tvReporteDetalleVenta;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public String getFechaGeneraReporte() {
+		return fechaGeneraReporte;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setFechaGeneraReporte(String fechaGeneraReporte) {
+		this.fechaGeneraReporte = fechaGeneraReporte;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public Integer getTotalEntregadas() {
+		return totalEntregadas;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalEntregadas(Integer totalEntregadas) {
+		this.totalEntregadas = totalEntregadas;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public Integer getTotalNoEntregadas() {
+		return totalNoEntregadas;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalNoEntregadas(Integer totalNoEntregadas) {
+		this.totalNoEntregadas = totalNoEntregadas;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public Integer getTotalEntregasParciales() {
+		return totalEntregasParciales;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalEntregasParciales(Integer totalEntregasParciales) {
+		this.totalEntregasParciales = totalEntregasParciales;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public List<TvReporteCajaFormaPago> getTvReporteCajaFormaPago() {
+		return tvReporteCajaFormaPago;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTvReporteCajaFormaPago(List<TvReporteCajaFormaPago> tvReporteCajaFormaPago) {
+		this.tvReporteCajaFormaPago = tvReporteCajaFormaPago;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTotalReintegro() {
+		return totalReintegro;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalReintegro(BigDecimal totalReintegro) {
+		this.totalReintegro = totalReintegro;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public List<GastosDto> getListaGastos() {
+		return listaGastos;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setListaGastos(List<GastosDto> listaGastos) {
+		this.listaGastos = listaGastos;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTotalGastos() {
+		return totalGastos;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalGastos(BigDecimal totalGastos) {
+		this.totalGastos = totalGastos;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public List<AbonoDto> getListaAbonos() {
+		return listaAbonos;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setListaAbonos(List<AbonoDto> listaAbonos) {
+		this.listaAbonos = listaAbonos;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public List<CancelaVentaDto> getListaCancelados() {
+		return listaCancelados;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setListaCancelados(List<CancelaVentaDto> listaCancelados) {
+		this.listaCancelados = listaCancelados;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTotalCredito() {
+		return totalCredito;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalCredito(BigDecimal totalCredito) {
+		this.totalCredito = totalCredito;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTotalVenta() {
+		return totalVenta;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalVenta(BigDecimal totalVenta) {
+		this.totalVenta = totalVenta;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getEfectivoContado() {
+		return efectivoContado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setEfectivoContado(BigDecimal efectivoContado) {
+		this.efectivoContado = efectivoContado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getChequeContado() {
+		return chequeContado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setChequeContado(BigDecimal chequeContado) {
+		this.chequeContado = chequeContado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTransferenciaContado() {
+		return transferenciaContado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTransferenciaContado(BigDecimal transferenciaContado) {
+		this.transferenciaContado = transferenciaContado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTarjetaCreditoContado() {
+		return tarjetaCreditoContado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTarjetaCreditoContado(BigDecimal tarjetaCreditoContado) {
+		this.tarjetaCreditoContado = tarjetaCreditoContado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTarjetaDebitoContad() {
+		return tarjetaDebitoContad;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTarjetaDebitoContad(BigDecimal tarjetaDebitoContad) {
+		this.tarjetaDebitoContad = tarjetaDebitoContad;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getCondonacionContado() {
+		return CondonacionContado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setCondonacionContado(BigDecimal condonacionContado) {
+		CondonacionContado = condonacionContado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getEfectivoAbono() {
+		return efectivoAbono;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setEfectivoAbono(BigDecimal efectivoAbono) {
+		this.efectivoAbono = efectivoAbono;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getChequeAbono() {
+		return chequeAbono;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setChequeAbono(BigDecimal chequeAbono) {
+		this.chequeAbono = chequeAbono;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTransferenciaAbono() {
+		return transferenciaAbono;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTransferenciaAbono(BigDecimal transferenciaAbono) {
+		this.transferenciaAbono = transferenciaAbono;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTarjetaCreditoAbono() {
+		return tarjetaCreditoAbono;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTarjetaCreditoAbono(BigDecimal tarjetaCreditoAbono) {
+		this.tarjetaCreditoAbono = tarjetaCreditoAbono;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTarjetaDebitoAbon() {
+		return tarjetaDebitoAbon;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTarjetaDebitoAbon(BigDecimal tarjetaDebitoAbon) {
+		this.tarjetaDebitoAbon = tarjetaDebitoAbon;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getCondonacionAbono() {
+		return CondonacionAbono;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setCondonacionAbono(BigDecimal condonacionAbono) {
+		CondonacionAbono = condonacionAbono;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTotalCancelado() {
+		return totalCancelado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalCancelado(BigDecimal totalCancelado) {
+		this.totalCancelado = totalCancelado;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getSaldosFavor() {
+		return saldosFavor;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setSaldosFavor(BigDecimal saldosFavor) {
+		this.saldosFavor = saldosFavor;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public BigDecimal getTotalDescuento() {
+		return totalDescuento;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setTotalDescuento(BigDecimal totalDescuento) {
+		this.totalDescuento = totalDescuento;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -645,18 +1872,7 @@ public class BalanceCajaDto {
 	}
 
 
-	public Double getTotalReintegro() {
-		return totalReintegro;
-	}
 
-
-
-
-
-	public void setTotalReintegro(Double totalReintegro) {
-		this.totalReintegro = totalReintegro;
-	}
-	
 	
 	
 	

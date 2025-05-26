@@ -1,5 +1,7 @@
 package com.refacFabela.service.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,6 +75,7 @@ import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.repository.VwSaldoVentaFavorDisponibleRepository;
 import com.refacFabela.service.ProductosService;
+import com.refacFabela.utils.DateTimeUtil;
 import com.refacFabela.utils.utils;
 
 @Service
@@ -412,50 +415,34 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 
 	@Override
 	public TwAbono guardarAbono(TwAbono abonoDto) {
-		
-		
-		abonoDto.setdFecha(new Date());
-		abonoVentaIdRepository.save(abonoDto);
-		
-			
-		double total_venta=0.0;
-		double total_abonos=0.0;
-		
-		// Se consulta el total de la venta		
-		List<TwVentasProducto> twVentasProducto=twProductosVentaRepository.findBynIdVenta(abonoDto.getnIdVenta());
-		
-				for (int i = 0; i < twVentasProducto.size(); i++) {
-					total_venta+=twVentasProducto.get(i).getnTotalPartida();
-					
-					
-				}
-				System.err.println(total_venta);
-		// Se consulta el total de abonos 		
-		List<TwAbono> twAbono=abonoVentaIdRepository.abonosVenta(abonoDto.getnIdVenta());
-				
-				for (int i = 0; i < twAbono.size(); i++) {
-					total_abonos+=twAbono.get(i).getnAbono();
-					
-					
-				}
-				
-				System.err.println(total_abonos);
-				
-		//si el total de abonos es igual al total de la venta se registra la fecha de pago del crédito
-			if((total_venta-total_abonos)<0.19) {
-				
-				Date fecha= new Date();	
-				
-				TwVenta twVenta=ventasRepository.findBynId(abonoDto.getnIdVenta());
-				
-				twVenta.setdFechaPagoCredito(fecha);
-				
-				ventasRepository.save(twVenta);
-				
-				
-			}
-			
-		return abonoDto ;
+	    abonoDto.setdFecha(new Date());
+	    abonoVentaIdRepository.save(abonoDto);
+
+	    BigDecimal total_venta = BigDecimal.ZERO;
+	    BigDecimal total_abonos = BigDecimal.ZERO;
+
+	    // Se consulta el total de la venta
+	    List<TwVentasProducto> twVentasProducto = twProductosVentaRepository.findBynIdVenta(abonoDto.getnIdVenta());
+	    for (TwVentasProducto producto : twVentasProducto) {
+	        total_venta = total_venta.add(producto.getnTotalPartida());
+	    }
+	    System.err.println("Total venta: " + total_venta);
+
+	    // Se consulta el total de abonos
+	    List<TwAbono> twAbonos = abonoVentaIdRepository.abonosVenta(abonoDto.getnIdVenta());
+	    for (TwAbono abono : twAbonos) {
+	        total_abonos = total_abonos.add(abono.getnAbono());
+	    }
+	    System.err.println("Total abonos: " + total_abonos);
+
+	    // Si el total de abonos es igual al total de la venta, se registra la fecha de pago
+	    if (total_venta.compareTo(total_abonos) == 0) {
+	        TwVenta twVenta = ventasRepository.findBynId(abonoDto.getnIdVenta());
+	        twVenta.setdFechaPagoCredito(new Date());
+	        ventasRepository.save(twVenta);
+	    }
+
+	    return abonoDto;
 	}
 
 	@Override
@@ -593,8 +580,8 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		utils util= new utils();
 		TwCaja caja = new TwCaja();
 		
-		Double totalUnitario=0.0;
-		Double totalPartida=0.0;
+		BigDecimal totalUnitario=new BigDecimal("0");
+		BigDecimal totalPartida=new BigDecimal("0");
 		
 		
 		
@@ -628,23 +615,34 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		    /*verificamos si hay penalización*/
 				if(ventaProductoCancelaDto.penaliza) {
 					
-					totalUnitario=twVentasProducto.getnTotalUnitario()-(twVentasProducto.getnTotalUnitario()*0.20);
-					totalPartida=twVentasProducto.getnTotalPartida()-(twVentasProducto.getnTotalPartida()*0.20);	
+					totalUnitario = twVentasProducto.getnTotalUnitario().subtract(twVentasProducto.getnTotalUnitario().multiply(BigDecimal.valueOf(0.20)));
+					totalPartida = twVentasProducto.getnTotalPartida().subtract(twVentasProducto.getnTotalPartida().multiply(BigDecimal.valueOf(0.20)));
 					
-					twVentaProductoCancela.setnPrecioUnitario(util.truncaValor(totalUnitario/1.16));
-					twVentaProductoCancela.setnIvaUnitario(util.truncaValor(((totalUnitario/1.16))*0.16));
-					twVentaProductoCancela.setnTotalUnitario(util.truncaValor(totalUnitario));
-					twVentaProductoCancela.setnPrecioPartida(util.truncaValor(totalPartida));
-					twVentaProductoCancela.setPenaliza(util.truncaValor( twVentasProducto.getnTotalPartida()-totalPartida));
+					BigDecimal precioUnitario = totalUnitario.divide(BigDecimal.valueOf(1.16), 10, RoundingMode.DOWN);
+					twVentaProductoCancela.setnPrecioUnitario(precioUnitario);
+
+					// IVA unitario = precioUnitario * 0.16
+					BigDecimal ivaUnitario = precioUnitario.multiply(BigDecimal.valueOf(0.16));
+					twVentaProductoCancela.setnIvaUnitario(ivaUnitario);
+
+					// Total unitario (con IVA incluido)
+					twVentaProductoCancela.setnTotalUnitario(totalUnitario);
+
+					// Precio de la partida
+					twVentaProductoCancela.setnPrecioPartida(totalPartida);
+
+					// Penalización = total original - total cancelado
+					BigDecimal penaliza = twVentasProducto.getnTotalPartida().subtract(totalPartida);
+					twVentaProductoCancela.setPenaliza(penaliza);
 				
 					
 				}
 				else {
 					
-					twVentaProductoCancela.setnPrecioUnitario(twVentasProducto.getnPrecioUnitario());
-					twVentaProductoCancela.setnIvaUnitario(twVentasProducto.getnIvaUnitario());
-					twVentaProductoCancela.setnTotalUnitario(twVentasProducto.getnTotalUnitario());
-					twVentaProductoCancela.setnPrecioPartida(twVentasProducto.getnTotalPartida());
+					twVentaProductoCancela.setnPrecioUnitario(DateTimeUtil.truncarDosDecimales(twVentasProducto.getnPrecioUnitario()));
+					twVentaProductoCancela.setnIvaUnitario(DateTimeUtil.truncarDosDecimales(twVentasProducto.getnIvaUnitario()));
+					twVentaProductoCancela.setnTotalUnitario(DateTimeUtil.truncarDosDecimales(twVentasProducto.getnTotalUnitario()));
+					twVentaProductoCancela.setnPrecioPartida(DateTimeUtil.truncarDosDecimales(twVentasProducto.getnTotalPartida()));
 				
 					
 					
@@ -704,23 +702,47 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			
 			if(ventaProductoCancelaDto.penaliza) {
 				
-				totalUnitario=twVentasProducto.getnTotalUnitario()-(twVentasProducto.getnTotalUnitario()*0.20);
-				totalPartida=twVentasProducto.getnTotalPartida()-(twVentasProducto.getnTotalPartida()*0.20);	
+				// Descuento del 20%
+				BigDecimal descuento = BigDecimal.valueOf(0.20);
+
+				// totalUnitario = totalUnitario - (totalUnitario * 0.20)
+				 totalUnitario = twVentasProducto.getnTotalUnitario()
+				    .subtract(twVentasProducto.getnTotalUnitario().multiply(descuento));
+
+				// totalPartida = totalPartida - (totalPartida * 0.20)
+				 totalPartida = twVentasProducto.getnTotalPartida()
+				    .subtract(twVentasProducto.getnTotalPartida().multiply(descuento));
+
+				// Precio unitario sin IVA: totalUnitario / 1.16
+				BigDecimal precioUnitario = totalUnitario.divide(BigDecimal.valueOf(1.16), 10, RoundingMode.DOWN);
+				twVentaProductoCancela.setnPrecioUnitario(precioUnitario);
+
+				// IVA unitario: precioUnitario * 0.16
+				BigDecimal ivaUnitario = precioUnitario.multiply(BigDecimal.valueOf(0.16));
+				twVentaProductoCancela.setnIvaUnitario(ivaUnitario);
+
+				// Total unitario con IVA
+				twVentaProductoCancela.setnTotalUnitario(totalUnitario);
+
+				// Precio partida final
+				twVentaProductoCancela.setnPrecioPartida(totalPartida);
+
+				// Penalización = original - ajustado
 				
-				twVentaProductoCancela.setnPrecioUnitario(util.truncaValor(totalUnitario/1.16));
-				twVentaProductoCancela.setnIvaUnitario(util.truncaValor(((totalUnitario/1.16))*0.16));
-				twVentaProductoCancela.setnTotalUnitario(util.truncaValor(totalUnitario));
-				twVentaProductoCancela.setnPrecioPartida(util.truncaValor(totalPartida));
-				twVentaProductoCancela.setPenaliza(util.truncaValor( twVentasProducto.getnTotalPartida()-totalPartida));
+				BigDecimal penaliza = twVentasProducto.getnTotalPartida().subtract(totalPartida);
+				twVentaProductoCancela.setPenaliza(penaliza);
+
+				
+				
 			
 				
 			}
 			else {
 				
-				twVentaProductoCancela.setnPrecioUnitario(twVentasProducto.getnPrecioUnitario());
-				twVentaProductoCancela.setnIvaUnitario(twVentasProducto.getnIvaUnitario());
-				twVentaProductoCancela.setnTotalUnitario(twVentasProducto.getnTotalUnitario());
-				twVentaProductoCancela.setnPrecioPartida(twVentasProducto.getnTotalPartida());
+				twVentaProductoCancela.setnPrecioUnitario(DateTimeUtil.truncarDosDecimales(twVentasProducto.getnPrecioUnitario()));
+				twVentaProductoCancela.setnIvaUnitario(DateTimeUtil.truncarDosDecimales( twVentasProducto.getnIvaUnitario()));
+				twVentaProductoCancela.setnTotalUnitario(DateTimeUtil.truncarDosDecimales( twVentasProducto.getnTotalUnitario()));
+				twVentaProductoCancela.setnPrecioPartida(DateTimeUtil.truncarDosDecimales( twVentasProducto.getnTotalPartida()));
 			
 				
 				

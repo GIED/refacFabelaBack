@@ -1,6 +1,8 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import javax.persistence.*;
 
 @Entity
@@ -24,22 +26,22 @@ public class TwCotizacionesProducto implements Serializable {
 	private int nCantidad;
 	
 	@Column(name = "n_ivaPartida")
-	private double nIvaPartida;
+	private BigDecimal nIvaPartida;
 	
 	@Column(name = "n_ivaUnitario")
-	private double nIvaUnitario;
+	private BigDecimal nIvaUnitario;
 	
 	@Column(name = "n_precioPartida")
-	private double nPrecioPartida;
+	private BigDecimal nPrecioPartida;
 	
 	@Column(name = "n_precioUnitario")
-	private double nPrecioUnitario;
+	private BigDecimal nPrecioUnitario;
 	
 	@Column(name = "n_totalPartida")
-	private double nTotalPartida;
+	private BigDecimal nTotalPartida;
 	
 	@Column(name = "n_totalUnitario")
-	private double nTotalUnitario;
+	private BigDecimal nTotalUnitario;
 	
 	@Column(name = "s_condicionEntrega")
 	private String sCondicionEntrega;
@@ -93,52 +95,53 @@ public class TwCotizacionesProducto implements Serializable {
 	public void setnCantidad(int nCantidad) {
 		this.nCantidad = nCantidad;
 	}
+	
 
-	public double getnIvaPartida() {
+	public BigDecimal getnIvaPartida() {
 		return nIvaPartida;
 	}
 
-	public void setnIvaPartida(double nIvaPartida) {
+	public void setnIvaPartida(BigDecimal nIvaPartida) {
 		this.nIvaPartida = nIvaPartida;
 	}
 
-	public double getnIvaUnitario() {
+	public BigDecimal getnIvaUnitario() {
 		return nIvaUnitario;
 	}
 
-	public void setnIvaUnitario(double nIvaUnitario) {
+	public void setnIvaUnitario(BigDecimal nIvaUnitario) {
 		this.nIvaUnitario = nIvaUnitario;
 	}
 
-	public double getnPrecioPartida() {
+	public BigDecimal getnPrecioPartida() {
 		return nPrecioPartida;
 	}
 
-	public void setnPrecioPartida(double nPrecioPartida) {
+	public void setnPrecioPartida(BigDecimal nPrecioPartida) {
 		this.nPrecioPartida = nPrecioPartida;
 	}
 
-	public double getnPrecioUnitario() {
+	public BigDecimal getnPrecioUnitario() {
 		return nPrecioUnitario;
 	}
 
-	public void setnPrecioUnitario(double nPrecioUnitario) {
+	public void setnPrecioUnitario(BigDecimal nPrecioUnitario) {
 		this.nPrecioUnitario = nPrecioUnitario;
 	}
 
-	public double getnTotalPartida() {
+	public BigDecimal getnTotalPartida() {
 		return nTotalPartida;
 	}
 
-	public void setnTotalPartida(double nTotalPartida) {
+	public void setnTotalPartida(BigDecimal nTotalPartida) {
 		this.nTotalPartida = nTotalPartida;
 	}
 
-	public double getnTotalUnitario() {
+	public BigDecimal getnTotalUnitario() {
 		return nTotalUnitario;
 	}
 
-	public void setnTotalUnitario(double nTotalUnitario) {
+	public void setnTotalUnitario(BigDecimal nTotalUnitario) {
 		this.nTotalUnitario = nTotalUnitario;
 	}
 

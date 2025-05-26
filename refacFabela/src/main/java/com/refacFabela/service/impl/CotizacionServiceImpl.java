@@ -1,5 +1,6 @@
 package com.refacFabela.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import com.refacFabela.repository.CotizacionRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TwCotizacionesRepository;
 import com.refacFabela.service.CotizacionService;
+import com.refacFabela.utils.DateTimeUtil;
 import com.refacFabela.utils.utils;
 @Service
 public class CotizacionServiceImpl implements CotizacionService {
@@ -51,7 +53,7 @@ public class CotizacionServiceImpl implements CotizacionService {
 		twCotizacion.setnIdCliente(listaCotizacion.get(0).getnIdCliente());
 		twCotizacion.setnIdUsuario(listaCotizacion.get(0).getnIdUsuario());
 		twCotizacion.setsFolioCotizacion(listaCotizacion.get(0).getsFolio());
-		twCotizacion.setdFecha(new Date());
+		twCotizacion.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 		twCotizacion.setnEstatus(1);
 		
 		TwCotizaciones cotizacionRegistrada = new TwCotizaciones();
@@ -70,9 +72,28 @@ public class CotizacionServiceImpl implements CotizacionService {
 			twCotizacionProducto.setnPrecioUnitario(cotizacionDto.getnPrecioUnitario());
 			twCotizacionProducto.setnIvaUnitario(cotizacionDto.getnIvaUnitario());
 			twCotizacionProducto.setnTotalUnitario(cotizacionDto.getnTotalUnitario());
-			twCotizacionProducto.setnPrecioPartida(cotizacionDto.getnCantidad()* cotizacionDto.getnPrecioUnitario());
-			twCotizacionProducto.setnIvaPartida(utils.truncarDecimales(twCotizacionProducto.getnPrecioPartida() * .16));
-			twCotizacionProducto.setnTotalPartida(utils.truncarDecimales(twCotizacionProducto.getnPrecioPartida() + twCotizacionProducto.getnIvaPartida()));			
+		
+			// se convierte cantidad a big decimal
+			final BigDecimal cantidad = BigDecimal.valueOf(cotizacionDto.getnCantidad());
+			final BigDecimal porcentajeIva = BigDecimal.valueOf(0.16);
+			
+		
+
+			// Precio = cantidad * precio unitario (truncado)
+			final BigDecimal precioPartida = cantidad.multiply(cotizacionDto.getnPrecioUnitario());
+			twCotizacionProducto.setnPrecioPartida(DateTimeUtil.truncarDosDecimales(precioPartida));
+
+			// IVA = precio * 0.16 (truncado)
+			final BigDecimal ivaPartida = precioPartida.multiply(porcentajeIva);
+			twCotizacionProducto.setnIvaPartida(DateTimeUtil.truncarDosDecimales(ivaPartida));
+
+			// Total = precio + IVA (truncado)
+			final BigDecimal totalPartida = precioPartida.add(ivaPartida);
+			twCotizacionProducto.setnTotalPartida(DateTimeUtil.truncarDosDecimales(totalPartida));
+			
+			
+			
+			
 			twCotizacionProducto.setnIdDescuento(cotizacionDto.getnInDescuento());
 			List<TwProductobodega> productoBodega=productoBodegaRepository.findBynIdProducto(cotizacionDto.getnIdProducto());
 			

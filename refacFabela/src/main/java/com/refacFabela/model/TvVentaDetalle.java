@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -48,31 +49,31 @@ public class TvVentaDetalle implements Serializable {
 	private Date dFechaPagoCredito;
 	
 	@Column(name = "n_totalVenta")
-	private Double nTotalVenta;
+	private BigDecimal nTotalVenta;
 	
 	@Column(name = "n_anticipo")
-	private Double nAnticipo;
+	private BigDecimal nAnticipo;
 	
 	@Column(name = "n_totalAbono")
-	private Double nTotalAbono;
+	private BigDecimal nTotalAbono;
 	
 	@Column(name = "n_saldoTotal")
-	private Double nSaldoTotal;
+	private BigDecimal nSaldoTotal;
 	
 	@Column(name = "n_avancePago")
-	private Double nAvancePago;
+	private BigDecimal nAvancePago;
 	
 	@Column(name = "s_estatus")
 	private String sEstatus;
 	
 	@Column(name = "nDescuento")
-	private Double descuento;
+	private BigDecimal descuento;
 	
 	@Column(name = "n_idTipoVenta")
 	private Long nIdTipoVenta;
 	
 	@Column(name = "n_saldo_favor")
-	private Double nSaldoFavor;	
+	private BigDecimal nSaldoFavor;	
 	
 	@Column(name = "n_id_venta_utilizado")
 	private Long nIdVentaUtilizado;
@@ -149,14 +150,7 @@ public class TvVentaDetalle implements Serializable {
 		this.twCaja = twCaja;
 	}
 
-	public double getDescuento() {
-		return descuento;
-	}
-
-
-	public void setDescuento(double descuento) {
-		this.descuento = descuento;
-	}
+	
 
 
 	public Long getnId() {
@@ -231,43 +225,7 @@ public class TvVentaDetalle implements Serializable {
 		this.dFechaPagoCredito = dFechaPagoCredito;
 	}
 
-	public double getnTotalVenta() {
-		return nTotalVenta;
-	}
-
-
-
-	public Double getnTotalAbono() {
-		return nTotalAbono;
-	}
-
-	public void setnTotalAbono(Double nTotalAbono) {
-		this.nTotalAbono = nTotalAbono;
-	}
-
-	public Double getnSaldoTotal() {
-		return nSaldoTotal;
-	}
-
-	public void setnSaldoTotal(Double nSaldoTotal) {
-		this.nSaldoTotal = nSaldoTotal;
-	}
-
-	public Double getnAvancePago() {
-		return nAvancePago;
-	}
-
-	public void setnAvancePago(Double nAvancePago) {
-		this.nAvancePago = nAvancePago;
-	}
-
-	public void setnTotalVenta(Double nTotalVenta) {
-		this.nTotalVenta = nTotalVenta;
-	}
-
-	public void setDescuento(Double descuento) {
-		this.descuento = descuento;
-	}
+	
 
 	public String getsEstatus() {
 		return sEstatus;
@@ -323,25 +281,65 @@ public class TvVentaDetalle implements Serializable {
 	
 	
 
-	public Double getnAnticipo() {
+	
+	
+	
+
+	public BigDecimal getnTotalVenta() {
+		return nTotalVenta;
+	}
+
+	public void setnTotalVenta(BigDecimal nTotalVenta) {
+		this.nTotalVenta = nTotalVenta;
+	}
+
+	public BigDecimal getnAnticipo() {
 		return nAnticipo;
 	}
 
-	public void setnAnticipo(Double nAnticipo) {
+	public void setnAnticipo(BigDecimal nAnticipo) {
 		this.nAnticipo = nAnticipo;
 	}
-	
-	
 
-	public Double getnSaldoFavor() {
+	public BigDecimal getnTotalAbono() {
+		return nTotalAbono;
+	}
+
+	public void setnTotalAbono(BigDecimal nTotalAbono) {
+		this.nTotalAbono = nTotalAbono;
+	}
+
+	public BigDecimal getnSaldoTotal() {
+		return nSaldoTotal;
+	}
+
+	public void setnSaldoTotal(BigDecimal nSaldoTotal) {
+		this.nSaldoTotal = nSaldoTotal;
+	}
+
+	public BigDecimal getnAvancePago() {
+		return nAvancePago;
+	}
+
+	public void setnAvancePago(BigDecimal nAvancePago) {
+		this.nAvancePago = nAvancePago;
+	}
+
+	public BigDecimal getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(BigDecimal descuento) {
+		this.descuento = descuento;
+	}
+
+	public BigDecimal getnSaldoFavor() {
 		return nSaldoFavor;
 	}
 
-	public void setnSaldoFavor(Double nSaldoFavor) {
+	public void setnSaldoFavor(BigDecimal nSaldoFavor) {
 		this.nSaldoFavor = nSaldoFavor;
 	}
-	
-	
 
 	public Long getnIdVentaUtilizado() {
 		return nIdVentaUtilizado;

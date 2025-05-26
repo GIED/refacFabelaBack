@@ -1,6 +1,7 @@
 package com.refacFabela.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.refacFabela.model.TwVentasProducto;
@@ -16,8 +17,8 @@ public class VentaProductoDto implements  Serializable {
 	private String sDescripcion;
 	private String sMarca;
 	private int nCantidad;
-	private double nTotalUnitario;
-	private double nTotalPartida;
+	private BigDecimal nTotalUnitario;
+	private BigDecimal nTotalPartida;
 	private Date dFechaVenta;
 	private int nEstatusEntregaAlmacen;
 	private String sBodega;
@@ -26,7 +27,7 @@ public class VentaProductoDto implements  Serializable {
 	private Integer nEstatus;
 	private Long nIdVenta;
 	private String sCondicionEntrega;
-	private double nUnitario;
+	private BigDecimal nUnitario;
 	
 	
 	
@@ -127,20 +128,26 @@ public class VentaProductoDto implements  Serializable {
 		this.nCantidad = nCantidad;
 	}
 
-	public double getnTotalUnitario() {
+	
+
+	public BigDecimal getnTotalUnitario() {
 		return nTotalUnitario;
 	}
 
-	public void setnTotalUnitario(double nTotalUnitario) {
+	public void setnTotalUnitario(BigDecimal nTotalUnitario) {
 		this.nTotalUnitario = nTotalUnitario;
 	}
 
-	public double getnTotalPartida() {
+	public BigDecimal getnTotalPartida() {
 		return nTotalPartida;
 	}
 
-	public void setnTotalPartida(double nTotalPartida) {
+	public void setnTotalPartida(BigDecimal nTotalPartida) {
 		this.nTotalPartida = nTotalPartida;
+	}
+
+	public void setnUnitario(BigDecimal nUnitario) {
+		this.nUnitario = nUnitario;
 	}
 
 	public Date getdFechaVenta() {
@@ -202,14 +209,11 @@ public class VentaProductoDto implements  Serializable {
 		this.sCondicionEntrega = sCondicionEntrega;
 	}
 
-	public double getnUnitario() {
+	public BigDecimal getnUnitario() {
 		return nUnitario;
 	}
 
-	public void setnUnitario(double nUnitario) {
-		this.nUnitario = nUnitario;
-	}
-
+	
 	
 
 	

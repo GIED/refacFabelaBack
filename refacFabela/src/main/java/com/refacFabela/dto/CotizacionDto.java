@@ -1,6 +1,7 @@
 package com.refacFabela.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class CotizacionDto implements Serializable{
 
@@ -13,9 +14,9 @@ public class CotizacionDto implements Serializable{
 	private Long nIdUsuario;
 	private Long nIdProducto;
 	private Integer nCantidad;
-	private Double nPrecioUnitario;
-	private Double nIvaUnitario;
-	private Double nTotalUnitario;
+	private BigDecimal nPrecioUnitario;
+	private BigDecimal nIvaUnitario;
+	private BigDecimal nTotalUnitario;
 	private String sFolio;
 	private Integer nInDescuento;
 	
@@ -43,22 +44,25 @@ public class CotizacionDto implements Serializable{
 	public void setnCantidad(Integer nCantidad) {
 		this.nCantidad = nCantidad;
 	}
-	public Double getnPrecioUnitario() {
+	
+	
+	
+	public BigDecimal getnPrecioUnitario() {
 		return nPrecioUnitario;
 	}
-	public void setnPrecioUnitario(Double nPrecioUnitario) {
+	public void setnPrecioUnitario(BigDecimal nPrecioUnitario) {
 		this.nPrecioUnitario = nPrecioUnitario;
 	}
-	public Double getnIvaUnitario() {
+	public BigDecimal getnIvaUnitario() {
 		return nIvaUnitario;
 	}
-	public void setnIvaUnitario(Double nIvaUnitario) {
+	public void setnIvaUnitario(BigDecimal nIvaUnitario) {
 		this.nIvaUnitario = nIvaUnitario;
 	}
-	public Double getnTotalUnitario() {
+	public BigDecimal getnTotalUnitario() {
 		return nTotalUnitario;
 	}
-	public void setnTotalUnitario(Double nTotalUnitario) {
+	public void setnTotalUnitario(BigDecimal nTotalUnitario) {
 		this.nTotalUnitario = nTotalUnitario;
 	}
 	public String getsFolio() {

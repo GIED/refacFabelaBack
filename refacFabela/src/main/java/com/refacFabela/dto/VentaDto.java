@@ -1,5 +1,6 @@
 package com.refacFabela.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class VentaDto {
 	   private Integer tipoPago;
 	   private Date fechaIniCredito;
 	   private Date fechaFinCredito;
-	   private Double anticipo;
+	   private BigDecimal anticipo;
 	   private List<TvStockProductoDto> listaValidada;
 	   private TwCotizaciones twCotizacion;
 	   
@@ -75,10 +76,11 @@ public class VentaDto {
 	}
 	
 	
-	public Double getAnticipo() {
+	
+	public BigDecimal getAnticipo() {
 		return anticipo;
 	}
-	public void setAnticipo(Double anticipo) {
+	public void setAnticipo(BigDecimal anticipo) {
 		this.anticipo = anticipo;
 	}
 	@Override

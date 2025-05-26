@@ -1,6 +1,7 @@
 package com.refacFabela.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -12,10 +13,10 @@ public class TwSaldoUtilizadoDto implements Serializable {
 	private Long nIdVenta;
 
 	
-	private Double nSaldoTotal;
+	private BigDecimal nSaldoTotal;
 
 	
-	private Double nSaldoUtilizado;
+	private BigDecimal nSaldoUtilizado;
 	
 	
 	private Long nIdUsuario;
@@ -43,22 +44,25 @@ public class TwSaldoUtilizadoDto implements Serializable {
 	}
 
 
-	public Double getnSaldoTotal() {
+	
+
+
+	public BigDecimal getnSaldoTotal() {
 		return nSaldoTotal;
 	}
 
 
-	public void setnSaldoTotal(Double nSaldoTotal) {
+	public void setnSaldoTotal(BigDecimal nSaldoTotal) {
 		this.nSaldoTotal = nSaldoTotal;
 	}
 
 
-	public Double getnSaldoUtilizado() {
+	public BigDecimal getnSaldoUtilizado() {
 		return nSaldoUtilizado;
 	}
 
 
-	public void setnSaldoUtilizado(Double nSaldoUtilizado) {
+	public void setnSaldoUtilizado(BigDecimal nSaldoUtilizado) {
 		this.nSaldoUtilizado = nSaldoUtilizado;
 	}
 

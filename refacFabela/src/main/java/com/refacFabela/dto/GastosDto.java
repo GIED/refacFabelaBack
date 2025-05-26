@@ -1,5 +1,6 @@
 package com.refacFabela.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class GastosDto {
@@ -9,7 +10,7 @@ public class GastosDto {
 	String descripcion;
 	Date fecha;
 	String usuario;
-	Double monto;
+	BigDecimal monto;
 	
 	public GastosDto() {
 		
@@ -50,10 +51,15 @@ public class GastosDto {
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
-	public Double getMonto() {
+	
+
+
+	public BigDecimal getMonto() {
 		return monto;
 	}
-	public void setMonto(Double monto) {
+
+
+	public void setMonto(BigDecimal monto) {
 		this.monto = monto;
 	}
 

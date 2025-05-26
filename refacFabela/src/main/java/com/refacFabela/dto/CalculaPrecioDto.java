@@ -1,14 +1,16 @@
 package com.refacFabela.dto;
 
+import java.math.BigDecimal;
+
 public class CalculaPrecioDto {
 	
 	Integer cantidad;
-	double precioUnitario;
-	double ivaUnitario;
-	double totalUnitario;
-	double precioPartida;
-	double ivaPartida;
-	double totalPartida;
+	BigDecimal precioUnitario;
+	BigDecimal ivaUnitario;
+	BigDecimal totalUnitario;
+	BigDecimal precioPartida;
+	BigDecimal ivaPartida;
+	BigDecimal totalPartida;
 	
 	
 	public Integer getCantidad() {
@@ -17,40 +19,43 @@ public class CalculaPrecioDto {
 	public void setCantidad(Integer cantidad) {
 		this.cantidad = cantidad;
 	}
-	public double getPrecioUnitario() {
+	
+	
+	
+	public BigDecimal getPrecioUnitario() {
 		return precioUnitario;
 	}
-	public void setPrecioUnitario(double precioUnitario) {
+	public void setPrecioUnitario(BigDecimal precioUnitario) {
 		this.precioUnitario = precioUnitario;
 	}
-	public double getIvaUnitario() {
+	public BigDecimal getIvaUnitario() {
 		return ivaUnitario;
 	}
-	public void setIvaUnitario(double ivaUnitario) {
+	public void setIvaUnitario(BigDecimal ivaUnitario) {
 		this.ivaUnitario = ivaUnitario;
 	}
-	public double getTotalUnitario() {
+	public BigDecimal getTotalUnitario() {
 		return totalUnitario;
 	}
-	public void setTotalUnitario(double totalUnitario) {
+	public void setTotalUnitario(BigDecimal totalUnitario) {
 		this.totalUnitario = totalUnitario;
 	}
-	public double getPrecioPartida() {
+	public BigDecimal getPrecioPartida() {
 		return precioPartida;
 	}
-	public void setPrecioPartida(double precioPartida) {
+	public void setPrecioPartida(BigDecimal precioPartida) {
 		this.precioPartida = precioPartida;
 	}
-	public double getIvaPartida() {
+	public BigDecimal getIvaPartida() {
 		return ivaPartida;
 	}
-	public void setIvaPartida(double ivaPartida) {
+	public void setIvaPartida(BigDecimal ivaPartida) {
 		this.ivaPartida = ivaPartida;
 	}
-	public double getTotalPartida() {
+	public BigDecimal getTotalPartida() {
 		return totalPartida;
 	}
-	public void setTotalPartida(double totalPartida) {
+	public void setTotalPartida(BigDecimal totalPartida) {
 		this.totalPartida = totalPartida;
 	}
 	@Override

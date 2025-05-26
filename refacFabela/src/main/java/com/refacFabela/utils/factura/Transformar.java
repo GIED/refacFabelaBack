@@ -1,5 +1,6 @@
 package com.refacFabela.utils.factura;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,6 +16,7 @@ import com.refacFabela.model.factura.CabeceraPagosXml;
 import com.refacFabela.model.factura.CabeceraXml;
 import com.refacFabela.model.factura.ConceptoXml;
 import com.refacFabela.model.factura.Impuesto;
+import com.refacFabela.utils.DateTimeUtil;
 import com.refacFabela.utils.utils;
 @Component
 public class Transformar {
@@ -28,7 +30,7 @@ public class Transformar {
                 utils util =new utils();
                 
                 /*Se verifica que no tenga más de un metodo de pago y que el pago en efectivo no sea mayor a 2000, de lo contrario sale por definir*/
-                if(listaVentaCobro.size()>1 || ((calcularTotal(productosVendidos)>=2000) && (twVenta.getTcFormapago().getnId()==1L) )) {
+                if(listaVentaCobro.size()>1 || (calcularTotal(productosVendidos).compareTo(BigDecimal.valueOf(2000)) >= 0 && (twVenta.getTcFormapago().getnId()==1L) )) {
                 	cabeceraXmlBean.setFormaPago("99");
                 	cabeceraXmlBean.setMetodoPago("Pago en parcialidades o diferido");
                 }
@@ -152,30 +154,30 @@ public class Transformar {
 	        return impuesto;
 	    }
 
-	    private static Double calculaSubTotal(List<TwVentasProducto> lista) {
-	        Double subTotal = 0.0;
+	    private static BigDecimal calculaSubTotal(List<TwVentasProducto> lista) {
+	        BigDecimal subTotal = BigDecimal.ZERO;
 	        utils util =new utils();
 	        for (int i = 0; i < lista.size(); i++) {
-	            subTotal = subTotal + lista.get(i).getnPrecioPartida();
+	            subTotal = subTotal.add( lista.get(i).getnPrecioPartida());
 	        }
-	        return util.truncaValor(subTotal) ;
+	        return DateTimeUtil.truncarDosDecimales(subTotal);
 	    }
 
-	    private static Double calculaIvaTotal(List<TwVentasProducto> lista) {
-	        Double iva = 0.0;
+	    private static BigDecimal calculaIvaTotal(List<TwVentasProducto> lista) {
+	    	BigDecimal iva = BigDecimal.ZERO;
 	        utils util =new utils();
 	        for (int i = 0; i < lista.size(); i++) {
-	            iva = iva + lista.get(i).getnIvaPartida();
+	            iva = iva.add( lista.get(i).getnIvaPartida());
 	        }
 
-	        return util.truncaValor(iva);
+	        return DateTimeUtil.truncarDosDecimales(iva);
 	    }
 	    
-	    private static Double calcularTotal(List<TwVentasProducto> lista){     
-	      Double  total=0.0;      
+	    private static BigDecimal calcularTotal(List<TwVentasProducto> lista){     
+	    	BigDecimal  total=BigDecimal.ZERO;      
 	      utils util =new utils();
-	        total= calculaSubTotal(lista) + calculaIvaTotal(lista); 
-	        return  util.truncaValor(total);
+	        total= calculaSubTotal(lista).add(calculaIvaTotal(lista)) ; 
+	        return  DateTimeUtil.truncarDosDecimales(total);
 	    }
 
 }

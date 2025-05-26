@@ -1,7 +1,8 @@
 package com.refacFabela.dto;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class ReporteCotizacionDto implements Serializable{
 
@@ -14,17 +15,17 @@ public class ReporteCotizacionDto implements Serializable{
 	private String rfcEmpresa;
 	private String nombreCliente;
 	private String rfcCliente;
-	private Date fecha;
+	private LocalDateTime fecha;
 	private Long folioCotizacion;
 	private String claveSat;
 	private Integer cantidad;
 	private Long noIdentificacion;
 	private String nombreProducto;
-	private Double precioUnitario;
-	private Double importe;
-	private Double subTotal;
-	private Double ivaTotal;
-	private Double total;
+	private BigDecimal precioUnitario;
+	private BigDecimal importe;
+	private BigDecimal subTotal;
+	private BigDecimal ivaTotal;
+	private BigDecimal total;
 	private String descripcionCatSat;
 	private String correo;
 	private String condicionEntrega;
@@ -41,7 +42,7 @@ public class ReporteCotizacionDto implements Serializable{
 	}
 	
 	public ReporteCotizacionDto(String claveSat, int cantidad, Long noIdentificacion, String nombreProducto,
-			Double precioUnitario, Double importe) {
+			BigDecimal precioUnitario, BigDecimal importe) {
 		
 		this.cantidad = cantidad;
 		this.claveSat = claveSat;
@@ -74,12 +75,15 @@ public class ReporteCotizacionDto implements Serializable{
 	public void setRfcCliente(String rfcCliente) {
 		this.rfcCliente = rfcCliente;
 	}
-	public Date getFecha() {
+	
+	public LocalDateTime getFecha() {
 		return fecha;
 	}
-	public void setFecha(Date fecha) {
+
+	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
 	}
+
 	public Long getFolioCotizacion() {
 		return folioCotizacion;
 	}
@@ -113,34 +117,45 @@ public class ReporteCotizacionDto implements Serializable{
 	public void setNombreProducto(String nombreProducto) {
 		this.nombreProducto = nombreProducto;
 	}
-	public Double getPrecioUnitario() {
+	
+
+	public BigDecimal getPrecioUnitario() {
 		return precioUnitario;
 	}
-	public void setPrecioUnitario(Double precioUnitario) {
+
+	public void setPrecioUnitario(BigDecimal precioUnitario) {
 		this.precioUnitario = precioUnitario;
 	}
-	public Double getImporte() {
+
+	public BigDecimal getImporte() {
 		return importe;
 	}
-	public void setImporte(Double importe) {
+
+	public void setImporte(BigDecimal importe) {
 		this.importe = importe;
 	}
-	public Double getSubTotal() {
+
+	public BigDecimal getSubTotal() {
 		return subTotal;
 	}
-	public void setSubTotal(Double subTotal) {
+
+	public void setSubTotal(BigDecimal subTotal) {
 		this.subTotal = subTotal;
 	}
-	public Double getIvaTotal() {
+
+	public BigDecimal getIvaTotal() {
 		return ivaTotal;
 	}
-	public void setIvaTotal(Double ivaTotal) {
+
+	public void setIvaTotal(BigDecimal ivaTotal) {
 		this.ivaTotal = ivaTotal;
 	}
-	public Double getTotal() {
+
+	public BigDecimal getTotal() {
 		return total;
 	}
-	public void setTotal(Double total) {
+
+	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
 

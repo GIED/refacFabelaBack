@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,13 +33,13 @@ public class TwVentaProductoCancela  implements Serializable {
 	@Column(name = "n_cantidad")
 	private Integer nCantidad;	
 	@Column(name = "n_precioUnitario")
-	private Double nPrecioUnitario;	
+	private BigDecimal nPrecioUnitario;	
 	@Column(name = "n_ivaUnitario")
-	private Double nIvaUnitario;	
+	private BigDecimal nIvaUnitario;	
 	@Column(name = "n_totalUnitario")
-	private Double nTotalUnitario;	
+	private BigDecimal nTotalUnitario;	
 	@Column(name = "n_precioPartida")
-	private Double nPrecioPartida;	
+	private BigDecimal nPrecioPartida;	
 	@Column(name = "n_idUsuario")
 	private Long nIdUsuario;	
 	@Column(name = "d_fecha")
@@ -46,7 +47,7 @@ public class TwVentaProductoCancela  implements Serializable {
 	@Column(name = "n_idCaja")
 	private Long nIdCaja;	
 	@Column(name = "n_total_penaliza")
-	private Double penaliza;
+	private BigDecimal penaliza;
 	@Column(name = "s_motivo")
 	private String sMotivo;
 	
@@ -88,14 +89,6 @@ public class TwVentaProductoCancela  implements Serializable {
 
 
 
-	public Double getPenaliza() {
-		return penaliza;
-	}
-
-
-	public void setPenaliza(Double penaliza) {
-		this.penaliza = penaliza;
-	}
 
 
 	public Long getnId() {
@@ -138,44 +131,76 @@ public class TwVentaProductoCancela  implements Serializable {
 	}
 
 
-	public Double getnPrecioUnitario() {
+	
+
+	public BigDecimal getnPrecioUnitario() {
 		return nPrecioUnitario;
 	}
 
 
-	public void setnPrecioUnitario(Double nPrecioUnitario) {
+
+
+	public void setnPrecioUnitario(BigDecimal nPrecioUnitario) {
 		this.nPrecioUnitario = nPrecioUnitario;
 	}
 
 
-	public Double getnIvaUnitario() {
+
+
+	public BigDecimal getnIvaUnitario() {
 		return nIvaUnitario;
 	}
 
 
-	public void setnIvaUnitario(Double nIvaUnitario) {
+
+
+	public void setnIvaUnitario(BigDecimal nIvaUnitario) {
 		this.nIvaUnitario = nIvaUnitario;
 	}
 
 
-	public Double getnTotalUnitario() {
+
+
+	public BigDecimal getnTotalUnitario() {
 		return nTotalUnitario;
 	}
 
 
-	public void setnTotalUnitario(Double nTotalUnitario) {
+
+
+	public void setnTotalUnitario(BigDecimal nTotalUnitario) {
 		this.nTotalUnitario = nTotalUnitario;
 	}
 
 
-	public Double getnPrecioPartida() {
+
+
+	public BigDecimal getnPrecioPartida() {
 		return nPrecioPartida;
 	}
 
 
-	public void setnPrecioPartida(Double nPrecioPartida) {
+
+
+	public void setnPrecioPartida(BigDecimal nPrecioPartida) {
 		this.nPrecioPartida = nPrecioPartida;
 	}
+
+
+
+
+	public BigDecimal getPenaliza() {
+		return penaliza;
+	}
+
+
+
+
+	public void setPenaliza(BigDecimal penaliza) {
+		this.penaliza = penaliza;
+	}
+
+
 
 
 	public Long getnIdUsuario() {

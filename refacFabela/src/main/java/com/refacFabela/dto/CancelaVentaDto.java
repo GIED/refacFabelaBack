@@ -1,5 +1,6 @@
 package com.refacFabela.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class CancelaVentaDto {
@@ -10,7 +11,7 @@ public class CancelaVentaDto {
 	String noParte;
 	String producto;
 	Integer cantidad;
-	Double totalCancela;
+	BigDecimal totalCancela;
 	String usuario;
 	String saldoFavor;
 	String tipoPago;
@@ -66,12 +67,19 @@ public class CancelaVentaDto {
 	public void setCantidad(Integer cantidad) {
 		this.cantidad = cantidad;
 	}
-	public Double getTotalCancela() {
+	
+	public BigDecimal getTotalCancela() {
 		return totalCancela;
 	}
-	public void setTotalCancela(Double totalCancela) {
+
+
+
+	public void setTotalCancela(BigDecimal totalCancela) {
 		this.totalCancela = totalCancela;
 	}
+
+
+
 	public String getUsuario() {
 		return usuario;
 	}
