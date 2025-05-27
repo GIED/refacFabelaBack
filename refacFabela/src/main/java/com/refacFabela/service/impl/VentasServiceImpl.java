@@ -146,12 +146,12 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setdFechaVenta(new Date());
 		
 		
-		/* Para las ventas por internet
+		// Para las ventas por internet
 		if (twVenta.getnIdTipoVenta() == 2L) {
 			twVenta.setnIdEstatusVenta(2L);
 		}else {
 			twVenta.setnIdEstatusVenta(1L);			
-		} */
+		} 
 		
 		/*Si las ventas es a crédito */
 		if(ventaDto.getTipoPago()==1L){
