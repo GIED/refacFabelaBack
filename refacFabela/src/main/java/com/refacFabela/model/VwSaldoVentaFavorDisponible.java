@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -25,13 +26,13 @@ public class VwSaldoVentaFavorDisponible implements Serializable {
 	private Long nIdVenta;
 	
 	@Column(name = "n_total_cancelado")
-	private Double nTotalCancelado;
+	private BigDecimal nTotalCancelado;
 
 	@Column(name = "n_total_usado")
-	private Double nTotalUsado;
+	private BigDecimal nTotalUsado;
 
 	@Column(name = "n_saldo_disponible")
-	private Double nSaldoDisponible;
+	private BigDecimal nSaldoDisponible;
 	
 
 	public Long getnIdVenta() {
@@ -42,29 +43,31 @@ public class VwSaldoVentaFavorDisponible implements Serializable {
 		this.nIdVenta = nIdVenta;
 	}
 
-	public Double getnTotalCancelado() {
+	public BigDecimal getnTotalCancelado() {
 		return nTotalCancelado;
 	}
 
-	public void setnTotalCancelado(Double nTotalCancelado) {
+	public void setnTotalCancelado(BigDecimal nTotalCancelado) {
 		this.nTotalCancelado = nTotalCancelado;
 	}
 
-	public Double getnTotalUsado() {
+	public BigDecimal getnTotalUsado() {
 		return nTotalUsado;
 	}
 
-	public void setnTotalUsado(Double nTotalUsado) {
+	public void setnTotalUsado(BigDecimal nTotalUsado) {
 		this.nTotalUsado = nTotalUsado;
 	}
 
-	public Double getnSaldoDisponible() {
+	public BigDecimal getnSaldoDisponible() {
 		return nSaldoDisponible;
 	}
 
-	public void setnSaldoDisponible(Double nSaldoDisponible) {
+	public void setnSaldoDisponible(BigDecimal nSaldoDisponible) {
 		this.nSaldoDisponible = nSaldoDisponible;
 	}
+
+	
 	
 	
 	

@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -23,13 +24,13 @@ public class TvPedidoDetalle implements Serializable {
 	@Column(name = "s_cve_pedido")
 	private String sCvePedido;		
 	@Column(name = "d_fecha_pedido")
-	private Date dFechaPedido;		
+	private LocalDateTime dFechaPedido;		
 	@Column(name = "s_observaciones")
 	private String sObservaciones;	
 	@Column(name = "n_estatus")
 	private Long nEstatus;		
 	@Column(name = "d_fecha_pedido_cierre")
-	private Date dFechaPedidoCierre;		
+	private LocalDateTime dFechaPedidoCierre;		
 	@Column(name = "s_nombreUsuario")
 	private String sNombreUsuario;		
 	@Column(name = "n_total_productos")
@@ -70,14 +71,7 @@ public class TvPedidoDetalle implements Serializable {
 	}
 
 
-	public Date getdFechaPedido() {
-		return dFechaPedido;
-	}
 
-
-	public void setdFechaPedido(Date dFechaPedido) {
-		this.dFechaPedido = dFechaPedido;
-	}
 
 
 	public String getsObservaciones() {
@@ -100,12 +94,25 @@ public class TvPedidoDetalle implements Serializable {
 	}
 
 
-	public Date getdFechaPedidoCierre() {
+
+
+
+	public LocalDateTime getdFechaPedido() {
+		return dFechaPedido;
+	}
+
+
+	public void setdFechaPedido(LocalDateTime dFechaPedido) {
+		this.dFechaPedido = dFechaPedido;
+	}
+
+
+	public LocalDateTime getdFechaPedidoCierre() {
 		return dFechaPedidoCierre;
 	}
 
 
-	public void setdFechaPedidoCierre(Date dFechaPedidoCierre) {
+	public void setdFechaPedidoCierre(LocalDateTime dFechaPedidoCierre) {
 		this.dFechaPedidoCierre = dFechaPedidoCierre;
 	}
 

@@ -644,7 +644,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("rfcEmpresa", "TES030201001");
 			params.put("id", twPedido.getnId());
 			params.put("clave", twPedido.getsCvePedido());		
-			params.put("fecha", util.formatoFecha(twPedido.getdFechaPedido()));			
+			params.put("fecha", twPedido.getdFechaPedido());			
 			params.put("listaPedidoProducto", listaPedidoProducto);		
 			params.put("usuario", twPedido.getTcUsuario().getsNombreUsuario());
 	        params.put("qr", getQR(("\nUsuario: "+twPedido.getTcUsuario().getsNombreUsuario())));

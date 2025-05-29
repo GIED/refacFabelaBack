@@ -1,5 +1,6 @@
 package com.refacFabela.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -38,8 +39,7 @@ public class VwFacturaProductoBalance {
     private Long nIdRazonSocial;
 
     @Column(name = "d_fecha_inicio_factura")
-    @Temporal(TemporalType.DATE)
-    private Date dFechaInicioFactura;
+    private LocalDateTime dFechaInicioFactura;
 
     @Column(name = "n_estatus_factura_proveedor")
     private Integer nEstatusFacturaProveedor;
@@ -120,11 +120,13 @@ public class VwFacturaProductoBalance {
 		this.nIdRazonSocial = nIdRazonSocial;
 	}
 
-	public Date getdFechaInicioFactura() {
+	
+
+	public LocalDateTime getdFechaInicioFactura() {
 		return dFechaInicioFactura;
 	}
 
-	public void setdFechaInicioFactura(Date dFechaInicioFactura) {
+	public void setdFechaInicioFactura(LocalDateTime dFechaInicioFactura) {
 		this.dFechaInicioFactura = dFechaInicioFactura;
 	}
 

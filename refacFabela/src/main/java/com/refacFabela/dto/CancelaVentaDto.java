@@ -1,12 +1,13 @@
 package com.refacFabela.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class CancelaVentaDto {
 	
 	Long venta;
-	Date fechaVenta;
+	LocalDateTime fechaVenta;
 	String cliente;
 	String noParte;
 	String producto;
@@ -37,12 +38,14 @@ public class CancelaVentaDto {
 	public void setVenta(Long venta) {
 		this.venta = venta;
 	}
-	public Date getFechaVenta() {
+	
+	public LocalDateTime getFechaVenta() {
 		return fechaVenta;
 	}
-	public void setFechaVenta(Date fechaVenta) {
+	public void setFechaVenta(LocalDateTime fechaVenta) {
 		this.fechaVenta = fechaVenta;
 	}
+
 	public String getCliente() {
 		return cliente;
 	}

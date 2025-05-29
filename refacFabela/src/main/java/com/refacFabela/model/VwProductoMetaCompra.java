@@ -5,6 +5,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class VwProductoMetaCompra {
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "d_ultima_fecha_compra")
-    private Date dUltimaFechaCompra;
+    private LocalDateTime dUltimaFechaCompra;
 
     @Column(name = "n_stock_sugerido")
     private Integer nStockSugerido;
@@ -242,11 +243,12 @@ public class VwProductoMetaCompra {
 		this.nStockMaximoRequerido = nStockMaximoRequerido;
 	}
 
-	public Date getdUltimaFechaCompra() {
+
+	public LocalDateTime getdUltimaFechaCompra() {
 		return dUltimaFechaCompra;
 	}
 
-	public void setdUltimaFechaCompra(Date dUltimaFechaCompra) {
+	public void setdUltimaFechaCompra(LocalDateTime dUltimaFechaCompra) {
 		this.dUltimaFechaCompra = dUltimaFechaCompra;
 	}
 

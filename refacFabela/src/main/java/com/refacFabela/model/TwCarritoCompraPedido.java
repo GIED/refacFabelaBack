@@ -1,5 +1,6 @@
 package com.refacFabela.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -42,13 +43,11 @@ public class TwCarritoCompraPedido {
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "d_fecha_registro")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dFechaRegistro;
+    private LocalDateTime dFechaRegistro;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "d_fecha_llegada")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dFechaLlegada;
+    private LocalDateTime dFechaLlegada;
 
     @Column(name = "n_estatus")
     private Integer nEstatus;
@@ -109,19 +108,21 @@ public class TwCarritoCompraPedido {
 		this.nCantidad = nCantidad;
 	}
 
-	public Date getdFechaRegistro() {
+	
+
+	public LocalDateTime getdFechaRegistro() {
 		return dFechaRegistro;
 	}
 
-	public void setdFechaRegistro(Date dFechaRegistro) {
+	public void setdFechaRegistro(LocalDateTime dFechaRegistro) {
 		this.dFechaRegistro = dFechaRegistro;
 	}
 
-	public Date getdFechaLlegada() {
+	public LocalDateTime getdFechaLlegada() {
 		return dFechaLlegada;
 	}
 
-	public void setdFechaLlegada(Date dFechaLlegada) {
+	public void setdFechaLlegada(LocalDateTime dFechaLlegada) {
 		this.dFechaLlegada = dFechaLlegada;
 	}
 

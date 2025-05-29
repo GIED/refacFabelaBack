@@ -1,13 +1,14 @@
 package com.refacFabela.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class PedidoProductoDto {
 	
 	private String noParte;
 	private String producto;
-	private String fechaPedido;
-	private String fechaRecibida;
+	private LocalDateTime fechaPedido;
+	private LocalDateTime fechaRecibida;
 	private int cantidad;
 	private BigDecimal precio;
 	private String estatus;
@@ -25,16 +26,17 @@ public class PedidoProductoDto {
 	public void setProducto(String producto) {
 		this.producto = producto;
 	}
-	public String getFechaPedido() {
+	
+	public LocalDateTime getFechaPedido() {
 		return fechaPedido;
 	}
-	public void setFechaPedido(String fechaPedido) {
+	public void setFechaPedido(LocalDateTime fechaPedido) {
 		this.fechaPedido = fechaPedido;
 	}
-	public String getFechaRecibida() {
+	public LocalDateTime getFechaRecibida() {
 		return fechaRecibida;
 	}
-	public void setFechaRecibida(String fechaRecibida) {
+	public void setFechaRecibida(LocalDateTime fechaRecibida) {
 		this.fechaRecibida = fechaRecibida;
 	}
 	public int getCantidad() {

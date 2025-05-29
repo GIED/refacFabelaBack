@@ -20,6 +20,11 @@ public class DateTimeUtil {
         return zonedDateTime.toLocalDateTime();
     }
     
+    public static Date convertirALocalDateTimeEnMexicoADate(LocalDateTime fechaLocalDateTime) {
+        ZoneId zonaMexico = ZoneId.of(ZONE_ID_MEXICO); // Debe estar definido como constante
+        return Date.from(fechaLocalDateTime.atZone(zonaMexico).toInstant());
+    }
+    
     
     public static String convertirFecha(LocalDateTime fecha) {
         if (fecha == null) {

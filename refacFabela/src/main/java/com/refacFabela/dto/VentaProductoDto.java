@@ -2,6 +2,7 @@ package com.refacFabela.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.refacFabela.model.TwVentasProducto;
@@ -19,7 +20,7 @@ public class VentaProductoDto implements  Serializable {
 	private int nCantidad;
 	private BigDecimal nTotalUnitario;
 	private BigDecimal nTotalPartida;
-	private Date dFechaVenta;
+	private LocalDateTime dFechaVenta;
 	private int nEstatusEntregaAlmacen;
 	private String sBodega;
 	private String sNivel;
@@ -150,11 +151,13 @@ public class VentaProductoDto implements  Serializable {
 		this.nUnitario = nUnitario;
 	}
 
-	public Date getdFechaVenta() {
+	
+
+	public LocalDateTime getdFechaVenta() {
 		return dFechaVenta;
 	}
 
-	public void setdFechaVenta(Date dFechaVenta) {
+	public void setdFechaVenta(LocalDateTime dFechaVenta) {
 		this.dFechaVenta = dFechaVenta;
 	}
 

@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -36,7 +37,7 @@ public class TvVentaStock  implements Serializable {
 	private Integer nCantidad;
 	
 	@Column(name = "d_fechaVenta")
-	private Date dFechaVenta;
+	private BigDecimal dFechaVenta;
 
 	@Column(name = "n_cantidad_total")
 	private Integer nCantidadTotal;
@@ -93,13 +94,18 @@ public class TvVentaStock  implements Serializable {
 		this.nCantidad = nCantidad;
 	}
 
-	public Date getdFechaVenta() {
+
+	public BigDecimal getdFechaVenta() {
 		return dFechaVenta;
 	}
 
-	public void setdFechaVenta(Date dFechaVenta) {
+
+
+	public void setdFechaVenta(BigDecimal dFechaVenta) {
 		this.dFechaVenta = dFechaVenta;
 	}
+
+
 
 	public Integer getnCantidadTotal() {
 		return nCantidadTotal;

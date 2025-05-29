@@ -2,6 +2,7 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,19 +35,19 @@ public class TvVentaDetalle implements Serializable {
 	private String sFolioVenta;
 	
 	@Column(name = "d_fechaVenta")
-	private Date dFechaVenta;	
+	private LocalDateTime dFechaVenta;	
 	
 	@Column(name = "n_tipoPago")
 	private long nTipoPago;		
 
 	@Column(name = "d_fechaInicioCredito")
-	private Date dFechaInicioCredito;
+	private LocalDateTime dFechaInicioCredito;
 	
 	@Column(name = "d_fechaTerminoCredito")
-	private Date dFechaTerminoCredito;
+	private LocalDateTime dFechaTerminoCredito;
 	
 	@Column(name = "d_fechaPagoCredito")
-	private Date dFechaPagoCredito;
+	private LocalDateTime dFechaPagoCredito;
 	
 	@Column(name = "n_totalVenta")
 	private BigDecimal nTotalVenta;
@@ -185,13 +186,7 @@ public class TvVentaDetalle implements Serializable {
 		this.sFolioVenta = sFolioVenta;
 	}
 
-	public Date getdFechaVenta() {
-		return dFechaVenta;
-	}
-
-	public void setdFechaVenta(Date dFechaVenta) {
-		this.dFechaVenta = dFechaVenta;
-	}
+	
 
 	public long getnTipoPago() {
 		return nTipoPago;
@@ -201,29 +196,6 @@ public class TvVentaDetalle implements Serializable {
 		this.nTipoPago = nTipoPago;
 	}
 
-	public Date getdFechaInicioCredito() {
-		return dFechaInicioCredito;
-	}
-
-	public void setdFechaInicioCredito(Date dFechaInicioCredito) {
-		this.dFechaInicioCredito = dFechaInicioCredito;
-	}
-
-	public Date getdFechaTerminoCredito() {
-		return dFechaTerminoCredito;
-	}
-
-	public void setdFechaTerminoCredito(Date dFechaTerminoCredito) {
-		this.dFechaTerminoCredito = dFechaTerminoCredito;
-	}
-
-	public Date getdFechaPagoCredito() {
-		return dFechaPagoCredito;
-	}
-
-	public void setdFechaPagoCredito(Date dFechaPagoCredito) {
-		this.dFechaPagoCredito = dFechaPagoCredito;
-	}
 
 	
 
@@ -351,6 +323,39 @@ public class TvVentaDetalle implements Serializable {
 	
 	
 	
+
+	
+	public LocalDateTime getdFechaVenta() {
+		return dFechaVenta;
+	}
+
+	public void setdFechaVenta(LocalDateTime dFechaVenta) {
+		this.dFechaVenta = dFechaVenta;
+	}
+
+	public LocalDateTime getdFechaInicioCredito() {
+		return dFechaInicioCredito;
+	}
+
+	public void setdFechaInicioCredito(LocalDateTime dFechaInicioCredito) {
+		this.dFechaInicioCredito = dFechaInicioCredito;
+	}
+
+	public LocalDateTime getdFechaTerminoCredito() {
+		return dFechaTerminoCredito;
+	}
+
+	public void setdFechaTerminoCredito(LocalDateTime dFechaTerminoCredito) {
+		this.dFechaTerminoCredito = dFechaTerminoCredito;
+	}
+
+	public LocalDateTime getdFechaPagoCredito() {
+		return dFechaPagoCredito;
+	}
+
+	public void setdFechaPagoCredito(LocalDateTime dFechaPagoCredito) {
+		this.dFechaPagoCredito = dFechaPagoCredito;
+	}
 
 	public Boolean getnSaldo() {
 		return nSaldo;

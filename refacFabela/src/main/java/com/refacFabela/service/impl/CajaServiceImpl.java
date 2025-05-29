@@ -1,5 +1,6 @@
 package com.refacFabela.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import com.refacFabela.repository.TvReporteDetalleVentaRepository;
 import com.refacFabela.repository.TwGastoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.CajaService;
+import com.refacFabela.utils.DateTimeUtil;
 @Service
 public class CajaServiceImpl implements CajaService {
 	
@@ -64,7 +66,7 @@ public class CajaServiceImpl implements CajaService {
 
 
 	@Override
-	public TwCaja nuevaCaja(Double saldoInicial, Long nIdUsuario) {
+	public TwCaja nuevaCaja(BigDecimal saldoInicial, Long nIdUsuario) {
 		
 		TwCaja twCaja =new TwCaja();
 		TwCaja twCajaActiva =new TwCaja();
@@ -77,11 +79,21 @@ public class CajaServiceImpl implements CajaService {
 		/* OBTEBER VALORES DE CIERRE DE CAJA */
 		
 		
-		twCajaActiva.setdFechaCierre(new Date());	
-		twCajaActiva.setnPagoEfectivo(trVentaCobroRepository.TotalPagoEfectivoVenta(twCajaActiva.getnId()) + abonoVentaIdRepository.TotalAbonoEfectivo(twCajaActiva.getnId()));		
-		twCajaActiva.setnPagoElectronico(trVentaCobroRepository.TotalPagoElectronico(twCajaActiva.getnId()) + abonoVentaIdRepository.TotalAbonoElectronico(twCajaActiva.getnId()));
-		twCajaActiva.setnSaldoCierre(twCajaActiva.getnPagoEfectivo() + twCajaActiva.getnPagoElectronico());
-		twCajaActiva.setnSaldoFinal(twCajaActiva.getnSaldoCierre() + twCajaActiva.getnSaldoInicial() );		
+		twCajaActiva.setdFechaCierre(DateTimeUtil.obtenerHoraExactaDeMexico());	
+		twCajaActiva.setnPagoEfectivo( trVentaCobroRepository.TotalPagoEfectivoVenta(twCajaActiva.getnId()).add(abonoVentaIdRepository.TotalAbonoEfectivo(twCajaActiva.getnId())));
+
+			twCajaActiva.setnPagoElectronico( trVentaCobroRepository.TotalPagoElectronico(twCajaActiva.getnId()) .add(abonoVentaIdRepository.TotalAbonoElectronico(twCajaActiva.getnId()))
+			);
+
+			twCajaActiva.setnSaldoCierre(
+			    twCajaActiva.getnPagoEfectivo()
+			        .add(twCajaActiva.getnPagoElectronico())
+			);
+
+			twCajaActiva.setnSaldoFinal(
+			    twCajaActiva.getnSaldoCierre()
+			        .add(twCajaActiva.getnSaldoInicial())
+			);		
 		twCajaActiva.setnEstatus(0);
 		
 		
@@ -93,12 +105,12 @@ public class CajaServiceImpl implements CajaService {
 		/* PERTURA DE LA NUEVA CAJA */
 
 		
-		twCaja.setdFechaApertura(new Date());
-		twCaja.setnSaldoInicial(0);
-		twCaja.setnSaldoCierre(0);
-		twCaja.setnSaldoFinal(0);
-		twCaja.setnPagoEfectivo(0);
-		twCaja.setnPagoElectronico(0);
+		twCaja.setdFechaApertura(DateTimeUtil.obtenerHoraExactaDeMexico());
+		twCaja.setnSaldoInicial( BigDecimal.ZERO);
+		twCaja.setnSaldoCierre( BigDecimal.ZERO);
+		twCaja.setnSaldoFinal( BigDecimal.ZERO);
+		twCaja.setnPagoEfectivo( BigDecimal.ZERO);
+		twCaja.setnPagoElectronico( BigDecimal.ZERO);
 		twCaja.setnEstatus(1);
 		twCaja.setnIdUsuario(nIdUsuario);
 		twCaja.setnSaldoInicial(saldoInicial);

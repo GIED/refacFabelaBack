@@ -54,6 +54,7 @@ import com.refacFabela.repository.TcMarcaRepository;
 import com.refacFabela.repository.TcMonedaRepository;
 import com.refacFabela.repository.TcRegimenFiscalRepository;
 import com.refacFabela.service.CatalagosService;
+import com.refacFabela.utils.DateTimeUtil;
 
 @Service
 public class CatalogosServiceImp implements CatalagosService {
@@ -222,7 +223,7 @@ public class CatalogosServiceImp implements CatalagosService {
 		
 		fechaDto fecha= new fechaDto();
 		
-		fecha.setFechaActual(new Date());
+		fecha.setFechaActual(DateTimeUtil.obtenerHoraExactaDeMexico());
 		
 		
 		return fecha ;

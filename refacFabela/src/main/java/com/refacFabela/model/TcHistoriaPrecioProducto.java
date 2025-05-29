@@ -2,6 +2,7 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -42,7 +43,7 @@ public class TcHistoriaPrecioProducto implements Serializable {
 	private Long nIdusuario;
 
 	@Column(name = "d_fecha")
-	private Date dFecha;
+	private LocalDateTime dFecha;
 
 	// bi-directional many-to-one association to TcGanancia
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -121,11 +122,13 @@ public class TcHistoriaPrecioProducto implements Serializable {
 
 	
 
-	public Date getdFecha() {
+	
+
+	public LocalDateTime getdFecha() {
 		return dFecha;
 	}
 
-	public void setdFecha(Date dFecha) {
+	public void setdFecha(LocalDateTime dFecha) {
 		this.dFecha = dFecha;
 	}
 

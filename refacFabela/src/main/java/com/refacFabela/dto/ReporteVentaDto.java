@@ -2,6 +2,7 @@ package com.refacFabela.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ReporteVentaDto implements Serializable{
@@ -15,7 +16,7 @@ public class ReporteVentaDto implements Serializable{
 	private String rfcEmpresa;
 	private String nombreCliente;
 	private String rfcCliente;
-	private Date fecha;
+	private LocalDateTime fecha;
 	private Long folioVenta;
 	private String claveSat;
 	private Integer cantidad;
@@ -63,10 +64,11 @@ public class ReporteVentaDto implements Serializable{
 	public void setRfcCliente(String rfcCliente) {
 		this.rfcCliente = rfcCliente;
 	}
-	public Date getFecha() {
+	
+	public LocalDateTime getFecha() {
 		return fecha;
 	}
-	public void setFecha(Date fecha) {
+	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
 	}
 	public Long getFolioVenta() {

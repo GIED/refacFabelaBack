@@ -1,6 +1,9 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -21,9 +24,8 @@ public class TwCotizacionesDetalle implements Serializable {
 	@Column(name = "n_idUsuario")
 	private Long nIdUsuario;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "d_fecha")
-	private Date dFecha;
+	private LocalDateTime dFecha;
 
 	@Column(name = "n_estatus")
 	private int nEstatus;
@@ -32,7 +34,7 @@ public class TwCotizacionesDetalle implements Serializable {
 	private String sFolioCotizacion;
 	
 	@Column(name = "n_totalCotizacion")
-	private Double nTotalCotizacion;
+	private BigDecimal nTotalCotizacion;
 	
 	@Column(name = "n_vigencia")
 	private int nVigencia;
@@ -75,13 +77,7 @@ public class TwCotizacionesDetalle implements Serializable {
 		this.nIdUsuario = nIdUsuario;
 	}
 
-	public Date getdFecha() {
-		return dFecha;
-	}
-
-	public void setdFecha(Date dFecha) {
-		this.dFecha = dFecha;
-	}
+	
 
 	public int getnEstatus() {
 		return nEstatus;
@@ -117,11 +113,20 @@ public class TwCotizacionesDetalle implements Serializable {
 
 	
 
-	public Double getnTotalCotizacion() {
+	
+	public LocalDateTime getdFecha() {
+		return dFecha;
+	}
+
+	public void setdFecha(LocalDateTime dFecha) {
+		this.dFecha = dFecha;
+	}
+
+	public BigDecimal getnTotalCotizacion() {
 		return nTotalCotizacion;
 	}
 
-	public void setnTotalCotizacion(Double nTotalCotizacion) {
+	public void setnTotalCotizacion(BigDecimal nTotalCotizacion) {
 		this.nTotalCotizacion = nTotalCotizacion;
 	}
 

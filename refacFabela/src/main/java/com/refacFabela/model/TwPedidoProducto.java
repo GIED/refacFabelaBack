@@ -1,6 +1,8 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -19,7 +21,7 @@ public class TwPedidoProducto implements Serializable {
 	private String sClavePedido;
 	
 	@Column(name = "d_fechaPedido")
-	private Date dFechaPedido;
+	private LocalDateTime dFechaPedido;
 	
 	@Column(name = "n_MotivoPedido")
 	private Long nMotivoPedido;
@@ -37,7 +39,7 @@ public class TwPedidoProducto implements Serializable {
 	private int nCantidaRecibida;
 	
 	@Column(name = "d_fechaRecibida")
-	private Date dFechaRecibida;
+	private LocalDateTime dFechaRecibida;
 	
 	@Column(name = "n_estatus")
 	private Integer nEstatus;	
@@ -100,14 +102,7 @@ public class TwPedidoProducto implements Serializable {
 	}
 
 
-	public Date getdFechaPedido() {
-		return dFechaPedido;
-	}
 
-
-	public void setdFechaPedido(Date dFechaPedido) {
-		this.dFechaPedido = dFechaPedido;
-	}
 
 
 	public Long getnMotivoPedido() {
@@ -160,14 +155,27 @@ public class TwPedidoProducto implements Serializable {
 	}
 
 
-	public Date getdFechaRecibida() {
+
+
+	public LocalDateTime getdFechaPedido() {
+		return dFechaPedido;
+	}
+
+
+	public void setdFechaPedido(LocalDateTime dFechaPedido) {
+		this.dFechaPedido = dFechaPedido;
+	}
+
+
+	public LocalDateTime getdFechaRecibida() {
 		return dFechaRecibida;
 	}
 
 
-	public void setdFechaRecibida(Date dFechaRecibida) {
+	public void setdFechaRecibida(LocalDateTime dFechaRecibida) {
 		this.dFechaRecibida = dFechaRecibida;
 	}
+
 
 	public Integer getnEstatus() {
 		return nEstatus;

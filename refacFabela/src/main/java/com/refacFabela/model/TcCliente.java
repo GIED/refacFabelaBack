@@ -1,6 +1,9 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -15,15 +18,15 @@ public class TcCliente implements Serializable {
 	@Column(name = "n_id")
 	private Long nId;
 
-	@Temporal(TemporalType.DATE)
-	private Date d_fechaCredito;
+	@Column(name = "d_fechaCredito")
+	private LocalDateTime d_fechaCredito;
 
 	@Column(name = "n_estatus")
 	private int nEstatus;
 
 	private Long n_idUsuarioCredito;
 
-	private double n_limiteCredito;
+	private BigDecimal n_limiteCredito;
 
 	@Column(name = "s_correo")
 	private String sCorreo;
@@ -110,12 +113,18 @@ public class TcCliente implements Serializable {
 		this.nId = nId;
 	}
 
-	public Date getD_fechaCredito() {
+	
+
+	public LocalDateTime getD_fechaCredito() {
 		return d_fechaCredito;
 	}
 
-	public void setD_fechaCredito(Date d_fechaCredito) {
+	public void setD_fechaCredito(LocalDateTime d_fechaCredito) {
 		this.d_fechaCredito = d_fechaCredito;
+	}
+
+	public void setN_limiteCredito(BigDecimal n_limiteCredito) {
+		this.n_limiteCredito = n_limiteCredito;
 	}
 
 	public int getnEstatus() {
@@ -134,12 +143,10 @@ public class TcCliente implements Serializable {
 		this.n_idUsuarioCredito = n_idUsuarioCredito;
 	}
 
-	public double getN_limiteCredito() {
-		return n_limiteCredito;
-	}
+	
 
-	public void setN_limiteCredito(double n_limiteCredito) {
-		this.n_limiteCredito = n_limiteCredito;
+	public BigDecimal getN_limiteCredito() {
+		return n_limiteCredito;
 	}
 
 	public String getsCorreo() {

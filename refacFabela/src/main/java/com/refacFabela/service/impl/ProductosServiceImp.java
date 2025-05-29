@@ -189,7 +189,7 @@ public class ProductosServiceImp implements ProductosService {
 	public TcProducto guardarProducto(TcProducto tcProducto) {
 
 		// se asigana la fecha de la aplicación
-		tcProducto.setdFecha(new Date());
+		tcProducto.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 
 		// Se manda calcular el precio final, precio sin iva y precio peso del producto
 		tcProducto = utilisServiceImp.calcularPrecio(tcProducto);
@@ -336,7 +336,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		newProducto.setnIdGanancia(twProductosAlternativo.getTcProductoAlternativo().getnIdGanancia());
 		newProducto.setnIdusuario(twProductosAlternativo.getTcProductoAlternativo().getnIdusuario());
 		newProducto.setnEstatus(twProductosAlternativo.getTcProductoAlternativo().getnEstatus());
-		newProducto.setdFecha(new Date());
+		newProducto.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 		newProducto.setnIdclavesat(twProductosAlternativo.getTcProductoAlternativo().getnIdclavesat());
 		newProducto.setnIdMarca(twProductosAlternativo.getTcProductoAlternativo().getnIdMarca());
 		newProducto.setnIdDescuento(twProductosAlternativo.getTcProductoAlternativo().getnIdDescuento());
@@ -404,7 +404,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		System.err.println(ventaProductoDto.getnId());
 		
 		twVentasProductoDTO=twProductosVentaRepository.obtenerPrpductosId(ventaProductoDto.getnId());
-		twVentasProductoDTO.setdFechaEntregaAlmacen(new Date());
+		twVentasProductoDTO.setdFechaEntregaAlmacen(DateTimeUtil.obtenerHoraExactaDeMexico());
 		twVentasProductoDTO.setnEstatusEntregaAlmacen(ventaProductoDto.getnEstatusEntregaAlmacen());
 		
 		twProductosVentaRepository.save(twVentasProductoDTO); 
@@ -415,7 +415,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 
 	@Override
 	public TwAbono guardarAbono(TwAbono abonoDto) {
-	    abonoDto.setdFecha(new Date());
+	    abonoDto.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 	    abonoVentaIdRepository.save(abonoDto);
 
 	    BigDecimal total_venta = BigDecimal.ZERO;
@@ -438,7 +438,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	    // Si el total de abonos es igual al total de la venta, se registra la fecha de pago
 	    if (total_venta.compareTo(total_abonos) == 0) {
 	        TwVenta twVenta = ventasRepository.findBynId(abonoDto.getnIdVenta());
-	        twVenta.setdFechaPagoCredito(new Date());
+	        twVenta.setdFechaPagoCredito(DateTimeUtil.obtenerHoraExactaDeMexico());
 	        ventasRepository.save(twVenta);
 	    }
 
@@ -655,19 +655,19 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			twVentaProductoCancela.setsMotivo(ventaProductoCancelaDto.sMotivo);
 		
 			twVentaProductoCancela.setnIdUsuario(twVentasProducto.getnIdUsuario());
-			twVentaProductoCancela.setdFecha(new Date());
+			twVentaProductoCancela.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 			twVentaProductoCancela.setnIdCaja(caja.getnId());			
 			twSaldosRepository.save(twVentaProductoCancela);
 			}
 			
 			if(twVenta.getnTipoPago()==1L && twVenta.getnIdEstatusVenta()>1) {
-				Date fecha= new Date();				
+							
 				twSaldoUtilizado.setnIdUsuario(twVenta.getnIdUsuario());
 				twSaldoUtilizado.setnIdCaja(caja.getnId());
 				twSaldoUtilizado.setnIdVenta(twVenta.getnId());
 				twSaldoUtilizado.setnSaldoTotal(twVentasProducto.getnTotalPartida());
 				twSaldoUtilizado.setnSaldoUtilizado(twVentasProducto.getnTotalPartida());
-				twSaldoUtilizado.setdFecha(fecha);
+				twSaldoUtilizado.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 				twSaldoUtilizado.setnEstatus(true);				
 			twSaldoUtilizadoRepository.save(twSaldoUtilizado);					
 			}			
@@ -752,7 +752,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 
 		    twVentaProductoCancela.setsMotivo(ventaProductoCancelaDto.sMotivo);
 			twVentaProductoCancela.setnIdUsuario(twVentasProducto.getnIdUsuario());
-			twVentaProductoCancela.setdFecha(new Date());
+			twVentaProductoCancela.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 			twVentaProductoCancela.setnIdCaja(caja.getnId());
 			twSaldosRepository.save(twVentaProductoCancela);
 			}
@@ -762,14 +762,14 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		    //productoBodegaRepository.save(twProductobodega);
 			
 			if(twVenta.getnTipoPago()==1L && twVenta.getnIdEstatusVenta()>1) {
-				Date fecha= new Date();
+			
 				
 				twSaldoUtilizado.setnIdUsuario(twVenta.getnIdUsuario());
 				twSaldoUtilizado.setnIdCaja(caja.getnId());
 				twSaldoUtilizado.setnIdVenta(twVenta.getnId());
 				twSaldoUtilizado.setnSaldoTotal(twVentasProducto.getnTotalPartida());
 				twSaldoUtilizado.setnSaldoUtilizado(twVentasProducto.getnTotalPartida());
-				twSaldoUtilizado.setdFecha(fecha);
+				twSaldoUtilizado.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 				twSaldoUtilizado.setnEstatus(true);				
 				twSaldoUtilizadoRepository.save(twSaldoUtilizado);						
 			}			

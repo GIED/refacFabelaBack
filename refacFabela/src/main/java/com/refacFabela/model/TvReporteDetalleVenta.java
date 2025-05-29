@@ -2,6 +2,7 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -33,15 +34,15 @@ public class TvReporteDetalleVenta implements Serializable {
 		@Column(name = "s_estatus_venta") 
 		private String sEstatusVenta;
 		@Column(name = "d_fecha_venta") 
-		private Date dFechaVenta;
+		private LocalDateTime dFechaVenta;
 		@Column(name = "s_tipo_venta")
 		private String sTipoVenta;
 		@Column(name = "s_tipo_pago") 
 		private String sTipoPago;		
 		@Column(name = "d_inicio_credito")
-		private Date dInicioCredito;
+		private LocalDateTime dInicioCredito;
 		@Column(name = "d_termino_credito") 
-		private Date dTerminoCredito;
+		private LocalDateTime dTerminoCredito;
 		@Column(name = "s_nombre_usuario" )
 		private String sNombreUsuario;
 		@Column(name = "n_anticipo") 
@@ -139,15 +140,7 @@ public class TvReporteDetalleVenta implements Serializable {
 
 
 
-		public Date getdFechaVenta() {
-			return dFechaVenta;
-		}
-
-
-
-		public void setdFechaVenta(Date dFechaVenta) {
-			this.dFechaVenta = dFechaVenta;
-		}
+	
 
 
 
@@ -175,28 +168,11 @@ public class TvReporteDetalleVenta implements Serializable {
 
 
 
-		public Date getdInicioCredito() {
-			return dInicioCredito;
-		}
+	
 
 
 
-		public void setdInicioCredito(Date dInicioCredito) {
-			this.dInicioCredito = dInicioCredito;
-		}
-
-
-
-		public Date getdTerminoCredito() {
-			return dTerminoCredito;
-		}
-
-
-
-		public void setdTerminoCredito(Date dTerminoCredito) {
-			this.dTerminoCredito = dTerminoCredito;
-		}
-
+	
 
 
 		public String getsNombreUsuario() {
@@ -303,6 +279,45 @@ public class TvReporteDetalleVenta implements Serializable {
 
 		public void setsEstatusEntrega(String sEstatusEntrega) {
 			this.sEstatusEntrega = sEstatusEntrega;
+		}
+
+		
+		
+		
+
+
+		public LocalDateTime getdFechaVenta() {
+			return dFechaVenta;
+		}
+
+
+
+		public void setdFechaVenta(LocalDateTime dFechaVenta) {
+			this.dFechaVenta = dFechaVenta;
+		}
+
+
+
+		public LocalDateTime getdInicioCredito() {
+			return dInicioCredito;
+		}
+
+
+
+		public void setdInicioCredito(LocalDateTime dInicioCredito) {
+			this.dInicioCredito = dInicioCredito;
+		}
+
+
+
+		public LocalDateTime getdTerminoCredito() {
+			return dTerminoCredito;
+		}
+
+
+
+		public void setdTerminoCredito(LocalDateTime dTerminoCredito) {
+			this.dTerminoCredito = dTerminoCredito;
 		}
 
 

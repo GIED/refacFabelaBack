@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import java.io.Serializable;
@@ -18,28 +19,28 @@ public class TvSaldoGeneralCliente implements Serializable {
 	private Long nIdCliente;
 
 	@Column(name = "n_limiteCredito")
-	private double nLimiteCredito;
+	private BigDecimal nLimiteCredito;
 
 	@Column(name = "n_saldo_total")
-	private double nSaldoTotal;
+	private BigDecimal nSaldoTotal;
 
 	@Column(name = "n_credito_disponible")
-	private double nCreditoDisponible;
+	private BigDecimal nCreditoDisponible;
 
 	@Column(name = "n_saldo_utilizado")
-	private double nSaldoUtilizado;
+	private BigDecimal nSaldoUtilizado;
 
 	@Column(name = "n_avance_credito")
-	private double nAvanceCredito;
+	private BigDecimal nAvanceCredito;
 
 	@Column(name = "s_estatus")
 	private String sEstatus;
 
 	@Column(name = "n_abonos")
-	private double nAbonos;
+	private BigDecimal nAbonos;
 
 	@Column(name = "n_total_venta")
-	private double nTotalVenta;
+	private BigDecimal nTotalVenta;
 
 	@ManyToOne
 	@JoinColumn(name = "n_idCliente", referencedColumnName = "n_id", updatable = false, insertable = false)
@@ -50,21 +51,7 @@ public class TvSaldoGeneralCliente implements Serializable {
 	public TvSaldoGeneralCliente() {
 	}
 
-	public double getnAbonos() {
-		return nAbonos;
-	}
-
-	public void setnAbonos(double nAbonos) {
-		this.nAbonos = nAbonos;
-	}
-
-	public double getnTotalVenta() {
-		return nTotalVenta;
-	}
-
-	public void setnTotalVenta(double nTotalVenta) {
-		this.nTotalVenta = nTotalVenta;
-	}
+	
 
 	public String getsEstatus() {
 		return sEstatus;
@@ -74,21 +61,7 @@ public class TvSaldoGeneralCliente implements Serializable {
 		this.sEstatus = sEstatus;
 	}
 
-	public double getnSaldoUtilizado() {
-		return nSaldoUtilizado;
-	}
 
-	public void setnSaldoUtilizado(double nSaldoUtilizado) {
-		this.nSaldoUtilizado = nSaldoUtilizado;
-	}
-
-	public double getnAvanceCredito() {
-		return nAvanceCredito;
-	}
-
-	public void setnAvanceCredito(double nAvanceCredito) {
-		this.nAvanceCredito = nAvanceCredito;
-	}
 
 	public TcCliente getTcCliente() {
 		return tcCliente;
@@ -106,28 +79,90 @@ public class TvSaldoGeneralCliente implements Serializable {
 		this.nIdCliente = nIdCliente;
 	}
 
-	public double getnLimiteCredito() {
+
+
+	public BigDecimal getnLimiteCredito() {
 		return nLimiteCredito;
 	}
 
-	public void setnLimiteCredito(double nLimiteCredito) {
+
+
+	public void setnLimiteCredito(BigDecimal nLimiteCredito) {
 		this.nLimiteCredito = nLimiteCredito;
 	}
 
-	public double getnSaldoTotal() {
+
+
+	public BigDecimal getnSaldoTotal() {
 		return nSaldoTotal;
 	}
 
-	public void setnSaldoTotal(double nSaldoTotal) {
+
+
+	public void setnSaldoTotal(BigDecimal nSaldoTotal) {
 		this.nSaldoTotal = nSaldoTotal;
 	}
 
-	public double getnCreditoDisponible() {
+
+
+	public BigDecimal getnCreditoDisponible() {
 		return nCreditoDisponible;
 	}
 
-	public void setnCreditoDisponible(double nCreditoDisponible) {
+
+
+	public void setnCreditoDisponible(BigDecimal nCreditoDisponible) {
 		this.nCreditoDisponible = nCreditoDisponible;
 	}
+
+
+
+	public BigDecimal getnSaldoUtilizado() {
+		return nSaldoUtilizado;
+	}
+
+
+
+	public void setnSaldoUtilizado(BigDecimal nSaldoUtilizado) {
+		this.nSaldoUtilizado = nSaldoUtilizado;
+	}
+
+
+
+	public BigDecimal getnAvanceCredito() {
+		return nAvanceCredito;
+	}
+
+
+
+	public void setnAvanceCredito(BigDecimal nAvanceCredito) {
+		this.nAvanceCredito = nAvanceCredito;
+	}
+
+
+
+	public BigDecimal getnAbonos() {
+		return nAbonos;
+	}
+
+
+
+	public void setnAbonos(BigDecimal nAbonos) {
+		this.nAbonos = nAbonos;
+	}
+
+
+
+	public BigDecimal getnTotalVenta() {
+		return nTotalVenta;
+	}
+
+
+
+	public void setnTotalVenta(BigDecimal nTotalVenta) {
+		this.nTotalVenta = nTotalVenta;
+	}
+
+	
 
 }

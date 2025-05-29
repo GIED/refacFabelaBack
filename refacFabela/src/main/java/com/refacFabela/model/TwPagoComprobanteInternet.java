@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -38,10 +39,10 @@ public class TwPagoComprobanteInternet implements Serializable {
 	private String sObservaciones;
 	
 	@Column(name="s_fechaCarga")
-	private Date dFechaCarga;
+	private LocalDateTime dFechaCarga;
 	
 	@Column(name="s_fechaValidacion")
-	private Date dFechaValidacion;
+	private LocalDateTime dFechaValidacion;
 	
 	
 	
@@ -160,25 +161,29 @@ public class TwPagoComprobanteInternet implements Serializable {
 
 
 
-	public Date getdFechaCarga() {
+	
+
+
+
+	public LocalDateTime getdFechaCarga() {
 		return dFechaCarga;
 	}
 
 
 
-	public void setdFechaCarga(Date dFechaCarga) {
+	public void setdFechaCarga(LocalDateTime dFechaCarga) {
 		this.dFechaCarga = dFechaCarga;
 	}
 
 
 
-	public Date getdFechaValidacion() {
+	public LocalDateTime getdFechaValidacion() {
 		return dFechaValidacion;
 	}
 
 
 
-	public void setdFechaValidacion(Date dFechaValidacion) {
+	public void setdFechaValidacion(LocalDateTime dFechaValidacion) {
 		this.dFechaValidacion = dFechaValidacion;
 	}
 

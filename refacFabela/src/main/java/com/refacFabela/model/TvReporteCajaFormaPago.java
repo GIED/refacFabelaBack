@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ public class TvReporteCajaFormaPago implements Serializable {
 	@Column(name = "n_id_caja") 
 	private Long nIdCaja;	
 	@Column(name = "n_total_forma_pago") 
-	private Double nTotalFormaPago;
+	private BigDecimal nTotalFormaPago;
     
 	public TvReporteCajaFormaPago() {
 		
@@ -45,11 +46,13 @@ public class TvReporteCajaFormaPago implements Serializable {
 		this.nIdCaja = nIdCaja;
 	}
 
-	public Double getnTotalFormaPago() {
+	
+
+	public BigDecimal getnTotalFormaPago() {
 		return nTotalFormaPago;
 	}
 
-	public void setnTotalFormaPago(Double nTotalFormaPago) {
+	public void setnTotalFormaPago(BigDecimal nTotalFormaPago) {
 		this.nTotalFormaPago = nTotalFormaPago;
 	}
 

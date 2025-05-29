@@ -27,8 +27,8 @@ public class TwVentasProducto implements Serializable {
 	private Long nIdUsuario;
 	
 	@Column(name = "d_fechaEntregaAlmacen")
-	@Temporal(TemporalType.DATE)
-	private Date dFechaEntregaAlmacen;
+
+	private LocalDateTime dFechaEntregaAlmacen;
 
 	@Column(name = "d_fechaEntregaEstimada")
 	private LocalDateTime dFechaEntregaEstimada;
@@ -117,15 +117,16 @@ public class TwVentasProducto implements Serializable {
 		this.nIdUsuario = nIdUsuario;
 	}
 
-	public Date getdFechaEntregaAlmacen() {
+
+	
+
+	public LocalDateTime getdFechaEntregaAlmacen() {
 		return dFechaEntregaAlmacen;
 	}
 
-	public void setdFechaEntregaAlmacen(Date dFechaEntregaAlmacen) {
+	public void setdFechaEntregaAlmacen(LocalDateTime dFechaEntregaAlmacen) {
 		this.dFechaEntregaAlmacen = dFechaEntregaAlmacen;
 	}
-
-	
 
 	public LocalDateTime getdFechaEntregaEstimada() {
 		return dFechaEntregaEstimada;

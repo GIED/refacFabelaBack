@@ -1,6 +1,7 @@
 package com.refacFabela.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class ProductoDto implements Serializable{
 	
@@ -13,7 +14,7 @@ public class ProductoDto implements Serializable{
 	private String sNoParte;
 	private String sProducto;
 	private String sMarca;
-	private double nPrecioConIva;
+	private BigDecimal nPrecioConIva;
 	public Long getnId() {
 		return nId;
 	}
@@ -38,12 +39,13 @@ public class ProductoDto implements Serializable{
 	public void setsMarca(String sMarca) {
 		this.sMarca = sMarca;
 	}
-	public double getnPrecioConIva() {
+	public BigDecimal getnPrecioConIva() {
 		return nPrecioConIva;
 	}
-	public void setnPrecioConIva(double nPrecioConIva) {
+	public void setnPrecioConIva(BigDecimal nPrecioConIva) {
 		this.nPrecioConIva = nPrecioConIva;
 	}
+	
 	
 	
 	

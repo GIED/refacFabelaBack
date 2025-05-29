@@ -2,6 +2,7 @@ package com.refacFabela.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -25,7 +26,7 @@ public class TwSaldoUtilizadoDto implements Serializable {
 	private Boolean nEstatus;
 	
 	
-	private Date dFecha;
+	private LocalDateTime dFecha;
 	
 	
 	private Long nIdCaja;
@@ -86,13 +87,17 @@ public class TwSaldoUtilizadoDto implements Serializable {
 		this.nEstatus = nEstatus;
 	}
 
+    
+	
+   
 
-	public Date getdFecha() {
+
+	public LocalDateTime getdFecha() {
 		return dFecha;
 	}
 
 
-	public void setdFecha(Date dFecha) {
+	public void setdFecha(LocalDateTime dFecha) {
 		this.dFecha = dFecha;
 	}
 

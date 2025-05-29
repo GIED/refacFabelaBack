@@ -2,6 +2,7 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,9 +21,9 @@ public class TwAbono implements Serializable {
 	@Column(name = "n_idVenta")
 	private Long nIdVenta;
 
-	@Temporal(TemporalType.DATE)
+	
 	@Column(name = "d_fecha")
-	private Date dFecha;
+	private LocalDateTime dFecha;
 
 	@Column(name = "n_abono")
 	private BigDecimal nAbono;
@@ -71,15 +72,18 @@ public class TwAbono implements Serializable {
 		this.nId = nId;
 	}
 
-	public Date getdFecha() {
+
+	
+
+	public LocalDateTime getdFecha() {
 		return dFecha;
 	}
 
-	public void setdFecha(Date dFecha) {
+
+	public void setdFecha(LocalDateTime dFecha) {
 		this.dFecha = dFecha;
 	}
 
-	
 
 	public BigDecimal getnAbono() {
 		return nAbono;

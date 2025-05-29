@@ -1,6 +1,7 @@
 package com.refacFabela.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import com.refacFabela.model.TvReporteCajaFormaPago;
 import com.refacFabela.model.TvReporteDetalleVenta;
@@ -8,7 +9,7 @@ import com.refacFabela.model.TvReporteDetalleVenta;
 public class BalanceCajaDto {
 	
 	public Long caja;
-	public String fechaInicioCaja;
+	public LocalDateTime fechaInicioCaja;
 	public BigDecimal totalGeneralIngresos;
 	public BigDecimal totalVentas;
 	public BigDecimal totalIngresoAbonos;
@@ -17,7 +18,7 @@ public class BalanceCajaDto {
 	public Integer noVentas;
 	public Integer noAbonos;
 	public List<TvReporteDetalleVenta> tvReporteDetalleVenta;
-	public String fechaGeneraReporte;
+	public LocalDateTime fechaGeneraReporte;
 	public Integer totalEntregadas;
 	public Integer totalNoEntregadas;
 	public Integer totalEntregasParciales;
@@ -76,6 +77,54 @@ public class BalanceCajaDto {
 
 
 
+	public LocalDateTime getFechaInicioCaja() {
+		return fechaInicioCaja;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setFechaInicioCaja(LocalDateTime fechaInicioCaja) {
+		this.fechaInicioCaja = fechaInicioCaja;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public Long getCaja() {
 		return caja;
 	}
@@ -124,35 +173,7 @@ public class BalanceCajaDto {
 
 
 
-	public String getFechaInicioCaja() {
-		return fechaInicioCaja;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public void setFechaInicioCaja(String fechaInicioCaja) {
-		this.fechaInicioCaja = fechaInicioCaja;
-	}
-
-
+	
 
 
 
@@ -556,7 +577,28 @@ public class BalanceCajaDto {
 
 
 
-	public String getFechaGeneraReporte() {
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public LocalDateTime getFechaGeneraReporte() {
 		return fechaGeneraReporte;
 	}
 
@@ -580,7 +622,7 @@ public class BalanceCajaDto {
 
 
 
-	public void setFechaGeneraReporte(String fechaGeneraReporte) {
+	public void setFechaGeneraReporte(LocalDateTime fechaGeneraReporte) {
 		this.fechaGeneraReporte = fechaGeneraReporte;
 	}
 

@@ -1,6 +1,7 @@
 package com.refacFabela.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class VentaProductoCancelaDto implements  Serializable {
 
@@ -9,7 +10,7 @@ public class VentaProductoCancelaDto implements  Serializable {
 	public VentaProductoDto VentaProductoDto;
 	public Integer nCancela;
 	public Boolean penaliza;
-	public Double totalPenaliza;
+	public BigDecimal totalPenaliza;
 	public String sMotivo;
 
 	
@@ -43,13 +44,17 @@ public class VentaProductoCancelaDto implements  Serializable {
 
 
 
-	public Double getTotalPenaliza() {
+	
+
+
+
+	public BigDecimal getTotalPenaliza() {
 		return totalPenaliza;
 	}
 
 
 
-	public void setTotalPenaliza(Double totalPenaliza) {
+	public void setTotalPenaliza(BigDecimal totalPenaliza) {
 		this.totalPenaliza = totalPenaliza;
 	}
 

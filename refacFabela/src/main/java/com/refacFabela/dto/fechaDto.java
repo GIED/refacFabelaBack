@@ -1,18 +1,21 @@
 package com.refacFabela.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class fechaDto {
 	
-	public Date fechaActual;
+	public LocalDateTime fechaActual;
 
-	public Date getFechaActual() {
+	public LocalDateTime getFechaActual() {
 		return fechaActual;
 	}
 
-	public void setFechaActual(Date fechaActual) {
+	public void setFechaActual(LocalDateTime fechaActual) {
 		this.fechaActual = fechaActual;
 	}
+
+	
 	
 	
 

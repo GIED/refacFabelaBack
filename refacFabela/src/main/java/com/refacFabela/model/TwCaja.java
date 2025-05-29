@@ -1,6 +1,9 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -16,31 +19,31 @@ public class TwCaja implements Serializable {
 	private Long nId;
 
 	@Column(name = "d_fechaApertura")
-	private Date dFechaApertura;
+	private LocalDateTime dFechaApertura;
 
 	@Column(name = "d_fechaCierre")
-	private Date dFechaCierre;
+	private LocalDateTime dFechaCierre;
 
 	@Column(name = "n_estatus")
-	private int nEstatus;
+	private Integer nEstatus;
 	
 	@Column(name = "n_pagoEfectivo")
-	private double nPagoEfectivo;
+	private BigDecimal nPagoEfectivo;
     
 	@Column(name = "n_pagoElectronico")
-	private double nPagoElectronico;
+	private BigDecimal nPagoElectronico;
     
 	@Column(name = "n_saldoCierre")
-	private double nSaldoCierre;
+	private BigDecimal nSaldoCierre;
 	
 	@Column(name = "n_saldoFinal")
-	private double nSaldoFinal;
+	private BigDecimal nSaldoFinal;
 
 	@Column(name = "n_saldoInicial")
-	private double nSaldoInicial;
+	private BigDecimal nSaldoInicial;
 	
 	@Column(name = "n_idUsuario")
-	private double nIdUsuario;
+	private Long nIdUsuario;
 
 	// bi-directional many-to-one association to TcUsuario
 	@ManyToOne
@@ -60,22 +63,7 @@ public class TwCaja implements Serializable {
 		this.nId = nId;
 	}
 
-	public Date getdFechaApertura() {
-		return dFechaApertura;
-	}
-
-	public void setdFechaApertura(Date dFechaApertura) {
-		this.dFechaApertura = dFechaApertura;
-	}
-
-	public Date getdFechaCierre() {
-		return dFechaCierre;
-	}
-
-	public void setdFechaCierre(Date dFechaCierre) {
-		this.dFechaCierre = dFechaCierre;
-	}
-
+	
 	public int getnEstatus() {
 		return nEstatus;
 	}
@@ -84,54 +72,77 @@ public class TwCaja implements Serializable {
 		this.nEstatus = nEstatus;
 	}
 
-	public double getnPagoEfectivo() {
+	
+
+
+	public LocalDateTime getdFechaApertura() {
+		return dFechaApertura;
+	}
+
+	public void setdFechaApertura(LocalDateTime dFechaApertura) {
+		this.dFechaApertura = dFechaApertura;
+	}
+
+	public LocalDateTime getdFechaCierre() {
+		return dFechaCierre;
+	}
+
+	public void setdFechaCierre(LocalDateTime dFechaCierre) {
+		this.dFechaCierre = dFechaCierre;
+	}
+
+	public BigDecimal getnPagoEfectivo() {
 		return nPagoEfectivo;
 	}
 
-	public void setnPagoEfectivo(double nPagoEfectivo) {
+	public void setnPagoEfectivo(BigDecimal nPagoEfectivo) {
 		this.nPagoEfectivo = nPagoEfectivo;
+	}
+
+	public BigDecimal getnPagoElectronico() {
+		return nPagoElectronico;
+	}
+
+	public void setnPagoElectronico(BigDecimal nPagoElectronico) {
+		this.nPagoElectronico = nPagoElectronico;
+	}
+
+	public BigDecimal getnSaldoCierre() {
+		return nSaldoCierre;
+	}
+
+	public void setnSaldoCierre(BigDecimal nSaldoCierre) {
+		this.nSaldoCierre = nSaldoCierre;
+	}
+
+	public BigDecimal getnSaldoFinal() {
+		return nSaldoFinal;
+	}
+
+	public void setnSaldoFinal(BigDecimal nSaldoFinal) {
+		this.nSaldoFinal = nSaldoFinal;
+	}
+
+	public BigDecimal getnSaldoInicial() {
+		return nSaldoInicial;
+	}
+
+	public void setnSaldoInicial(BigDecimal nSaldoInicial) {
+		this.nSaldoInicial = nSaldoInicial;
 	}
 
 	
 
-	public double getnPagoElectronico() {
-		return nPagoElectronico;
-	}
-
-	public void setnPagoElectronico(double nPagoElectronico) {
-		this.nPagoElectronico = nPagoElectronico;
-	}
-
-	public double getnSaldoCierre() {
-		return nSaldoCierre;
-	}
-
-	public void setnSaldoCierre(double nSaldoCierre) {
-		this.nSaldoCierre = nSaldoCierre;
-	}
-
-	public double getnSaldoFinal() {
-		return nSaldoFinal;
-	}
-
-	public void setnSaldoFinal(double nSaldoFinal) {
-		this.nSaldoFinal = nSaldoFinal;
-	}
-
-	public double getnSaldoInicial() {
-		return nSaldoInicial;
-	}
-
-	public void setnSaldoInicial(double nSaldoInicial) {
-		this.nSaldoInicial = nSaldoInicial;
-	}
-
-	public double getnIdUsuario() {
+	public Long getnIdUsuario() {
 		return nIdUsuario;
 	}
 
-	public void setnIdUsuario(double nIdUsuario) {
+	public void setnIdUsuario(Long nIdUsuario) {
 		this.nIdUsuario = nIdUsuario;
+	}
+
+	public void setnEstatus(Integer nEstatus) {
+		this.nEstatus = nEstatus;
 	}
 
 	public TcUsuario getTcUsuario() {

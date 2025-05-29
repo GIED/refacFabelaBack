@@ -2,6 +2,7 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -37,7 +38,7 @@ public class TwGasto implements Serializable {
 	private String sDescripcion;
 
 	@Column(name = "d_fecha")
-	private Date dFecha;
+	private LocalDateTime dFecha;
 	
 	@Column(name = "n_estatus")
 	private Integer nEstatus;
@@ -117,12 +118,15 @@ public class TwGasto implements Serializable {
 	}
 
 
-	public Date getdFecha() {
+	
+
+
+	public LocalDateTime getdFecha() {
 		return dFecha;
 	}
 
 
-	public void setdFecha(Date dFecha) {
+	public void setdFecha(LocalDateTime dFecha) {
 		this.dFecha = dFecha;
 	}
 

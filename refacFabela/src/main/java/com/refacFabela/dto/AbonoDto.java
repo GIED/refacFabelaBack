@@ -1,16 +1,17 @@
 package com.refacFabela.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class AbonoDto {
 	
 	Long idVenta;
-	Date fechaVenta;
+	LocalDateTime fechaVenta;
 	BigDecimal abono;
 	String formaPago;
 	String usuario;
-	Date fechaAbono;
+	LocalDateTime fechaAbono;
 	
 	
 	public AbonoDto() {
@@ -28,14 +29,7 @@ public class AbonoDto {
 	}
 
 
-	public Date getFechaVenta() {
-		return fechaVenta;
-	}
-
-
-	public void setFechaVenta(Date fechaVenta) {
-		this.fechaVenta = fechaVenta;
-	}
+	
 
 
 	
@@ -70,14 +64,26 @@ public class AbonoDto {
 	}
 
 
-	public Date getFechaAbono() {
+	public LocalDateTime getFechaVenta() {
+		return fechaVenta;
+	}
+
+
+	public void setFechaVenta(LocalDateTime fechaVenta) {
+		this.fechaVenta = fechaVenta;
+	}
+
+
+	public LocalDateTime getFechaAbono() {
 		return fechaAbono;
 	}
 
 
-	public void setFechaAbono(Date fechaAbono) {
+	public void setFechaAbono(LocalDateTime fechaAbono) {
 		this.fechaAbono = fechaAbono;
 	}
-	
+
+
+
 
 }

@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -25,19 +26,19 @@ public class VwFacturaProveedorBalance implements Serializable {
     private String sMoneda;
 
     @Column(name = "total_facturas")
-    private Double totalFacturas;
+    private BigDecimal totalFacturas;
 
     @Column(name = "total_abonos")
-    private Double totalAbonos;
+    private BigDecimal totalAbonos;
 
     @Column(name = "saldo_pendiente_pago")
-    private Double saldoPendientePago;
+    private BigDecimal saldoPendientePago;
 
     @Column(name = "total_por_pagar")
-    private Double totalPorPagar;
+    private BigDecimal totalPorPagar;
 
     @Column(name = "total_vencidas")
-    private Double totalVencidas;
+    private BigDecimal totalVencidas;
     
     
     @ManyToOne
@@ -72,45 +73,47 @@ public class VwFacturaProveedorBalance implements Serializable {
         this.sMoneda = sMoneda;
     }
 
-    public Double getTotalFacturas() {
-        return totalFacturas;
-    }
+	public BigDecimal getTotalFacturas() {
+		return totalFacturas;
+	}
 
-    public void setTotalFacturas(Double totalFacturas) {
-        this.totalFacturas = totalFacturas;
-    }
+	public void setTotalFacturas(BigDecimal totalFacturas) {
+		this.totalFacturas = totalFacturas;
+	}
 
-    public Double getTotalAbonos() {
-        return totalAbonos;
-    }
+	public BigDecimal getTotalAbonos() {
+		return totalAbonos;
+	}
 
-    public void setTotalAbonos(Double totalAbonos) {
-        this.totalAbonos = totalAbonos;
-    }
+	public void setTotalAbonos(BigDecimal totalAbonos) {
+		this.totalAbonos = totalAbonos;
+	}
 
-    public Double getSaldoPendientePago() {
-        return saldoPendientePago;
-    }
+	public BigDecimal getSaldoPendientePago() {
+		return saldoPendientePago;
+	}
 
-    public void setSaldoPendientePago(Double saldoPendientePago) {
-        this.saldoPendientePago = saldoPendientePago;
-    }
+	public void setSaldoPendientePago(BigDecimal saldoPendientePago) {
+		this.saldoPendientePago = saldoPendientePago;
+	}
 
-    public Double getTotalPorPagar() {
-        return totalPorPagar;
-    }
+	public BigDecimal getTotalPorPagar() {
+		return totalPorPagar;
+	}
 
-    public void setTotalPorPagar(Double totalPorPagar) {
-        this.totalPorPagar = totalPorPagar;
-    }
+	public void setTotalPorPagar(BigDecimal totalPorPagar) {
+		this.totalPorPagar = totalPorPagar;
+	}
 
-    public Double getTotalVencidas() {
-        return totalVencidas;
-    }
+	public BigDecimal getTotalVencidas() {
+		return totalVencidas;
+	}
 
-    public void setTotalVencidas(Double totalVencidas) {
-        this.totalVencidas = totalVencidas;
-    }
+	public void setTotalVencidas(BigDecimal totalVencidas) {
+		this.totalVencidas = totalVencidas;
+	}
+
+   
 	
 	
 

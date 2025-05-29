@@ -31,6 +31,7 @@ import com.refacFabela.repository.VwFacturaProveedorBalanceRepository;
 import com.refacFabela.service.FacturasProveedorService;
 import com.refacFabela.tipoCambio.DataSerie;
 import com.refacFabela.tipoCambio.Series;
+import com.refacFabela.utils.DateTimeUtil;
 
 @Service
 public class TwFacturasProveedorServiceImpl implements FacturasProveedorService {
@@ -275,7 +276,7 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 			if(pedidosPendientes==0) {
 				twPedido=twPedidoRepository.pedidoId(pedido.getnIdPedido());
 				twPedido.setnEstatus(0L);
-				 twPedido.setdFechaPedidoCierre(new Date());				 
+				 twPedido.setdFechaPedidoCierre(DateTimeUtil.obtenerHoraExactaDeMexico());				 
 				 twPedidoRepository.save(twPedido);
 				
 			}

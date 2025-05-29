@@ -36,7 +36,7 @@ public class TwAbonoFacturaProveedor implements Serializable {
 	    private BigDecimal nMontoAbono;  // Monto del abono
 
 	    @Column(name = "d_fecha_abono")	  
-	    private Date dFechaAbono;  // Fecha del abono
+	    private BigDecimal dFechaAbono;  // Fecha del abono
 
 	    @Column(name = "n_estatus_abono")
 	    private Integer nEstatusAbono;  // Estatus del abono
@@ -117,15 +117,17 @@ public class TwAbonoFacturaProveedor implements Serializable {
 	        this.nMontoAbono = nMontoAbono;
 	    }
 
-	    public Date getdFechaAbono() {
-	        return dFechaAbono;
-	    }
+	  
 
-	    public void setdFechaAbono(Date dFechaAbono) {
-	        this.dFechaAbono = dFechaAbono;
-	    }
+	    public BigDecimal getdFechaAbono() {
+			return dFechaAbono;
+		}
 
-	    public Integer getnEstatusAbono() {
+		public void setdFechaAbono(BigDecimal dFechaAbono) {
+			this.dFechaAbono = dFechaAbono;
+		}
+
+		public Integer getnEstatusAbono() {
 	        return nEstatusAbono;
 	    }
 

@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,7 +41,7 @@ public class TwSaldoUtilizado implements Serializable {
 	private Boolean nEstatus;
 	
 	@Column(name = "d_fecha")
-	private Date dFecha;
+	private LocalDateTime dFecha;
 	
 	@Column(name = "n_id_caja")
 	private Long nIdCaja;
@@ -111,11 +112,13 @@ public class TwSaldoUtilizado implements Serializable {
 		this.nEstatus = nEstatus;
 	}
 
-	public Date getdFecha() {
+	
+
+	public LocalDateTime getdFecha() {
 		return dFecha;
 	}
 
-	public void setdFecha(Date dFecha) {
+	public void setdFecha(LocalDateTime dFecha) {
 		this.dFecha = dFecha;
 	}
 

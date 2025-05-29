@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -331,7 +332,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		reporteVenta.setNombreCliente(cliente.getsRazonSocial());
 		reporteVenta.setRfcCliente(cliente.getsRfc());
 		reporteVenta.setFolioVenta(twVenta.getnId());
-		reporteVenta.setFecha(new Date());
+		reporteVenta.setFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 		reporteVenta.setTipoPago(twVenta.getnTipoPago());
 		reporteVenta.setDescuento(twVenta.getDescuento());
 		reporteVenta.setNombreVendedor(tcUsuario.getsNombreUsuario());
@@ -675,7 +676,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			
 			abono.setId(twAbono.getnId());
 			abono.setAbono(DateTimeUtil.truncarDosDecimales(twAbono.getnAbono()));
-			abono.setFecha(util.formatoFecha(twAbono.getdFecha()));
+			abono.setFecha(twAbono.getdFecha());
 			abono.setFormaPago(twAbono.getTcFormapago().getsDescripcion());
 			abono.setUsuario(twAbono.getTcUsuario().getsNombreUsuario());
 			
@@ -714,9 +715,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				ventaAbomo.setIdCliente(listaVentaDetalle.getnIdCliente());
 				ventaAbomo.setIdVenta(listaVentaDetalle.getnId());
 				ventaAbomo.setFolioVenta(listaVentaDetalle.getsFolioVenta());
-				ventaAbomo.setFechaVenta(util.formatoFecha(listaVentaDetalle.getdFechaVenta()));
-				ventaAbomo.setFechaInicioCredito(util.formatoFecha(listaVentaDetalle.getdFechaInicioCredito()));
-				ventaAbomo.setFechaTerminoCredito(util.formatoFecha(listaVentaDetalle.getdFechaTerminoCredito()));
+				ventaAbomo.setFechaVenta(listaVentaDetalle.getdFechaVenta());
+				ventaAbomo.setFechaInicioCredito(listaVentaDetalle.getdFechaInicioCredito());
+				ventaAbomo.setFechaTerminoCredito(listaVentaDetalle.getdFechaTerminoCredito());
 				ventaAbomo.setTotalVenta(DateTimeUtil.truncarDosDecimales(listaVentaDetalle.getnTotalVenta()));
 				ventaAbomo.setTotalAbono(DateTimeUtil.truncarDosDecimales(listaVentaDetalle.getnTotalAbono()));
 				ventaAbomo.setSaldoTotal(DateTimeUtil.truncarDosDecimales(listaVentaDetalle.getnSaldoTotal()));
@@ -744,7 +745,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 					abono.setId(abonosDto.getnId());
 					abono.setAbono(DateTimeUtil.truncarDosDecimales(abonosDto.getnAbono()));
 					abono.setFormaPago(abonosDto.getTcFormapago().getsDescripcion());
-					abono.setFecha(util.formatoFecha(abonosDto.getdFecha()));
+					abono.setFecha(abonosDto.getdFecha());
 					abono.setUsuario(abonosDto.getTcUsuario().getsNombreUsuario());
 					listaAbonosDto.add(abono);
 					totalAbonos=totalAbonos.add(abonosDto.getnAbono());
@@ -802,12 +803,12 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				pedidoProductoDto.setNoParte(twPedidoProducto.getTcProducto().getsNoParte());
 				pedidoProductoDto.setProducto(twPedidoProducto.getTcProducto().getsProducto());
 				pedidoProductoDto.setCantidad(twPedidoProducto.getnCantidadPedida());
-				pedidoProductoDto.setFechaPedido(util.formatoFecha(twPedidoProducto.getdFechaPedido()));
+				pedidoProductoDto.setFechaPedido(twPedidoProducto.getdFechaPedido());
 				pedidoProductoDto.setProveedor(twPedidoProducto.getTcProveedore().getsRazonSocial());
 				
 				
 				if(twPedidoProducto.getdFechaPedido()!=null) {
-					pedidoProductoDto.setFechaRecibida(util.formatoFecha(twPedidoProducto.getdFechaPedido()));
+					pedidoProductoDto.setFechaRecibida(twPedidoProducto.getdFechaPedido());
 				}
 				else
 				{
@@ -1108,7 +1109,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		
 		/*LLENAOD DE OBJETO BALANCE CAJA*/
 		balanceCajaDto.setCaja(caja.getnId());
-		balanceCajaDto.setFechaInicioCaja(util.formatoFecha(caja.getdFechaApertura()));
+		balanceCajaDto.setFechaInicioCaja(caja.getdFechaApertura());
 		balanceCajaDto.setTotalIngresoVenta(DateTimeUtil.truncarDosDecimales(totalIngresosVenta));
 		balanceCajaDto.setTotalIngresoAbonos(DateTimeUtil.truncarDosDecimales(totalIngresosAbono));		
 		BigDecimal totalGeneralIngresos = totalIngresosVenta.add(totalIngresosAbono).subtract(totalReitegros);
@@ -1120,7 +1121,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		balanceCajaDto.setTotalEntregadas(totalEntregadas);
 		balanceCajaDto.setTotalNoEntregadas(totalNoEntregadas);
 		balanceCajaDto.setTotalEntregasParciales(totalEntegasParciales);
-		balanceCajaDto.setFechaGeneraReporte(util.formatoFecha(new Date()));
+		balanceCajaDto.setFechaGeneraReporte(DateTimeUtil.obtenerHoraExactaDeMexico());
 		balanceCajaDto.setTvReporteDetalleVenta(trReporteDetalleVentas);
 		balanceCajaDto.setTvReporteCajaFormaPago(tvReporteCajaFormaPago);
 		balanceCajaDto.setTotalReintegro(DateTimeUtil.truncarDosDecimales(totalReitegros));

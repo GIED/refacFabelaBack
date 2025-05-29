@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -38,7 +39,7 @@ import javax.persistence.Table;
 		@Column(name = "n_id_usuario")
 		private Long nIdUsuario;
 		@Column(name = "d_fecha_ingreso")
-		private Date dFechaingreso;
+		private LocalDateTime dFechaingreso;
 		
 		
 
@@ -114,11 +115,13 @@ import javax.persistence.Table;
 
 		
 
-		public Date getdFechaingreso() {
+		
+
+		public LocalDateTime getdFechaingreso() {
 			return dFechaingreso;
 		}
 
-		public void setdFechaingreso(Date dFechaingreso) {
+		public void setdFechaingreso(LocalDateTime dFechaingreso) {
 			this.dFechaingreso = dFechaingreso;
 		}
 

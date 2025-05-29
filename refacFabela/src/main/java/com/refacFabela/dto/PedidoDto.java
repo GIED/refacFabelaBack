@@ -1,6 +1,7 @@
 package com.refacFabela.dto;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -13,10 +14,10 @@ public class PedidoDto implements Serializable {
 	private Long nId;
 	private Long nIdUsuario;
 	private String sCvePedido;
-	private Date dFechaPedido;
+	private LocalDateTime dFechaPedido;
 	private String sObservaciones;
 	private Long nEstatus;
-	private Date dFechaPedidoCierre;
+	private LocalDateTime dFechaPedidoCierre;
 	private List<TwPedidoProducto> twPedidoProducto;
 
 	public Long getnId() {
@@ -43,13 +44,7 @@ public class PedidoDto implements Serializable {
 		this.sCvePedido = sCvePedido;
 	}
 
-	public Date getdFechaPedido() {
-		return dFechaPedido;
-	}
-
-	public void setdFechaPedido(Date dFechaPedido) {
-		this.dFechaPedido = dFechaPedido;
-	}
+	
 
 	public String getsObservaciones() {
 		return sObservaciones;
@@ -67,11 +62,20 @@ public class PedidoDto implements Serializable {
 		this.nEstatus = nEstatus;
 	}
 
-	public Date getdFechaPedidoCierre() {
+	
+	public LocalDateTime getdFechaPedido() {
+		return dFechaPedido;
+	}
+
+	public void setdFechaPedido(LocalDateTime dFechaPedido) {
+		this.dFechaPedido = dFechaPedido;
+	}
+
+	public LocalDateTime getdFechaPedidoCierre() {
 		return dFechaPedidoCierre;
 	}
 
-	public void setdFechaPedidoCierre(Date dFechaPedidoCierre) {
+	public void setdFechaPedidoCierre(LocalDateTime dFechaPedidoCierre) {
 		this.dFechaPedidoCierre = dFechaPedidoCierre;
 	}
 

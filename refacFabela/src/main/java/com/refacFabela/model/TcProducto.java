@@ -2,6 +2,7 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.refacFabela.utils.DateTimeUtil;
 
 @Entity
 @Table(name = "tc_productos")
@@ -24,7 +27,7 @@ public class TcProducto implements Serializable {
 	private Long nId;
 
 	@Column(name = "d_fecha")
-	private Date dFecha = new Date();
+	private LocalDateTime dFecha = DateTimeUtil.obtenerHoraExactaDeMexico();
 
 	@Column(name = "n_estatus")
 	private int nEstatus;
@@ -184,13 +187,17 @@ public class TcProducto implements Serializable {
 	}
 
 
-	public Date getdFecha() {
+
+
+	public LocalDateTime getdFecha() {
 		return dFecha;
 	}
 
-	public void setdFecha(Date dFecha) {
+
+	public void setdFecha(LocalDateTime dFecha) {
 		this.dFecha = dFecha;
 	}
+
 
 	public int getnEstatus() {
 		return nEstatus;

@@ -1,5 +1,6 @@
 package com.refacFabela.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.repository.ClienteSaldoRepository;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.service.ClienteService;
+import com.refacFabela.utils.DateTimeUtil;
 import com.refacFabela.utils.utils;
 
 @Service
@@ -31,8 +33,8 @@ public class ClientesServiceImp implements ClienteService {
 	@Override
 	public TcCliente guardarCliente(TcCliente tcCliente) {
 		utils util=new utils();
-		if(tcCliente.getN_limiteCredito()>0 && tcCliente.getD_fechaCredito()==null) {
-			tcCliente.setD_fechaCredito(new Date());			
+		if(tcCliente.getN_limiteCredito().compareTo(BigDecimal.ZERO) > 0 && tcCliente.getD_fechaCredito()==null) {
+			tcCliente.setD_fechaCredito(DateTimeUtil.obtenerHoraExactaDeMexico());			
 			
 		}
 		

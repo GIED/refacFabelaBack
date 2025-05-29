@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -36,7 +37,7 @@ public class ThStockProducto implements Serializable {
 	private Integer nStockFinal;	
 	
 	@Column(name = "d_fecha")
-	private Date dFecha;		
+	private LocalDateTime dFecha;		
 
 	@Column(name = "n_id_bodega")
 	private Long nIdBodega;
@@ -114,11 +115,12 @@ public class ThStockProducto implements Serializable {
 		this.nStockFinal = nStockFinal;
 	}
 
-	public Date getdFecha() {
+
+	public LocalDateTime getdFecha() {
 		return dFecha;
 	}
 
-	public void setdFecha(Date dFecha) {
+	public void setdFecha(LocalDateTime dFecha) {
 		this.dFecha = dFecha;
 	}
 

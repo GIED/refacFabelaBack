@@ -1,5 +1,6 @@
 package com.refacFabela.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -79,7 +80,7 @@ public class CajaController {
 		return null;
 	}
 	@GetMapping("/nuevaCaja")
-	public TwCaja consultaBalanceCaja(@RequestParam Double saldoInicial, @RequestParam Long nIdUsuario) {
+	public TwCaja consultaBalanceCaja(@RequestParam BigDecimal saldoInicial, @RequestParam Long nIdUsuario) {
 		try {
 
 			return cajaService.nuevaCaja( saldoInicial, nIdUsuario);

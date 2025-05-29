@@ -1,6 +1,7 @@
 package com.refacFabela.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -13,8 +14,8 @@ public class VentaDto {
 	   private String sFolioVenta;
 	   private Integer idTipoVenta;
 	   private Integer tipoPago;
-	   private Date fechaIniCredito;
-	   private Date fechaFinCredito;
+	   private LocalDateTime fechaIniCredito;
+	   private LocalDateTime fechaFinCredito;
 	   private BigDecimal anticipo;
 	   private List<TvStockProductoDto> listaValidada;
 	   private TwCotizaciones twCotizacion;
@@ -49,18 +50,7 @@ public class VentaDto {
 	public void setTipoPago(Integer tipoPago) {
 		this.tipoPago = tipoPago;
 	}
-	public Date getFechaIniCredito() {
-		return fechaIniCredito;
-	}
-	public void setFechaIniCredito(Date fechaIniCredito) {
-		this.fechaIniCredito = fechaIniCredito;
-	}
-	public Date getFechaFinCredito() {
-		return fechaFinCredito;
-	}
-	public void setFechaFinCredito(Date fechaFinCredito) {
-		this.fechaFinCredito = fechaFinCredito;
-	}
+	
 	public List<TvStockProductoDto> getListaValidada() {
 		return listaValidada;
 	}
@@ -77,6 +67,18 @@ public class VentaDto {
 	
 	
 	
+	public LocalDateTime getFechaIniCredito() {
+		return fechaIniCredito;
+	}
+	public void setFechaIniCredito(LocalDateTime fechaIniCredito) {
+		this.fechaIniCredito = fechaIniCredito;
+	}
+	public LocalDateTime getFechaFinCredito() {
+		return fechaFinCredito;
+	}
+	public void setFechaFinCredito(LocalDateTime fechaFinCredito) {
+		this.fechaFinCredito = fechaFinCredito;
+	}
 	public BigDecimal getAnticipo() {
 		return anticipo;
 	}

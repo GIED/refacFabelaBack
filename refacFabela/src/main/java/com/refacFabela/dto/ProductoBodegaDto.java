@@ -1,5 +1,6 @@
 package com.refacFabela.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ProductoBodegaDto {
@@ -10,7 +11,7 @@ public class ProductoBodegaDto {
 	public String bodega;
 	public String anaquel;
 	public String nivel;
-	public Date fecha;
+	public LocalDateTime fecha;
 	public String getNoParte() {
 		return noParte;
 	}
@@ -47,10 +48,11 @@ public class ProductoBodegaDto {
 	public void setNivel(String nivel) {
 		this.nivel = nivel;
 	}
-	public Date getFecha() {
+	
+	public LocalDateTime getFecha() {
 		return fecha;
 	}
-	public void setFecha(Date fecha) {
+	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
 	}
 	@Override

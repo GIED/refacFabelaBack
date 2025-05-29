@@ -43,6 +43,7 @@ import com.refacFabela.repository.VentasFacturaRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.VentasService;
+import com.refacFabela.utils.DateTimeUtil;
 import com.refacFabela.utils.utils;
 
 
@@ -143,7 +144,7 @@ public class VentasServiceImpl implements VentasService {
 		twVenta.setAnticipo(ventaDto.getAnticipo());
 		twVenta.setDescuento(BigDecimal.ZERO);	
 		/*Se integra la fecha de la venta del producto*/
-		twVenta.setdFechaVenta(new Date());
+		twVenta.setdFechaVenta(DateTimeUtil.obtenerHoraExactaDeMexico());
 		
 		
 		// Para las ventas por internet
@@ -223,7 +224,7 @@ public class VentasServiceImpl implements VentasService {
 		
 		if(ventaDto.getIdTipoVenta()==3L) {
 			twPedido.setsCvePedido("VP-"+utils.formatoFecha(new Date())+Math.random()*1000000+1);
-			twPedido.setdFechaPedido(new Date());
+			twPedido.setdFechaPedido(DateTimeUtil.obtenerHoraExactaDeMexico());
 			twPedido.setnIdUsuario(ventaDto.getIdUsuario());
 			twPedido.setnEstatus(0L);
 			twPedido.setnIdVenta(ventaRegistrada.getnId());
@@ -236,7 +237,7 @@ public class VentasServiceImpl implements VentasService {
 
 				
 			    twPedidoProducto.setsClavePedido(respuesta.getsCvePedido());
-				twPedidoProducto.setdFechaPedido(new Date());
+				twPedidoProducto.setdFechaPedido(DateTimeUtil.obtenerHoraExactaDeMexico());
 				twPedidoProducto.setnMotivoPedido(2L);
 				twPedidoProducto.setnIdProducto(ventaDto.getListaValidada().get(i).getnIdProducto());
 				twPedidoProducto.setnCantidadPedida(ventaDto.getListaValidada().get(i).getnCantidad());
@@ -287,7 +288,7 @@ public class VentasServiceImpl implements VentasService {
 					
 					
 					ThStockProducto  thStockProducto= new ThStockProducto();
-					thStockProducto.setdFecha(new Date());
+					thStockProducto.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 					thStockProducto.setnIdProducto(twVentaProducto.getnIdProducto());
 					thStockProducto.setnIdVenta(twVentaProducto.getnIdVenta());
 					
@@ -365,7 +366,7 @@ public class VentasServiceImpl implements VentasService {
 							ubicacion= listaStockBodega.getTcBodega().getsBodega()+"-"+listaStockBodega.getTcAnaquel().getsAnaquel()+"-"+listaStockBodega.getTcNivel().getsNivel();
 							productosTraer.setsUbicacion(ubicacion);
 							productosTraer.setnEstatus(0L);
-							productosTraer.setdFecha(new Date());
+							productosTraer.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 							
 							
 							
@@ -431,7 +432,7 @@ public class VentasServiceImpl implements VentasService {
 							ubicacion= listaStockBodega.getTcBodega().getsBodega()+"-"+listaStockBodega.getTcAnaquel().getsAnaquel()+"-"+listaStockBodega.getTcNivel().getsNivel();
 							productosTraer.setsUbicacion(ubicacion);
 							productosTraer.setnEstatus(0L);
-							productosTraer.setdFecha(new Date());
+							productosTraer.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 							
 						
 							if (listaStockBodega.getnCantidad() >= cantidad) {
@@ -668,7 +669,7 @@ public class VentasServiceImpl implements VentasService {
 				ventaCobro.setnIdVenta(venta.getnId());
 				ventaCobro.setnIdCaja(venta.getnIdCaja());
 				ventaCobro.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
-				ventaCobro.setdFecha(new Date());
+				ventaCobro.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 				ventaCobro.setnEstatus(1L);
 				ventaCobro.setnIdCaja(caja.getnId());
 				ventaCobro.setnMonto(tvVentaDetalle.getnAnticipo());
@@ -677,7 +678,7 @@ public class VentasServiceImpl implements VentasService {
 				
 				ventaCobroSaldo.setnIdVenta(venta.getnId());
 				ventaCobroSaldo.setnIdCaja(venta.getnIdCaja());				
-				ventaCobroSaldo.setdFecha(new Date());
+				ventaCobroSaldo.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 				ventaCobroSaldo.setnEstatus(1L);
 				ventaCobroSaldo.setnIdCaja(caja.getnId());			
 				ventaCobroSaldo.setnMonto(tvVentaDetalle.getnSaldoFavor());
@@ -691,7 +692,7 @@ public class VentasServiceImpl implements VentasService {
 				twSaldoUtilizado.setnSaldoTotal(tvVentaDetalle.getnSaldoFavor());
                 twSaldoUtilizado.setnIdUsuario(tvVentaDetalle.getnIdUsuario());
                 twSaldoUtilizado.setnEstatus(true);
-                twSaldoUtilizado.setdFecha(new Date());
+                twSaldoUtilizado.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
                 twSaldoUtilizado.setnIdCaja(caja.getnId());
                 twSaldoUtilizado.setnIdVentaUtilizado(tvVentaDetalle.getnId());
                 
@@ -706,7 +707,7 @@ public class VentasServiceImpl implements VentasService {
 				ventaCobro.setnIdVenta(venta.getnId());
 				ventaCobro.setnIdCaja(venta.getnIdCaja());
 				ventaCobro.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
-				ventaCobro.setdFecha(new Date());
+				ventaCobro.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 				ventaCobro.setnEstatus(1L);
 				ventaCobro.setnIdCaja(caja.getnId());
 				ventaCobro.setnMonto(tvVentaDetalle.getnTotalVenta());
@@ -719,7 +720,7 @@ public class VentasServiceImpl implements VentasService {
 			ventaCobro.setnIdVenta(venta.getnId());
 			ventaCobro.setnIdCaja(venta.getnIdCaja());
 			ventaCobro.setnIdFormaPago(tvVentaDetalle.getTcFormapago().getnId());
-			ventaCobro.setdFecha(new Date());
+			ventaCobro.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 			ventaCobro.setnEstatus(1L);
 			ventaCobro.setnIdCaja(caja.getnId());
 			ventaCobro.setnMonto(tvVentaDetalle.getnAnticipo());

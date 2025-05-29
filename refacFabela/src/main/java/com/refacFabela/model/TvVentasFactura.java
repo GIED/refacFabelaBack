@@ -1,6 +1,7 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,7 +33,7 @@ public class TvVentasFactura implements Serializable {
 	private String sFolioVenta;
 	
 	@Column(name = "d_fechaVenta")
-	private Date dFechaVenta;	
+	private BigDecimal dFechaVenta;	
 	
 	@Column(name = "n_tipoPago")
 	private long nTipoPago;		
@@ -53,7 +54,7 @@ public class TvVentasFactura implements Serializable {
 	private Long idFactura;
 	
 	@Column(name = "n_totalVenta")
-	private Double nTotalVenta;
+	private BigDecimal nTotalVenta;
 	
 	@Column(name = "n_id_dato_factura")
 	private Long nIdDatoFactura;
@@ -231,17 +232,7 @@ public class TvVentasFactura implements Serializable {
 
 
 
-	public Date getdFechaVenta() {
-		return dFechaVenta;
-	}
-
-
-
-
-
-	public void setdFechaVenta(Date dFechaVenta) {
-		this.dFechaVenta = dFechaVenta;
-	}
+	
 
 
 
@@ -341,7 +332,28 @@ public class TvVentasFactura implements Serializable {
 
 
 
-	public Double getnTotalVenta() {
+	
+
+
+
+
+	public BigDecimal getdFechaVenta() {
+		return dFechaVenta;
+	}
+
+
+
+
+
+	public void setdFechaVenta(BigDecimal dFechaVenta) {
+		this.dFechaVenta = dFechaVenta;
+	}
+
+
+
+
+
+	public BigDecimal getnTotalVenta() {
 		return nTotalVenta;
 	}
 
@@ -349,7 +361,7 @@ public class TvVentasFactura implements Serializable {
 
 
 
-	public void setnTotalVenta(Double nTotalVenta) {
+	public void setnTotalVenta(BigDecimal nTotalVenta) {
 		this.nTotalVenta = nTotalVenta;
 	}
 

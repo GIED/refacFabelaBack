@@ -23,6 +23,7 @@ import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.PedidosService;
+import com.refacFabela.utils.DateTimeUtil;
 import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
 
@@ -68,7 +69,7 @@ public class PedidosServiceImpl implements PedidosService {
 		TwPedido res = null;
 		utils util = new utils();
 
-		twPedido.setdFechaPedido(new Date());
+		twPedido.setdFechaPedido(DateTimeUtil.obtenerHoraExactaDeMexico());
 		twPedido.setdFechaPedidoCierre(null);
 		twPedido.setnIdUsuario(pedidoDto.getnIdUsuario());
 		twPedido.setnEstatus(pedidoDto.getnEstatus());
@@ -83,7 +84,7 @@ public class PedidosServiceImpl implements PedidosService {
 
 			twPedidoProducto = pedidoDto.getTwPedidoProducto().get(i);
 
-			twPedidoProducto.setdFechaPedido(new Date());
+			twPedidoProducto.setdFechaPedido(DateTimeUtil.obtenerHoraExactaDeMexico());
 			twPedidoProducto.setnIdPedido(res.getnId());
 			twPedidoProducto.setsClavePedido(pedidoDto.getsCvePedido());
 
@@ -136,7 +137,7 @@ public class PedidosServiceImpl implements PedidosService {
 		}
 	    
 
-		twPedidoProducto.setdFechaRecibida(new Date());
+		twPedidoProducto.setdFechaRecibida(DateTimeUtil.obtenerHoraExactaDeMexico());
 		pedidioProducto = pedidosProductoRepository.save(twPedidoProducto);
 
 		
@@ -163,7 +164,7 @@ public class PedidosServiceImpl implements PedidosService {
 			twHistoriaIngresoProducto.setnIdPedido(twPedidoProducto.getnIdPedido());
 			twHistoriaIngresoProducto.setnIdProducto(twPedidoProducto.getnIdProducto());
 			twHistoriaIngresoProducto.setnIdUsuario(twPedidoProducto.getnIdUsuario());
-			twHistoriaIngresoProducto.setdFechaingreso(new Date());
+			twHistoriaIngresoProducto.setdFechaingreso(DateTimeUtil.obtenerHoraExactaDeMexico());
 			twHistoriaIngresoProductoRepository.save(twHistoriaIngresoProducto);
 
 		}
@@ -174,7 +175,7 @@ public class PedidosServiceImpl implements PedidosService {
 
 			twPedido = twPedidoRepository.getById(twPedidoProducto.getnIdPedido());
 			twPedido.setnEstatus(1L);
-			twPedido.setdFechaPedidoCierre(new Date());
+			twPedido.setdFechaPedidoCierre(DateTimeUtil.obtenerHoraExactaDeMexico());
 			System.err.println("esta es la venta a consultar" + twPedido.getnIdVenta());
 
 			// SI EL PEDIDO ES GENERADO A PARTIR DE UNA VENTA POR PEDIDO SE ENVIA UN CORREO,

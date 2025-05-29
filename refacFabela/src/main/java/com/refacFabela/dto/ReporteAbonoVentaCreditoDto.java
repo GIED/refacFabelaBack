@@ -1,6 +1,7 @@
 package com.refacFabela.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ReporteAbonoVentaCreditoDto {
@@ -8,9 +9,9 @@ public class ReporteAbonoVentaCreditoDto {
 	public Long idCliente;
 	public Long idVenta;
 	public String folioVenta;
-	public String fechaVenta;
-	public String fechaInicioCredito;
-	public String fechaTerminoCredito;
+	public LocalDateTime fechaVenta;
+	public LocalDateTime fechaInicioCredito;
+	public LocalDateTime fechaTerminoCredito;
 	public BigDecimal totalVenta;
 	public BigDecimal totalAbono;
 	public BigDecimal saldoTotal;
@@ -45,28 +46,28 @@ public class ReporteAbonoVentaCreditoDto {
 	public void setFolioVenta(String folioVenta) {
 		this.folioVenta = folioVenta;
 	}
-	public String getFechaVenta() {
+	
+	
+	
+	
+	public LocalDateTime getFechaVenta() {
 		return fechaVenta;
 	}
-	public void setFechaVenta(String fechaVenta) {
+	public void setFechaVenta(LocalDateTime fechaVenta) {
 		this.fechaVenta = fechaVenta;
 	}
-	
-	public String getFechaInicioCredito() {
+	public LocalDateTime getFechaInicioCredito() {
 		return fechaInicioCredito;
 	}
-	public void setFechaInicioCredito(String fechaInicioCredito) {
+	public void setFechaInicioCredito(LocalDateTime fechaInicioCredito) {
 		this.fechaInicioCredito = fechaInicioCredito;
 	}
-	public String getFechaTerminoCredito() {
+	public LocalDateTime getFechaTerminoCredito() {
 		return fechaTerminoCredito;
 	}
-	public void setFechaTerminoCredito(String fechaTerminoCredito) {
+	public void setFechaTerminoCredito(LocalDateTime fechaTerminoCredito) {
 		this.fechaTerminoCredito = fechaTerminoCredito;
 	}
-	
-	
-	
 	public BigDecimal getTotalVenta() {
 		return totalVenta;
 	}

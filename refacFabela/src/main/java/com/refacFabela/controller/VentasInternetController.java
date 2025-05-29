@@ -35,6 +35,7 @@ import com.refacFabela.model.TwPagoComprobanteInternet;
 import com.refacFabela.service.ClienteService;
 import com.refacFabela.service.CotizacionService;
 import com.refacFabela.service.VentaInternetService;
+import com.refacFabela.utils.DateTimeUtil;
 
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST })
@@ -104,7 +105,7 @@ public class VentasInternetController {
 					
 					comprobantePago.setsComprobante(nombreArchivo);
 					comprobantePago.setnStatus(1);
-					comprobantePago.setdFechaCarga(new Date());
+					comprobantePago.setdFechaCarga(DateTimeUtil.obtenerHoraExactaDeMexico());
 					
 					response.put("twPagoComprobanteInternet", this.ventaInternetService.guardarComprobante(comprobantePago));
 					response.put("mensaje", "comprobante subido correctamente: "+nombreArchivo);
@@ -177,7 +178,7 @@ public class VentasInternetController {
 		
 			//Pago Aceptado
 		if (twPagoComprobanteInternet.getnStatus() == 2) {
-			twPagoComprobanteInternet.setdFechaValidacion(new Date());
+			twPagoComprobanteInternet.setdFechaValidacion(DateTimeUtil.obtenerHoraExactaDeMexico());
 			pagoActualizado = this.ventaInternetService.guardarComprobante(twPagoComprobanteInternet);
 			Listacotizacion=cotizacionService.consultaCotizacionId(pagoActualizado.getnIdCotizacion());
 			

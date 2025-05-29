@@ -2,6 +2,7 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class TwVenta implements Serializable {
 	private String sFolioVenta;
 
 	@Column(name = "d_fechaVenta")
-	private Date dFechaVenta;
+	private LocalDateTime dFechaVenta;
 	
 	@Column(name = "n_estatusVenta")
 	private Long nIdEstatusVenta;
@@ -45,13 +46,13 @@ public class TwVenta implements Serializable {
 	private Long nIdCaja;
 	
 	@Column(name = "d_fechaInicioCredito")
-	private Date dFechaInicioCredito;
+	private LocalDateTime dFechaInicioCredito;
 	
 	@Column(name = "d_fechaTerminoCredito")
-	private Date dFechaTerminoCredito;
+	private LocalDateTime dFechaTerminoCredito;
 	
 	@Column(name = "d_fechaPagoCredito")
-	private Date dFechaPagoCredito;
+	private LocalDateTime dFechaPagoCredito;
 	
 	@Column(name = "n_idCotizacion")
 	private Long nIdCotizacion;
@@ -173,14 +174,7 @@ public class TwVenta implements Serializable {
 	
 
 
-	public Date getdFechaVenta() {
-		return dFechaVenta;
-	}
-
-
-	public void setdFechaVenta(Date dFechaVenta) {
-		this.dFechaVenta = dFechaVenta;
-	}
+	
 
 	
 	
@@ -247,23 +241,40 @@ public class TwVenta implements Serializable {
 	}
 
 
-	public Date getdFechaInicioCredito() {
+	
+
+	public LocalDateTime getdFechaVenta() {
+		return dFechaVenta;
+	}
+
+
+	public void setdFechaVenta(LocalDateTime dFechaVenta) {
+		this.dFechaVenta = dFechaVenta;
+	}
+
+
+	public LocalDateTime getdFechaInicioCredito() {
 		return dFechaInicioCredito;
 	}
 
 
-	public void setdFechaInicioCredito(Date dFechaInicioCredito) {
+	public void setdFechaInicioCredito(LocalDateTime dFechaInicioCredito) {
 		this.dFechaInicioCredito = dFechaInicioCredito;
 	}
 
 
-	public Date getdFechaPagoCredito() {
+	public LocalDateTime getdFechaPagoCredito() {
 		return dFechaPagoCredito;
 	}
 
 
-	public void setdFechaPagoCredito(Date dFechaPagoCredito) {
+	public void setdFechaPagoCredito(LocalDateTime dFechaPagoCredito) {
 		this.dFechaPagoCredito = dFechaPagoCredito;
+	}
+
+
+	public void setdFechaTerminoCredito(LocalDateTime dFechaTerminoCredito) {
+		this.dFechaTerminoCredito = dFechaTerminoCredito;
 	}
 
 
@@ -307,13 +318,11 @@ public class TwVenta implements Serializable {
 	}
 
 
-	public Date getdFechaTerminoCredito() {
+	
+
+
+	public LocalDateTime getdFechaTerminoCredito() {
 		return dFechaTerminoCredito;
-	}
-
-
-	public void setdFechaTerminoCredito(Date dFechaTerminoCredito) {
-		this.dFechaTerminoCredito = dFechaTerminoCredito;
 	}
 
 
