@@ -81,7 +81,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("nombreCliente", reporteCotizacion.getNombreCliente());
 	         params.put("rfcCliente", reporteCotizacion.getRfcCliente());
 	         params.put("folioCotizacion", reporteCotizacion.getFolioCotizacion());
-	         params.put("fecha", DateTimeUtil.convertirFecha(reporteCotizacion.getFecha()) );
+	         params.put("fecha", DateTimeUtil.convertirALocalDateTimeEnMexicoADate(reporteCotizacion.getFecha()) );
 	         params.put("subTotal", reporteCotizacion.getSubTotal());
 	         params.put("ivaTotal", reporteCotizacion.getIvaTotal());
 	         params.put("total", reporteCotizacion.getTotal());
@@ -169,7 +169,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("nombreCliente", reporteVenta.getNombreCliente());
 	         params.put("rfcCliente", reporteVenta.getRfcCliente());
 	         params.put("folioVenta", reporteVenta.getFolioVenta());
-	         params.put("fecha", reporteVenta.getFecha());
+	         params.put("fecha",  DateTimeUtil.convertirALocalDateTimeEnMexicoADate(reporteVenta.getFecha()));
 	         params.put("subTotal", reporteVenta.getSubTotal());
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
 	         params.put("total", reporteVenta.getTotal());
@@ -244,7 +244,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("nombreCliente", reporteVenta.getNombreCliente());
 	         params.put("rfcCliente", reporteVenta.getRfcCliente());
 	         params.put("folioVenta", reporteVenta.getFolioVenta());
-	         params.put("fecha", reporteVenta.getFecha());
+	         params.put("fecha", DateTimeUtil.convertirALocalDateTimeEnMexicoADate(reporteVenta.getFecha()));
 	         params.put("subTotal", reporteVenta.getSubTotal());
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
 	         params.put("total",  reporteVenta.getTotal().subtract(reporteVenta.getDescuento()).subtract(totalAbono));
@@ -325,7 +325,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("nombreCliente", reporteVenta.getNombreCliente());
 	         params.put("rfcCliente", reporteVenta.getRfcCliente());
 	         params.put("folioVenta", reporteVenta.getFolioVenta());
-	         params.put("fecha", reporteVenta.getFecha());
+	         params.put("fecha", DateTimeUtil.convertirALocalDateTimeEnMexicoADate(reporteVenta.getFecha()));
 	         params.put("subTotal", reporteVenta.getSubTotal());
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
 	         params.put("total",  reporteVenta.getTotal().subtract(reporteVenta.getDescuento()).subtract(totalAbono));
@@ -400,7 +400,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("nombreCliente", reporteVenta.getNombreCliente());
 	         params.put("rfcCliente", reporteVenta.getRfcCliente());
 	         params.put("folioVenta", reporteVenta.getFolioVenta());
-	         params.put("fecha", reporteVenta.getFecha());
+	         params.put("fecha", DateTimeUtil.convertirALocalDateTimeEnMexicoADate(reporteVenta.getFecha()));
 	         params.put("subTotal", reporteVenta.getSubTotal());
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
 	         params.put("total", reporteVenta.getTotal());
@@ -478,7 +478,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("nombreCliente", reporteVenta.getNombreCliente());
 			params.put("rfcCliente", reporteVenta.getRfcCliente());
 			params.put("folioVenta", reporteVenta.getFolioVenta());
-			params.put("fecha", reporteVenta.getFecha());
+			params.put("fecha", DateTimeUtil.convertirALocalDateTimeEnMexicoADate(reporteVenta.getFecha()));
 			params.put("subTotal", reporteVenta.getSubTotal());
 			params.put("ivaTotal", reporteVenta.getIvaTotal());
 			params.put("total", reporteVenta.getTotal());
@@ -581,7 +581,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("rfcEmpresa", reporteVenta.getRfcEmpresa());
 			params.put("nombreCliente", cliente.getsRazonSocial());
 			params.put("rfcCliente", cliente.getsRfc());		
-			params.put("fecha", util.formatoFecha(new Date()));
+			params.put("fecha", DateTimeUtil.convertirALocalDateTimeEnMexicoADate(DateTimeUtil.obtenerHoraExactaDeMexico()) );
 			//params.put("subTotal", reporteVenta.getSubTotal());
 			//params.put("ivaTotal", reporteVenta.getIvaTotal());
 			params.put("total", reporteVenta.getTotal());
@@ -644,7 +644,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("rfcEmpresa", "TES030201001");
 			params.put("id", twPedido.getnId());
 			params.put("clave", twPedido.getsCvePedido());		
-			params.put("fecha", twPedido.getdFechaPedido());			
+			params.put("fecha", DateTimeUtil.convertirALocalDateTimeEnMexicoADate(twPedido.getdFechaPedido()));			
 			params.put("listaPedidoProducto", listaPedidoProducto);		
 			params.put("usuario", twPedido.getTcUsuario().getsNombreUsuario());
 	        params.put("qr", getQR(("\nUsuario: "+twPedido.getTcUsuario().getsNombreUsuario())));
