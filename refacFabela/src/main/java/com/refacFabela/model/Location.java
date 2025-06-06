@@ -114,14 +114,15 @@ public class Location {
     public void setCustPrice(String custPrice) {
         this.custPrice = custPrice;
     }
-		@Override
-		public String toString() {
-			return "Location [LocCode=" + LocCode + ", BranchName=" + BranchName + ", BranchState=" + BranchState
-					+ ", BranchZip=" + BranchZip + ", BranchTaxPr=" + BranchTaxPr + ", NetQtyStock=" + NetQtyStock
-					+ ", PotProductQ=" + PotProductQ + ", ExpecDatePr=" + ExpecDatePr + ", NxtExpPopD=" + NxtExpPopD
-					+ ", CustPrice=" + CustPrice + "]";
-		}
-	    
+
+	@Override
+	public String toString() {
+		return "Location [locCode=" + locCode + ", branchName=" + branchName + ", branchState=" + branchState
+				+ ", branchZip=" + branchZip + ", branchTaxPr=" + branchTaxPr + ", netQtyStock=" + netQtyStock
+				+ ", potProductQ=" + potProductQ + ", expecDatePr=" + expecDatePr + ", nxtExpPopD=" + nxtExpPopD
+				+ ", custPrice=" + custPrice + "]";
+	}
+		
 	    
 
 }
