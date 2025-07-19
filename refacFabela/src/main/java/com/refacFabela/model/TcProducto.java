@@ -85,6 +85,26 @@ public class TcProducto implements Serializable {
 	@Column(name = "n_id_marca")
 	private Long nIdMarca;
 	
+	@Column(name = "n_peso")
+	private BigDecimal nPeso;
+	
+	@Column(name = "n_largo")
+	private BigDecimal nLargo;
+	
+	@Column(name = "n_alto")
+	private BigDecimal nAlto;
+	
+	@Column(name = "n_ancho")
+	private BigDecimal nAncho;
+	
+	@Column(name = "n_volumen")
+	private BigDecimal nVolumen;
+	
+	@Column(name = "s_ruta_imagen")
+	private String sRutaImagen;
+	
+	
+	
 
 	// bi-directional many-to-one association to TcCategoria
 	@ManyToOne()
@@ -140,6 +160,69 @@ public class TcProducto implements Serializable {
 
 	public TcProducto() {
 	}
+	
+	public BigDecimal getnAncho() {
+		return nAncho;
+	}
+
+	public void setnAncho(BigDecimal nAncho) {
+		this.nAncho = nAncho;
+	}
+
+	public BigDecimal getnPeso() {
+		return nPeso;
+	}
+
+
+	public void setnPeso(BigDecimal nPeso) {
+		this.nPeso = nPeso;
+	}
+
+
+	public BigDecimal getnLargo() {
+		return nLargo;
+	}
+
+	public void setnLargo(BigDecimal nLargo) {
+		this.nLargo = nLargo;
+	}
+
+	public BigDecimal getnAlto() {
+		return nAlto;
+	}
+
+
+	public void setnAlto(BigDecimal nAlto) {
+		this.nAlto = nAlto;
+	}
+
+
+	public BigDecimal getnVolumen() {
+		return nVolumen;
+	}
+
+
+
+	public void setnVolumen(BigDecimal nVolumen) {
+		this.nVolumen = nVolumen;
+	}
+
+
+	public String getsRutaImagen() {
+		return sRutaImagen;
+	}
+
+
+
+	public void setsRutaImagen(String sRutaImagen) {
+		this.sRutaImagen = sRutaImagen;
+	}
+
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 
 	public Long getnId() {
@@ -185,9 +268,6 @@ public class TcProducto implements Serializable {
 	public void setnPrecioIva(BigDecimal nPrecioIva) {
 		this.nPrecioIva = nPrecioIva;
 	}
-
-
-
 
 	public LocalDateTime getdFecha() {
 		return dFecha;
@@ -385,7 +465,6 @@ public class TcProducto implements Serializable {
 		this.tcDescuento = tcDescuento;
 	}
 
-
 	@Override
 	public String toString() {
 		return "TcProducto [nId=" + nId + ", dFecha=" + dFecha + ", nEstatus=" + nEstatus + ", nIdCategoriaGeneral="
@@ -394,9 +473,15 @@ public class TcProducto implements Serializable {
 				+ ", sProducto=" + sProducto + ", nIdusuario=" + nIdusuario + ", nIdGanancia=" + nIdGanancia
 				+ ", nIdclavesat=" + nIdclavesat + ", nPrecioPeso=" + nPrecioPeso + ", nPrecioSinIva=" + nPrecioSinIva
 				+ ", nPrecioConIva=" + nPrecioConIva + ", sIdBar=" + sIdBar + ", nPrecioIva=" + nPrecioIva
-				+ ", tcCategoria=" + tcCategoria + ", tcCategoriaGeneral=" + tcCategoriaGeneral + ", tcClavesat="
-				+ tcClavesat + ", tcGanancia=" + tcGanancia + ", tcUsuario=" + tcUsuario + "]";
+				+ ", nIdDescuento=" + nIdDescuento + ", nIdMarca=" + nIdMarca + ", nPeso=" + nPeso + ", nLargo="
+				+ nLargo + ", nAlto=" + nAlto + ", nAncho=" + nAncho + ", nVolumen=" + nVolumen + ", sRutaImagen="
+				+ sRutaImagen + ", tcCategoria=" + tcCategoria + ", tcCategoriaGeneral=" + tcCategoriaGeneral
+				+ ", tcClavesat=" + tcClavesat + ", tcGanancia=" + tcGanancia + ", tcUsuario=" + tcUsuario
+				+ ", tcDescuento=" + tcDescuento + "]";
 	}
+
+
+	
 
 
 	

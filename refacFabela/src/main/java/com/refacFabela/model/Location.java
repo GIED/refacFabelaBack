@@ -33,13 +33,28 @@ public class Location {
 
     @JsonProperty("CustPrice")
     private String custPrice;
+    
+    @JsonProperty("InventoryStatus")
+    private String inventoryStatus;
 
     // Getters y Setters
+    
+    
+    
+    
     public String getLocCode() {
         return locCode;
     }
 
-    public void setLocCode(String locCode) {
+    public String getInventoryStatus() {
+		return inventoryStatus;
+	}
+
+	public void setInventoryStatus(String inventoryStatus) {
+		this.inventoryStatus = inventoryStatus;
+	}
+
+	public void setLocCode(String locCode) {
         this.locCode = locCode;
     }
 
