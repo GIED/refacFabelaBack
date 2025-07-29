@@ -76,6 +76,7 @@ import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.repository.VwSaldoVentaFavorDisponibleRepository;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.utils.DateTimeUtil;
+import com.refacFabela.utils.subirArchivo;
 import com.refacFabela.utils.utils;
 
 @Service
@@ -154,7 +155,9 @@ public class ProductosServiceImp implements ProductosService {
 	private TwProductoBodegaRepository twProductoBodegaRepository;
 
  
+	 private final subirArchivo archivoHelper = new subirArchivo(); // O inyectado si se convierte a @Component
 
+	    private static final String RUTA_IMAGENES = "/opt/imgprod/";
 
 
 	
@@ -193,6 +196,25 @@ public class ProductosServiceImp implements ProductosService {
 
 		// Se manda calcular el precio final, precio sin iva y precio peso del producto
 		tcProducto = utilisServiceImp.calcularPrecio(tcProducto);
+		
+		
+		try {
+		    boolean imagenGuardada = archivoHelper.procesarImagenProducto(tcProducto, RUTA_IMAGENES);
+
+		    if (imagenGuardada) {
+		        String nombreArchivo = tcProducto.getsNoParte() != null ? tcProducto.getsNoParte() : "sin_nombre";
+		        String rutaFinal = RUTA_IMAGENES + nombreArchivo + ".jpg";
+
+		        // Guarda solo la ruta relativa o nombre según lo que necesites
+		        tcProducto.setsRutaImagen(rutaFinal); 
+		    } else {
+		        System.out.println("No se guardó imagen o no era válida.");
+		    }
+		} catch (Exception e) {
+		    // Registra y propaga la excepción de forma controlada
+		    System.err.println("Error al guardar la imagen del producto: " + e.getMessage());
+		    throw new RuntimeException("Error al procesar la imagen del producto", e);
+		}
 
 		// Guarda o actualiza el producto nuevo o existente
 		TcProducto nuevoProducto = productosRepository.save(tcProducto);
@@ -986,6 +1008,14 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	public TwPedidoProducto pedidoProductoIngreso(TwPedidoProducto wPedidoProducto) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	
+    /*obtiene la imagen del producto*/
+	@Override
+	public String obtenerImagenBase64(String ruta) {				
+		
+		return archivoHelper.obtenerImagenBase64(ruta);
 	}
 
 	

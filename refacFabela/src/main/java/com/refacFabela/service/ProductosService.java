@@ -3,6 +3,8 @@ package com.refacFabela.service;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.CalculaPrecioDto;
 import com.refacFabela.dto.ProductoDescuentoDto;
@@ -126,5 +128,7 @@ public interface ProductosService {
 	public TcProducto calcularNuevoPrecio(ProductoDescuentoDto productoDescuentoDto);
 
 	public TwMaquinaCliente guardarMaquina(TwMaquinaCliente twMaquinaCliente);
+	
+	public String obtenerImagenBase64(String ruta);
 
 }
