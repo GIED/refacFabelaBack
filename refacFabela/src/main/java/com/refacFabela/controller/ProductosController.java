@@ -1,10 +1,13 @@
 package com.refacFabela.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -295,16 +298,16 @@ public class ProductosController {
 	}
 
 	
-	@GetMapping("/obtenerImagenProducto")
-	public ResponseEntity<String> obtenerImagenBase64(@RequestParam() String ruta) {
-
-		  String base64 = productosService.obtenerImagenBase64(ruta);
-
-	        if (base64 != null) {
-	            return ResponseEntity.ok(base64);
-	        } else {
-	            return ResponseEntity.notFound().build();
-	        }
+	@GetMapping(value = "/obtenerImagenProducto", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<String, String>> obtenerImagenBase64(@RequestParam String ruta) {
+	    String base64 = productosService.obtenerImagenBase64(ruta);
+	    if (base64 != null) {
+	        Map<String, String> respuesta = new HashMap<>();
+	        respuesta.put("imagenBase64", "data:image/jpeg;base64," + base64);
+	        return ResponseEntity.ok(respuesta);
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
 	}
 	
 	

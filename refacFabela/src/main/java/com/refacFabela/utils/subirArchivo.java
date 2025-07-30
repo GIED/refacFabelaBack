@@ -170,7 +170,6 @@ public String obtenerImagenBase64(String rutaCompleta) {
             System.err.println("❌ Imagen no encontrada en disco: " + rutaCompleta);
             return null;
         }
-
         byte[] bytes = Files.readAllBytes(path);
         return Base64.getEncoder().encodeToString(bytes);
 
