@@ -310,6 +310,18 @@ public class ProductosController {
 	    }
 	}
 	
+	@GetMapping("/getProductByNoParteAndIdMarca")
+	public TcProducto getProductByNoParteAndIdMarca(@RequestParam() String noParte, Long nIdMarca) {
+
+		try {
+			return productosService.getProductoByNoParteAndIdMarca(noParte, nIdMarca);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener Producto por noParte y idMarca" + e);
+		}
+		return null;
+	}
+	
 	
 	
 

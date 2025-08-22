@@ -131,4 +131,6 @@ public interface ProductosService {
 	
 	public String obtenerImagenBase64(String ruta);
 
+	public TcProducto getProductoByNoParteAndIdMarca(String noParte, Long nIdMarca);
+
 }

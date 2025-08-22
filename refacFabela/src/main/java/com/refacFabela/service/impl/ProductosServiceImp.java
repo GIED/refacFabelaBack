@@ -1018,6 +1018,12 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		return archivoHelper.obtenerImagenBase64(ruta);
 	}
 
+	@Override
+	public TcProducto getProductoByNoParteAndIdMarca(String noParte, Long nIdMarca) {
+		
+		return productosRepository.findBysNoParteAndIdMarca(noParte, nIdMarca);
+	}
+
 	
 	
 
