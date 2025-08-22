@@ -392,6 +392,8 @@ public class ReporteServiceImpl implements ReporteService {
 	        
 	         String fechaVencimiento=util.sumarRestarDiasFecha(reporteVenta.getFecha(), 30);
 
+	         System.err.println( DateTimeUtil.formatearFechaHoraMx(reporteVenta.getFecha()));
+	         System.err.println( listaAbono);
 	         
 	         //aqui van los parametros
 	         params.put("logo", this.imagenHeader);
@@ -400,7 +402,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         params.put("nombreCliente", reporteVenta.getNombreCliente());
 	         params.put("rfcCliente", reporteVenta.getRfcCliente());
 	         params.put("folioVenta", reporteVenta.getFolioVenta());
-	         params.put("fecha", DateTimeUtil.convertirALocalDateTimeEnMexicoADate(reporteVenta.getFecha()));
+	         params.put("fecha", DateTimeUtil.formatearFechaHoraMx(reporteVenta.getFecha()));
 	         params.put("subTotal", reporteVenta.getSubTotal());
 	         params.put("ivaTotal", reporteVenta.getIvaTotal());
 	         params.put("total", reporteVenta.getTotal());

@@ -676,7 +676,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			
 			abono.setId(twAbono.getnId());
 			abono.setAbono(DateTimeUtil.truncarDosDecimales(twAbono.getnAbono()));
-			abono.setFecha(twAbono.getdFecha());
+			abono.setFecha(DateTimeUtil.formatearFechaHoraMx(twAbono.getdFecha()));
 			abono.setFormaPago(twAbono.getTcFormapago().getsDescripcion());
 			abono.setUsuario(twAbono.getTcUsuario().getsNombreUsuario());
 			
@@ -745,7 +745,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 					abono.setId(abonosDto.getnId());
 					abono.setAbono(DateTimeUtil.truncarDosDecimales(abonosDto.getnAbono()));
 					abono.setFormaPago(abonosDto.getTcFormapago().getsDescripcion());
-					abono.setFecha(abonosDto.getdFecha());
+					abono.setFecha(DateTimeUtil.formatearFechaHoraMx(abonosDto.getdFecha()));
 					abono.setUsuario(abonosDto.getTcUsuario().getsNombreUsuario());
 					listaAbonosDto.add(abono);
 					totalAbonos=totalAbonos.add(abonosDto.getnAbono());
