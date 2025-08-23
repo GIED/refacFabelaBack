@@ -19,13 +19,15 @@ public class UtilisServiceImp {
 	private CatalogoGananciaRepository catalogoGananciaRepository;
 
 public TcProducto calcularPrecio(TcProducto tcProducto){
+	
+		System.err.println("producto recibido en tcProducto: "+tcProducto);
 		
 	     utils util =new utils();		
 	
 	     TcGanancia ganancia=obtenerGananciaTc(tcProducto.getnIdGanancia());
 	     tcProducto.setTcGanancia(ganancia);
 	     
-	     System.err.println(util.calcularPrecio(tcProducto, obtenerTipoCambio(), 0.0, 0, false));
+	     System.err.println("metodoCalcularPrecii"+util.calcularPrecio(tcProducto, obtenerTipoCambio(), 0.0, 0, false));
 					
 		
 		return util.calcularPrecio(tcProducto, obtenerTipoCambio(), 0.0, 0, false);
