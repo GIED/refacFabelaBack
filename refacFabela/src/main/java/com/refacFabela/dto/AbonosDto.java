@@ -13,7 +13,7 @@ public class AbonosDto implements Serializable {
 	private Long id;	
 	private BigDecimal abono;
 	private String usuario;
-	private LocalDateTime fecha;
+	private String fecha;
 	private String formaPago;
 	public Long getId() {
 		return id;
@@ -38,10 +38,11 @@ public class AbonosDto implements Serializable {
 	}
 	
 	
-	public LocalDateTime getFecha() {
+	
+	public String getFecha() {
 		return fecha;
 	}
-	public void setFecha(LocalDateTime fecha) {
+	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
 	public String getFormaPago() {
