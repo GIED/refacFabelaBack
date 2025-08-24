@@ -31,7 +31,7 @@ public interface ProductosRepository extends JpaRepository<TcProducto, Long> {
 	@Query("Select c from TcProducto c where c.nId=:nId and nEstatus=1")
 	public List<TcProducto> consultarPorId(Long nId);
 	
-	@Query("Select c from TcProducto c where c.sNoParte=:noParte and c.nIdMarca=:nIdMarca")
+	@Query("Select c from TcProducto c where c.sNoParte=:noParte AND (c.nIdMarca = :nIdMarca OR c.nIdMarca IS NULL)")
 	public TcProducto findBysNoParteAndIdMarca(String noParte, Long nIdMarca);
 	
 	
