@@ -378,7 +378,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			TwSaldoUtilizadoDto saldo = new TwSaldoUtilizadoDto();
 			
 			saldo.setnIdVenta(saldoUtilizadoDto.getnIdVenta());
-			saldo.setdFecha(saldoUtilizadoDto.getdFecha());
+			saldo.setdFecha(DateTimeUtil.formatearFechaHoraMx(saldoUtilizadoDto.getdFecha()));
 			saldo.setnEstatus(saldoUtilizadoDto.getnEstatus());
 			saldo.setnIdCaja(saldoUtilizadoDto.getnIdCaja());
 			saldo.setnIdUsuario(saldoUtilizadoDto.getnIdUsuario());

@@ -704,7 +704,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("rfcEmpresa", "FAMJ810312FY6");
 			params.put("listaFormaPago", balanceCajaDto.getTvReporteCajaFormaPago());
 			params.put("caja",  balanceCajaDto.getCaja());
-			params.put("fechaEmicion",  balanceCajaDto.getFechaGeneraReporte());
+			params.put("fechaEmicion",  DateTimeUtil.formatearFechaHoraMx(balanceCajaDto.getFechaGeneraReporte()));
 			params.put("totalIngresoVentas", DateTimeUtil.truncarDosDecimales(balanceCajaDto.getTotalIngresoVenta()) );
 			params.put("totalIngresoAbonos",  DateTimeUtil.truncarDosDecimales(balanceCajaDto.getTotalIngresoAbonos()) );
 			params.put("totalIngresoGeneral",  DateTimeUtil.truncarDosDecimales(balanceCajaDto.getTotalGeneralIngresos()) );

@@ -26,7 +26,7 @@ public class TwSaldoUtilizadoDto implements Serializable {
 	private Boolean nEstatus;
 	
 	
-	private LocalDateTime dFecha;
+	private String dFecha;
 	
 	
 	private Long nIdCaja;
@@ -92,12 +92,15 @@ public class TwSaldoUtilizadoDto implements Serializable {
    
 
 
-	public LocalDateTime getdFecha() {
+	
+
+
+	public String getdFecha() {
 		return dFecha;
 	}
 
 
-	public void setdFecha(LocalDateTime dFecha) {
+	public void setdFecha(String dFecha) {
 		this.dFecha = dFecha;
 	}
 
