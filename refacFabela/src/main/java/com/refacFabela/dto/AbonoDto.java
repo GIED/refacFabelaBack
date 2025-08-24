@@ -7,11 +7,11 @@ import java.util.Date;
 public class AbonoDto {
 	
 	Long idVenta;
-	LocalDateTime fechaVenta;
+	String fechaVenta;
 	BigDecimal abono;
 	String formaPago;
 	String usuario;
-	LocalDateTime fechaAbono;
+	String fechaAbono;
 	
 	
 	public AbonoDto() {
@@ -64,24 +64,27 @@ public class AbonoDto {
 	}
 
 
-	public LocalDateTime getFechaVenta() {
+	public String getFechaVenta() {
 		return fechaVenta;
 	}
 
 
-	public void setFechaVenta(LocalDateTime fechaVenta) {
+	public void setFechaVenta(String fechaVenta) {
 		this.fechaVenta = fechaVenta;
 	}
 
 
-	public LocalDateTime getFechaAbono() {
+	public String getFechaAbono() {
 		return fechaAbono;
 	}
 
 
-	public void setFechaAbono(LocalDateTime fechaAbono) {
+	public void setFechaAbono(String fechaAbono) {
 		this.fechaAbono = fechaAbono;
 	}
+
+
+	
 
 
 

@@ -7,7 +7,7 @@ import java.util.Date;
 public class CancelaVentaDto {
 	
 	Long venta;
-	LocalDateTime fechaVenta;
+	String fechaVenta;
 	String cliente;
 	String noParte;
 	String producto;
@@ -39,12 +39,19 @@ public class CancelaVentaDto {
 		this.venta = venta;
 	}
 	
-	public LocalDateTime getFechaVenta() {
+	
+
+	public String getFechaVenta() {
 		return fechaVenta;
 	}
-	public void setFechaVenta(LocalDateTime fechaVenta) {
+
+
+
+	public void setFechaVenta(String fechaVenta) {
 		this.fechaVenta = fechaVenta;
 	}
+
+
 
 	public String getCliente() {
 		return cliente;

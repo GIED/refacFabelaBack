@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteCaja" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="19" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="68"/>
+	<property name="ireport.y" value="357"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -239,7 +239,7 @@
 	<subDataset name="listaFormaPago" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="sFormaPago" class="java.lang.String"/>
 		<field name="nIdCaja" class="java.lang.Long"/>
-		<field name="nTotalFormaPago" class="java.lang.Double"/>
+		<field name="nTotalFormaPago" class="java.math.BigDecimal"/>
 	</subDataset>
 	<subDataset name="dataset1" uuid="f52220f7-c836-4a3d-a11b-ed049381aa5f"/>
 	<subDataset name="listaVentaDetalle" uuid="fd769831-8bde-460b-8772-9efb8a13889b">
@@ -249,11 +249,11 @@
 		<field name="sTipoVenta" class="java.lang.String"/>
 		<field name="sTipoPago" class="java.lang.String"/>
 		<field name="sFormaPago" class="java.lang.String"/>
-		<field name="nAnticipo" class="java.lang.Double"/>
-		<field name="nDescuento" class="java.lang.Double"/>
-		<field name="nTotalVenta" class="java.lang.Double"/>
-		<field name="nTotalPagoCajaNota" class="java.lang.Double"/>
-		<field name="nSaldoFinalVenta" class="java.lang.Double"/>
+		<field name="nAnticipo" class="java.math.BigDecimal"/>
+		<field name="nDescuento" class="java.math.BigDecimal"/>
+		<field name="nTotalVenta" class="java.math.BigDecimal"/>
+		<field name="nTotalPagoCajaNota" class="java.math.BigDecimal"/>
+		<field name="nSaldoFinalVenta" class="java.math.BigDecimal"/>
 		<field name="sEstatusEntrega" class="java.lang.String"/>
 		<field name="sEstatusVenta" class="java.lang.String"/>
 		<field name="nEstatusVenta" class="java.lang.Long"/>
@@ -262,26 +262,26 @@
 		<field name="nId" class="java.lang.Long"/>
 		<field name="gasto" class="java.lang.String"/>
 		<field name="descripcion" class="java.lang.String"/>
-		<field name="fecha" class="java.util.Date"/>
+		<field name="fecha" class="java.lang.String"/>
 		<field name="usuario" class="java.lang.String"/>
-		<field name="monto" class="java.lang.Double"/>
+		<field name="monto" class="java.math.BigDecimal"/>
 	</subDataset>
 	<subDataset name="listaAbonos" uuid="ce18a40b-6e81-4366-bb55-daae53024ffd">
 		<field name="idVenta" class="java.lang.Long"/>
-		<field name="fechaVenta" class="java.util.Date"/>
-		<field name="abono" class="java.lang.Double"/>
+		<field name="fechaVenta" class="java.lang.String"/>
+		<field name="abono" class="java.math.BigDecimal"/>
 		<field name="formaPago" class="java.lang.String"/>
 		<field name="usuario" class="java.lang.String"/>
-		<field name="fechaAbono" class="java.util.Date"/>
+		<field name="fechaAbono" class="java.lang.String"/>
 	</subDataset>
 	<subDataset name="listaCancelados" uuid="59abde7a-e7b7-4e37-a8a1-3d9fd32ed40d">
 		<field name="venta" class="java.lang.Long"/>
-		<field name="fechaVenta" class="java.util.Date"/>
+		<field name="fechaVenta" class="java.lang.String"/>
 		<field name="cliente" class="java.lang.String"/>
 		<field name="noParte" class="java.lang.String"/>
 		<field name="producto" class="java.lang.String"/>
 		<field name="cantidad" class="java.lang.Integer"/>
-		<field name="totalCancela" class="java.lang.Double"/>
+		<field name="totalCancela" class="java.math.BigDecimal"/>
 		<field name="usuario" class="java.lang.String"/>
 		<field name="saldoFavor" class="java.lang.String"/>
 		<field name="tipoPago" class="java.lang.String"/>
@@ -293,38 +293,38 @@
 	<parameter name="listaFormaPago" class="java.util.List"/>
 	<parameter name="caja" class="java.lang.Long"/>
 	<parameter name="fechaEmicion" class="java.lang.String"/>
-	<parameter name="totalIngresoVentas" class="java.lang.Double"/>
-	<parameter name="totalIngresoAbonos" class="java.lang.Double"/>
-	<parameter name="totalIngresoGeneral" class="java.lang.Double"/>
+	<parameter name="totalIngresoVentas" class="java.math.BigDecimal"/>
+	<parameter name="totalIngresoAbonos" class="java.math.BigDecimal"/>
+	<parameter name="totalIngresoGeneral" class="java.math.BigDecimal"/>
 	<parameter name="noVentas" class="java.lang.Integer"/>
 	<parameter name="noAbonos" class="java.lang.Integer"/>
-	<parameter name="totalVentas" class="java.lang.Double"/>
+	<parameter name="totalVentas" class="java.math.BigDecimal"/>
 	<parameter name="entregadas" class="java.lang.Integer"/>
 	<parameter name="noEntregadas" class="java.lang.Integer"/>
 	<parameter name="entregasParciales" class="java.lang.Integer"/>
 	<parameter name="listaVentaDetalle" class="java.util.List"/>
-	<parameter name="totalReintegro" class="java.lang.Double"/>
-	<parameter name="totalGastos" class="java.lang.Double"/>
+	<parameter name="totalReintegro" class="java.math.BigDecimal"/>
+	<parameter name="totalGastos" class="java.math.BigDecimal"/>
 	<parameter name="listaGastos" class="java.util.List"/>
 	<parameter name="listaAbonos" class="java.util.List"/>
 	<parameter name="listaCancelados" class="java.util.List"/>
-	<parameter name="totalCredito" class="java.lang.Double"/>
-	<parameter name="totalVenta" class="java.lang.Double"/>
-	<parameter name="efectivoContado" class="java.lang.Double"/>
-	<parameter name="chequeContado" class="java.lang.Double"/>
-	<parameter name="transferenciaContado" class="java.lang.Double"/>
-	<parameter name="tarjetaCreditoContado" class="java.lang.Double"/>
-	<parameter name="tarjetaDebitoContado" class="java.lang.Double"/>
-	<parameter name="condonacionContado" class="java.lang.Double"/>
-	<parameter name="efectivoAbono" class="java.lang.Double"/>
-	<parameter name="chequeAbono" class="java.lang.Double"/>
-	<parameter name="transferenciaAbono" class="java.lang.Double"/>
-	<parameter name="tarjetaDebitoAbono" class="java.lang.Double"/>
-	<parameter name="tarjetaCreditoAbono" class="java.lang.Double"/>
-	<parameter name="condonacionAbono" class="java.lang.Double"/>
-	<parameter name="saldoFavor" class="java.lang.Double"/>
-	<parameter name="totalCancela" class="java.lang.Double"/>
-	<parameter name="totalDescuento" class="java.lang.Double"/>
+	<parameter name="totalCredito" class="java.math.BigDecimal"/>
+	<parameter name="totalVenta" class="java.math.BigDecimal"/>
+	<parameter name="efectivoContado" class="java.math.BigDecimal"/>
+	<parameter name="chequeContado" class="java.math.BigDecimal"/>
+	<parameter name="transferenciaContado" class="java.math.BigDecimal"/>
+	<parameter name="tarjetaCreditoContado" class="java.math.BigDecimal"/>
+	<parameter name="tarjetaDebitoContado" class="java.math.BigDecimal"/>
+	<parameter name="condonacionContado" class="java.math.BigDecimal"/>
+	<parameter name="efectivoAbono" class="java.math.BigDecimal"/>
+	<parameter name="chequeAbono" class="java.math.BigDecimal"/>
+	<parameter name="transferenciaAbono" class="java.math.BigDecimal"/>
+	<parameter name="tarjetaDebitoAbono" class="java.math.BigDecimal"/>
+	<parameter name="tarjetaCreditoAbono" class="java.math.BigDecimal"/>
+	<parameter name="condonacionAbono" class="java.math.BigDecimal"/>
+	<parameter name="saldoFavor" class="java.math.BigDecimal"/>
+	<parameter name="totalCancela" class="java.math.BigDecimal"/>
+	<parameter name="totalDescuento" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -924,12 +924,12 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{efectivoContado}+
-$P{chequeContado}+
-$P{transferenciaContado}+
-$P{tarjetaCreditoContado}+
-$P{tarjetaDebitoContado}+
-$P{condonacionContado}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{efectivoContado}     == null ? java.math.BigDecimal.ZERO : $P{efectivoContado})
+  .add($P{chequeContado} == null ? java.math.BigDecimal.ZERO : $P{chequeContado})
+  .add($P{transferenciaContado} == null ? java.math.BigDecimal.ZERO : $P{transferenciaContado})
+  .add($P{tarjetaCreditoContado} == null ? java.math.BigDecimal.ZERO : $P{tarjetaCreditoContado})
+  .add($P{tarjetaDebitoContado}  == null ? java.math.BigDecimal.ZERO : $P{tarjetaDebitoContado})
+  .add($P{condonacionContado}    == null ? java.math.BigDecimal.ZERO : $P{condonacionContado})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="226" y="136" width="73" height="15" uuid="eb2d83af-fb9e-4003-bd10-e3dffe0fd320"/>
@@ -1067,12 +1067,12 @@ $P{condonacionContado}]]></textFieldExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{efectivoAbono}+
-$P{chequeAbono}+
-$P{transferenciaAbono}+
-$P{tarjetaCreditoAbono}+
-$P{tarjetaDebitoAbono}+
-$P{condonacionAbono}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{efectivoAbono}     == null ? java.math.BigDecimal.ZERO : $P{efectivoAbono})
+  .add($P{chequeAbono} == null ? java.math.BigDecimal.ZERO : $P{chequeAbono})
+  .add($P{transferenciaAbono} == null ? java.math.BigDecimal.ZERO : $P{transferenciaAbono})
+  .add($P{tarjetaCreditoAbono} == null ? java.math.BigDecimal.ZERO : $P{tarjetaCreditoAbono})
+  .add($P{tarjetaDebitoAbono}  == null ? java.math.BigDecimal.ZERO : $P{tarjetaDebitoAbono})
+  .add($P{condonacionAbono}    == null ? java.math.BigDecimal.ZERO : $P{condonacionAbono})]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="456" y="19" width="72" height="15" forecolor="#04115F" backcolor="#343434" uuid="d399d23f-7f03-454a-804c-2f630afdd05f"/>
@@ -1085,25 +1085,26 @@ $P{condonacionAbono}]]></textFieldExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{efectivoContado}+$P{efectivoAbono}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{efectivoContado} == null ? java.math.BigDecimal.ZERO : $P{efectivoContado})
+   .add($P{efectivoAbono} == null ? java.math.BigDecimal.ZERO : $P{efectivoAbono})]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="456" y="136" width="63" height="15" backcolor="#99CC00" uuid="d027897a-3233-4790-8fbd-a71800f685f3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{efectivoContado}+
-$P{chequeContado}+
-$P{transferenciaContado}+
-$P{tarjetaCreditoContado}+
-$P{tarjetaDebitoContado}+
-$P{condonacionContado}+
-$P{efectivoAbono}+
-$P{chequeAbono}+
-$P{transferenciaAbono}+
-$P{tarjetaCreditoAbono}+
-$P{tarjetaDebitoAbono}+
-$P{condonacionAbono}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{efectivoContado}     == null ? java.math.BigDecimal.ZERO : $P{efectivoContado})
+  .add($P{chequeContado} == null ? java.math.BigDecimal.ZERO : $P{chequeContado})
+  .add($P{transferenciaContado} == null ? java.math.BigDecimal.ZERO : $P{transferenciaContado})
+  .add($P{tarjetaCreditoContado} == null ? java.math.BigDecimal.ZERO : $P{tarjetaCreditoContado})
+  .add($P{tarjetaDebitoContado}  == null ? java.math.BigDecimal.ZERO : $P{tarjetaDebitoContado})
+  .add($P{condonacionContado}    == null ? java.math.BigDecimal.ZERO : $P{condonacionContado})
+  .add($P{efectivoAbono}     == null ? java.math.BigDecimal.ZERO : $P{efectivoAbono})
+  .add($P{chequeAbono}       == null ? java.math.BigDecimal.ZERO : $P{chequeAbono})
+  .add($P{transferenciaAbono} == null ? java.math.BigDecimal.ZERO : $P{transferenciaAbono})
+  .add($P{tarjetaCreditoAbono} == null ? java.math.BigDecimal.ZERO : $P{tarjetaCreditoAbono})
+  .add($P{tarjetaDebitoAbono}  == null ? java.math.BigDecimal.ZERO : $P{tarjetaDebitoAbono})
+  .add($P{condonacionAbono}    == null ? java.math.BigDecimal.ZERO : $P{condonacionAbono})]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="456" y="119" width="72" height="15" forecolor="#04115F" backcolor="#FEFEFE" uuid="b2f70f50-53a5-4e9f-a3c0-d1f60eb320e2"/>
@@ -1122,35 +1123,40 @@ $P{condonacionAbono}]]></textFieldExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{transferenciaContado}+$P{transferenciaAbono}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{transferenciaContado} == null ? java.math.BigDecimal.ZERO : $P{transferenciaContado})
+   .add($P{transferenciaAbono} == null ? java.math.BigDecimal.ZERO : $P{transferenciaAbono})]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="456" y="102" width="72" height="15" uuid="5a1f4f27-3ea7-49a2-9f5d-ab9dc43b3e5f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{tarjetaDebitoContado}+$P{tarjetaDebitoAbono}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{tarjetaDebitoContado} == null ? java.math.BigDecimal.ZERO : $P{tarjetaDebitoContado})
+   .add($P{tarjetaDebitoAbono} == null ? java.math.BigDecimal.ZERO : $P{tarjetaDebitoAbono})]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="456" y="119" width="72" height="15" uuid="4042a709-e7de-439e-8d49-68e1a4a5ab70"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{condonacionContado}+$P{condonacionAbono}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{condonacionContado} == null ? java.math.BigDecimal.ZERO : $P{condonacionContado})
+   .add($P{condonacionAbono} == null ? java.math.BigDecimal.ZERO : $P{condonacionAbono})]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="456" y="51" width="72" height="15" uuid="3b50dbbe-a8aa-43d9-a9e9-d6d41cec372f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{chequeContado}+$P{chequeAbono}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{chequeContado} == null ? java.math.BigDecimal.ZERO : $P{chequeContado})
+   .add($P{chequeAbono} == null ? java.math.BigDecimal.ZERO : $P{chequeAbono})]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="456" y="85" width="72" height="15" uuid="aee11c72-1c3b-4c04-96cb-5ae8a3afd002"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{tarjetaCreditoContado}+$P{tarjetaCreditoAbono}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{tarjetaCreditoContado} == null ? java.math.BigDecimal.ZERO : $P{tarjetaCreditoContado})
+   .add($P{tarjetaCreditoAbono} == null ? java.math.BigDecimal.ZERO : $P{tarjetaCreditoAbono})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="456" y="19" width="72" height="15" forecolor="#FFFFFF" uuid="2c8f29c2-2f7c-4401-9868-0beaeab3dde4"/>
@@ -1206,7 +1212,8 @@ $P{condonacionAbono}]]></textFieldExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{condonacionContado}+$P{condonacionAbono}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{condonacionContado} == null ? java.math.BigDecimal.ZERO : $P{condonacionContado})
+   .add($P{condonacionAbono} == null ? java.math.BigDecimal.ZERO : $P{condonacionAbono})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="15" y="85" width="104" height="16" uuid="7fbbebc7-d5c9-4e0a-bed3-ad8e9942829a"/>
@@ -1220,7 +1227,8 @@ $P{condonacionAbono}]]></textFieldExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{efectivoContado}+$P{efectivoAbono}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{efectivoContado} == null ? java.math.BigDecimal.ZERO : $P{efectivoContado})
+   .add($P{efectivoAbono} == null ? java.math.BigDecimal.ZERO : $P{efectivoAbono})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="15" y="102" width="104" height="16" uuid="10e61328-7142-4107-9eb9-d7ba3cb9c716"/>
@@ -1267,7 +1275,9 @@ $P{condonacionAbono}]]></textFieldExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{efectivoContado}+$P{efectivoAbono}-$P{totalGastos}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{efectivoContado} == null ? java.math.BigDecimal.ZERO : $P{efectivoContado})
+   .add($P{efectivoAbono} == null ? java.math.BigDecimal.ZERO : $P{efectivoAbono})
+   .subtract($P{totalGastos} == null ? java.math.BigDecimal.ZERO : $P{totalGastos})]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="167" y="119" width="45" height="15" forecolor="#04115F" backcolor="#FEFEFE" uuid="731f72e5-5b65-42b3-a630-e33b8cf85a67"/>
