@@ -480,7 +480,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("nombreCliente", reporteVenta.getNombreCliente());
 			params.put("rfcCliente", reporteVenta.getRfcCliente());
 			params.put("folioVenta", reporteVenta.getFolioVenta());
-			params.put("fecha", DateTimeUtil.convertirALocalDateTimeEnMexicoADate(reporteVenta.getFecha()));
+			params.put("fecha",DateTimeUtil.formatearFechaHoraMx(reporteVenta.getFecha()));
 			params.put("subTotal", reporteVenta.getSubTotal());
 			params.put("ivaTotal", reporteVenta.getIvaTotal());
 			params.put("total", reporteVenta.getTotal());
@@ -704,7 +704,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("rfcEmpresa", "FAMJ810312FY6");
 			params.put("listaFormaPago", balanceCajaDto.getTvReporteCajaFormaPago());
 			params.put("caja",  balanceCajaDto.getCaja());
-			params.put("fechaEmicion",  balanceCajaDto.getFechaGeneraReporte());
+			params.put("fechaEmicion",  DateTimeUtil.formatearFechaHoraMx(balanceCajaDto.getFechaGeneraReporte()));
 			params.put("totalIngresoVentas", DateTimeUtil.truncarDosDecimales(balanceCajaDto.getTotalIngresoVenta()) );
 			params.put("totalIngresoAbonos",  DateTimeUtil.truncarDosDecimales(balanceCajaDto.getTotalIngresoAbonos()) );
 			params.put("totalIngresoGeneral",  DateTimeUtil.truncarDosDecimales(balanceCajaDto.getTotalGeneralIngresos()) );

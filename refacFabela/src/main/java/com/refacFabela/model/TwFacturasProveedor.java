@@ -13,10 +13,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -37,21 +39,18 @@ public class TwFacturasProveedor implements Serializable {
 	
 	@Column(name = "n_id_proveedor")
 	private Long nIdProveedor;
-	
 	@Column(name = "d_fecha_inicio_factura")
-	private LocalDateTime dFechaInicioFactura;
-	
+	private LocalDate dFechaInicioFactura;
 	@Column(name = "d_fecha_termino_factura")
-	private LocalDateTime dFechaTerminoFactura;
+	private LocalDate dFechaTerminoFactura;
 	
 	@Column(name = "n_id_usuario")
 	private Long nIdUsuario;
 	
 	@Column(name = "n_estatus_factura_proveedor")
 	private Long nEstatusFacturaProveedor;
-	
 	@Column(name = "d_fecha_pago_factura")
-	private LocalDateTime dFechaPagoFactura;
+	private LocalDate dFechaPagoFactura;
 	
 	@JsonSerialize(using = ToStringSerializer.class)
 	@Column(name = "n_monto_factura", precision = 20, scale=2)
@@ -162,27 +161,28 @@ public class TwFacturasProveedor implements Serializable {
 
 	
 
-	public LocalDateTime getdFechaInicioFactura() {
+	
+	public LocalDate getdFechaInicioFactura() {
 		return dFechaInicioFactura;
 	}
 
-	public void setdFechaInicioFactura(LocalDateTime dFechaInicioFactura) {
+	public void setdFechaInicioFactura(LocalDate dFechaInicioFactura) {
 		this.dFechaInicioFactura = dFechaInicioFactura;
 	}
 
-	public LocalDateTime getdFechaTerminoFactura() {
+	public LocalDate getdFechaTerminoFactura() {
 		return dFechaTerminoFactura;
 	}
 
-	public void setdFechaTerminoFactura(LocalDateTime dFechaTerminoFactura) {
+	public void setdFechaTerminoFactura(LocalDate dFechaTerminoFactura) {
 		this.dFechaTerminoFactura = dFechaTerminoFactura;
 	}
 
-	public LocalDateTime getdFechaPagoFactura() {
+	public LocalDate getdFechaPagoFactura() {
 		return dFechaPagoFactura;
 	}
 
-	public void setdFechaPagoFactura(LocalDateTime dFechaPagoFactura) {
+	public void setdFechaPagoFactura(LocalDate dFechaPagoFactura) {
 		this.dFechaPagoFactura = dFechaPagoFactura;
 	}
 

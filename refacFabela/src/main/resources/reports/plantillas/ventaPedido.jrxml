@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="28" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
-	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="729"/>
+	<property name="ireport.y" value="246"/>
 	<subDataset name="listaProductos" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="cantidad" class="java.lang.Integer"/>
 		<field name="noIdentificacion" class="java.lang.Long"/>
 		<field name="nombreProducto" class="java.lang.String"/>
-		<field name="precioUnitario" class="java.lang.Double"/>
-		<field name="importe" class="java.lang.Double"/>
+		<field name="precioUnitario" class="java.math.BigDecimal"/>
+		<field name="importe" class="java.math.BigDecimal"/>
 		<field name="descripcionCatSat" class="java.lang.String"/>
 		<field name="claveSat" class="java.lang.String"/>
 	</subDataset>
@@ -19,14 +19,14 @@
 	<parameter name="nombreCliente" class="java.lang.String"/>
 	<parameter name="rfcCliente" class="java.lang.String"/>
 	<parameter name="folioVenta" class="java.lang.Long"/>
-	<parameter name="fecha" class="java.util.Date"/>
-	<parameter name="subTotal" class="java.lang.Double"/>
-	<parameter name="ivaTotal" class="java.lang.Double" isForPrompting="false"/>
-	<parameter name="total" class="java.lang.Double"/>
+	<parameter name="fecha" class="java.lang.String"/>
+	<parameter name="subTotal" class="java.math.BigDecimal"/>
+	<parameter name="ivaTotal" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="total" class="java.math.BigDecimal"/>
 	<parameter name="qr" class="java.lang.Object"/>
-	<parameter name="anticipo" class="java.lang.Double"/>
-	<parameter name="saldoFinal" class="java.lang.Double" isForPrompting="false"/>
-	<parameter name="descuento" class="java.lang.Double"/>
+	<parameter name="anticipo" class="java.math.BigDecimal"/>
+	<parameter name="saldoFinal" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="descuento" class="java.math.BigDecimal"/>
 	<parameter name="nombreVendedor" class="java.lang.String"/>
 	<parameter name="idPedido" class="java.lang.Long"/>
 	<background>
@@ -320,102 +320,102 @@
 	<lastPageFooter>
 		<band height="209">
 			<staticText>
-				<reportElement x="209" y="38" width="179" height="17" uuid="d7d3ba3a-1991-450f-acec-36716551a824"/>
+				<reportElement x="195" y="72" width="179" height="12" uuid="d7d3ba3a-1991-450f-acec-36716551a824"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SUBTOTAL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="209" y="72" width="180" height="17" uuid="1f86462f-a988-4f23-a529-729d207b642f"/>
+				<reportElement x="194" y="96" width="180" height="12" uuid="1f86462f-a988-4f23-a529-729d207b642f"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="422" y="38" width="124" height="17" uuid="e9f016eb-c387-4380-928c-214eb507d14b"/>
+				<reportElement x="407" y="72" width="124" height="12" uuid="e9f016eb-c387-4380-928c-214eb507d14b"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{subTotal}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="422" y="55" width="124" height="17" uuid="1e4e7c21-2921-424c-9727-5c2656b743d1"/>
+				<reportElement x="407" y="84" width="124" height="12" uuid="1e4e7c21-2921-424c-9727-5c2656b743d1"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{ivaTotal}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="422" y="72" width="124" height="17" uuid="849a370a-d8d1-44e9-860b-0604173ca3ea"/>
+				<reportElement x="407" y="96" width="124" height="12" uuid="849a370a-d8d1-44e9-860b-0604173ca3ea"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="209" y="55" width="180" height="17" uuid="af252b6d-b821-4749-99f7-9e698e053236"/>
+				<reportElement x="194" y="84" width="180" height="12" uuid="af252b6d-b821-4749-99f7-9e698e053236"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TRASLADO IVA TASA 0.16000]]></text>
 			</staticText>
 			<image>
-				<reportElement x="1" y="13" width="243" height="127" uuid="8c876da8-b31b-41d7-b610-69e96ac16098"/>
+				<reportElement x="1" y="48" width="243" height="92" uuid="8c876da8-b31b-41d7-b610-69e96ac16098"/>
 				<imageExpression><![CDATA[$P{qr}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="209" y="21" width="180" height="17" uuid="c2814ac9-8867-4f11-8ca3-3df992b1c6ec"/>
+				<reportElement x="194" y="60" width="180" height="12" uuid="c2814ac9-8867-4f11-8ca3-3df992b1c6ec"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MONEDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="21" width="135" height="17" uuid="51b183db-5b89-4651-b685-0ffecf2b573e"/>
+				<reportElement x="396" y="60" width="135" height="12" uuid="51b183db-5b89-4651-b685-0ffecf2b573e"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[MXN - PESO MEXICANO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="4" width="135" height="17" uuid="ee98c2ae-7ed0-4385-9cb7-bfde0f5a7d98"/>
+				<reportElement x="396" y="48" width="135" height="12" uuid="ee98c2ae-7ed0-4385-9cb7-bfde0f5a7d98"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[CONTADO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="209" y="4" width="180" height="17" uuid="e9283d4a-e095-42d3-9b7c-85472c841522"/>
+				<reportElement x="194" y="48" width="180" height="12" uuid="e9283d4a-e095-42d3-9b7c-85472c841522"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CONDICIONES DE PAGO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="209" y="89" width="180" height="17" uuid="5f939d5b-1256-4479-9a49-69c123d056f6"/>
+				<reportElement x="194" y="108" width="180" height="12" uuid="5f939d5b-1256-4479-9a49-69c123d056f6"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ANTICIPO]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="422" y="89" width="124" height="17" uuid="9925b442-6c9c-4be3-a73d-422f6d6d6a68"/>
+				<reportElement x="407" y="108" width="124" height="12" uuid="9925b442-6c9c-4be3-a73d-422f6d6d6a68"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{anticipo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
-				<reportElement x="422" y="106" width="124" height="17" uuid="2b66d8cb-02c1-471a-9534-eb01b3d7a022"/>
+				<reportElement x="407" y="120" width="124" height="12" uuid="2b66d8cb-02c1-471a-9534-eb01b3d7a022"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{descuento}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="209" y="106" width="180" height="17" uuid="0fb4416a-671b-44cb-976a-5a5451ef795d"/>
+				<reportElement x="194" y="120" width="180" height="12" uuid="0fb4416a-671b-44cb-976a-5a5451ef795d"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
@@ -432,14 +432,14 @@
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="209" y="123" width="180" height="17" uuid="c1a3fc35-24de-4b57-862e-e5bd064729d5"/>
+				<reportElement x="194" y="132" width="180" height="12" uuid="c1a3fc35-24de-4b57-862e-e5bd064729d5"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SALDO FINAL]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00">
-				<reportElement x="422" y="123" width="124" height="17" uuid="88acbdf4-5e18-4298-a468-ac3633378ee4"/>
+				<reportElement x="407" y="132" width="124" height="12" uuid="88acbdf4-5e18-4298-a468-ac3633378ee4"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
@@ -453,42 +453,42 @@
 				<text><![CDATA["No se aceptan cambios ni devoluciones en partes eléctricas ni en ventas por pedido. Los cambios solo se realizarán durante los primeros 5 días hábiles después de la venta, conservando los empaques originales en buen estado y libres de contaminantes. Para solicitar un cambio, se requiere presentar el comprobante de compra, y el producto será evaluado por nuestro equipo técnico. La garantía cubre defectos de fabricación, pero no daños por mal uso, negligencia o accidentes. Para más información, contáctenos a través de nuestro servicio de atención al cliente."]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="38" width="11" height="17" uuid="9e87afb2-6b7d-4cf8-8409-44b93ca35b86"/>
+				<reportElement x="396" y="72" width="11" height="12" uuid="9e87afb2-6b7d-4cf8-8409-44b93ca35b86"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="55" width="11" height="17" uuid="3976f3d9-2c5a-486e-a9d6-d3938096fd39"/>
+				<reportElement x="396" y="84" width="11" height="12" uuid="3976f3d9-2c5a-486e-a9d6-d3938096fd39"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="72" width="11" height="17" uuid="9ecc9588-e7ec-4894-a370-e031c2e29cdf"/>
+				<reportElement x="396" y="96" width="11" height="12" uuid="9ecc9588-e7ec-4894-a370-e031c2e29cdf"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="89" width="11" height="17" uuid="7e5da388-fc68-4db1-ac2c-34391be1db69"/>
+				<reportElement x="396" y="108" width="11" height="12" uuid="7e5da388-fc68-4db1-ac2c-34391be1db69"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="106" width="11" height="17" uuid="8ec6c1b6-6230-4f11-92f6-8f452286f8f3"/>
+				<reportElement x="396" y="120" width="11" height="12" uuid="8ec6c1b6-6230-4f11-92f6-8f452286f8f3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="123" width="11" height="17" uuid="3c851167-fdf8-447f-9a81-354b0669fdd8"/>
+				<reportElement x="396" y="132" width="11" height="12" uuid="3c851167-fdf8-447f-9a81-354b0669fdd8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>

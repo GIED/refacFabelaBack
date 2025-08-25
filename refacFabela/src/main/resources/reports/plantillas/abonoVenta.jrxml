@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de5c4bb1-1fd1-48dd-8884-986688f06e65">
-	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<subDataset name="listaAbonos" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="id" class="java.lang.Long"/>
 		<field name="abono" class="java.math.BigDecimal"/>
 		<field name="usuario" class="java.lang.String"/>
-		<field name="fecha" class="java.util.Date"/>
+		<field name="fecha" class="java.lang.String"/>
 		<field name="formaPago" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="listaAbonos" class="java.util.List"/>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.refacFabela.dto.PedidoDto;
 import com.refacFabela.model.TvPedidoDetalle;
+import com.refacFabela.model.TwCarritoCompraPedido;
 import com.refacFabela.model.TwHistoriaIngresoProducto;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
@@ -18,6 +19,7 @@ import com.refacFabela.model.TwVenta;
 import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TvPedidoDetalleRepository;
+import com.refacFabela.repository.TwComprasProductoPedidoRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
@@ -45,6 +47,8 @@ public class PedidosServiceImpl implements PedidosService {
 	private VentasRepository ventasRepository;
 	@Autowired
 	private TwHistoriaIngresoProductoRepository twHistoriaIngresoProductoRepository;
+	@Autowired
+	private TwComprasProductoPedidoRepository twComprasProductoPedidoRepository;
 	
   
 	
@@ -256,11 +260,40 @@ public class PedidosServiceImpl implements PedidosService {
 	        return false;
 	    }
 	}
+	
+	@Override
+	public Boolean  borrarProductoCarritoId(Long nId) {		
+		if (twComprasProductoPedidoRepository.existsById(nId)) {
+			twComprasProductoPedidoRepository.deleteById(nId);
+	        return !twComprasProductoPedidoRepository.existsById(nId);
+	    } else {
+	        return false;
+	    }
+	}
 
 	@Override
 	public List<TwPedidoProducto> obtenerProductosIdPedido(Long nIdProducto) {
 		// TODO Auto-generated method stub
 		return pedidosProductoRepository.obtenerProductosIdPedido(nIdProducto);
+	}
+
+	@Override
+	public TwCarritoCompraPedido guardaProductoCarrito(TwCarritoCompraPedido twCarritoCompraPedido) {
+		
+		
+		return twComprasProductoPedidoRepository.save(twCarritoCompraPedido);
+	}
+
+	@Override
+	public List<TwCarritoCompraPedido> obtenerPedidoCompraUsuario(Long nIdUsuario) {
+		
+		return twComprasProductoPedidoRepository.obtenerProductosComprasUsuario(nIdUsuario);
+	}
+
+	@Override
+	public Boolean borrarTodosLosProductosActivos(Long nIdUsuario) {
+		// TODO Auto-generated method stub
+		return twComprasProductoPedidoRepository.logicalDeleteAllActivos(nIdUsuario)>0;
 	}
 
 }

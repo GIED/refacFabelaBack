@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.dto.PedidoDto;
 import com.refacFabela.model.TvPedidoDetalle;
+import com.refacFabela.model.TwCarritoCompraPedido;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.service.PedidosService;
@@ -158,6 +159,19 @@ public class PedidosController {
 		return null;
 	}
 	
+	@PostMapping("/guardaProductoCarrito")
+	public TwCarritoCompraPedido guardaProductoCarrito(@RequestBody TwCarritoCompraPedido twCarritoCompraPedido) {
+
+		try {
+			return pedidosService.guardaProductoCarrito(twCarritoCompraPedido);
+
+		} catch (Exception e) {
+			logger.error("Error al guaradar el producto carrito" + e);
+		}
+
+		return null;
+	}
+	
 	
 	@GetMapping("/obteneCarritoPedidoUsuario")
 	public List<TwPedidoProducto> obteneCarritoPedido(@RequestParam() Long nIdUsuario) {
@@ -172,6 +186,22 @@ public class PedidosController {
 		return null;
 	}
 	
+	@GetMapping("/obteneCarritoCompraUsuario")
+	public List<TwCarritoCompraPedido> obteneCarritoCompraUsuario(@RequestParam() Long nIdUsuario) {
+		try {
+
+			return pedidosService.obtenerPedidoCompraUsuario(nIdUsuario);
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener los productos de carrito usuario " + e);
+		}
+		return null;
+	}
+	
+	
+	
+	
 	@GetMapping("/borrarPedidoProductoId")
 	public Boolean borrarPedidoProductoId(@RequestParam() Long nId) {
 		try {
@@ -184,6 +214,29 @@ public class PedidosController {
 		}
 		return null;
 	}
+	
+	@GetMapping("/borrarPedidoCarritoId")
+	public Boolean borrarPedidoCarritoId(@RequestParam() Long nId) {
+		try {
+
+			return pedidosService.borrarProductoCarritoId(nId);
+
+		} catch (Exception e) {
+
+			logger.error("Error  " + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/borrarTodosProductosCarrito")
+    public Boolean borrarTodosPedidosCarrito(@RequestParam() Long nIdUsuario) {
+        try {
+            return pedidosService.borrarTodosLosProductosActivos(nIdUsuario);
+        } catch (Exception e) {
+            logger.error("Error en borrarTodosPedidosCarrito ", e);
+            return false;
+        }
+    }
 	
 
 }

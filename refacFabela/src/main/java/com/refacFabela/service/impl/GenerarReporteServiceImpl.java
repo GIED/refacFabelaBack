@@ -378,7 +378,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			TwSaldoUtilizadoDto saldo = new TwSaldoUtilizadoDto();
 			
 			saldo.setnIdVenta(saldoUtilizadoDto.getnIdVenta());
-			saldo.setdFecha(saldoUtilizadoDto.getdFecha());
+			saldo.setdFecha(DateTimeUtil.formatearFechaHoraMx(saldoUtilizadoDto.getdFecha()));
 			saldo.setnEstatus(saldoUtilizadoDto.getnEstatus());
 			saldo.setnIdCaja(saldoUtilizadoDto.getnIdCaja());
 			saldo.setnIdUsuario(saldoUtilizadoDto.getnIdUsuario());
@@ -889,7 +889,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			 totalGastos=totalGastos.add(listaTwGastos.get(i).getnMonto());
 			 GastosDto gastoDto=new GastosDto();		 
 			 gastoDto.setnId(listaTwGastos.get(i).getnId());
-			 gastoDto.setFecha(listaTwGastos.get(i).getdFecha());
+			 gastoDto.setFecha(DateTimeUtil.formatearFechaHoraMx(listaTwGastos.get(i).getdFecha()));
 			 gastoDto.setDescripcion(listaTwGastos.get(i).getsDescripcion());
 			 gastoDto.setGasto(listaTwGastos.get(i).getTcGasto().getsGasto());
 			 gastoDto.setUsuario(listaTwGastos.get(i).getTcUsuario().getsNombreUsuario());
@@ -937,11 +937,11 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			totalIngresosAbono=totalIngresosAbono.add(twAbono.get(i).getnAbono()) ;
 			AbonoDto abonosDto=new AbonoDto();
 			abonosDto.setAbono(DateTimeUtil.truncarDosDecimales(twAbono.get(i).getnAbono()));
-			abonosDto.setFechaAbono(twAbono.get(i).getdFecha());
+			abonosDto.setFechaAbono(DateTimeUtil.formatearFechaHoraMx(twAbono.get(i).getdFecha()));
 			abonosDto.setIdVenta(twAbono.get(i).getnIdVenta());
 			abonosDto.setFormaPago(twAbono.get(i).getTcFormapago().getsDescripcion());
 			abonosDto.setUsuario(twAbono.get(i).getTcUsuario().getsNombreUsuario());
-			abonosDto.setFechaVenta(twAbono.get(i).getTwVenta().getdFechaVenta());
+			abonosDto.setFechaVenta(DateTimeUtil.formatearFechaHoraMx(twAbono.get(i).getTwVenta().getdFechaVenta()));
 			
 			auxListaAbonos.add(abonosDto);
 			
@@ -1060,7 +1060,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			
 			cancelaVentaDto.setCantidad(listaTwVentaProductoCancela.get(i).getnCantidad());
 			cancelaVentaDto.setCliente(listaTwVentaProductoCancela.get(i).getTwVenta().getTcCliente().getsRazonSocial());
-			cancelaVentaDto.setFechaVenta(listaTwVentaProductoCancela.get(i).getTwVenta().getdFechaVenta());
+			cancelaVentaDto.setFechaVenta(DateTimeUtil.formatearFechaHoraMx(listaTwVentaProductoCancela.get(i).getTwVenta().getdFechaVenta()));
 			cancelaVentaDto.setNoParte(listaTwVentaProductoCancela.get(i).getTcProducto().getsNoParte());
 			cancelaVentaDto.setProducto(listaTwVentaProductoCancela.get(i).getTcProducto().getsProducto());
 			cancelaVentaDto.setTotalCancela(listaTwVentaProductoCancela.get(i).getnPrecioPartida());

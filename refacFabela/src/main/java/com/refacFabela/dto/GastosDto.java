@@ -9,7 +9,7 @@ public class GastosDto {
 	Long nId;
 	String gasto;
 	String descripcion;
-	LocalDateTime fecha;
+	String fecha;
 	String usuario;
 	BigDecimal monto;
 	
@@ -42,12 +42,15 @@ public class GastosDto {
 	}
   
 	
-	public LocalDateTime getFecha() {
+	
+
+
+	public String getFecha() {
 		return fecha;
 	}
 
 
-	public void setFecha(LocalDateTime fecha) {
+	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
 
