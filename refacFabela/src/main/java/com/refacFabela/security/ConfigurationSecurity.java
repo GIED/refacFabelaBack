@@ -1,6 +1,7 @@
 package com.refacFabela.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,15 +30,25 @@ public class ConfigurationSecurity extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private JwtEntryPoint jwtEntryPoint;
+
+	@Value("${security.api.meta-compra.header-name:X-API-TOKEN}")
+	private String metaHeader;
+
+	@Value("${security.api.meta-compra.token:change-me}")
+	private String metaToken;
 	
 	@Bean
 	public JwtTokenFilter jwtTokenFilter() {
 		return new JwtTokenFilter();
 	}
+
+	@Bean
+	public ApiKeyMetaCompraFilter apiKeyMetaCompraFilter() {
+		return new ApiKeyMetaCompraFilter(metaHeader, metaToken);
+	}
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		
 		return new BCryptPasswordEncoder();
 	}
 
@@ -61,16 +72,24 @@ public class ConfigurationSecurity extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
 			.authorizeRequests()
-			.antMatchers("/auth/**", "/verComprobante/**").permitAll()
-			.anyRequest().authenticated()
+				.antMatchers("/auth/**", "/verComprobante/**").permitAll()
+
+				// 🔐 Esta ruta exige el rol concedido por el API Key filter
+				.antMatchers("/meta-compra/**").hasRole("META_COMPRA_READ")
+
+				// El resto funciona con tu JWT normal
+				.anyRequest().authenticated()
 			.and()
 			.exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
 			.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		
-		http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-	}
-	
-	
 
+		// Orden: primero API Key (solo aplicará a /api/meta-compra/**), después JWT
+		// IMPORTANTE: usa AnonymousAuthenticationFilter como ancla
+		http.addFilterBefore(apiKeyMetaCompraFilter(),
+		    org.springframework.security.web.authentication.AnonymousAuthenticationFilter.class);
+
+		http.addFilterBefore(jwtTokenFilter(),
+		    org.springframework.security.web.authentication.AnonymousAuthenticationFilter.class);
+	}
 }

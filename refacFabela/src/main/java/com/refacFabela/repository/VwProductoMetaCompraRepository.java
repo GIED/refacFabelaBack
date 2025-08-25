@@ -1,11 +1,12 @@
 package com.refacFabela.repository;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
 import com.refacFabela.model.VwProductoMetaCompra;
 
 @Repository
@@ -16,5 +17,7 @@ public interface VwProductoMetaCompraRepository extends JpaRepository<VwProducto
 	
 	@Query("SELECT c FROM VwProductoMetaCompra c WHERE c.nId=:idProducto  order by c.nCantidad asc")
 	public List<VwProductoMetaCompra> productoVentaCot(Long idProducto);
+	
+	public Optional<VwProductoMetaCompra> findBysNoParte(String noParte);
 
 }
