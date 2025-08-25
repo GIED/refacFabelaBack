@@ -2,6 +2,7 @@ package com.refacFabela.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -36,7 +37,7 @@ public class TwAbonoFacturaProveedor implements Serializable {
 	    private BigDecimal nMontoAbono;  // Monto del abono
 
 	    @Column(name = "d_fecha_abono")	  
-	    private BigDecimal dFechaAbono;  // Fecha del abono
+	    private LocalDateTime dFechaAbono;  // Fecha del abono
 
 	    @Column(name = "n_estatus_abono")
 	    private Integer nEstatusAbono;  // Estatus del abono
@@ -119,12 +120,18 @@ public class TwAbonoFacturaProveedor implements Serializable {
 
 	  
 
-	    public BigDecimal getdFechaAbono() {
+	    
+
+		public LocalDateTime getdFechaAbono() {
 			return dFechaAbono;
 		}
 
-		public void setdFechaAbono(BigDecimal dFechaAbono) {
+		public void setdFechaAbono(LocalDateTime dFechaAbono) {
 			this.dFechaAbono = dFechaAbono;
+		}
+
+		public static long getSerialversionuid() {
+			return serialVersionUID;
 		}
 
 		public Integer getnEstatusAbono() {

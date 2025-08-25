@@ -28,9 +28,7 @@ public class TwCarritoCompraPedido {
 
     @Column(name = "n_id_usuario")
     private Long nIdUsuario;
-
-    @Column(name = "n_id_pedido")
-    private Long nIdPedido;
+    
     
     @Column(name = "n_id_producto")
     private Long nIdProducto;
@@ -41,13 +39,10 @@ public class TwCarritoCompraPedido {
     @Column(name = "n_cantidad")
     private Integer nCantidad;
     
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @Column(name = "d_fecha_registro")
-    private LocalDateTime dFechaRegistro;
     
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @Column(name = "d_fecha_llegada")
-    private LocalDateTime dFechaLlegada;
+    @Column(name = "d_fecha_registro")
+    private LocalDateTime dFechaRegistro;    
+  
 
     @Column(name = "n_estatus")
     private Integer nEstatus;
@@ -84,13 +79,7 @@ public class TwCarritoCompraPedido {
 		this.nIdUsuario = nIdUsuario;
 	}
 
-	public Long getnIdPedido() {
-		return nIdPedido;
-	}
-
-	public void setnIdPedido(Long nIdPedido) {
-		this.nIdPedido = nIdPedido;
-	}
+	
 
 	public Long getnIdProducto() {
 		return nIdProducto;
@@ -118,13 +107,7 @@ public class TwCarritoCompraPedido {
 		this.dFechaRegistro = dFechaRegistro;
 	}
 
-	public LocalDateTime getdFechaLlegada() {
-		return dFechaLlegada;
-	}
-
-	public void setdFechaLlegada(LocalDateTime dFechaLlegada) {
-		this.dFechaLlegada = dFechaLlegada;
-	}
+	
 
 	public Integer getnEstatus() {
 		return nEstatus;
@@ -150,13 +133,7 @@ public class TwCarritoCompraPedido {
 		this.tcProducto = tcProducto;
 	}
 
-	@Override
-	public String toString() {
-		return "TwCarritoCompraPedido [nId=" + nId + ", nIdUsuario=" + nIdUsuario + ", nIdPedido=" + nIdPedido
-				+ ", nIdProducto=" + nIdProducto + ", nCantidad=" + nCantidad + ", dFechaRegistro=" + dFechaRegistro
-				+ ", dFechaLlegada=" + dFechaLlegada + ", nEstatus=" + nEstatus + ", twUsuario=" + twUsuario
-				+ ", tcProducto=" + tcProducto + "]";
-	}
+	
 
 	public Long getnIdProveedor() {
 		return nIdProveedor;
@@ -172,6 +149,14 @@ public class TwCarritoCompraPedido {
 
 	public void setTcProveedor(TcProveedore tcProveedor) {
 		TcProveedor = tcProveedor;
+	}
+
+	@Override
+	public String toString() {
+		return "TwCarritoCompraPedido [nId=" + nId + ", nIdUsuario=" + nIdUsuario + ", nIdProducto=" + nIdProducto
+				+ ", nIdProveedor=" + nIdProveedor + ", nCantidad=" + nCantidad + ", dFechaRegistro=" + dFechaRegistro
+				+ ", nEstatus=" + nEstatus + ", twUsuario=" + twUsuario + ", tcProducto=" + tcProducto
+				+ ", TcProveedor=" + TcProveedor + "]";
 	}
 
 
