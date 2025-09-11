@@ -21,60 +21,51 @@ import com.refacFabela.service.ClienteDireccionService;
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST })
 public class ClienteDireccionController {
 	@Autowired
-	private  ClienteDireccionService service;
-	
-	/** Lista todas las direcciones del cliente (predeterminada primero, luego por nId desc). */
-    @GetMapping
-    public ResponseEntity<List<DireccionEnvioDto>> listar(@RequestParam Long clienteId) {
-        return ResponseEntity.ok(service.listar(clienteId));
-    }
+	private ClienteDireccionService service;
 
-    /** Obtiene una dirección específica del cliente. */
-    @GetMapping("/obtener")
-    public ResponseEntity<DireccionEnvioDto> obtener(@RequestParam Long clienteId,
-                                                     @RequestParam Long dirId) {
-        // Puedes tener un service.obtener(clienteId, dirId) si prefieres;
-        // aquí reusamos el listado para mantener el ejemplo simple.
-        return ResponseEntity.ok(
-            service.listar(clienteId)
-                   .stream()
-                   .filter(d -> d.nId.equals(dirId))
-                   .findFirst()
-                   .orElseThrow(() -> new IllegalArgumentException("Dirección no encontrada"))
-        );
-    }
+	/**
+	 * Lista todas las direcciones del cliente (predeterminada primero, luego por
+	 * nId desc).
+	 */
+	@GetMapping
+	public ResponseEntity<List<DireccionEnvioDto>> listar(@RequestParam Long clienteId) {
+		return ResponseEntity.ok(service.listar(clienteId));
+	}
 
-    // ====== POST ======
+	/** Obtiene una dirección específica del cliente. */
+	@GetMapping("/obtener")
+	public ResponseEntity<DireccionEnvioDto> obtener(@RequestParam Long id) {
+		// Puedes tener un service.obtener(clienteId, dirId) si prefieres;
+		// aquí reusamos el listado para mantener el ejemplo simple.
+		return ResponseEntity.ok(service.listarById(id));
+	}
 
-    /** Crea una nueva dirección para el cliente. */
-    @PostMapping("/crear")
-    public ResponseEntity<DireccionEnvioDto> crear(@RequestParam Long clienteId,
-                                                   @RequestBody DireccionEnvioDto dto) {
-        return ResponseEntity.ok(service.crear(clienteId, dto));
-    }
+	// ====== POST ======
 
-    /** Actualiza una dirección existente (POST en lugar de PUT). */
-    @PostMapping("/editar")
-    public ResponseEntity<DireccionEnvioDto> editar(@RequestParam Long clienteId,
-                                                    @RequestParam Long dirId,
-                                                    @RequestBody DireccionEnvioDto dto) {
-        return ResponseEntity.ok(service.actualizar(clienteId, dirId, dto));
-    }
+	/** Crea una nueva dirección para el cliente. */
+	@PostMapping("/crear")
+	public ResponseEntity<DireccionEnvioDto> crear(@RequestBody DireccionEnvioDto dto) {
+		return ResponseEntity.ok(service.crear(dto));
+	}
 
-    /** Elimina una dirección (POST en lugar de DELETE). */
-    @PostMapping("/eliminar")
-    public ResponseEntity<Void> eliminar(@RequestParam Long clienteId,
-                                         @RequestParam Long dirId) {
-        service.eliminar(clienteId, dirId);
-        return ResponseEntity.noContent().build();
-    }
+	/** Actualiza una dirección existente (POST en lugar de PUT). */
+	@PostMapping("/editar")
+	public ResponseEntity<DireccionEnvioDto> editar(@RequestBody DireccionEnvioDto dto) {
+		return ResponseEntity.ok(service.actualizar(dto));
+	}
 
-    /** Marca una dirección como predeterminada (POST en lugar de PUT). */
-    @PostMapping("/predeterminada")
-    public ResponseEntity<Void> marcarPredeterminada(@RequestParam Long clienteId,
-                                                     @RequestParam Long dirId) {
-        service.marcarPredeterminada(clienteId, dirId);
-        return ResponseEntity.noContent().build();
-    }
-	
+	/** Elimina una dirección (POST en lugar de DELETE). */
+	@PostMapping("/eliminar")
+	public ResponseEntity<Void> eliminar(@RequestParam Long dirId) {
+		service.eliminar(dirId);
+		return ResponseEntity.noContent().build();
+	}
+
+	/** Marca una dirección como predeterminada (POST en lugar de PUT). */
+	@PostMapping("/predeterminada")
+	public ResponseEntity<Void> marcarPredeterminada(@RequestParam Long clienteId, @RequestParam Long dirId) {
+		service.marcarPredeterminada(clienteId, dirId);
+		return ResponseEntity.noContent().build();
+	}
+
 }

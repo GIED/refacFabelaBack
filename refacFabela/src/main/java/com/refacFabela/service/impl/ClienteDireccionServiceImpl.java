@@ -30,21 +30,26 @@ public class ClienteDireccionServiceImpl implements ClienteDireccionService {
                    .map(e -> toDto(e)) // evita ambigüedad de método de referencia
                    .collect(Collectors.toList());
     }
+	@Override
+	public DireccionEnvioDto listarById(Long id) {
+		return toDto(clienteDireccionRepository.findBynId(id));
+				
+	}
 
 	@Override
     @Transactional
-    public DireccionEnvioDto crear(Long clienteId, DireccionEnvioDto dto) {
+    public DireccionEnvioDto crear(DireccionEnvioDto dto) {
         TwClienteDireccion e = toEntity(dto);
-        e.setnIdCliente(clienteId);
+        
 
         // Si es la primera dirección del cliente → predeterminada
-        if (clienteDireccionRepository.countBynIdCliente(clienteId) == 0) {
+        if (clienteDireccionRepository.countBynIdCliente(dto.nIdCliente) == 0) {
             e.setbPredeterminada(Boolean.TRUE);
         }
 
         // Si viene marcada como predeterminada, limpia previas
         if (Boolean.TRUE.equals(e.getbPredeterminada())) {
-        	clienteDireccionRepository.clearPredeterminada(clienteId);
+        	clienteDireccionRepository.clearPredeterminada(dto.nIdCliente);
         }
 
         return toDto(clienteDireccionRepository.save(e));
@@ -52,8 +57,8 @@ public class ClienteDireccionServiceImpl implements ClienteDireccionService {
 
     @Override
     @Transactional
-    public DireccionEnvioDto actualizar(Long clienteId, Long dirId, DireccionEnvioDto dto) {
-        TwClienteDireccion e = clienteDireccionRepository.findOneByIdAndCliente(dirId, clienteId)
+    public DireccionEnvioDto actualizar(DireccionEnvioDto dto) {
+        TwClienteDireccion e = clienteDireccionRepository.findOneById(dto.nId)
             .orElseThrow(() -> new IllegalArgumentException("Dirección no encontrada"));
 
         e.setsReceptor(dto.sReceptor);
@@ -71,7 +76,7 @@ public class ClienteDireccionServiceImpl implements ClienteDireccionService {
 
         // Si solicitan marcarla predeterminada en la edición
         if (Boolean.TRUE.equals(dto.bPredeterminada)) {
-        	clienteDireccionRepository.clearPredeterminada(clienteId);
+        	clienteDireccionRepository.clearPredeterminada(dto.nIdCliente);
             e.setbPredeterminada(Boolean.TRUE);
         } else if (dto.bPredeterminada != null && !dto.bPredeterminada) {
             // si explícitamente mandan false, la desmarcamos
@@ -83,21 +88,21 @@ public class ClienteDireccionServiceImpl implements ClienteDireccionService {
 
     @Override
     @Transactional
-    public void eliminar(Long clienteId, Long dirId) {
-        TwClienteDireccion e = clienteDireccionRepository.findOneByIdAndCliente(dirId, clienteId)
+    public void eliminar(Long id) {
+        TwClienteDireccion e = clienteDireccionRepository.findOneById(id)
             .orElseThrow(() -> new IllegalArgumentException("Dirección no encontrada"));
         clienteDireccionRepository.delete(e);
     }
 
     @Override
     @Transactional
-    public void marcarPredeterminada(Long clienteId, Long dirId) {
+    public void marcarPredeterminada(Long clienteId, Long id) {
         // valida que exista
-    	clienteDireccionRepository.findOneByIdAndCliente(dirId, clienteId)
+    	clienteDireccionRepository.findOneById(id)
             .orElseThrow(() -> new IllegalArgumentException("Dirección no encontrada"));
         // limpia y marca
     	clienteDireccionRepository.clearPredeterminada(clienteId);
-    	clienteDireccionRepository.setPredeterminada(clienteId, dirId);
+    	clienteDireccionRepository.setPredeterminada(id);
     }
 
     /* ----- mapeo simple ----- */
@@ -123,6 +128,7 @@ public class ClienteDireccionServiceImpl implements ClienteDireccionService {
 
     private TwClienteDireccion toEntity(DireccionEnvioDto d) {
         TwClienteDireccion e = new TwClienteDireccion();
+        e.setnIdCliente(d.nIdCliente);
         e.setsReceptor(d.sReceptor);
         e.setsTel(d.sTel);
         e.setsCorreo(d.sCorreo);

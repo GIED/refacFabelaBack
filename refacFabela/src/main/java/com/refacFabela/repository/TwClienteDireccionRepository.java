@@ -16,9 +16,11 @@ import com.refacFabela.model.TwClienteDireccion;
 public interface TwClienteDireccionRepository extends JpaRepository<TwClienteDireccion, Long> {
 
 	List<TwClienteDireccion> findBynIdCliente(Long nIdCliente, Sort sort);
+	
+	TwClienteDireccion findBynId(Long id);
 
-	@Query("SELECT d FROM TwClienteDireccion d WHERE d.nId = :id AND d.nIdCliente = :clienteId")
-	Optional<TwClienteDireccion> findOneByIdAndCliente(@Param("id") Long id, @Param("clienteId") Long clienteId);
+	@Query("SELECT d FROM TwClienteDireccion d WHERE d.nId = :id ")
+	Optional<TwClienteDireccion> findOneById(@Param("id") Long id );
 
 
 	long countBynIdCliente(Long nIdCliente);
@@ -28,7 +30,7 @@ public interface TwClienteDireccionRepository extends JpaRepository<TwClienteDir
 	int clearPredeterminada(@Param("clienteId") Long clienteId);
 
 	@Modifying
-	@Query("UPDATE TwClienteDireccion d SET d.bPredeterminada = true WHERE d.nId = :id AND d.nIdCliente = :clienteId")
-	int setPredeterminada(@Param("clienteId") Long clienteId, @Param("id") Long id);
+	@Query("UPDATE TwClienteDireccion d SET d.bPredeterminada = true WHERE d.nId = :id")
+	int setPredeterminada(@Param("id") Long id);
 
 }
