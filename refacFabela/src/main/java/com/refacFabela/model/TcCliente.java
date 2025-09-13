@@ -257,6 +257,19 @@ public class TcCliente implements Serializable {
 		this.nDatosValidados = nDatosValidados;
 	}
 
+	@Override
+	public String toString() {
+		return "TcCliente [nId=" + nId + ", d_fechaCredito=" + d_fechaCredito + ", nEstatus=" + nEstatus
+				+ ", n_idUsuarioCredito=" + n_idUsuarioCredito + ", n_limiteCredito=" + n_limiteCredito + ", sCorreo="
+				+ sCorreo + ", sDireccion=" + sDireccion + ", sRazonSocial=" + sRazonSocial + ", sRfc=" + sRfc
+				+ ", sTelefono=" + sTelefono + ", sClave=" + sClave + ", nIdUsuario=" + nIdUsuario + ", nCp=" + nCp
+				+ ", nIdRegimenFiscal=" + nIdRegimenFiscal + ", nDescuento=" + nDescuento + ", nDatosValidados="
+				+ nDatosValidados + ", nIdDatoFactura=" + nIdDatoFactura + ", tcUsuario=" + tcUsuario
+				+ ", tcRegimenFiscal=" + tcRegimenFiscal + ", tcCp=" + tcCp + "]";
+	}
+	
+	
+	
 
 	
 

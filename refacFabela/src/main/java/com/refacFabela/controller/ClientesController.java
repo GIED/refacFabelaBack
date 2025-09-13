@@ -41,15 +41,15 @@ public class ClientesController {
 
 	@PostMapping("guardarCliente")
 	public TcCliente guardarCliente(@RequestBody TcCliente tcCliente) {
-
+		System.err.println("llego a metodo guardar"+tcCliente);
 		try {
 			return clienteService.guardarCliente(tcCliente);
 
 		} catch (Exception e) {
 			logger.error("Error al guardar cliente" + e);
+			return null;
 		}
 
-		return null;
 	}
 
 	@GetMapping("consultaClienteId")

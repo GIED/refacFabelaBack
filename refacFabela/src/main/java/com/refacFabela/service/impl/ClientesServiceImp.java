@@ -32,13 +32,14 @@ public class ClientesServiceImp implements ClienteService {
 
 	@Override
 	public TcCliente guardarCliente(TcCliente tcCliente) {
-		utils util=new utils();
+		
+		System.err.println("esto es lo que voy a guardar"+tcCliente);
+		
 		if(tcCliente.getN_limiteCredito().compareTo(BigDecimal.ZERO) > 0 && tcCliente.getD_fechaCredito()==null) {
 			tcCliente.setD_fechaCredito(DateTimeUtil.obtenerHoraExactaDeMexico());			
 			
 		}
 		
-	System.err.println("esto es lo que voy a guardar"+tcCliente);
 		
 		return clientesRepository.save(tcCliente);
 	}
