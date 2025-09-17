@@ -144,7 +144,10 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 
 	@Override
 	public List<VwFacturaProductoBalance> obtenerVwFacturaProductoBalanceEstatus(Integer nEstatusAlmacen) {
-		// TODO Auto-generated method stub
+		
+		System.err.println(vwFacturaProductoBalanceRepository.obtenerFacturasEstatusAlmacen(nEstatusAlmacen));
+		
+		
 		return vwFacturaProductoBalanceRepository.obtenerFacturasEstatusAlmacen(nEstatusAlmacen);
 	}
 
