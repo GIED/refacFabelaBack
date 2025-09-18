@@ -22,7 +22,7 @@ public interface TvVentaDetalleRepository extends JpaRepository<TvVentaDetalle, 
 	public List<TvVentaDetalle> consultaVentaDetalleIdEstatusVenta( long nEstatusVenta);
 	
 	
-	@Query("Select c from TvVentaDetalle c where c.tcEstatusVenta.nId=:nEstatusVenta or (c.nTipoPago=1 and dFechaVenta>=CURRENT_DATE - 5 ) order by dFechaVenta desc ")
+	@Query("Select c from TvVentaDetalle c where c.tcEstatusVenta.nId=:nEstatusVenta or (c.nTipoPago=1 and date(dFechaVenta)>=CURRENT_DATE - 7 ) order by dFechaVenta desc ")
 	public List<TvVentaDetalle> consultaVentaDetalleIdEstatusVentaFechaCredito( long nEstatusVenta);
 	
 	@Query(value = "select de.* from tv_ventadetalle de join (\n" + 
