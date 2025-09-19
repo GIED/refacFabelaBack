@@ -9,9 +9,9 @@ public class ReporteAbonoVentaCreditoDto {
 	public Long idCliente;
 	public Long idVenta;
 	public String folioVenta;
-	public LocalDateTime fechaVenta;
-	public LocalDateTime fechaInicioCredito;
-	public LocalDateTime fechaTerminoCredito;
+	public String fechaVenta;
+	public String fechaInicioCredito;
+	public String fechaTerminoCredito;
 	public BigDecimal totalVenta;
 	public BigDecimal totalAbono;
 	public BigDecimal saldoTotal;
@@ -46,26 +46,26 @@ public class ReporteAbonoVentaCreditoDto {
 	public void setFolioVenta(String folioVenta) {
 		this.folioVenta = folioVenta;
 	}
+		
 	
 	
 	
-	
-	public LocalDateTime getFechaVenta() {
+	public String getFechaVenta() {
 		return fechaVenta;
 	}
-	public void setFechaVenta(LocalDateTime fechaVenta) {
+	public void setFechaVenta(String fechaVenta) {
 		this.fechaVenta = fechaVenta;
 	}
-	public LocalDateTime getFechaInicioCredito() {
+	public String getFechaInicioCredito() {
 		return fechaInicioCredito;
 	}
-	public void setFechaInicioCredito(LocalDateTime fechaInicioCredito) {
+	public void setFechaInicioCredito(String fechaInicioCredito) {
 		this.fechaInicioCredito = fechaInicioCredito;
 	}
-	public LocalDateTime getFechaTerminoCredito() {
+	public String getFechaTerminoCredito() {
 		return fechaTerminoCredito;
 	}
-	public void setFechaTerminoCredito(LocalDateTime fechaTerminoCredito) {
+	public void setFechaTerminoCredito(String fechaTerminoCredito) {
 		this.fechaTerminoCredito = fechaTerminoCredito;
 	}
 	public BigDecimal getTotalVenta() {

@@ -583,7 +583,7 @@ public class ReporteServiceImpl implements ReporteService {
 			params.put("rfcEmpresa", reporteVenta.getRfcEmpresa());
 			params.put("nombreCliente", cliente.getsRazonSocial());
 			params.put("rfcCliente", cliente.getsRfc());		
-			params.put("fecha", DateTimeUtil.convertirALocalDateTimeEnMexicoADate(DateTimeUtil.obtenerHoraExactaDeMexico()) );
+			params.put("fecha", DateTimeUtil.formatearFechaHoraMx((DateTimeUtil.obtenerHoraExactaDeMexico()) ));
 			//params.put("subTotal", reporteVenta.getSubTotal());
 			//params.put("ivaTotal", reporteVenta.getIvaTotal());
 			params.put("total", reporteVenta.getTotal());

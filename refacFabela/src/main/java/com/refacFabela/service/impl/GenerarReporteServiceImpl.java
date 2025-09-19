@@ -715,9 +715,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				ventaAbomo.setIdCliente(listaVentaDetalle.getnIdCliente());
 				ventaAbomo.setIdVenta(listaVentaDetalle.getnId());
 				ventaAbomo.setFolioVenta(listaVentaDetalle.getsFolioVenta());
-				ventaAbomo.setFechaVenta(listaVentaDetalle.getdFechaVenta());
-				ventaAbomo.setFechaInicioCredito(listaVentaDetalle.getdFechaInicioCredito());
-				ventaAbomo.setFechaTerminoCredito(listaVentaDetalle.getdFechaTerminoCredito());
+				ventaAbomo.setFechaVenta(DateTimeUtil.formatearFechaHoraMx(listaVentaDetalle.getdFechaVenta()));
+				ventaAbomo.setFechaInicioCredito(DateTimeUtil.formatearFechaHoraMx(listaVentaDetalle.getdFechaInicioCredito()));
+				ventaAbomo.setFechaTerminoCredito(DateTimeUtil.formatearFechaHoraMx(listaVentaDetalle.getdFechaTerminoCredito()));
 				ventaAbomo.setTotalVenta(DateTimeUtil.truncarDosDecimales(listaVentaDetalle.getnTotalVenta()));
 				ventaAbomo.setTotalAbono(DateTimeUtil.truncarDosDecimales(listaVentaDetalle.getnTotalAbono()));
 				ventaAbomo.setSaldoTotal(DateTimeUtil.truncarDosDecimales(listaVentaDetalle.getnSaldoTotal()));
