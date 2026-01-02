@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.refacFabela.dto.CalculaPrecioDto;
+import com.refacFabela.dto.HistoriaIngresoProductoViewDto;
 import com.refacFabela.dto.ProductoDescuentoDto;
 import com.refacFabela.dto.VentaProductoCancelaDto;
 import com.refacFabela.dto.VentaProductoDto;
@@ -50,6 +51,7 @@ import com.refacFabela.repository.CatalogoBodegasRepository;
 import com.refacFabela.repository.CatalogoNivelesRepository;
 import com.refacFabela.repository.CatalogosRepository;
 import com.refacFabela.repository.ClientesRepository;
+import com.refacFabela.repository.HistoriaIngresoProductoView;
 import com.refacFabela.repository.HistoriaPrecioProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ProductoBodegasIdRepository;
@@ -1022,6 +1024,20 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	public TcProducto getProductoByNoParteAndIdMarca(String noParte, Long nIdMarca) {
 		
 		return productosRepository.findBysNoParteAndIdMarca(noParte, nIdMarca);
+	}
+
+	@Override
+	public List<HistoriaIngresoProductoViewDto> obteberHistoriaIngresoProductoDto(Long n_id) {		
+		
+	    List<HistoriaIngresoProductoView> rows = twHistoriaIngresoProductoRepository.obtenerHistoriaIngresoProducto(n_id);
+	    if (rows == null || rows.isEmpty()) {
+	        return java.util.Collections.emptyList();
+	    }
+
+	    return rows.stream()
+	            .map(HistoriaIngresoProductoViewDto::new)
+	            .collect(java.util.stream.Collectors.toList());
+	   	
 	}
 
 	

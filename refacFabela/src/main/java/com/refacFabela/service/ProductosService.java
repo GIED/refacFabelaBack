@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.refacFabela.dto.AbonosDto;
 import com.refacFabela.dto.CalculaPrecioDto;
+import com.refacFabela.dto.HistoriaIngresoProductoViewDto;
 import com.refacFabela.dto.ProductoDescuentoDto;
 import com.refacFabela.dto.TvStockProductoDto;
 import com.refacFabela.dto.TvVentaDetalleDto;
@@ -55,6 +56,9 @@ public interface ProductosService {
 	public List<TcHistoriaPrecioProducto> historiaPrecioProducto(Long n_id);
 
 	public List<TwHistoriaIngresoProducto> historiaIngresoProducto(Long n_id);
+	
+	public List<HistoriaIngresoProductoViewDto> obteberHistoriaIngresoProductoDto(Long n_id);
+
 
 	public List<TwProductobodega> consultaProductoBodega(Long id);
 	

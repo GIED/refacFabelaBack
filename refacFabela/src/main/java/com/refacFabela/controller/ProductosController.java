@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.refacFabela.dto.HistoriaIngresoProductoViewDto;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TvStockProducto;
@@ -156,6 +157,18 @@ public class ProductosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener Historia ingreso Producto" + e);
+		}
+		return null;
+	}
+	
+	@GetMapping("/obtenerHistoriaIngresoDelProducto")
+	public List<HistoriaIngresoProductoViewDto> obtenerHistoriaIngresoDelProducto(@RequestParam() Long n_id) {
+
+		try {
+			return productosService.obteberHistoriaIngresoProductoDto(n_id);
+		} catch (Exception e) {
+
+			logger.error("Error al obtener Historia ingreso Producto dto" + e);
 		}
 		return null;
 	}
