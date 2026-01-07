@@ -1040,6 +1040,54 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	   	
 	}
 
+	@Override
+	public java.util.Map<String, Object> descargarImagenesProductosCTP() {
+		java.util.Map<String, Object> response = new java.util.HashMap<>();
+		
+		try {
+			// Consultar productos CTP sin imagen (n_estatus=1, s_marca='CTP', s_ruta_imagen IS NULL)
+			List<TcProducto> productosSinImagen = productosRepository.findProductosCTPSinImagen();
+			
+			if (productosSinImagen == null || productosSinImagen.isEmpty()) {
+				response.put("mensaje", "No se encontraron productos CTP sin imagen");
+				response.put("total", 0);
+				response.put("exitosos", 0);
+				response.put("fallidos", 0);
+				return response;
+			}
+			
+			// Procesar las imágenes
+			java.util.Map<String, Integer> resultado = archivoHelper.procesarImagenesProductosCTP(productosSinImagen, RUTA_IMAGENES);
+			
+			// Actualizar la base de datos con la ruta de la imagen para los productos exitosos
+			int actualizados = 0;
+			for (TcProducto producto : productosSinImagen) {
+				String rutaImagen = RUTA_IMAGENES + producto.getsNoParte() + ".jpg";
+				java.io.File archivo = new java.io.File(rutaImagen);
+				
+				// Verificar si la imagen se descargó correctamente
+				if (archivo.exists()) {
+					producto.setsRutaImagen(rutaImagen);
+					productosRepository.save(producto);
+					actualizados++;
+				}
+			}
+			
+			response.put("mensaje", "Proceso completado exitosamente");
+			response.put("total", resultado.get("total"));
+			response.put("exitosos", resultado.get("exitosos"));
+			response.put("fallidos", resultado.get("fallidos"));
+			response.put("actualizados_bd", actualizados);
+			
+		} catch (Exception e) {
+			response.put("error", true);
+			response.put("mensaje", "Error al procesar imágenes: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return response;
+	}
+
 	
 	
 

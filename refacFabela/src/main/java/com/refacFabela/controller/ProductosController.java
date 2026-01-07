@@ -335,6 +335,27 @@ public class ProductosController {
 		return null;
 	}
 	
+	/**
+	 * Endpoint para descargar imágenes de productos CTP sin imagen.
+	 * Consulta productos con n_estatus=1, s_marca='CTP' y s_ruta_imagen NULL,
+	 * descarga las imágenes desde la URL por defecto de CTP y actualiza la BD.
+	 * 
+	 * @return Map con estadísticas del proceso (total, exitosos, fallidos, actualizados_bd)
+	 */
+	@PostMapping("/descargarImagenesProductosCTP")
+	public ResponseEntity<Map<String, Object>> descargarImagenesProductosCTP() {
+		try {
+			Map<String, Object> resultado = productosService.descargarImagenesProductosCTP();
+			return ResponseEntity.ok(resultado);
+		} catch (Exception e) {
+			logger.error("Error al descargar imágenes de productos CTP: " + e.getMessage(), e);
+			Map<String, Object> errorResponse = new HashMap<>();
+			errorResponse.put("error", true);
+			errorResponse.put("mensaje", "Error al procesar la solicitud: " + e.getMessage());
+			return ResponseEntity.status(500).body(errorResponse);
+		}
+	}
+	
 	
 	
 

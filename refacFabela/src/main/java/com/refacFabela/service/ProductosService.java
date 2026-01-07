@@ -2,6 +2,7 @@ package com.refacFabela.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 
@@ -136,5 +137,7 @@ public interface ProductosService {
 	public String obtenerImagenBase64(String ruta);
 
 	public TcProducto getProductoByNoParteAndIdMarca(String noParte, Long nIdMarca);
+	
+	public Map<String, Object> descargarImagenesProductosCTP();
 
 }

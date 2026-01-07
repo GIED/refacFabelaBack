@@ -12,6 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import org.springframework.web.multipart.MultipartFile;
 import com.refacFabela.model.TcProducto;
@@ -177,6 +180,57 @@ public String obtenerImagenBase64(String rutaCompleta) {
         System.err.println("❌ Error al convertir imagen a base64: " + e.getMessage());
         return null;
     }
+}
+
+/**
+ * Procesa múltiples productos CTP descargando sus imágenes desde la URL por defecto de CTP.
+ * Este método itera sobre una lista de productos y descarga la imagen de cada uno.
+ * 
+ * @param productos Lista de productos TcProducto a procesar
+ * @param rutaBase Ruta base donde se guardarán las imágenes
+ * @return Map con estadísticas del proceso: exitosos, fallidos y total procesados
+ */
+public Map<String, Integer> procesarImagenesProductosCTP(List<com.refacFabela.model.TcProducto> productos, String rutaBase) {
+    Map<String, Integer> resultado = new HashMap<>();
+    int exitosos = 0;
+    int fallidos = 0;
+    int total = productos.size();
+    
+    System.err.println("🚀 Iniciando procesamiento de " + total + " productos CTP");
+    
+    for (com.refacFabela.model.TcProducto producto : productos) {
+        try {
+            // Construir la URL por defecto de CTP
+            String urlCTP = "https://www.ctpsales.costex.com:11443/Webpics/220x220/" + producto.getsNoParte() + ".jpg";
+            String nombreArchivo = producto.getsNoParte() + ".jpg";
+            String rutaFinalCompleta = Paths.get(rutaBase, nombreArchivo).toString();
+            
+            System.err.println("📥 Procesando: " + producto.getsNoParte() + " - " + producto.getsProducto());
+            
+            // Intentar descargar la imagen
+            boolean descargado = guardarImagenDesdeUrl(urlCTP, rutaFinalCompleta);
+            
+            if (descargado) {
+                exitosos++;
+                System.err.println("✅ Imagen descargada exitosamente para: " + producto.getsNoParte());
+            } else {
+                fallidos++;
+                System.err.println("❌ No se pudo descargar la imagen para: " + producto.getsNoParte());
+            }
+            
+        } catch (Exception e) {
+            fallidos++;
+            System.err.println("❌ Error al procesar producto " + producto.getsNoParte() + ": " + e.getMessage());
+        }
+    }
+    
+    resultado.put("exitosos", exitosos);
+    resultado.put("fallidos", fallidos);
+    resultado.put("total", total);
+    
+    System.err.println("✨ Proceso completado - Exitosos: " + exitosos + " | Fallidos: " + fallidos + " | Total: " + total);
+    
+    return resultado;
 }
 
 	

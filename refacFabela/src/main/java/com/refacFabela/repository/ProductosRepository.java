@@ -34,6 +34,8 @@ public interface ProductosRepository extends JpaRepository<TcProducto, Long> {
 	@Query("Select c from TcProducto c where c.sNoParte=:noParte AND (c.nIdMarca = :nIdMarca OR c.nIdMarca IS NULL)")
 	public TcProducto findBysNoParteAndIdMarca(String noParte, Long nIdMarca);
 	
+	@Query("Select c from TcProducto c where c.nEstatus = 1 AND c.sMarca = 'CTP' AND (c.sRutaImagen IS NULL OR c.sRutaImagen = '') ")
+	public List<TcProducto> findProductosCTPSinImagen();
 	
 	
 
