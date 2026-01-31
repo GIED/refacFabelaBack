@@ -2,8 +2,10 @@ package com.refacFabela.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.refacFabela.dto.ProductoDto;
@@ -37,6 +39,8 @@ public interface ProductosRepository extends JpaRepository<TcProducto, Long> {
 	@Query("Select c from TcProducto c where c.nEstatus = 1 AND c.sMarca = 'CTP' AND (c.sRutaImagen IS NULL OR c.sRutaImagen = '') ")
 	public List<TcProducto> findProductosCTPSinImagen();
 	
+	@Query(value = "SELECT * FROM tc_productos WHERE n_id_marca = 53 AND (s_ruta_imagen IS NULL OR s_ruta_imagen LIKE '/%')", nativeQuery = true)
+	public List<TcProducto> findProductosCtpFaltantes(Pageable pageable);
 	
 
 }

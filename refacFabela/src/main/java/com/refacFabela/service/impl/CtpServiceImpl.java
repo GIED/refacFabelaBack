@@ -1,13 +1,16 @@
 package com.refacFabela.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.PageRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,14 +27,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.refacFabela.enums.CtpConstants;
 import com.refacFabela.model.Location;
 import com.refacFabela.model.Part;
+import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.WsError;
+import com.refacFabela.repository.ProductosRepository;
 import com.refacFabela.service.CtpService;
+import com.refacFabela.utils.subirArchivo;
 
 @Service
 public class CtpServiceImpl implements CtpService {
 
     private static final Logger logger = LoggerFactory.getLogger(CtpServiceImpl.class);
     private static final String URL = "https://www.ctpsales.costex.com:11443/WebServices/costex/partService/partController.php";
+    
+    @Autowired
+    private ProductosRepository productosRepository;
+    
+    private final subirArchivo archivoHelper = new subirArchivo();
+    private static final String RUTA_IMAGENES = "/opt/imgprod/";
 
     
     @Override
@@ -77,6 +89,13 @@ public class CtpServiceImpl implements CtpService {
             if (root.hasNonNull("ErrorCode")) {
                 WsError err = mapper.treeToValue(root, WsError.class);
                 String code = err.getErrorCode();
+                
+                // Si el error es PI004 (Parte no encontrada), devolvemos null para que el proceso continúe
+                if ("PI004".equals(code)) {
+                    logger.warn("Parte {} no encontrada en Costex (PI004)", numeroParte);
+                    return null;
+                }
+
                 String msg  = err.getErrorMessage();
                 logger.error("WS Costex devolvió error {} - {}. Raw: {}", code, msg, body);
                 throw new RuntimeException("WS Costex error " + code + (msg != null ? (": " + msg) : ""));
@@ -123,6 +142,129 @@ public class CtpServiceImpl implements CtpService {
             logger.error("Error al procesar la respuesta del WS de Costex", e);
             throw new RuntimeException("Error al procesar la respuesta del WS de Costex.", e);
         }
+    }
+
+    @Override
+    public List<Part> consultarCostexFaltantes(int limit) {
+        List<Part> partes = new ArrayList<>();
+        
+        try {
+            List<TcProducto> productos = productosRepository.findProductosCtpFaltantes(PageRequest.of(0, limit));
+            
+            for (TcProducto p : productos) {
+                try {
+                    // Usamos el metodo existente consultarParte
+                    if (p.getsNoParte() != null) {
+                        Part part = consultarParte(p.getsNoParte(), "1");
+                        if (part != null) {
+                            // Actualizar Peso (Kgs)
+                            if (part.getDblWeigthKgs() != null && !part.getDblWeigthKgs().isEmpty()) {
+                                try {
+                                    BigDecimal peso = new BigDecimal(part.getDblWeigthKgs());
+                                    boolean tienePesoSistema = p.getnPeso() != null && p.getnPeso().compareTo(BigDecimal.ZERO) > 0;
+                                    boolean wsMayorCero = peso.compareTo(BigDecimal.ZERO) > 0;
+                                    
+                                    if (wsMayorCero || (!tienePesoSistema && peso.compareTo(BigDecimal.ZERO) >= 0)) {
+                                        p.setnPeso(peso);
+                                    }
+                                } catch(NumberFormatException e) {
+                                  logger.warn("Error al convertir peso para {}", p.getsNoParte());
+                                }
+                            }
+                            
+                            // Actualizar Dimensiones (Pulgadas -> CM) * 2.54
+                            BigDecimal factorConversion = new BigDecimal("2.54");
+                            
+                            if (part.getDblLengthIn() != null && !part.getDblLengthIn().isEmpty()) {
+                                try {
+                                    BigDecimal largo = new BigDecimal(part.getDblLengthIn());
+                                    boolean tieneLargoSistema = p.getnLargo() != null && p.getnLargo().compareTo(BigDecimal.ZERO) > 0;
+                                    boolean wsMayorCero = largo.compareTo(BigDecimal.ZERO) > 0;
+
+                                    if (wsMayorCero || (!tieneLargoSistema && largo.compareTo(BigDecimal.ZERO) >= 0)) {
+                                        p.setnLargo(largo.multiply(factorConversion));
+                                    }
+                                } catch(NumberFormatException e) {
+                                  logger.warn("Error al convertir largo para {}", p.getsNoParte());
+                                }
+                            }
+                            
+                            if (part.getDblWidthIn() != null && !part.getDblWidthIn().isEmpty()) {
+                                try {
+                                    BigDecimal ancho = new BigDecimal(part.getDblWidthIn());
+                                    boolean tieneAnchoSistema = p.getnAncho() != null && p.getnAncho().compareTo(BigDecimal.ZERO) > 0;
+                                    boolean wsMayorCero = ancho.compareTo(BigDecimal.ZERO) > 0;
+
+                                    if (wsMayorCero || (!tieneAnchoSistema && ancho.compareTo(BigDecimal.ZERO) >= 0)) {
+                                        p.setnAncho(ancho.multiply(factorConversion));
+                                    }
+                                } catch(NumberFormatException e) {
+                                  logger.warn("Error al convertir ancho para {}", p.getsNoParte());
+                                }
+                            }
+                            
+                            if (part.getDblHeightIn() != null && !part.getDblHeightIn().isEmpty()) {
+                                try {
+                                    BigDecimal alto = new BigDecimal(part.getDblHeightIn());
+                                    boolean tieneAltoSistema = p.getnAlto() != null && p.getnAlto().compareTo(BigDecimal.ZERO) > 0;
+                                    boolean wsMayorCero = alto.compareTo(BigDecimal.ZERO) > 0;
+
+                                    if (wsMayorCero || (!tieneAltoSistema && alto.compareTo(BigDecimal.ZERO) >= 0)) {
+                                        p.setnAlto(alto.multiply(factorConversion));
+                                    }
+                                } catch(NumberFormatException e) {
+                                  logger.warn("Error al convertir alto para {}", p.getsNoParte());
+                                }
+                            }
+                                                        // Calcular y actualizar Volumen
+                            if (p.getnLargo() != null && p.getnAncho() != null && p.getnAlto() != null) {
+								BigDecimal volumen = p.getnLargo().multiply(p.getnAncho()).multiply(p.getnAlto());
+								p.setnVolumen(volumen);
+							}
+                                                        // Actualizar Imagen si no tiene
+                            if (p.getsRutaImagen() == null || p.getsRutaImagen().isEmpty() || p.getsRutaImagen().equals("CONFRONTADO")) {
+                                try {
+                                   boolean imagenGuardada = archivoHelper.procesarImagenProducto(p, RUTA_IMAGENES);
+                                   if (imagenGuardada) {
+                                       String nombreArchivo = p.getsNoParte() + ".jpg";
+                                       String rutaFinal = RUTA_IMAGENES + nombreArchivo;
+                                       p.setsRutaImagen(rutaFinal);
+                                   } else {
+                                	   // Si no se encuentra imagen, marcar como CONFRONTADO
+                                	   p.setsRutaImagen("CONFRONTADO");
+                                   }
+                                } catch (Exception e) {
+                                    logger.error("Error al procesar imagen para {}: {}", p.getsNoParte(), e.getMessage());
+                                    p.setsRutaImagen("CONFRONTADO");
+                                }
+                            }
+                            
+                            // Guardar cambios
+                            productosRepository.save(p);
+                            if (part.getStrPartNumber() == null || part.getStrPartNumber().isEmpty()) {
+                                part.setStrPartNumber(p.getsNoParte());
+                            }
+                            partes.add(part);
+                        } else {
+                        	// Parte no encontrada en Costex
+                        	p.setsRutaImagen("NO ENCONTRADO");
+                        	productosRepository.save(p);
+                        	
+                        	Part notFoundPart = new Part();
+                            notFoundPart.setStrPartNumber(p.getsNoParte());
+                            notFoundPart.setStrDescrip1("NO ENCONTRADO");
+                            partes.add(notFoundPart);
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.error("Error al consultar Costex para parte: {} Error: {}", p.getsNoParte(), e.getMessage());
+                }
+            }
+            
+        } catch (Exception e) {
+            logger.error("Error al obtener lista de productos faltantes", e);
+        }
+        return partes;
     }
 
 }
