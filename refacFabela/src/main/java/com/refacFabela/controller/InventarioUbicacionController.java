@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.dto.ActualizarConteoRequestDto;
+import com.refacFabela.dto.AjustarProductoRequestDto;
 import com.refacFabela.dto.AutorizarInventarioRequestDto;
 import com.refacFabela.dto.IniciarInventarioRequestDto;
 import com.refacFabela.dto.InventarioUbicacionDetalleDto;
@@ -217,6 +218,37 @@ public class InventarioUbicacionController {
     }
 
     // ========== ENDPOINTS PARA ADMIN ==========
+
+    /**
+     * POST /inventarios-ubicacion/{id}/detalle/{productoId}/ajustar
+     * Ajustar producto individual con diferencia (rol ADMIN).
+     * Actualiza tw_productobodega para ese producto específico.
+     */
+    @PostMapping("/{id}/detalle/{productoId}/ajustar")
+    public ResponseEntity<?> ajustarProducto(
+            @PathVariable Long id,
+            @PathVariable Long productoId,
+            @RequestBody AjustarProductoRequestDto request) {
+        try {
+            if (!tieneRol(RolNombre.ROLE_ADMIN)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new Mensaje("Solo el rol ADMIN puede ajustar productos"));
+            }
+
+            UsuarioPrincipal usuario = getUsuarioActual();
+            InventarioUbicacionDetalleDto detalle = inventarioService.ajustarProducto(
+                id, productoId, request.getsMotivoAjuste(), usuario.getnId()
+            );
+
+            return ResponseEntity.ok(detalle);
+
+        } catch (Exception e) {
+            logger.error("Error al ajustar producto " + productoId + 
+                        " del inventario " + id + ": " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new Mensaje("Error al ajustar producto: " + e.getMessage()));
+        }
+    }
 
     /**
      * POST /inventarios-ubicacion/{id}/autorizar

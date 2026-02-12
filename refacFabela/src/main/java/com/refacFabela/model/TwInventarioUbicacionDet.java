@@ -50,6 +50,19 @@ public class TwInventarioUbicacionDet implements Serializable {
     @Column(name = "s_observacion", length = 300)
     private String sObservacion;
 
+    // Campos de ajuste individual (agregados para flujo de autorización)
+    @Column(name = "b_ajustado")
+    private Boolean bAjustado;
+
+    @Column(name = "s_motivo_ajuste", length = 500)
+    private String sMotivoAjuste;
+
+    @Column(name = "d_fecha_ajuste")
+    private LocalDateTime dFechaAjuste;
+
+    @Column(name = "n_id_usuario_ajuste")
+    private Integer nIdUsuarioAjuste;
+
     // Relaciones ManyToOne
     @ManyToOne
     @JoinColumn(name = "n_idinventario", insertable = false, updatable = false)
@@ -62,6 +75,10 @@ public class TwInventarioUbicacionDet implements Serializable {
     @ManyToOne
     @JoinColumn(name = "n_idusuario_captura", insertable = false, updatable = false)
     private TcUsuario tcUsuarioCaptura;
+
+    @ManyToOne
+    @JoinColumn(name = "n_id_usuario_ajuste", insertable = false, updatable = false)
+    private TcUsuario tcUsuarioAjuste;
 
     public TwInventarioUbicacionDet() {
     }
@@ -177,5 +194,45 @@ public class TwInventarioUbicacionDet implements Serializable {
 
     public void setTcUsuarioCaptura(TcUsuario tcUsuarioCaptura) {
         this.tcUsuarioCaptura = tcUsuarioCaptura;
+    }
+
+    public Boolean getbAjustado() {
+        return bAjustado;
+    }
+
+    public void setbAjustado(Boolean bAjustado) {
+        this.bAjustado = bAjustado;
+    }
+
+    public String getsMotivoAjuste() {
+        return sMotivoAjuste;
+    }
+
+    public void setsMotivoAjuste(String sMotivoAjuste) {
+        this.sMotivoAjuste = sMotivoAjuste;
+    }
+
+    public LocalDateTime getdFechaAjuste() {
+        return dFechaAjuste;
+    }
+
+    public void setdFechaAjuste(LocalDateTime dFechaAjuste) {
+        this.dFechaAjuste = dFechaAjuste;
+    }
+
+    public Integer getnIdUsuarioAjuste() {
+        return nIdUsuarioAjuste;
+    }
+
+    public void setnIdUsuarioAjuste(Integer nIdUsuarioAjuste) {
+        this.nIdUsuarioAjuste = nIdUsuarioAjuste;
+    }
+
+    public TcUsuario getTcUsuarioAjuste() {
+        return tcUsuarioAjuste;
+    }
+
+    public void setTcUsuarioAjuste(TcUsuario tcUsuarioAjuste) {
+        this.tcUsuarioAjuste = tcUsuarioAjuste;
     }
 }

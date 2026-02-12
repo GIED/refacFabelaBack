@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.refacFabela.dto.ActualizarConteoRequestDto;
+import com.refacFabela.dto.AjustarProductoRequestDto;
 import com.refacFabela.dto.AutorizarInventarioRequestDto;
 import com.refacFabela.dto.IniciarInventarioRequestDto;
 import com.refacFabela.dto.InventarioUbicacionDetalleDto;
@@ -342,6 +343,72 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
     }
 
     @Override
+    public InventarioUbicacionDetalleDto ajustarProducto(Long inventarioId, Long productoId,
+                                                        String motivoAjuste, Long usuarioId) throws Exception {
+        TwInventarioUbicacion inventario = obtenerInventarioPorId(inventarioId);
+
+        // Validar que el inventario esté en estado EN_REVISION
+        if (!inventario.getnEstatus().equals(ESTATUS_EN_REVISION)) {
+            throw new Exception("Solo se pueden ajustar productos de inventarios en estatus EN_REVISION");
+        }
+
+        // Buscar el detalle del producto
+        TwInventarioUbicacionDet detalle = detalleRepository.findByInventarioAndProducto(inventarioId, productoId)
+            .orElseThrow(() -> new Exception("Producto no encontrado en el inventario"));
+
+        // Validar que el producto tenga diferencia
+        Integer diferencia = 0;
+        if (detalle.getnCantidadContada() != null && detalle.getnCantidadTeoricaRef() != null) {
+            diferencia = detalle.getnCantidadContada() - detalle.getnCantidadTeoricaRef();
+        }
+
+        if (diferencia == 0) {
+            throw new Exception("El producto no tiene diferencia, no requiere ajuste");
+        }
+
+        // Validar que no esté ya ajustado
+        if (Boolean.TRUE.equals(detalle.getbAjustado())) {
+            throw new Exception("El producto ya fue ajustado previamente");
+        }
+
+        // Actualizar tw_productobodega con la cantidad contada
+        List<TwProductobodega> productos = productoBodegaRepository.obtenerProductosPorUbicacion(
+            inventario.getnIdBodega(),
+            inventario.getnIdAnaquel(),
+            inventario.getnIdNivel()
+        );
+
+        Optional<TwProductobodega> pbOpt = productos.stream()
+            .filter(pb -> pb.getnIdProducto().equals(productoId))
+            .findFirst();
+
+        if (pbOpt.isPresent()) {
+            TwProductobodega pb = pbOpt.get();
+            pb.setnCantidad(detalle.getnCantidadContada());
+            productoBodegaRepository.save(pb);
+        } else {
+            // Si no existe, crear el registro
+            TwProductobodega nuevoPb = new TwProductobodega();
+            nuevoPb.setnIdBodega(inventario.getnIdBodega());
+            nuevoPb.setnIdAnaquel(inventario.getnIdAnaquel());
+            nuevoPb.setnIdNivel(inventario.getnIdNivel());
+            nuevoPb.setnIdProducto(productoId);
+            nuevoPb.setnCantidad(detalle.getnCantidadContada());
+            nuevoPb.setnEstatus(1L); // Activo
+            productoBodegaRepository.save(nuevoPb);
+        }
+
+        // Marcar el detalle como ajustado
+        detalle.setbAjustado(true);
+        detalle.setsMotivoAjuste(motivoAjuste);
+        detalle.setdFechaAjuste(LocalDateTime.now());
+        detalle.setnIdUsuarioAjuste(usuarioId.intValue()); // Convertir Long a Integer
+        detalleRepository.save(detalle);
+
+        return convertirDetalleADto(detalle);
+    }
+
+    @Override
     public InventarioUbicacionDto autorizarInventario(Long inventarioId, AutorizarInventarioRequestDto request,
                                                      Long usuarioId) throws Exception {
         TwInventarioUbicacion inventario = obtenerInventarioPorId(inventarioId);
@@ -528,6 +595,17 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
         // Calcular diferencia
         if (detalle.getnCantidadContada() != null && detalle.getnCantidadTeoricaRef() != null) {
             dto.setnDiferencia(detalle.getnCantidadContada() - detalle.getnCantidadTeoricaRef());
+        }
+
+        // Campos de ajuste individual
+        dto.setbAjustado(detalle.getbAjustado());
+        dto.setsMotivoAjuste(detalle.getsMotivoAjuste());
+        dto.setdFechaAjuste(detalle.getdFechaAjuste());
+        dto.setnIdUsuarioAjuste(detalle.getnIdUsuarioAjuste());
+        
+        // Usuario que ajustó
+        if (detalle.getTcUsuarioAjuste() != null) {
+            dto.setsNombreUsuarioAjuste(detalle.getTcUsuarioAjuste().getsNombreUsuario());
         }
 
         return dto;

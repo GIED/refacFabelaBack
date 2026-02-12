@@ -100,6 +100,19 @@ public interface InventarioUbicacionService {
     InventarioUbicacionDto cerrarInventario(Long inventarioId, Long usuarioId) throws Exception;
 
     /**
+     * Ajustar producto individual (rol ADMIN).
+     * Actualiza tw_productobodega para un producto específico con diferencia.
+     * @param inventarioId ID del inventario
+     * @param productoId ID del producto a ajustar
+     * @param motivoAjuste Motivo del ajuste
+     * @param usuarioId ID del usuario (admin) que ajusta
+     * @return Detalle actualizado con campos de ajuste poblados
+     * @throws Exception Si el inventario no está EN_REVISION o el producto no tiene diferencia
+     */
+    InventarioUbicacionDetalleDto ajustarProducto(Long inventarioId, Long productoId, 
+                                                  String motivoAjuste, Long usuarioId) throws Exception;
+
+    /**
      * Autorizar inventario (rol ADMIN).
      * @param inventarioId ID del inventario
      * @param request Motivo de autorización

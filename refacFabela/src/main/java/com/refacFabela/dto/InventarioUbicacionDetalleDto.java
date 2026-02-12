@@ -29,6 +29,13 @@ public class InventarioUbicacionDetalleDto implements Serializable {
     // Campos calculados
     private Integer nDiferencia; // contada - ref
 
+    // Campos de ajuste individual (para autorización)
+    private Boolean bAjustado;
+    private String sMotivoAjuste;
+    private LocalDateTime dFechaAjuste;
+    private Integer nIdUsuarioAjuste;
+    private String sNombreUsuarioAjuste;
+
     public InventarioUbicacionDetalleDto() {
     }
 
@@ -167,5 +174,45 @@ public class InventarioUbicacionDetalleDto implements Serializable {
 
     public void setnDiferencia(Integer nDiferencia) {
         this.nDiferencia = nDiferencia;
+    }
+
+    public Boolean getbAjustado() {
+        return bAjustado;
+    }
+
+    public void setbAjustado(Boolean bAjustado) {
+        this.bAjustado = bAjustado;
+    }
+
+    public String getsMotivoAjuste() {
+        return sMotivoAjuste;
+    }
+
+    public void setsMotivoAjuste(String sMotivoAjuste) {
+        this.sMotivoAjuste = sMotivoAjuste;
+    }
+
+    public LocalDateTime getdFechaAjuste() {
+        return dFechaAjuste;
+    }
+
+    public void setdFechaAjuste(LocalDateTime dFechaAjuste) {
+        this.dFechaAjuste = dFechaAjuste;
+    }
+
+    public Integer getnIdUsuarioAjuste() {
+        return nIdUsuarioAjuste;
+    }
+
+    public void setnIdUsuarioAjuste(Integer nIdUsuarioAjuste) {
+        this.nIdUsuarioAjuste = nIdUsuarioAjuste;
+    }
+
+    public String getsNombreUsuarioAjuste() {
+        return sNombreUsuarioAjuste;
+    }
+
+    public void setsNombreUsuarioAjuste(String sNombreUsuarioAjuste) {
+        this.sNombreUsuarioAjuste = sNombreUsuarioAjuste;
     }
 }
