@@ -61,4 +61,15 @@ public interface TwInventarioUbicacionDetRepository extends JpaRepository<TwInve
     @Modifying
     @Query("DELETE FROM TwInventarioUbicacionDet d WHERE d.nIdInventario = :nIdInventario")
     void deleteByInventarioId(@Param("nIdInventario") Long nIdInventario);
+
+    /**
+     * Buscar líneas de inventario donde aparece un producto específico.
+     * Devuelve los detalles con su inventario asociado para obtener la ubicación.
+     */
+    @Query("SELECT d FROM TwInventarioUbicacionDet d " +
+           "JOIN FETCH d.twInventarioUbicacion i " +
+           "JOIN FETCH d.tcProducto p " +
+           "WHERE d.nIdProducto = :nIdProducto " +
+           "ORDER BY i.dInicio DESC")
+    List<TwInventarioUbicacionDet> findByProductoId(@Param("nIdProducto") Long nIdProducto);
 }

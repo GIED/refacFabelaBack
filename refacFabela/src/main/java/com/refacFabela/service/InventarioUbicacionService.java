@@ -138,4 +138,13 @@ public interface InventarioUbicacionService {
      * @return Lista de eventos históricos
      */
     List<TwInventarioUbicacionDetHist> obtenerHistorial(Long inventarioId);
+    List<InventarioUbicacionDto> consultarInventariosPorUbicacion(Long nIdBodega, Long nIdAnaquel, Long nIdNivel);
+
+    /**
+     * Consultar inventarios donde aparece un producto específico.
+     * Devuelve los inventarios que contienen el producto con su detalle filtrado.
+     * @param nIdProducto ID del producto a buscar
+     * @return Lista de inventarios que contienen el producto
+     */
+    List<InventarioUbicacionDto> consultarInventariosPorProducto(Long nIdProducto);
 }

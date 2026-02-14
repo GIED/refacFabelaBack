@@ -3,6 +3,7 @@ package com.refacFabela.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -630,5 +631,69 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
             case 3: return "RECONTAR";
             default: return "DESCONOCIDO";
         }
+    }
+
+    @Override
+    public List<InventarioUbicacionDto> consultarInventariosPorUbicacion(Long nIdBodega, Long nIdAnaquel, Long nIdNivel) {
+        List<TwInventarioUbicacion> inventarios;
+
+        if (nIdBodega != null && nIdAnaquel != null && nIdNivel != null) {
+            // Búsqueda por ubicación completa
+            inventarios = inventarioRepository.findByUbicacion(nIdBodega, nIdAnaquel, nIdNivel);
+        } else if (nIdBodega != null && nIdAnaquel != null) {
+            // Búsqueda por bodega + anaquel
+            inventarios = inventarioRepository.findByBodegaAndAnaquel(nIdBodega, nIdAnaquel);
+        } else if (nIdBodega != null) {
+            // Búsqueda solo por bodega
+            inventarios = inventarioRepository.findByBodega(nIdBodega);
+        } else {
+            // Sin filtros: todos los inventarios
+            inventarios = inventarioRepository.findAllOrderByInicio();
+        }
+
+        return inventarios.stream()
+            .map(this::convertirADto)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InventarioUbicacionDto> consultarInventariosPorProducto(Long nIdProducto) {
+        // Buscar todas las líneas de detalle donde aparece el producto
+        List<TwInventarioUbicacionDet> detalles = detalleRepository.findByProductoId(nIdProducto);
+
+        if (detalles.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // Agrupar por inventario para no repetir
+        Map<Long, List<TwInventarioUbicacionDet>> detallesPorInventario = detalles.stream()
+            .collect(Collectors.groupingBy(TwInventarioUbicacionDet::getnIdInventario));
+
+        List<InventarioUbicacionDto> resultado = new ArrayList<>();
+
+        for (Map.Entry<Long, List<TwInventarioUbicacionDet>> entry : detallesPorInventario.entrySet()) {
+            TwInventarioUbicacionDet primerDetalle = entry.getValue().get(0);
+            TwInventarioUbicacion inventario = primerDetalle.getTwInventarioUbicacion();
+
+            if (inventario != null) {
+                InventarioUbicacionDto dto = convertirADto(inventario);
+                // Filtrar el detalle para solo mostrar el producto buscado
+                List<InventarioUbicacionDetalleDto> detalleProducto = entry.getValue().stream()
+                    .map(this::convertirDetalleADto)
+                    .collect(Collectors.toList());
+                dto.setDetalle(detalleProducto);
+                dto.setTotalLineas(detalleProducto.size());
+                resultado.add(dto);
+            }
+        }
+
+        // Ordenar por fecha de inicio descendente
+        resultado.sort((a, b) -> {
+            if (b.getdInicio() == null) return -1;
+            if (a.getdInicio() == null) return 1;
+            return b.getdInicio().compareTo(a.getdInicio());
+        });
+
+        return resultado;
     }
 }

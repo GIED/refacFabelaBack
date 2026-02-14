@@ -58,4 +58,26 @@ public interface TwInventarioUbicacionRepository extends JpaRepository<TwInventa
     @Query("SELECT i FROM TwInventarioUbicacion i WHERE i.nIdBodega = :nIdBodega " +
            "ORDER BY i.dInicio DESC")
     List<TwInventarioUbicacion> findByBodega(@Param("nIdBodega") Long nIdBodega);
+
+    /**
+     * Buscar inventarios por ubicación completa (bodega + anaquel + nivel).
+     */
+    @Query("SELECT i FROM TwInventarioUbicacion i WHERE i.nIdBodega = :nIdBodega " +
+           "AND i.nIdAnaquel = :nIdAnaquel AND i.nIdNivel = :nIdNivel " +
+           "ORDER BY i.dInicio DESC")
+    List<TwInventarioUbicacion> findByUbicacion(
+        @Param("nIdBodega") Long nIdBodega,
+        @Param("nIdAnaquel") Long nIdAnaquel,
+        @Param("nIdNivel") Long nIdNivel
+    );
+
+    /**
+     * Buscar inventarios por bodega y anaquel.
+     */
+    @Query("SELECT i FROM TwInventarioUbicacion i WHERE i.nIdBodega = :nIdBodega " +
+           "AND i.nIdAnaquel = :nIdAnaquel ORDER BY i.dInicio DESC")
+    List<TwInventarioUbicacion> findByBodegaAndAnaquel(
+        @Param("nIdBodega") Long nIdBodega,
+        @Param("nIdAnaquel") Long nIdAnaquel
+    );
 }

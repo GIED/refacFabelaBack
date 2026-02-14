@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.refacFabela.dto.ActualizarConteoRequestDto;
@@ -397,6 +398,47 @@ public class InventarioUbicacionController {
             logger.error("Error al obtener historial del inventario " + id + ": " + e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new Mensaje("Error al obtener historial"));
+        }
+    }
+
+    /**
+     * GET /inventarios-ubicacion/consulta
+     * Consultar inventarios por ubicación con filtros opcionales.
+     * Sin restricción de rol (controlado por menú en frontend).
+     */
+    @GetMapping("/consulta")
+    public ResponseEntity<?> consultarInventariosPorUbicacion(
+            @RequestParam(required = false) Long nIdBodega,
+            @RequestParam(required = false) Long nIdAnaquel,
+            @RequestParam(required = false) Long nIdNivel) {
+        try {
+            List<InventarioUbicacionDto> inventarios = inventarioService.consultarInventariosPorUbicacion(
+                nIdBodega, nIdAnaquel, nIdNivel
+            );
+            return ResponseEntity.ok(inventarios);
+
+        } catch (Exception e) {
+            logger.error("Error al consultar inventarios por ubicación: " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new Mensaje("Error al consultar inventarios"));
+        }
+    }
+
+    /**
+     * GET /inventarios-ubicacion/por-producto/{productoId}
+     * Consultar inventarios donde aparece un producto específico.
+     * Sin restricción de rol (controlado por menú en frontend).
+     */
+    @GetMapping("/por-producto/{productoId}")
+    public ResponseEntity<?> consultarInventariosPorProducto(@PathVariable Long productoId) {
+        try {
+            List<InventarioUbicacionDto> inventarios = inventarioService.consultarInventariosPorProducto(productoId);
+            return ResponseEntity.ok(inventarios);
+
+        } catch (Exception e) {
+            logger.error("Error al consultar inventarios por producto " + productoId + ": " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new Mensaje("Error al consultar inventarios por producto"));
         }
     }
 }
