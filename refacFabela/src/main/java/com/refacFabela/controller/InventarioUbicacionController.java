@@ -85,10 +85,27 @@ public class InventarioUbicacionController {
         } catch (Exception e) {
             logger.error("Error al iniciar inventario: " + e.getMessage(), e);
             
-            // Si el error es por inventario existente, devolver el mensaje específico
-            if (e.getMessage().contains("Ya existe un inventario")) {
+            // Violación de constraint único (race condition) o validación de negocio
+            boolean esConflicto = (e.getMessage() != null && (
+                    e.getMessage().contains("Ya existe un inventario") ||
+                    e.getMessage().contains("ya tiene un inventario"))) ||
+                    e instanceof org.springframework.dao.DataIntegrityViolationException;
+            
+            if (esConflicto) {
+                // Intentar recuperar el inventario existente del usuario
+                try {
+                    UsuarioPrincipal usuario = getUsuarioActual();
+                    InventarioUbicacionDto existente = inventarioService.obtenerInventarioAbiertoUsuario(usuario.getnId());
+                    if (existente != null) {
+                        // Devolver el inventario existente para que el frontend lo cargue automáticamente
+                        return ResponseEntity.status(HttpStatus.CONFLICT)
+                            .body(existente);
+                    }
+                } catch (Exception ex) {
+                    logger.warn("No se pudo recuperar inventario existente: " + ex.getMessage());
+                }
                 return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new Mensaje(e.getMessage()));
+                    .body(new Mensaje("Ya existe un inventario abierto/pausado. Recargue la página."));
             }
             
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
