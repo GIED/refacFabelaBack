@@ -333,7 +333,31 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
             throw new Exception("No se puede cerrar el inventario. Hay " + pendientes + " línea(s) pendiente(s) de contar");
         }
 
-        inventario.setnEstatus(ESTATUS_EN_REVISION);
+        // Verificar si hay productos con diferencias
+        List<TwInventarioUbicacionDet> detalles = detalleRepository.findByInventarioId(inventarioId);
+        boolean hayDiferencias = detalles.stream()
+            .anyMatch(detalle -> {
+                // Calcular diferencia: contada - referencia
+                Integer contada = detalle.getnCantidadContada();
+                Integer referencia = detalle.getnCantidadTeoricaRef();
+                if (contada == null || referencia == null) {
+                    return false;
+                }
+                Integer diferencia = contada - referencia;
+                return diferencia != 0;
+            });
+
+        // Si NO hay diferencias, cerrar automáticamente (APLICADO)
+        // Si HAY diferencias, pasar a revisión (EN_REVISION)
+        if (hayDiferencias) {
+            inventario.setnEstatus(ESTATUS_EN_REVISION);
+        } else {
+            // Cierre automático sin revisión
+            inventario.setnEstatus(ESTATUS_APLICADO);
+            inventario.setnIdUsuarioAutoriza(usuarioId); // El mismo usuario que cierra autoriza automáticamente
+            inventario.setdAutorizacion(LocalDateTime.now());
+        }
+
         inventario.setdCierre(LocalDateTime.now());
         inventario.setnIdUsuarioCierra(usuarioId);
         inventario.setdUltimaActividad(LocalDateTime.now());
