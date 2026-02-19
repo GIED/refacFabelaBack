@@ -38,6 +38,9 @@ public class InventarioUbicacionDto implements Serializable {
     private Integer lineasContadas;
     private Integer lineasRecontar;
 
+    // Mensaje temporal de sincronización (no persistido)
+    private String sMensajeSincronizacion;
+
     // Detalle de productos
     private List<InventarioUbicacionDetalleDto> detalle;
 
@@ -251,5 +254,13 @@ public class InventarioUbicacionDto implements Serializable {
 
     public void setDetalle(List<InventarioUbicacionDetalleDto> detalle) {
         this.detalle = detalle;
+    }
+
+    public String getsMensajeSincronizacion() {
+        return sMensajeSincronizacion;
+    }
+
+    public void setsMensajeSincronizacion(String sMensajeSincronizacion) {
+        this.sMensajeSincronizacion = sMensajeSincronizacion;
     }
 }

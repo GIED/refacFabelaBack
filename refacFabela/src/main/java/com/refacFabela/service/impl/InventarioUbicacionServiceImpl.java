@@ -168,7 +168,41 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
 
         LocalDateTime ahora = LocalDateTime.now();
 
-        // 1. Insertar productos nuevos que no están en el detalle
+        // Crear mapa de productos actuales para búsqueda rápida
+        Map<Long, TwProductobodega> mapaProductosActuales = productosActuales.stream()
+            .collect(Collectors.toMap(TwProductobodega::getnIdProducto, pb -> pb));
+
+        // Variables para tracking de sincronización
+        int productosAgregados = 0;
+        int productosActualizados = 0;
+        int productosEliminados = 0;
+        int productosNoEliminados = 0;
+
+        // 1. Procesar productos que ya no existen en tw_productobodega
+        List<TwInventarioUbicacionDet> lineasAEliminar = new ArrayList<>();
+        for (TwInventarioUbicacionDet linea : detalleActual) {
+            if (!mapaProductosActuales.containsKey(linea.getnIdProducto())) {
+                // El producto ya no existe en la ubicación
+                if (linea.getnCantidadContada() == null) {
+                    // No está contado, se puede eliminar
+                    lineasAEliminar.add(linea);
+                    productosEliminados++;
+                } else {
+                    // Ya está contado, NO se puede eliminar
+                    productosNoEliminados++;
+                }
+            }
+        }
+
+        // Eliminar líneas que ya no existen y no están contadas
+        for (TwInventarioUbicacionDet linea : lineasAEliminar) {
+            detalleRepository.delete(linea);
+        }
+
+        // Actualizar lista de detalle después de eliminaciones
+        detalleActual = detalleRepository.findByInventarioId(inventarioId);
+
+        // 2. Insertar productos nuevos que no están en el detalle
         for (TwProductobodega pb : productosActuales) {
             boolean existe = detalleActual.stream()
                 .anyMatch(d -> d.getnIdProducto().equals(pb.getnIdProducto()));
@@ -184,32 +218,65 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
                 nuevaLinea.setnEstatusLinea(ESTATUS_LINEA_PENDIENTE);
 
                 detalleRepository.save(nuevaLinea);
+                productosAgregados++;
             }
         }
 
-        // 2. Actualizar n_cantidad_teorica_ref SOLO para líneas pendientes
+        // 3. Actualizar n_cantidad_teorica_ref SOLO para líneas pendientes (no contadas)
         for (TwInventarioUbicacionDet linea : detalleActual) {
             if (linea.getnCantidadContada() == null) { // Solo pendientes
-                Optional<TwProductobodega> pbOpt = productosActuales.stream()
-                    .filter(pb -> pb.getnIdProducto().equals(linea.getnIdProducto()))
-                    .findFirst();
-
-                if (pbOpt.isPresent()) {
-                    Integer cantidadActual = pbOpt.get().getnCantidad() != null ? pbOpt.get().getnCantidad() : 0;
+                TwProductobodega pb = mapaProductosActuales.get(linea.getnIdProducto());
+                
+                if (pb != null) {
+                    Integer cantidadActual = pb.getnCantidad() != null ? pb.getnCantidad() : 0;
                     if (!cantidadActual.equals(linea.getnCantidadTeoricaRef())) {
                         linea.setnCantidadTeoricaRef(cantidadActual);
                         linea.setdRefActualizada(ahora);
                         detalleRepository.save(linea);
+                        productosActualizados++;
                     }
                 }
             }
+        }
+
+        // Preparar mensaje de sincronización
+        StringBuilder mensajeSinc = new StringBuilder();
+        List<String> cambios = new ArrayList<>();
+        
+        if (productosAgregados > 0) {
+            cambios.add(productosAgregados + " agregado(s)");
+        }
+        if (productosActualizados > 0) {
+            cambios.add(productosActualizados + " actualizado(s)");
+        }
+        if (productosEliminados > 0) {
+            cambios.add(productosEliminados + " eliminado(s)");
+        }
+        if (productosNoEliminados > 0) {
+            cambios.add("⚠️ " + productosNoEliminados + " no eliminados (contabilizados)");
+        }
+        
+        if (cambios.isEmpty()) {
+            mensajeSinc.append("Sin cambios");
+        } else {
+            mensajeSinc.append("Cambios aplicados: " + String.join(", ", cambios));
+        }
+
+        // Log para auditoría y debugging
+        System.out.println("SINCRONIZACIÓN - Inventario " + inventarioId + ": " + mensajeSinc.toString());
+        if (productosNoEliminados > 0) {
+            System.out.println("  ⚠️ Productos contabilizados no eliminados: " + productosNoEliminados);
         }
 
         // Actualizar última actividad
         inventario.setdUltimaActividad(ahora);
         inventarioRepository.save(inventario);
 
-        return convertirADto(inventario);
+        // Convertir a DTO e incluir mensaje de sincronización
+        InventarioUbicacionDto dto = convertirADto(inventario);
+        dto.setsMensajeSincronizacion(mensajeSinc.toString());
+
+        return dto;
     }
 
     @Override
