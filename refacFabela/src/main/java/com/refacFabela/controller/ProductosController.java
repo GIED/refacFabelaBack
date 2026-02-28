@@ -28,6 +28,7 @@ import com.refacFabela.model.TwProductosAlternativo;
 import com.refacFabela.model.TwVentaProductoCancela;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.service.impl.UtilisServiceImp;
+import com.refacFabela.utils.ImagenProductoService;
 
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST })
@@ -38,6 +39,8 @@ public class ProductosController {
 	private ProductosService productosService;
 	@Autowired
 	private UtilisServiceImp utilisServiceImp;
+	@Autowired
+	private ImagenProductoService imagenProductoService;
 
 	@GetMapping("/obtenerProductos")
 	public List<TcProducto> obtenerProductos() {
@@ -355,8 +358,55 @@ public class ProductosController {
 			return ResponseEntity.status(500).body(errorResponse);
 		}
 	}
-	
-	
-	
+
+	/**
+	 * Resuelve la URL de imagen de un producto.
+	 * Prioridad: Costex CDN -> Cloudflare R2 -> Local (auto-sube a R2)
+	 */
+	@GetMapping(value = "/resolverImagenProducto", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<String, String>> resolverImagenProducto(@RequestParam String noParte) {
+		try {
+			// Primero intentar resolución real (Costex HEAD, Cloudflare, Local)
+			String urlResuelta = imagenProductoService.resolverUrlImagen(noParte);
+			boolean encontrada = urlResuelta != null;
+			// Si no se encontró en ningún CDN, usar fallback (URL directa de Costex para que el navegador intente)
+			String urlFinal = encontrada ? urlResuelta : imagenProductoService.resolverUrlImagenConFallback(noParte);
+			Map<String, String> respuesta = new HashMap<>();
+			respuesta.put("url", urlFinal);
+			respuesta.put("encontrada", String.valueOf(encontrada));
+			return ResponseEntity.ok(respuesta);
+		} catch (Exception e) {
+			logger.error("Error al resolver imagen del producto [" + noParte + "]: " + e.getMessage(), e);
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("url", "");
+			errorResponse.put("encontrada", "false");
+			return ResponseEntity.ok(errorResponse);
+		}
+	}
+
+	/**
+	 * Fuerza la subida de una imagen local a Cloudflare R2.
+	 */
+	@PostMapping(value = "/subirImagenCloudflare", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<String, String>> subirImagenCloudflare(@RequestParam String noParte) {
+		try {
+			String url = imagenProductoService.forzarSubidaCloudflare(noParte);
+			Map<String, String> respuesta = new HashMap<>();
+			if (url != null) {
+				respuesta.put("url", url);
+				respuesta.put("subida", "true");
+			} else {
+				respuesta.put("url", "");
+				respuesta.put("subida", "false");
+			}
+			return ResponseEntity.ok(respuesta);
+		} catch (Exception e) {
+			logger.error("Error al subir imagen a Cloudflare [" + noParte + "]: " + e.getMessage(), e);
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("url", "");
+			errorResponse.put("subida", "false");
+			return ResponseEntity.ok(errorResponse);
+		}
+	}
 
 }

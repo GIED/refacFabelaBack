@@ -141,23 +141,28 @@ public boolean guardarImagenDesdeBase64(String base64, String rutaDestinoComplet
     }
 }
 
-// ✅ Método principal que valida y guarda la imagen según su origen
+// Método principal que valida y guarda la imagen según su origen
 public boolean procesarImagenProducto(TcProducto producto, String rutaBase) throws Exception {
+    return procesarImagenProducto(producto, rutaBase, "https://www.ctpsales.costex.com:11443/Webpics/220x220/");
+}
+
+// Método principal con URL de CDN configurable
+public boolean procesarImagenProducto(TcProducto producto, String rutaBase, String costexBaseUrl) throws Exception {
     String rutaImagen = producto.getsRutaImagen();
 
     // Si no hay imagen definida, usar la URL por defecto de CTP
     if (rutaImagen == null || rutaImagen.trim().isEmpty()) {
-        rutaImagen = "https://www.ctpsales.costex.com:11443/Webpics/220x220/" + producto.getsNoParte() + ".jpg";
+        rutaImagen = costexBaseUrl + producto.getsNoParte() + ".jpg";
     }
 
     // Construir nombre de archivo
-    String nombreArchivo = producto.getsNoParte() + ".jpg"; // Puedes validar y ajustar extensión si lo deseas
+    String nombreArchivo = producto.getsNoParte() + ".jpg";
     String rutaFinalCompleta = Paths.get(rutaBase, nombreArchivo).toString();
 
-    System.err.println("🧩 Ruta de imagen original: " + rutaImagen);
-    System.err.println("📁 Ruta final completa: " + rutaFinalCompleta);
+    System.err.println("Ruta de imagen original: " + rutaImagen);
+    System.err.println("Ruta final completa: " + rutaFinalCompleta);
 
-    if (rutaImagen.startsWith("https://www.ctpsales.costex.com:11443/Webpics/220x220/" + producto.getsNoParte() + ".jpg")) {
+    if (rutaImagen.startsWith(costexBaseUrl)) {
         return guardarImagenDesdeUrl(rutaImagen, rutaFinalCompleta);
     } else {
         return guardarImagenDesdeBase64(rutaImagen, rutaFinalCompleta);
@@ -184,13 +189,21 @@ public String obtenerImagenBase64(String rutaCompleta) {
 
 /**
  * Procesa múltiples productos CTP descargando sus imágenes desde la URL por defecto de CTP.
- * Este método itera sobre una lista de productos y descarga la imagen de cada uno.
+ * Sobrecarga retrocompatible que usa la URL por defecto de Costex.
+ */
+public Map<String, Integer> procesarImagenesProductosCTP(List<com.refacFabela.model.TcProducto> productos, String rutaBase) {
+    return procesarImagenesProductosCTP(productos, rutaBase, "https://www.ctpsales.costex.com:11443/Webpics/220x220/");
+}
+
+/**
+ * Procesa múltiples productos CTP descargando sus imágenes desde la URL de CDN configurable.
  * 
  * @param productos Lista de productos TcProducto a procesar
  * @param rutaBase Ruta base donde se guardarán las imágenes
+ * @param costexBaseUrl URL base del CDN de Costex
  * @return Map con estadísticas del proceso: exitosos, fallidos y total procesados
  */
-public Map<String, Integer> procesarImagenesProductosCTP(List<com.refacFabela.model.TcProducto> productos, String rutaBase) {
+public Map<String, Integer> procesarImagenesProductosCTP(List<com.refacFabela.model.TcProducto> productos, String rutaBase, String costexBaseUrl) {
     Map<String, Integer> resultado = new HashMap<>();
     int exitosos = 0;
     int fallidos = 0;
@@ -201,7 +214,7 @@ public Map<String, Integer> procesarImagenesProductosCTP(List<com.refacFabela.mo
     for (com.refacFabela.model.TcProducto producto : productos) {
         try {
             // Construir la URL por defecto de CTP
-            String urlCTP = "https://www.ctpsales.costex.com:11443/Webpics/220x220/" + producto.getsNoParte() + ".jpg";
+            String urlCTP = costexBaseUrl + producto.getsNoParte() + ".jpg";
             String nombreArchivo = producto.getsNoParte() + ".jpg";
             String rutaFinalCompleta = Paths.get(rutaBase, nombreArchivo).toString();
             

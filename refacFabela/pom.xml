@@ -158,12 +158,31 @@
         <artifactId>jackson-databind</artifactId>
         <version>2.12.3</version>
     </dependency>
+
+    <!-- AWS S3 SDK (compatible con Cloudflare R2) -->
+    <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-s3</artifactId>
+        <version>1.12.261</version>
+    </dependency>
     
 
     
 
 
 	</dependencies>
+
+	<!-- Repositorios HTTPS para JasperReports (evitar bloqueo HTTP de Maven 3.8+) -->
+	<repositories>
+		<repository>
+			<id>jaspersoft-third-party</id>
+			<url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+		</repository>
+		<repository>
+			<id>jr-ce-releases</id>
+			<url>https://jaspersoft.jfrog.io/jaspersoft/jr-ce-releases</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
