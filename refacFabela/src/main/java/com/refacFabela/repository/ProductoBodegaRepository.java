@@ -11,19 +11,19 @@ import com.refacFabela.model.TwProductobodega;
 @Repository
 public interface ProductoBodegaRepository extends JpaRepository<TwProductobodega, Long> {
 	
-	@Query("Select d from TwProductobodega d  where d.nIdProducto =:id order by d.nIdBodega asc" )
+	@Query("Select d from TwProductobodega d  where d.nIdProducto =:id and d.tcProducto.nEstatus = 1 order by d.nIdBodega asc" )
 	public List<TwProductobodega> findBynIdProducto(Long id);
 	
-	@Query("Select d from TwProductobodega d  where d.nIdProducto =:id and d.nIdBodega=:nIdBodega order by d.nIdBodega asc" )
+	@Query("Select d from TwProductobodega d  where d.nIdProducto =:id and d.nIdBodega=:nIdBodega and d.tcProducto.nEstatus = 1 order by d.nIdBodega asc" )
 	public TwProductobodega findBynIdProductoIdBodega(Long id, Long nIdBodega);
 	
-	@Query("Select d from TwProductobodega d  where d.nIdBodega =:idBodega and d.nIdNivel=:idNivel and d.nIdAnaquel=:idAnaquel order by nCantidad desc" )
+	@Query("Select d from TwProductobodega d  where d.nIdBodega =:idBodega and d.nIdNivel=:idNivel and d.nIdAnaquel=:idAnaquel and d.tcProducto.nEstatus = 1 order by nCantidad desc" )
 	public List<TwProductobodega> obtenerInventaroEsp(Long idBodega, Long idAnaquel, Long idNivel);
 	
-	@Query("Select d from TwProductobodega d  where d.nIdProducto =:nIProducto and d.tcBodega.sBodega =:bodega " )
+	@Query("Select d from TwProductobodega d  where d.nIdProducto =:nIProducto and d.tcBodega.sBodega =:bodega and d.tcProducto.nEstatus = 1" )
 	public TwProductobodega obtenerProductoBodega(Long nIProducto, String bodega);
 	
-	@Query("Select d from TwProductobodega d  where d.nIdProducto =:producto and d.nIdBodega =:bodega " )
+	@Query("Select d from TwProductobodega d  where d.nIdProducto =:producto and d.nIdBodega =:bodega and d.tcProducto.nEstatus = 1" )
 	public TwProductobodega obtenerStockBodega(Long producto, Long bodega);
 	  
 	

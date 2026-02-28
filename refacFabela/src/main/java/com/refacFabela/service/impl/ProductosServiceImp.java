@@ -700,26 +700,38 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 				
 			ventaProductoCancelaDto.VentaProductoDto.setnEstatus(1);
 			
-			System.err.println("Entre a cancelar parcalemte");
+			System.err.println("Entre a cancelar parcialmente");
 		    
 		    /*Se consulta el producto para mandar a calcular el precio del producto*/
 		    
 		    tcProducto=productosRepository.findBynId(twVentasProducto.getnIdProducto()); 
 		    tcProducto.setnPrecioSinIva(twVentasProducto.getnPrecioUnitario());		    
 		    
-		    twVentasProductoCalculado=util.calcularPrecioGuardar(tcProducto, twVentasProducto.getnCantidad()-ventaProductoCancelaDto.nCancela);		    
+		    /*PASO 1: Calcular montos de la cantidad CANCELADA antes de sobreescribir twVentasProducto*/
+		    twVentasProductoCalculado=util.calcularPrecioGuardar(tcProducto, ventaProductoCancelaDto.nCancela);
+		    
+		    /*Variables locales con los valores de lo CANCELADO para evitar confusiones*/
+		    BigDecimal canceladoPrecioUnitario = twVentasProductoCalculado.getnPrecioUnitario();
+		    BigDecimal canceladoIvaUnitario = twVentasProductoCalculado.getnIvaUnitario();
+		    BigDecimal canceladoTotalUnitario = twVentasProductoCalculado.getnTotalUnitario();
+		    BigDecimal canceladoTotalPartida = twVentasProductoCalculado.getnTotalPartida();
+		    
+		    /*PASO 2: Calcular montos de la cantidad RESTANTE y actualizar el registro de venta*/
+		    TwVentasProducto twVentasProductoRestante = util.calcularPrecioGuardar(tcProducto, twVentasProducto.getnCantidad()-ventaProductoCancelaDto.nCancela);
 		    twVentasProducto.setnEstatus(1);
 		    twVentasProducto.setnCantidad(twVentasProducto.getnCantidad()-ventaProductoCancelaDto.nCancela);
-		    twVentasProducto.setnPrecioUnitario(twVentasProductoCalculado.getnPrecioUnitario());
-		    twVentasProducto.setnIvaUnitario(twVentasProductoCalculado.getnIvaUnitario());
-		    twVentasProducto.setnTotalUnitario(twVentasProductoCalculado.getnTotalUnitario());
-		    twVentasProducto.setnPrecioPartida(twVentasProductoCalculado.getnPrecioPartida());
-		    twVentasProducto.setnIvaPartida(twVentasProductoCalculado.getnIvaPartida());
-		    twVentasProducto.setnTotalPartida(twVentasProductoCalculado.getnTotalPartida());
-		    /*Se gaurda la cancelación del producto*/
+		    twVentasProducto.setnPrecioUnitario(twVentasProductoRestante.getnPrecioUnitario());
+		    twVentasProducto.setnIvaUnitario(twVentasProductoRestante.getnIvaUnitario());
+		    twVentasProducto.setnTotalUnitario(twVentasProductoRestante.getnTotalUnitario());
+		    twVentasProducto.setnPrecioPartida(twVentasProductoRestante.getnPrecioPartida());
+		    twVentasProducto.setnIvaPartida(twVentasProductoRestante.getnIvaPartida());
+		    twVentasProducto.setnTotalPartida(twVentasProductoRestante.getnTotalPartida());
+		    /*Se guarda la actualización del producto con cantidad restante*/
 		    twProductosVentaRepository.save(twVentasProducto);	
+
+		    /*PASO 3: Crear registro de cancelación usando montos de lo CANCELADO*/
 			if(twVenta.getnIdEstatusVenta()>1) {
-			twVentasProductoCalculado=util.calcularPrecioGuardar(tcProducto, ventaProductoCancelaDto.nCancela);			
+			
 			twVentaProductoCancela.setnIdVenta(twVentasProducto.getnIdVenta());
 			twVentaProductoCancela.setnIdProductos(twVentasProducto.getnIdProducto());
 			twVentaProductoCancela.setnCantidad(ventaProductoCancelaDto.nCancela);
@@ -729,13 +741,13 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 				// Descuento del 20%
 				BigDecimal descuento = BigDecimal.valueOf(0.20);
 
-				// totalUnitario = totalUnitario - (totalUnitario * 0.20)
-				 totalUnitario = twVentasProducto.getnTotalUnitario()
-				    .subtract(twVentasProducto.getnTotalUnitario().multiply(descuento));
+				// totalUnitario del CANCELADO con penalización del 20%
+				 totalUnitario = canceladoTotalUnitario
+				    .subtract(canceladoTotalUnitario.multiply(descuento));
 
-				// totalPartida = totalPartida - (totalPartida * 0.20)
-				 totalPartida = twVentasProducto.getnTotalPartida()
-				    .subtract(twVentasProducto.getnTotalPartida().multiply(descuento));
+				// totalPartida del CANCELADO con penalización del 20%
+				 totalPartida = canceladoTotalPartida
+				    .subtract(canceladoTotalPartida.multiply(descuento));
 
 				// Precio unitario sin IVA: totalUnitario / 1.16
 				BigDecimal precioUnitario = totalUnitario.divide(BigDecimal.valueOf(1.16), 10, RoundingMode.DOWN);
@@ -751,27 +763,19 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 				// Precio partida final
 				twVentaProductoCancela.setnPrecioPartida(totalPartida);
 
-				// Penalización = original - ajustado
-				
-				BigDecimal penaliza = twVentasProducto.getnTotalPartida().subtract(totalPartida);
+				// Penalización = total cancelado original - total con descuento
+				BigDecimal penaliza = canceladoTotalPartida.subtract(totalPartida);
 				twVentaProductoCancela.setPenaliza(penaliza);
-
-				
-				
-			
 				
 			}
 			else {
 				
-				twVentaProductoCancela.setnPrecioUnitario(DateTimeUtil.truncarDosDecimales(twVentasProducto.getnPrecioUnitario()));
-				twVentaProductoCancela.setnIvaUnitario(DateTimeUtil.truncarDosDecimales( twVentasProducto.getnIvaUnitario()));
-				twVentaProductoCancela.setnTotalUnitario(DateTimeUtil.truncarDosDecimales( twVentasProducto.getnTotalUnitario()));
-				twVentaProductoCancela.setnPrecioPartida(DateTimeUtil.truncarDosDecimales( twVentasProducto.getnTotalPartida()));
-			
-				
+				twVentaProductoCancela.setnPrecioUnitario(DateTimeUtil.truncarDosDecimales(canceladoPrecioUnitario));
+				twVentaProductoCancela.setnIvaUnitario(DateTimeUtil.truncarDosDecimales(canceladoIvaUnitario));
+				twVentaProductoCancela.setnTotalUnitario(DateTimeUtil.truncarDosDecimales(canceladoTotalUnitario));
+				twVentaProductoCancela.setnPrecioPartida(DateTimeUtil.truncarDosDecimales(canceladoTotalPartida));
 				
 			}
-			
 			
 
 		    twVentaProductoCancela.setsMotivo(ventaProductoCancelaDto.sMotivo);
@@ -785,14 +789,14 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			twProductobodega.setnCantidad(twProductobodega.getnCantidad()+ventaProductoCancelaDto.nCancela);			
 		    //productoBodegaRepository.save(twProductobodega);
 			
+			/*PASO 4: Saldo utilizado con montos de lo CANCELADO*/
 			if(twVenta.getnTipoPago()==1L && twVenta.getnIdEstatusVenta()>1) {
 			
-				
 				twSaldoUtilizado.setnIdUsuario(twVenta.getnIdUsuario());
 				twSaldoUtilizado.setnIdCaja(caja.getnId());
 				twSaldoUtilizado.setnIdVenta(twVenta.getnId());
-				twSaldoUtilizado.setnSaldoTotal(twVentasProducto.getnTotalPartida());
-				twSaldoUtilizado.setnSaldoUtilizado(twVentasProducto.getnTotalPartida());
+				twSaldoUtilizado.setnSaldoTotal(canceladoTotalPartida);
+				twSaldoUtilizado.setnSaldoUtilizado(canceladoTotalPartida);
 				twSaldoUtilizado.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 				twSaldoUtilizado.setnEstatus(true);				
 				twSaldoUtilizadoRepository.save(twSaldoUtilizado);						

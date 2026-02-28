@@ -12,7 +12,7 @@ import com.refacFabela.model.TwProductobodega;
 @Repository
 public interface TwProductoBodegaRepository extends JpaRepository<TwProductobodega, Long> {
 
-	@Query("select c from TwProductobodega c where c.nIdProducto=:nIdProducto order by c.nIdBodega asc ")
+	@Query("select c from TwProductobodega c where c.nIdProducto=:nIdProducto and c.tcProducto.nEstatus = 1 order by c.nIdBodega asc ")
 	public List<TwProductobodega> productoBogas(Long nIdProducto);
 	
 	/**
@@ -20,7 +20,7 @@ public interface TwProductoBodegaRepository extends JpaRepository<TwProductobode
 	 */
 	@Query("SELECT pb FROM TwProductobodega pb WHERE pb.nIdBodega = :nIdBodega " +
 	       "AND pb.nIdAnaquel = :nIdAnaquel AND pb.nIdNivel = :nIdNivel " +
-	       "AND pb.nCantidad > 0 ORDER BY pb.tcProducto.sNoParte")
+	       "AND pb.nCantidad > 0 AND pb.tcProducto.nEstatus = 1 ORDER BY pb.tcProducto.sNoParte")
 	List<TwProductobodega> obtenerProductosPorUbicacion(
 		@Param("nIdBodega") Long nIdBodega,
 		@Param("nIdAnaquel") Long nIdAnaquel,

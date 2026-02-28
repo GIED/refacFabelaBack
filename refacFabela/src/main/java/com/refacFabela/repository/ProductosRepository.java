@@ -16,7 +16,8 @@ import com.refacFabela.model.TwProductobodega;
 @Repository
 public interface ProductosRepository extends JpaRepository<TcProducto, Long> {
 	
-	public TcProducto findBysNoParte(String No_parte );
+	@Query("Select c from TcProducto c where c.sNoParte = :noParte and c.nEstatus = 1")
+	public TcProducto findBysNoParte(@Param("noParte") String noParte);
 	
 	public List<TcProducto> findBynEstatus(int estatus);
 	
@@ -33,13 +34,13 @@ public interface ProductosRepository extends JpaRepository<TcProducto, Long> {
 	@Query("Select c from TcProducto c where c.nId=:nId and nEstatus=1")
 	public List<TcProducto> consultarPorId(Long nId);
 	
-	@Query("Select c from TcProducto c where c.sNoParte=:noParte AND (c.nIdMarca = :nIdMarca OR c.nIdMarca IS NULL)")
+	@Query("Select c from TcProducto c where c.sNoParte=:noParte AND (c.nIdMarca = :nIdMarca OR c.nIdMarca IS NULL) and c.nEstatus=1")
 	public TcProducto findBysNoParteAndIdMarca(String noParte, Long nIdMarca);
 	
 	@Query("Select c from TcProducto c where c.nEstatus = 1 AND c.sMarca = 'CTP' AND (c.sRutaImagen IS NULL OR c.sRutaImagen = '') ")
 	public List<TcProducto> findProductosCTPSinImagen();
 	
-	@Query(value = "SELECT * FROM tc_productos WHERE n_id_marca = 53 AND (s_ruta_imagen IS NULL OR s_ruta_imagen LIKE '/%')", nativeQuery = true)
+	@Query(value = "SELECT * FROM tc_productos WHERE n_estatus = 1 AND n_id_marca = 53 AND (s_ruta_imagen IS NULL OR s_ruta_imagen LIKE '/%')", nativeQuery = true)
 	public List<TcProducto> findProductosCtpFaltantes(Pageable pageable);
 	
 
