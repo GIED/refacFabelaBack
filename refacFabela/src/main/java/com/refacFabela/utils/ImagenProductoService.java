@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.cdn.CadecoImageScraperService;
 import com.refacFabela.cdn.CloudflareImageService;
 import com.refacFabela.cdn.CloudflareProperties;
 
@@ -15,10 +16,16 @@ import com.refacFabela.cdn.CloudflareProperties;
  * 
  * Prioridad de búsqueda:
  * 1. CDN del proveedor (Costex) — si la imagen existe en su servidor
- * 2. CDN propio (Cloudflare Images) — si fue subida previamente
+ * 2. CDN propio (Cloudflare R2 / Jemkal) — si fue subida previamente
  * 3. Repositorio local (/opt/imgprod/) — si existe, se sube a Cloudflare automáticamente
+ * 4. CADECO (scraping vtexassets) — busca imagen, la descarga y la sube a Cloudflare
  * 
- * El resultado siempre es una URL pública (Costex o Cloudflare), nunca una ruta local.
+ * Política de sincronización: toda imagen nueva encontrada en cualquier origen se replica
+ * SIEMPRE a Cloudflare R2 Y al repositorio local, para que ambos estén siempre actualizados.
+ * - Costex → descarga a local + sube a R2 (background)
+ * - R2 → descarga a local si no existe (background)
+ * - Local → sube a R2
+ * - CADECO → descarga a local + sube a R2
  */
 @Service
 public class ImagenProductoService {
@@ -28,6 +35,9 @@ public class ImagenProductoService {
 
     @Autowired
     private CloudflareProperties cdnProperties;
+
+    @Autowired
+    private CadecoImageScraperService cadecoService;
 
     /**
      * Caché en memoria para evitar verificaciones HTTP repetidas al CDN de Costex.
@@ -44,8 +54,9 @@ public class ImagenProductoService {
     /**
      * Resuelve la URL de imagen de un producto siguiendo la prioridad:
      * 1. CDN Costex (proveedor)
-     * 2. Cloudflare CDN (propio)
+     * 2. Cloudflare CDN (propio - jemkal)
      * 3. Repositorio local (sube a Cloudflare si lo encuentra)
+     * 4. CADECO (scraping, descarga y sube a Cloudflare)
      *
      * @param noParte Número de parte del producto
      * @return URL pública de la imagen, o null si no se encontró en ningún origen
@@ -64,13 +75,26 @@ public class ImagenProductoService {
         // 1. Verificar CDN de Costex
         String urlCostex = verificarCostex(noParte);
         if (urlCostex != null) {
+            // Costex tiene la imagen. Verificar si ya tenemos copia en R2 y local.
+            // Si R2 ya la tiene, preferir esa URL (CDN propio).
+            String urlR2Existente = verificarCloudflare(noParte);
+            if (urlR2Existente != null) {
+                // Ya está en R2; solo asegurar copia local
+                asegurarCopiaLocalEnBackground(noParte, urlR2Existente);
+                cacheUrlResuelta.put(noParte, urlR2Existente);
+                return urlR2Existente;
+            }
+            // No está en R2: sincronizar a R2 + local en background
+            subirDesdeUrlEnBackground(noParte, urlCostex);
             cacheUrlResuelta.put(noParte, urlCostex);
             return urlCostex;
         }
 
-        // 2. Verificar Cloudflare CDN
+        // 2. Verificar Cloudflare CDN (jemkal)
         String urlCloudflare = verificarCloudflare(noParte);
         if (urlCloudflare != null) {
+            // Asegurar copia local si no existe
+            asegurarCopiaLocalEnBackground(noParte, urlCloudflare);
             cacheUrlResuelta.put(noParte, urlCloudflare);
             return urlCloudflare;
         }
@@ -80,6 +104,13 @@ public class ImagenProductoService {
         if (urlDesdeLocal != null) {
             cacheUrlResuelta.put(noParte, urlDesdeLocal);
             return urlDesdeLocal;
+        }
+
+        // 4. Buscar en CADECO (scraping) y subir a Cloudflare
+        String urlDesdeCadeco = verificarCadecoYSubir(noParte);
+        if (urlDesdeCadeco != null) {
+            cacheUrlResuelta.put(noParte, urlDesdeCadeco);
+            return urlDesdeCadeco;
         }
 
         return null;
@@ -132,6 +163,7 @@ public class ImagenProductoService {
     public void invalidarCache(String noParte) {
         cacheUrlResuelta.remove(noParte);
         cacheCostex.remove(noParte);
+        cadecoService.invalidarCache(noParte);
     }
 
     /**
@@ -140,6 +172,7 @@ public class ImagenProductoService {
     public void limpiarCache() {
         cacheUrlResuelta.clear();
         cacheCostex.clear();
+        cadecoService.limpiarCache();
     }
 
     // ======================== Métodos privados ========================
@@ -167,7 +200,7 @@ public class ImagenProductoService {
     }
 
     /**
-     * Verifica si la imagen existe en Cloudflare CDN.
+     * Verifica si la imagen existe en Cloudflare CDN (jemkal).
      */
     private String verificarCloudflare(String noParte) {
         if (!cdnProperties.isR2Configurado()) {
@@ -178,6 +211,32 @@ public class ImagenProductoService {
             return cloudflareService.obtenerUrlPublica(noParte);
         }
         return null;
+    }
+
+    /**
+     * Verifica si existe copia local de la imagen. Si no existe, la descarga
+     * desde la URL proporcionada (R2/Costex) en un hilo separado.
+     * Garantiza que el repositorio local siempre tenga copia de las imágenes en R2.
+     */
+    private void asegurarCopiaLocalEnBackground(final String noParte, final String urlOrigen) {
+        String rutaLocal = cdnProperties.getRutaImagenesLocal() + noParte + ".jpg";
+        File archivoLocal = new File(rutaLocal);
+        if (archivoLocal.exists()) {
+            return; // Ya existe localmente, no hacer nada
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String ruta = cadecoService.descargarImagen(noParte, urlOrigen);
+                    if (ruta != null) {
+                        System.out.println("Background: imagen R2 copiada a local: " + noParte);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Background: error al copiar imagen a local para " + noParte + ": " + e.getMessage());
+                }
+            }
+        }).start();
     }
 
     /**
@@ -203,5 +262,92 @@ public class ImagenProductoService {
         // Si Cloudflare no está configurado o falló, no podemos servir desde local vía URL
         System.err.println("Imagen local encontrada pero no se pudo subir a Cloudflare: " + noParte);
         return null;
+    }
+
+    /**
+     * Busca la imagen en CADECO (scraping de cadeco.com.mx).
+     * Si la encuentra, la descarga al repositorio local y la sube a Cloudflare R2.
+     * Retorna la URL de Cloudflare (jemkal) para servir desde CDN propio.
+     */
+    private String verificarCadecoYSubir(String noParte) {
+        try {
+            String urlCadeco = cadecoService.obtenerUrlImagenCadeco(noParte);
+            if (urlCadeco == null) {
+                return null;
+            }
+
+            System.out.println("Imagen encontrada en CADECO para " + noParte + ": " + urlCadeco);
+
+            // Descargar la imagen al repositorio local
+            String rutaLocal = cadecoService.descargarImagen(noParte, urlCadeco);
+            if (rutaLocal == null) {
+                System.err.println("No se pudo descargar imagen de CADECO para: " + noParte);
+                // Retornar la URL de CADECO directamente como fallback
+                return urlCadeco;
+            }
+
+            // Subir a Cloudflare R2 desde el archivo descargado
+            File archivoLocal = new File(rutaLocal);
+            if (archivoLocal.exists()) {
+                String urlR2 = cloudflareService.subirImagen(noParte, archivoLocal);
+                if (urlR2 != null) {
+                    System.out.println("Imagen CADECO subida a R2: " + noParte + " -> " + urlR2);
+                    return urlR2;
+                }
+            }
+
+            // Si no se pudo subir a R2, retornar la URL de CADECO directamente
+            return urlCadeco;
+
+        } catch (Exception e) {
+            System.err.println("Error al buscar imagen en CADECO para " + noParte + ": " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Sincroniza una imagen externa (Costex/CADECO) a AMBOS destinos en background:
+     * 1. Repositorio local (descarga)
+     * 2. Cloudflare R2 (sube)
+     * No bloquea el hilo principal; es un "best effort" para poblar ambos repositorios.
+     */
+    private void subirDesdeUrlEnBackground(final String noParte, final String urlOrigen) {
+        final boolean faltaR2 = cdnProperties.isR2Configurado() && !cloudflareService.existeImagen(noParte);
+        final String rutaLocalPath = cdnProperties.getRutaImagenesLocal() + noParte + ".jpg";
+        final boolean faltaLocal = !new File(rutaLocalPath).exists();
+
+        if (!faltaR2 && !faltaLocal) {
+            return; // Ya existe en ambos destinos
+        }
+
+        // Ejecutar en un hilo separado para no bloquear la respuesta
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Siempre descargar a local si no existe
+                    String rutaDescargada = rutaLocalPath;
+                    if (faltaLocal) {
+                        rutaDescargada = cadecoService.descargarImagen(noParte, urlOrigen);
+                        if (rutaDescargada != null) {
+                            System.out.println("Background: imagen descargada a local: " + noParte);
+                        }
+                    }
+
+                    // Subir a R2 si no existe ahí
+                    if (faltaR2 && rutaDescargada != null) {
+                        File archivo = new File(rutaDescargada);
+                        if (archivo.exists()) {
+                            String urlR2 = cloudflareService.subirImagen(noParte, archivo);
+                            if (urlR2 != null) {
+                                System.out.println("Background: imagen subida a R2: " + noParte);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    System.err.println("Background: error al sincronizar imagen para " + noParte + ": " + e.getMessage());
+                }
+            }
+        }).start();
     }
 }
