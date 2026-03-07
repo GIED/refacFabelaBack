@@ -51,6 +51,7 @@ import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
 import com.refacFabela.ws.com.microsoft.schemas._2003._10.serialization.arrays.ArrayOfstring;
 import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.ArrayOfDetalleCFDICancelacion;
+import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.DetallesPaqueteCreditos;
 import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.RespuestaCancelacion;
 import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.RespuestaCreditos;
 import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.RespuestaTFD33;
@@ -477,16 +478,19 @@ public class TimbrarXml {
 		// Se comprueba le operación
 		if (Respuesta.isOperacionExitosa()) {
 			for (int i = 0; i < Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().size(); i++) {
-				  System.out.println("En Uso: " + Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).isEnUso().booleanValue());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getFechaActivacion().toString());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getFechaVencimiento().toString());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getPaquete().getValue());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbres().intValue());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresRestantes().intValue());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresUsados().intValue());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).isVigente());
-	                  restantes=Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresRestantes().intValue();
-	                         System.out.println("RESTANTES :"+ restantes);
+				DetallesPaqueteCreditos paquete = Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i);
+				System.out.println("En Uso: " + paquete.isEnUso().booleanValue());
+				System.out.println(paquete.getFechaActivacion().toString());
+				System.out.println(paquete.getFechaVencimiento().toString());
+				System.out.println(paquete.getPaquete().getValue());
+				System.out.println(paquete.getTimbres().intValue());
+				System.out.println(paquete.getTimbresRestantes().intValue());
+				System.out.println(paquete.getTimbresUsados().intValue());
+				System.out.println("Vigente: " + paquete.isVigente());
+				if (Boolean.TRUE.equals(paquete.isVigente())) {
+					restantes += paquete.getTimbresRestantes().intValue();
+					System.out.println("RESTANTES ACUMULADOS: " + restantes);
+				}
 			}
 
 		} else {
@@ -500,30 +504,57 @@ public class TimbrarXml {
 	public static int consultaFolio(TcDatosFactura tcDatosFactura) {
 
 		int restantes = 0;
-
 		RespuestaCreditos Respuesta;
 
-		// Se invoca al método del WS
-		Respuesta = consultarCreditos(tcDatosFactura.getsUsuarioFolios(),tcDatosFactura.getsPasswordFolios());
-
-		// Se comprueba le operación
-		if (Respuesta.isOperacionExitosa()) {
-			for (int i = 0; i < Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().size(); i++) {
-				  System.out.println("En Uso: " + Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).isEnUso().booleanValue());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getFechaActivacion().toString());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getFechaVencimiento().toString());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getPaquete().getValue());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbres().intValue());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresRestantes().intValue());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresUsados().intValue());
-	                 System.out.println(Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).isVigente());
-	                  restantes=Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i).getTimbresRestantes().intValue();
-	                         System.out.println("RESTANTES :"+ restantes);
+		try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter("d:/Proyectos/Fabela/Backend/creditos-debug.log", true))) {
+			pw.println("TIMBRAR_XML consultaFolio - Usuario: " + tcDatosFactura.getsUsuarioFolios());
+			pw.flush();
+			
+			// Se invoca al método del WS
+			try {
+				Respuesta = consultarCreditos(tcDatosFactura.getsUsuarioFolios(),tcDatosFactura.getsPasswordFolios());
+			} catch (Exception e) {
+				pw.println("EXCEPCION SOAP: " + e.getMessage());
+				e.printStackTrace(pw);
+				pw.flush();
+				return 0;
 			}
 
-		} else {
-			System.out.println("Hubo un error al realizar la consulta");
-			System.out.println(Respuesta.getMensajeError().getValue());
+			pw.println("Respuesta SOAP - Exitosa: " + Respuesta.isOperacionExitosa());
+
+			if (Respuesta.isOperacionExitosa()) {
+				if (Respuesta.getPaquetes() == null || Respuesta.getPaquetes().getValue() == null) {
+					pw.println("Paquetes es NULL");
+					pw.flush();
+					return 0;
+				}
+				int totalPaquetes = Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().size();
+				pw.println("Total paquetes: " + totalPaquetes);
+				for (int i = 0; i < totalPaquetes; i++) {
+					DetallesPaqueteCreditos paquete = Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i);
+					pw.println("--- Paquete " + i + " ---");
+					pw.println("  EnUso: " + paquete.isEnUso());
+					pw.println("  FechaActivacion: " + paquete.getFechaActivacion());
+					pw.println("  FechaVencimiento: " + paquete.getFechaVencimiento());
+					pw.println("  Paquete: " + (paquete.getPaquete() != null ? paquete.getPaquete().getValue() : "NULL"));
+					pw.println("  Timbres: " + paquete.getTimbres());
+					pw.println("  TimbresRestantes: " + paquete.getTimbresRestantes());
+					pw.println("  TimbresUsados: " + paquete.getTimbresUsados());
+					pw.println("  Vigente: " + paquete.isVigente());
+					if (Boolean.TRUE.equals(paquete.isVigente())) {
+						restantes += paquete.getTimbresRestantes().intValue();
+						pw.println("  >> ACUMULADO: " + restantes);
+					}
+				}
+			} else {
+				pw.println("ERROR SOAP: " + (Respuesta.getMensajeError() != null ? Respuesta.getMensajeError().getValue() : "NULL"));
+			}
+
+			pw.println("FIN consultaFolio - restantes: " + restantes);
+			pw.println("---");
+			pw.flush();
+		} catch (Exception logEx) {
+			logEx.printStackTrace();
 		}
 
 		return restantes;
