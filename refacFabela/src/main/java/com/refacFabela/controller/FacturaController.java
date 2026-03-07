@@ -1,7 +1,5 @@
 package com.refacFabela.controller;
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,29 +131,11 @@ public class FacturaController {
 	
 	@GetMapping(value = "consultaCreditos")
 	public int consultaCreditos(@RequestParam(required = true) Long nDatoFactura) {
-		
-		try (PrintWriter pw = new PrintWriter(new FileWriter("d:/Proyectos/Fabela/Backend/creditos-debug.log", true))) {
-			pw.println("====== " + new java.util.Date() + " ======");
-			pw.println("CONTROLLER consultaCreditos - nDatoFactura: " + nDatoFactura);
-			try {
-				int creditos = this.facturaService.consultaCreditos(nDatoFactura);
-				pw.println("CONTROLLER consultaCreditos - Resultado: " + creditos);
-				pw.flush();
-				return creditos;
-			} catch (Exception e) {
-				logger.error("Error al consultar creditos ", e);
-				pw.println("CONTROLLER consultaCreditos - EXCEPCION: " + e.getMessage());
-				e.printStackTrace(pw);
-				pw.flush();
-				return 0;
-			}
-		} catch (Exception fileEx) {
-			logger.error("Error escribiendo log de creditos", fileEx);
-			try {
-				return this.facturaService.consultaCreditos(nDatoFactura);
-			} catch (Exception e2) {
-				return 0;
-			}
+		try {
+			return this.facturaService.consultaCreditos(nDatoFactura);
+		} catch (Exception e) {
+			logger.error("Error al consultar creditos ", e);
+			return 0;
 		}
 	}
 	

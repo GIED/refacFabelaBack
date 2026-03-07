@@ -113,9 +113,6 @@ public class TimbrarXml {
 
 			// mandamos xml a timbrar al webservice
 			if (consultaFolioDinamico(tcDatosFactura) > 0) {
-				System.out.println("ENTRE A TIMBRAR");
-				System.out.println("Este es el xml que se va a facturar:"+consello);
-				
 				procesarXml(consello, idVenta, cabecera, cadenaOriginal,tcDatosFactura);
 			} else {
 				System.err.println("creditos insuficientes");
