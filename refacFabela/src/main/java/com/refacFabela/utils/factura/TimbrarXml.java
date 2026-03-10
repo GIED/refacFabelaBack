@@ -503,53 +503,39 @@ public class TimbrarXml {
 		int restantes = 0;
 		RespuestaCreditos Respuesta;
 
-		try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter("d:/Proyectos/Fabela/Backend/creditos-debug.log", true))) {
-			pw.println("TIMBRAR_XML consultaFolio - Usuario: " + tcDatosFactura.getsUsuarioFolios());
-			pw.flush();
+		try {
+			System.out.println("consultaFolio - Usuario: " + tcDatosFactura.getsUsuarioFolios());
 			
 			// Se invoca al método del WS
 			try {
 				Respuesta = consultarCreditos(tcDatosFactura.getsUsuarioFolios(),tcDatosFactura.getsPasswordFolios());
 			} catch (Exception e) {
-				pw.println("EXCEPCION SOAP: " + e.getMessage());
-				e.printStackTrace(pw);
-				pw.flush();
+				System.err.println("consultaFolio - EXCEPCION SOAP: " + e.getMessage());
+				e.printStackTrace();
 				return 0;
 			}
 
-			pw.println("Respuesta SOAP - Exitosa: " + Respuesta.isOperacionExitosa());
+			System.out.println("consultaFolio - Respuesta SOAP - Exitosa: " + Respuesta.isOperacionExitosa());
 
 			if (Respuesta.isOperacionExitosa()) {
 				if (Respuesta.getPaquetes() == null || Respuesta.getPaquetes().getValue() == null) {
-					pw.println("Paquetes es NULL");
-					pw.flush();
+					System.out.println("consultaFolio - Paquetes es NULL");
 					return 0;
 				}
 				int totalPaquetes = Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().size();
-				pw.println("Total paquetes: " + totalPaquetes);
+				System.out.println("consultaFolio - Total paquetes: " + totalPaquetes);
 				for (int i = 0; i < totalPaquetes; i++) {
 					DetallesPaqueteCreditos paquete = Respuesta.getPaquetes().getValue().getDetallesPaqueteCreditos().get(i);
-					pw.println("--- Paquete " + i + " ---");
-					pw.println("  EnUso: " + paquete.isEnUso());
-					pw.println("  FechaActivacion: " + paquete.getFechaActivacion());
-					pw.println("  FechaVencimiento: " + paquete.getFechaVencimiento());
-					pw.println("  Paquete: " + (paquete.getPaquete() != null ? paquete.getPaquete().getValue() : "NULL"));
-					pw.println("  Timbres: " + paquete.getTimbres());
-					pw.println("  TimbresRestantes: " + paquete.getTimbresRestantes());
-					pw.println("  TimbresUsados: " + paquete.getTimbresUsados());
-					pw.println("  Vigente: " + paquete.isVigente());
 					if (Boolean.TRUE.equals(paquete.isVigente())) {
 						restantes += paquete.getTimbresRestantes().intValue();
-						pw.println("  >> ACUMULADO: " + restantes);
+						System.out.println("consultaFolio - Paquete " + i + " vigente, timbresRestantes: " + paquete.getTimbresRestantes() + ", acumulado: " + restantes);
 					}
 				}
 			} else {
-				pw.println("ERROR SOAP: " + (Respuesta.getMensajeError() != null ? Respuesta.getMensajeError().getValue() : "NULL"));
+				System.err.println("consultaFolio - ERROR SOAP: " + (Respuesta.getMensajeError() != null ? Respuesta.getMensajeError().getValue() : "NULL"));
 			}
 
-			pw.println("FIN consultaFolio - restantes: " + restantes);
-			pw.println("---");
-			pw.flush();
+			System.out.println("consultaFolio - FIN, restantes: " + restantes);
 		} catch (Exception logEx) {
 			logEx.printStackTrace();
 		}

@@ -168,24 +168,18 @@ public String complemento(Long idVenta, String cveCfdi) throws Exception {
 
 	@Override
 	public int consultaCreditos(Long nDatoFactura) {
-		try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter("d:/Proyectos/Fabela/Backend/creditos-debug.log", true))) {
-			pw.println("SERVICE consultaCreditos - nDatoFactura: " + nDatoFactura);
-			
+		try {
 			TcDatosFactura tcDatosFactura=tcDatosFacturaRepository.obtenerDatos(nDatoFactura);
 			
 			if(tcDatosFactura == null) {
-				pw.println("ERROR: tcDatosFactura es NULL para nDatoFactura=" + nDatoFactura);
-				pw.flush();
+				System.err.println("consultaCreditos - ERROR: tcDatosFactura es NULL para nDatoFactura=" + nDatoFactura);
 				return 0;
 			}
 			
-			pw.println("Usuario folios: " + tcDatosFactura.getsUsuarioFolios());
-			pw.println("Password folios: " + (tcDatosFactura.getsPasswordFolios() != null ? "****(tiene valor)" : "NULL"));
-			pw.flush();
+			System.out.println("consultaCreditos - Usuario folios: " + tcDatosFactura.getsUsuarioFolios());
 			
 			int resultado = TimbrarXml.consultaFolio(tcDatosFactura);
-			pw.println("Resultado consultaFolio: " + resultado);
-			pw.flush();
+			System.out.println("consultaCreditos - Resultado consultaFolio: " + resultado);
 			return resultado;
 		} catch (Exception e) {
 			e.printStackTrace();
