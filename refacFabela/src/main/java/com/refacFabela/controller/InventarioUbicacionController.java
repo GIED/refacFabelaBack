@@ -255,7 +255,7 @@ public class InventarioUbicacionController {
 
             UsuarioPrincipal usuario = getUsuarioActual();
             InventarioUbicacionDetalleDto detalle = inventarioService.ajustarProducto(
-                id, productoId, request.getsMotivoAjuste(), usuario.getnId()
+                id, productoId, request.getsMotivoAjuste(), request.getnCantidadCorregida(), usuario.getnId()
             );
 
             return ResponseEntity.ok(detalle);

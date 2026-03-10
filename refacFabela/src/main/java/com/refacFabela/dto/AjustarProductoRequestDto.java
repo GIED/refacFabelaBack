@@ -9,6 +9,7 @@ public class AjustarProductoRequestDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String sMotivoAjuste;
+    private Integer nCantidadCorregida;
 
     public AjustarProductoRequestDto() {
     }
@@ -20,5 +21,13 @@ public class AjustarProductoRequestDto implements Serializable {
 
     public void setsMotivoAjuste(String sMotivoAjuste) {
         this.sMotivoAjuste = sMotivoAjuste;
+    }
+
+    public Integer getnCantidadCorregida() {
+        return nCantidadCorregida;
+    }
+
+    public void setnCantidadCorregida(Integer nCantidadCorregida) {
+        this.nCantidadCorregida = nCantidadCorregida;
     }
 }

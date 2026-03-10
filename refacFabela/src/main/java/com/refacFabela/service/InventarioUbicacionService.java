@@ -105,12 +105,13 @@ public interface InventarioUbicacionService {
      * @param inventarioId ID del inventario
      * @param productoId ID del producto a ajustar
      * @param motivoAjuste Motivo del ajuste
+     * @param cantidadCorregida Cantidad corregida por admin (null = usar cantidad contada original)
      * @param usuarioId ID del usuario (admin) que ajusta
      * @return Detalle actualizado con campos de ajuste poblados
      * @throws Exception Si el inventario no está EN_REVISION o el producto no tiene diferencia
      */
     InventarioUbicacionDetalleDto ajustarProducto(Long inventarioId, Long productoId, 
-                                                  String motivoAjuste, Long usuarioId) throws Exception;
+                                                  String motivoAjuste, Integer cantidadCorregida, Long usuarioId) throws Exception;
 
     /**
      * Autorizar inventario (rol ADMIN).

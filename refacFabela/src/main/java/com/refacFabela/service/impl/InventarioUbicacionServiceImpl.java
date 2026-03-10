@@ -436,7 +436,7 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
 
     @Override
     public InventarioUbicacionDetalleDto ajustarProducto(Long inventarioId, Long productoId,
-                                                        String motivoAjuste, Long usuarioId) throws Exception {
+                                                        String motivoAjuste, Integer cantidadCorregida, Long usuarioId) throws Exception {
         TwInventarioUbicacion inventario = obtenerInventarioPorId(inventarioId);
 
         // Validar que el inventario esté en estado EN_REVISION
@@ -448,22 +448,35 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
         TwInventarioUbicacionDet detalle = detalleRepository.findByInventarioAndProducto(inventarioId, productoId)
             .orElseThrow(() -> new Exception("Producto no encontrado en el inventario"));
 
-        // Validar que el producto tenga diferencia
-        Integer diferencia = 0;
-        if (detalle.getnCantidadContada() != null && detalle.getnCantidadTeoricaRef() != null) {
-            diferencia = detalle.getnCantidadContada() - detalle.getnCantidadTeoricaRef();
-        }
-
-        if (diferencia == 0) {
-            throw new Exception("El producto no tiene diferencia, no requiere ajuste");
-        }
-
         // Validar que no esté ya ajustado
         if (Boolean.TRUE.equals(detalle.getbAjustado())) {
             throw new Exception("El producto ya fue ajustado previamente");
         }
 
-        // Actualizar tw_productobodega con la cantidad contada
+        // Determinar la cantidad final: usar corregida si se proporcionó, si no la contada original
+        Integer cantidadFinal;
+        if (cantidadCorregida != null) {
+            if (cantidadCorregida < 0) {
+                throw new Exception("La cantidad corregida no puede ser negativa");
+            }
+            cantidadFinal = cantidadCorregida;
+            // Actualizar la cantidad contada en el detalle con la corrección del admin
+            detalle.setnCantidadContada(cantidadCorregida);
+        } else {
+            cantidadFinal = detalle.getnCantidadContada();
+        }
+
+        // Recalcular diferencia con la cantidad final
+        Integer diferencia = 0;
+        if (cantidadFinal != null && detalle.getnCantidadTeoricaRef() != null) {
+            diferencia = cantidadFinal - detalle.getnCantidadTeoricaRef();
+        }
+
+        if (diferencia == 0 && cantidadCorregida == null) {
+            throw new Exception("El producto no tiene diferencia, no requiere ajuste");
+        }
+
+        // Actualizar tw_productobodega con la cantidad final
         List<TwProductobodega> productos = productoBodegaRepository.obtenerProductosPorUbicacion(
             inventario.getnIdBodega(),
             inventario.getnIdAnaquel(),
@@ -476,7 +489,7 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
 
         if (pbOpt.isPresent()) {
             TwProductobodega pb = pbOpt.get();
-            pb.setnCantidad(detalle.getnCantidadContada());
+            pb.setnCantidad(cantidadFinal);
             productoBodegaRepository.save(pb);
         } else {
             // Si no existe, crear el registro
@@ -485,7 +498,7 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
             nuevoPb.setnIdAnaquel(inventario.getnIdAnaquel());
             nuevoPb.setnIdNivel(inventario.getnIdNivel());
             nuevoPb.setnIdProducto(productoId);
-            nuevoPb.setnCantidad(detalle.getnCantidadContada());
+            nuevoPb.setnCantidad(cantidadFinal);
             nuevoPb.setnEstatus(1L); // Activo
             productoBodegaRepository.save(nuevoPb);
         }
