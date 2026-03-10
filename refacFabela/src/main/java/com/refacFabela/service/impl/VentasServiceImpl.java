@@ -276,7 +276,8 @@ public class VentasServiceImpl implements VentasService {
 
 			List<TwProductobodega> listaStock = new ArrayList<TwProductobodega>();
 			
-			listaStock = productoBodegaRepository.findBynIdProducto(twVentaProducto.getnIdProducto());
+			// Leer con bloqueo pesimista para evitar race condition con traspasos
+			listaStock = productoBodegaRepository.findBynIdProductoForUpdate(twVentaProducto.getnIdProducto());
 			
 			int cantidad = twVentaProducto.getnCantidad();	
 

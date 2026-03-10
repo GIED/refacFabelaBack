@@ -33,6 +33,8 @@ import com.refacFabela.tipoCambio.DataSerie;
 import com.refacFabela.tipoCambio.Series;
 import com.refacFabela.utils.DateTimeUtil;
 
+import javax.transaction.Transactional;
+
 @Service
 public class TwFacturasProveedorServiceImpl implements FacturasProveedorService {
 
@@ -218,9 +220,8 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 	
 	
 	
+	@Transactional
 	public void surtirPedidos(List<TwProductobodega> bodegas, List<TwPedidoProducto> pedidos) {
-		
-		
 		
 		System.err.println("EL TOTAL DE PEDIDOS A RECORRER ES DE:" + pedidos.size());
 

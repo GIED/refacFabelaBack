@@ -32,6 +32,8 @@ import com.refacFabela.utils.utils;
 import antlr.Utils;
 import ch.qos.logback.classic.pattern.Util;
 
+import javax.transaction.Transactional;
+
 @Service
 public class PedidosServiceImpl implements PedidosService {
 
@@ -104,6 +106,7 @@ public class PedidosServiceImpl implements PedidosService {
 	}
 
 	@Override
+	@Transactional
 	public TwPedidoProducto ingresoProducto(TwPedidoProducto twPedidoProducto) {
 		// DECRARACIÓN DE VARIABLES
 		utils util = new utils();

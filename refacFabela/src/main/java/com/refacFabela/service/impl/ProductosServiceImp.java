@@ -631,7 +631,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			
 			/*Se re integra el producto a la bodega*/
 			twProductobodega.setnCantidad(twProductobodega.getnCantidad()+ventaProductoCancelaDto.VentaProductoDto.getnCantidad());			
-			//productoBodegaRepository.save(twProductobodega);	
+			productoBodegaRepository.save(twProductobodega);
 			
 			/*Se guarda el producto cancelado en productos cancela*/
 			if(twVenta.getnIdEstatusVenta()>1) {
@@ -787,7 +787,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			
 			/*Se re integra el producto a la bodega*/
 			twProductobodega.setnCantidad(twProductobodega.getnCantidad()+ventaProductoCancelaDto.nCancela);			
-		    //productoBodegaRepository.save(twProductobodega);
+			productoBodegaRepository.save(twProductobodega);
 			
 			/*PASO 4: Saldo utilizado con montos de lo CANCELADO*/
 			if(twVenta.getnTipoPago()==1L && twVenta.getnIdEstatusVenta()>1) {

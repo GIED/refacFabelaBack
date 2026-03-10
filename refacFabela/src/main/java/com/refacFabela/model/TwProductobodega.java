@@ -14,6 +14,10 @@ public class TwProductobodega implements Serializable {
 	@Column(name = "n_id")
 	private Long nId;
 	
+	@Version
+	@Column(name = "n_version")
+	private Integer nVersion;
+	
 	@Column(name = "n_idbodega")
 	private Long nIdBodega;
 	
@@ -61,6 +65,14 @@ public class TwProductobodega implements Serializable {
 
 	public void setnId(Long nId) {
 		this.nId = nId;
+	}
+
+	public Integer getnVersion() {
+		return nVersion;
+	}
+
+	public void setnVersion(Integer nVersion) {
+		this.nVersion = nVersion;
 	}
 
 	public Long getnIdBodega() {

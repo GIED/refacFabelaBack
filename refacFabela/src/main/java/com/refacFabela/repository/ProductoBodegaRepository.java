@@ -2,7 +2,10 @@ package com.refacFabela.repository;
 
 import java.util.List;
 
+import javax.persistence.LockModeType;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +28,21 @@ public interface ProductoBodegaRepository extends JpaRepository<TwProductobodega
 	
 	@Query("Select d from TwProductobodega d  where d.nIdProducto =:producto and d.nIdBodega =:bodega and d.tcProducto.nEstatus = 1" )
 	public TwProductobodega obtenerStockBodega(Long producto, Long bodega);
+	
+	/**
+	 * Obtiene todas las bodegas de un producto CON bloqueo pesimista (SELECT FOR UPDATE).
+	 * Usar dentro de @Transactional para evitar race conditions en traspasos y ventas.
+	 */
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Query("Select d from TwProductobodega d where d.nIdProducto =:id and d.tcProducto.nEstatus = 1 order by d.nIdBodega asc")
+	public List<TwProductobodega> findBynIdProductoForUpdate(Long id);
+	
+	/**
+	 * Obtiene stock de una bodega específica CON bloqueo pesimista (SELECT FOR UPDATE).
+	 */
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Query("Select d from TwProductobodega d where d.nIdProducto =:producto and d.nIdBodega =:bodega and d.tcProducto.nEstatus = 1")
+	public TwProductobodega obtenerStockBodegaForUpdate(Long producto, Long bodega);
 	  
 	
 }
