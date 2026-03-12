@@ -30,6 +30,7 @@ import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.repository.CatalogoAnaquelRepository;
 import com.refacFabela.repository.CatalogoBodegasRepository;
 import com.refacFabela.repository.CatalogoNivelesRepository;
+import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TwInventarioUbicacionDetHistRepository;
 import com.refacFabela.repository.TwInventarioUbicacionDetRepository;
 import com.refacFabela.repository.TwInventarioUbicacionRepository;
@@ -65,6 +66,9 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
 
     @Autowired
     private TwProductoBodegaRepository productoBodegaRepository;
+
+    @Autowired
+    private ProductoBodegaRepository productoBodegaRepo;
 
     @Autowired
     private CatalogoBodegasRepository bodegasRepository;
@@ -477,22 +481,16 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
         }
 
         // Actualizar tw_productobodega con la cantidad final
-        List<TwProductobodega> productos = productoBodegaRepository.obtenerProductosPorUbicacion(
-            inventario.getnIdBodega(),
-            inventario.getnIdAnaquel(),
-            inventario.getnIdNivel()
-        );
+        // Buscar por producto + bodega SIN filtro de cantidad (evita duplicados cuando qty=0)
+        TwProductobodega pb = productoBodegaRepo.obtenerStockBodega(productoId, inventario.getnIdBodega());
 
-        Optional<TwProductobodega> pbOpt = productos.stream()
-            .filter(pb -> pb.getnIdProducto().equals(productoId))
-            .findFirst();
-
-        if (pbOpt.isPresent()) {
-            TwProductobodega pb = pbOpt.get();
+        if (pb != null) {
             pb.setnCantidad(cantidadFinal);
+            pb.setnIdAnaquel(inventario.getnIdAnaquel());
+            pb.setnIdNivel(inventario.getnIdNivel());
             productoBodegaRepository.save(pb);
         } else {
-            // Si no existe, crear el registro
+            // Verdaderamente no existe — crear el registro
             TwProductobodega nuevoPb = new TwProductobodega();
             nuevoPb.setnIdBodega(inventario.getnIdBodega());
             nuevoPb.setnIdAnaquel(inventario.getnIdAnaquel());
@@ -546,23 +544,17 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
 
         // Actualizar tw_productobodega con las cantidades contadas
         for (TwInventarioUbicacionDet linea : detalle) {
-            // Buscar el registro en tw_productobodega
-            List<TwProductobodega> productos = productoBodegaRepository.obtenerProductosPorUbicacion(
-                inventario.getnIdBodega(),
-                inventario.getnIdAnaquel(),
-                inventario.getnIdNivel()
-            );
+            // Buscar por producto + bodega SIN filtro de cantidad (evita duplicados cuando qty=0)
+            TwProductobodega pb = productoBodegaRepo.obtenerStockBodega(
+                linea.getnIdProducto(), inventario.getnIdBodega());
 
-            Optional<TwProductobodega> pbOpt = productos.stream()
-                .filter(pb -> pb.getnIdProducto().equals(linea.getnIdProducto()))
-                .findFirst();
-
-            if (pbOpt.isPresent()) {
-                TwProductobodega pb = pbOpt.get();
+            if (pb != null) {
                 pb.setnCantidad(linea.getnCantidadContada());
+                pb.setnIdAnaquel(inventario.getnIdAnaquel());
+                pb.setnIdNivel(inventario.getnIdNivel());
                 productoBodegaRepository.save(pb);
             } else {
-                // Si no existe, crear el registro
+                // Verdaderamente no existe — crear el registro
                 TwProductobodega nuevoPb = new TwProductobodega();
                 nuevoPb.setnIdBodega(inventario.getnIdBodega());
                 nuevoPb.setnIdAnaquel(inventario.getnIdAnaquel());

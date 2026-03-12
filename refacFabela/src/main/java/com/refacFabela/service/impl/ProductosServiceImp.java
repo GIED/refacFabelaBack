@@ -191,6 +191,7 @@ public class ProductosServiceImp implements ProductosService {
 	}
 
 	@Override
+	@Transactional
 	public TcProducto guardarProducto(TcProducto tcProducto) {
 
 		// se asigana la fecha de la aplicación
@@ -229,8 +230,8 @@ public class ProductosServiceImp implements ProductosService {
 		
 		for (int i = 0; i < bodegas.size(); i++) {
 		
-			
-			bodegaExiste=productoBodegaRepository.obtenerProductoBodega(nuevoProducto.getnId(), bodegas.get(i).getsBodega());
+			// Verificar por IDs (producto + bodega) en vez de nombre de bodega
+			bodegaExiste=productoBodegaRepository.obtenerStockBodega(nuevoProducto.getnId(), bodegas.get(i).getnId());
 			System.err.println(bodegaExiste);
 			if(bodegaExiste==null) {
 				TwProductobodega bodegaNuevo= new TwProductobodega();				
@@ -1005,8 +1006,20 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	}
 
 	@Override
+	@Transactional
 	public TwProductobodega guardarProductoBodega(TwProductobodega twProductobodega) {
-		
+		// Si viene sin ID (insert), verificar que no exista ya un registro para ese producto+bodega
+		if (twProductobodega.getnId() == null && twProductobodega.getnIdProducto() != null && twProductobodega.getnIdBodega() != null) {
+			TwProductobodega existente = productoBodegaRepository.obtenerStockBodega(
+					twProductobodega.getnIdProducto(), twProductobodega.getnIdBodega());
+			if (existente != null) {
+				// Ya existe: actualizar el registro existente en lugar de crear uno nuevo
+				existente.setnCantidad(twProductobodega.getnCantidad());
+				existente.setnIdAnaquel(twProductobodega.getnIdAnaquel());
+				existente.setnIdNivel(twProductobodega.getnIdNivel());
+				return twProductoBodegaRepository.save(existente);
+			}
+		}
 		return twProductoBodegaRepository.save(twProductobodega);
 	}
 
