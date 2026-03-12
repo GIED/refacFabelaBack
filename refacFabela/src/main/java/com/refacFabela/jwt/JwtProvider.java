@@ -50,7 +50,7 @@ public class JwtProvider {
 				.claim("nombreUsuario", usuarioPrincipal.getsNombreUsuario())
 				.claim("roles", roles)
 				.setIssuedAt(new Date())
-				.setExpiration(new Date(new Date().getTime() + expiration * 180))
+				.setExpiration(new Date(new Date().getTime() + expiration * 1000L))
 				.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
 	}
 
@@ -64,15 +64,15 @@ public class JwtProvider {
 			return true;
 
 		} catch (MalformedJwtException e) {
-			logger.equals("token mal formado");
+			logger.error("Token mal formado: {}", e.getMessage());
 		} catch (UnsupportedJwtException e) {
-			logger.equals("token no soportado");
+			logger.error("Token no soportado: {}", e.getMessage());
 		} catch (ExpiredJwtException e) {
-			logger.equals("token expirado");
+			logger.error("Token expirado: {}", e.getMessage());
 		} catch (IllegalArgumentException e) {
-			logger.equals("token  vacío");
+			logger.error("Token vacío: {}", e.getMessage());
 		} catch (SignatureException e) {
-			logger.equals("fallo en la firma");
+			logger.error("Fallo en la firma: {}", e.getMessage());
 		}
 		return false;
 	}
@@ -80,8 +80,10 @@ public class JwtProvider {
 	public String refreshToken(JwtDto jwtDto) throws ParseException {
 		try {
 			Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(jwtDto.getToken());
-		}catch (ExpiredJwtException e) {
-				logger.equals("token expirado");
+			// Token aún válido — retornarlo tal cual (no generar null)
+			return jwtDto.getToken();
+		} catch (ExpiredJwtException e) {
+				logger.error("Refresh de token expirado, generando nuevo token");
 				JWT jwt = JWTParser.parse(jwtDto.getToken());
 				JWTClaimsSet claims = jwt.getJWTClaimsSet();
 				String usuario = claims.getSubject();
@@ -95,10 +97,9 @@ public class JwtProvider {
 						.claim("nombreUsuario", nombreUsuario)
 						.claim("roles", roles)
 						.setIssuedAt(new Date())
-						.setExpiration(new Date(new Date().getTime() + expiration * 180))
+						.setExpiration(new Date(new Date().getTime() + expiration * 1000L))
 						.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
 		}
-		return null;
 	}
 
 }

@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import com.refacFabela.dto.JwtDto;
 import com.refacFabela.dto.LoginUsuario;
 import com.refacFabela.dto.Mensaje;
@@ -33,20 +36,27 @@ public class AuthController {
 	private JwtProvider jwtProvider;
 	
 	@PostMapping("/login")
-	public ResponseEntity<JwtDto> login (@RequestBody LoginUsuario loginUsuario, BindingResult bindingResult){
+	public ResponseEntity<?> login(@RequestBody LoginUsuario loginUsuario, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			return new ResponseEntity(new Mensaje("campos incorrectos"), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new Mensaje("Campos incorrectos o vacíos"), HttpStatus.BAD_REQUEST);
 		}
-		
-		Authentication authentication = 
-				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getsUsuario(), loginUsuario.getsPassword()));
-		
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		
-		String jwt = jwtProvider.generateToken(authentication);
-		JwtDto jwtDto = new JwtDto(jwt);
-		return new ResponseEntity(jwtDto, HttpStatus.OK);
-		
+		try {
+			Authentication authentication =
+					authenticationManager.authenticate(
+							new UsernamePasswordAuthenticationToken(loginUsuario.getsUsuario(), loginUsuario.getsPassword()));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			String jwt = jwtProvider.generateToken(authentication);
+			JwtDto jwtDto = new JwtDto(jwt);
+			return new ResponseEntity<>(jwtDto, HttpStatus.OK);
+		} catch (BadCredentialsException e) {
+			return new ResponseEntity<>(new Mensaje("Usuario o contraseña incorrectos. Verifica tus datos e intenta nuevamente."), HttpStatus.UNAUTHORIZED);
+		} catch (DisabledException e) {
+			return new ResponseEntity<>(new Mensaje("Tu cuenta está desactivada. Contacta al administrador."), HttpStatus.UNAUTHORIZED);
+		} catch (LockedException e) {
+			return new ResponseEntity<>(new Mensaje("Tu cuenta está bloqueada. Contacta al administrador."), HttpStatus.UNAUTHORIZED);
+		} catch (Exception e) {
+			return new ResponseEntity<>(new Mensaje("Error al iniciar sesión. Intenta de nuevo."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@PostMapping("/refresh")
