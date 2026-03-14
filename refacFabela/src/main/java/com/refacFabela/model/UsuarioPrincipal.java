@@ -20,19 +20,21 @@ public class UsuarioPrincipal implements UserDetails{
 	private String sPassword;
 	private String sNombreUsuario;
 	private Integer nEstatus;
+	private Long nIdCliente;
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	
 	
 	
 	public UsuarioPrincipal(Long nId, String sClaveUser , String sUsuario, String sPassword, String sNombreUsuario
-			, Integer nEstatus , Collection<? extends GrantedAuthority> authorities) {
+			, Integer nEstatus , Long nIdCliente, Collection<? extends GrantedAuthority> authorities) {
 		this.nId=nId;
 		this.sClaveUser = sClaveUser;
 		this.sUsuario = sUsuario;
 		this.sPassword = sPassword;
 		this.sNombreUsuario = sNombreUsuario;
 		this.nEstatus=nEstatus;
+		this.nIdCliente=nIdCliente;
 		this.authorities = authorities;
 	}
 	
@@ -49,7 +51,7 @@ public class UsuarioPrincipal implements UserDetails{
 				.collect(Collectors.toList());
 		
 		//regresa el usuario con sus privilegios
-		return new UsuarioPrincipal(usuario.getnId(),usuario.getsClaveUser(), usuario.getsUsuario(), usuario.getsPassword(), usuario.getsNombreUsuario(),usuario.getnEstatus(), authorities);
+		return new UsuarioPrincipal(usuario.getnId(),usuario.getsClaveUser(), usuario.getsUsuario(), usuario.getsPassword(), usuario.getsNombreUsuario(),usuario.getnEstatus(), usuario.getnIdCliente(), authorities);
 	}
 	
 	 
@@ -104,6 +106,10 @@ public class UsuarioPrincipal implements UserDetails{
 
 	public Long getnId() {
 		return nId;
+	}
+
+	public Long getnIdCliente() {
+		return nIdCliente;
 	}
 
 	

@@ -211,6 +211,11 @@ public class CotizacionServiceImpl implements CotizacionService {
 		return twCotizacionesRepository.findByCotizacionesCliente(nIdCliente) ;
 	}
 
+	@Override
+	public List<TwCotizacionesDetalle> consultaHistorialCotizacionesCliente(Long nIdCliente) {
+		return twCotizacionesRepository.findHistorialByCliente(nIdCliente);
+	}
+
 
 
 	

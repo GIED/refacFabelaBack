@@ -49,6 +49,7 @@ public class JwtProvider {
 				.claim("nId", usuarioPrincipal.getnId())
 				.claim("nombreUsuario", usuarioPrincipal.getsNombreUsuario())
 				.claim("roles", roles)
+				.claim("nIdCliente", usuarioPrincipal.getnIdCliente())
 				.setIssuedAt(new Date())
 				.setExpiration(new Date(new Date().getTime() + expiration * 1000L))
 				.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
@@ -90,12 +91,14 @@ public class JwtProvider {
 				Long nId = (Long) claims.getClaim("nId");
 				String nombreUsuario = (String) claims.getClaim("nombreUsuario");
 				List<String> roles = (List<String>) claims.getClaim("roles");
+				Long nIdCliente = (Long) claims.getClaim("nIdCliente");
 				
 				return Jwts.builder()
 						.setSubject(usuario)
 						.claim("nId", nId)
 						.claim("nombreUsuario", nombreUsuario)
 						.claim("roles", roles)
+						.claim("nIdCliente", nIdCliente)
 						.setIssuedAt(new Date())
 						.setExpiration(new Date(new Date().getTime() + expiration * 1000L))
 						.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();

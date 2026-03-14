@@ -116,6 +116,16 @@ public class VentasServiceImpl implements VentasService {
 
 		return tvVentaDetalleRepository.consultaVentaDetalleId(nIdCliente, nTipoPago);
 	}
+
+	@Override
+	public List<TvVentaDetalle> consultaHistorialVentasCliente(Long nIdCliente) {
+		return tvVentaDetalleRepository.findHistorialByNIdCliente(nIdCliente);
+	}
+
+	@Override
+	public List<TvVentaDetalle> consultaPendientesVentasCliente(Long nIdCliente) {
+		return tvVentaDetalleRepository.findPendientesByNIdCliente(nIdCliente);
+	}
 	
 	@Override
 	public TwVenta guardarVenta(VentaDto ventaDto) {

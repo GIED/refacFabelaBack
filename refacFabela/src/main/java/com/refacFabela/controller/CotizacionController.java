@@ -119,6 +119,16 @@ public class CotizacionController {
 		}
 		return null;
 	}
+
+	@GetMapping("/consultaHistorialCotizacionesCliente")
+	public List<TwCotizacionesDetalle> consultaHistorialCotizacionesCliente(@RequestParam Long nIdCliente) {
+		try {
+			return cotizacionService.consultaHistorialCotizacionesCliente(nIdCliente);
+		} catch (Exception e) {
+			logger.error("Error al obtener historial cotizaciones cliente " + e);
+		}
+		return null;
+	}
 	
 	
 	

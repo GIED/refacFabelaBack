@@ -26,6 +26,7 @@ public class TcCliente implements Serializable {
 
 	private Long n_idUsuarioCredito;
 
+	@Column(name = "n_limiteCredito")
 	private BigDecimal n_limiteCredito;
 
 	@Column(name = "s_correo")

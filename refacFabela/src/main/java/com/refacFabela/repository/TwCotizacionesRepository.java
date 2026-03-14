@@ -24,4 +24,8 @@ public interface TwCotizacionesRepository extends JpaRepository<TwCotizacionesDe
 	
 
 
+	@Query(value="Select * from tv_cotizacionDetalle where n_idCliente=:Cliente order by n_id desc ",   nativeQuery = true) 
+	public List<TwCotizacionesDetalle> findHistorialByCliente(Long Cliente);
+
+
 }

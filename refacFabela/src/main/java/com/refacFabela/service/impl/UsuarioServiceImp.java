@@ -57,6 +57,10 @@ public class UsuarioServiceImp implements UsuarioService {
 		usu.setsNombreUsuario(tcUsuario.getsNombreUsuario());
 		usu.setsPassword(passwordEncoder.encode(tcUsuario.getsPassword()));	
 		usu.setRoles(asignaRol(tcUsuario));
+		// Actualizar nIdCliente si viene en el DTO
+		if (tcUsuario.getnIdCliente() != null) {
+			usu.setnIdCliente(tcUsuario.getnIdCliente());
+		}
 		if(tcUsuario.getnEstatus().equals(0)) {
 			usu.setnEstatus(0);
 		}
@@ -101,6 +105,11 @@ public class UsuarioServiceImp implements UsuarioService {
 		
 		usuario.setRoles(asignaRol(nuevoUsuario));
 		
+		// Si es revendedor, asignar el id de cliente
+		if (nuevoUsuario.getnIdCliente() != null) {
+			usuario.setnIdCliente(nuevoUsuario.getnIdCliente());
+		}
+		
 		TcUsuario newUsuario = usuarioRepository.save(usuario); 
 		
 		
@@ -137,6 +146,9 @@ public class UsuarioServiceImp implements UsuarioService {
 		}
 		if (nuevoUsuario.getRoles().contains("caja")){
 			roles.add(rolService.getByRolNombre(RolNombre.ROLE_CAJA).get());
+		}
+		if (nuevoUsuario.getRoles().contains("revendedor")){
+			roles.add(rolService.getByRolNombre(RolNombre.ROLE_REVENDEDOR).get());
 		}
 		
 		

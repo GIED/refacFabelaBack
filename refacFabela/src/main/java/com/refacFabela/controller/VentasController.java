@@ -169,6 +169,26 @@ public class VentasController {
 		}
 		return null;
 	}
+
+	@GetMapping("/obtenerHistorialVentasCliente")
+	public List<TvVentaDetalle> obtenerHistorialVentasCliente(@RequestParam() Long nIdCliente) {
+		try {
+			return ventasService.consultaHistorialVentasCliente(nIdCliente);
+		} catch (Exception e) {
+			logger.error("Error al obtener historial ventas cliente " + e);
+		}
+		return null;
+	}
+
+	@GetMapping("/obtenerVentasPendientesCliente")
+	public List<TvVentaDetalle> obtenerVentasPendientesCliente(@RequestParam() Long nIdCliente) {
+		try {
+			return ventasService.consultaPendientesVentasCliente(nIdCliente);
+		} catch (Exception e) {
+			logger.error("Error al obtener ventas pendientes cliente " + e);
+		}
+		return null;
+	}
 	@GetMapping("/obtenerAbonosVentaId") 
 	public List<TwAbono> obtenerAbonosVentaId(@RequestParam() Long nId) {
 

@@ -33,6 +33,9 @@ public class TcUsuario implements Serializable {
 	@Column(name = "n_estatus")
 	private Integer nEstatus;
 	
+	@Column(name = "n_id_cliente")
+	private Long nIdCliente;
+	
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name= "tr_usuario_rol", joinColumns =  @JoinColumn(name = "usuario_id") , inverseJoinColumns = @JoinColumn(name = "rol_id"))
@@ -138,6 +141,14 @@ public class TcUsuario implements Serializable {
 
 	public void setRoles(Set<TcRol> roles) {
 		this.roles = roles;
+	}
+
+	public Long getnIdCliente() {
+		return nIdCliente;
+	}
+
+	public void setnIdCliente(Long nIdCliente) {
+		this.nIdCliente = nIdCliente;
 	}
 
 	@Override
