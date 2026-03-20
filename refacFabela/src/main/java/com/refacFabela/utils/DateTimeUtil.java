@@ -9,10 +9,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import com.ibm.icu.text.SimpleDateFormat;
 
 public class DateTimeUtil {
 
