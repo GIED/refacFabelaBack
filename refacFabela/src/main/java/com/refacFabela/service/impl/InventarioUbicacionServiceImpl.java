@@ -37,6 +37,7 @@ import com.refacFabela.repository.TwInventarioUbicacionRepository;
 import com.refacFabela.repository.TwProductoBodegaRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.service.InventarioUbicacionService;
+import com.refacFabela.utils.envioMail;
 
 @Service
 @Transactional
@@ -182,19 +183,13 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
         int productosEliminados = 0;
         int productosNoEliminados = 0;
 
-        // 1. Procesar productos que ya no existen en tw_productobodega
+        // 1. Procesar productos que ya no existen en tw_productobodega (inactivos o movidos)
         List<TwInventarioUbicacionDet> lineasAEliminar = new ArrayList<>();
         for (TwInventarioUbicacionDet linea : detalleActual) {
             if (!mapaProductosActuales.containsKey(linea.getnIdProducto())) {
-                // El producto ya no existe en la ubicación
-                if (linea.getnCantidadContada() == null) {
-                    // No está contado, se puede eliminar
-                    lineasAEliminar.add(linea);
-                    productosEliminados++;
-                } else {
-                    // Ya está contado, NO se puede eliminar
-                    productosNoEliminados++;
-                }
+                // Producto inactivo o ya no existe en la ubicación: eliminar siempre
+                lineasAEliminar.add(linea);
+                productosEliminados++;
             }
         }
 
@@ -457,6 +452,11 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
             throw new Exception("El producto ya fue ajustado previamente");
         }
 
+        // Validar que el producto esté activo
+        if (detalle.getTcProducto() == null || detalle.getTcProducto().getnEstatus() != 1) {
+            throw new Exception("El producto " + productoId + " está inactivo y no debe formar parte del inventario");
+        }
+
         // Determinar la cantidad final: usar corregida si se proporcionó, si no la contada original
         Integer cantidadFinal;
         if (cantidadCorregida != null) {
@@ -481,7 +481,6 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
         }
 
         // Actualizar tw_productobodega con la cantidad final
-        // Buscar por producto + bodega SIN filtro de cantidad (evita duplicados cuando qty=0)
         TwProductobodega pb = productoBodegaRepo.obtenerStockBodega(productoId, inventario.getnIdBodega());
 
         if (pb != null) {
@@ -490,15 +489,9 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
             pb.setnIdNivel(inventario.getnIdNivel());
             productoBodegaRepository.save(pb);
         } else {
-            // Verdaderamente no existe — crear el registro
-            TwProductobodega nuevoPb = new TwProductobodega();
-            nuevoPb.setnIdBodega(inventario.getnIdBodega());
-            nuevoPb.setnIdAnaquel(inventario.getnIdAnaquel());
-            nuevoPb.setnIdNivel(inventario.getnIdNivel());
-            nuevoPb.setnIdProducto(productoId);
-            nuevoPb.setnCantidad(cantidadFinal);
-            nuevoPb.setnEstatus(1L); // Activo
-            productoBodegaRepository.save(nuevoPb);
+            // El producto está inactivo (nEstatus=0) o no existe en la bodega
+            throw new Exception("No se puede ajustar el producto " + productoId
+                + ": está inactivo o no existe en la bodega. Verifique el estatus del producto.");
         }
 
         // Marcar el detalle como ajustado
@@ -528,6 +521,13 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
 
         inventarioRepository.save(inventario);
 
+        // Enviar correo con los productos ajustados
+        try {
+            enviarCorreoAutorizacion(inventario, usuarioId);
+        } catch (Exception e) {
+            System.err.println("[autorizarInventario] Error al enviar correo de autorización: " + e.getMessage());
+        }
+
         return convertirADto(inventario);
     }
 
@@ -544,7 +544,13 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
 
         // Actualizar tw_productobodega con las cantidades contadas
         for (TwInventarioUbicacionDet linea : detalle) {
-            // Buscar por producto + bodega SIN filtro de cantidad (evita duplicados cuando qty=0)
+            // Saltar productos inactivos
+            if (linea.getTcProducto() == null || linea.getTcProducto().getnEstatus() != 1) {
+                System.out.println("[aplicarInventario] Producto " + linea.getnIdProducto()
+                    + " omitido: inactivo, no debe formar parte del inventario");
+                continue;
+            }
+
             TwProductobodega pb = productoBodegaRepo.obtenerStockBodega(
                 linea.getnIdProducto(), inventario.getnIdBodega());
 
@@ -553,16 +559,6 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
                 pb.setnIdAnaquel(inventario.getnIdAnaquel());
                 pb.setnIdNivel(inventario.getnIdNivel());
                 productoBodegaRepository.save(pb);
-            } else {
-                // Verdaderamente no existe — crear el registro
-                TwProductobodega nuevoPb = new TwProductobodega();
-                nuevoPb.setnIdBodega(inventario.getnIdBodega());
-                nuevoPb.setnIdAnaquel(inventario.getnIdAnaquel());
-                nuevoPb.setnIdNivel(inventario.getnIdNivel());
-                nuevoPb.setnIdProducto(linea.getnIdProducto());
-                nuevoPb.setnCantidad(linea.getnCantidadContada());
-                nuevoPb.setnEstatus(1L); // Activo
-                productoBodegaRepository.save(nuevoPb);
             }
         }
 
@@ -580,6 +576,65 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
     }
 
     // ========== Métodos auxiliares ==========
+
+    private void enviarCorreoAutorizacion(TwInventarioUbicacion inventario, Long usuarioId) {
+        List<TwInventarioUbicacionDet> detalles = detalleRepository.findByInventarioId(inventario.getnId());
+
+        // Filtrar solo los productos con diferencia (ajustados)
+        List<TwInventarioUbicacionDet> ajustados = detalles.stream()
+            .filter(d -> d.getnCantidadContada() != null && d.getnCantidadTeoricaRef() != null
+                    && !d.getnCantidadContada().equals(d.getnCantidadTeoricaRef()))
+            .collect(Collectors.toList());
+
+        if (ajustados.isEmpty()) {
+            return;
+        }
+
+        // Obtener nombre del usuario que autoriza
+        String nombreUsuario = "Desconocido";
+        Optional<TcUsuario> usuarioOpt = usuariosRepository.findById(usuarioId);
+        if (usuarioOpt.isPresent()) {
+            nombreUsuario = usuarioOpt.get().getsNombreUsuario();
+        }
+
+        // Obtener nombre de la bodega
+        String nombreBodega = inventario.getTcBodega() != null
+            ? inventario.getTcBodega().getsBodega() : "Bodega " + inventario.getnIdBodega();
+
+        // Construir el mensaje
+        StringBuilder sb = new StringBuilder();
+        sb.append("Se ha autorizado el ajuste del inventario #").append(inventario.getnId()).append("\n\n");
+        sb.append("Ubicación: ").append(nombreBodega).append("\n");
+        sb.append("Autorizado por: ").append(nombreUsuario).append("\n");
+        sb.append("Medio: Inventarios por ubicación\n");
+        sb.append("Motivo: ").append(inventario.getsMotivoAutorizacion() != null
+            ? inventario.getsMotivoAutorizacion() : "Sin motivo").append("\n\n");
+        sb.append("Productos ajustados:\n");
+        sb.append(String.format("%-20s %-40s %10s %10s %10s\n", "No. Parte", "Producto", "Teórica", "Contada", "Diferencia"));
+        sb.append("------------------------------------------------------------------------------------------------------\n");
+
+        for (TwInventarioUbicacionDet d : ajustados) {
+            String noParte = "";
+            String nombreProducto = "";
+            if (d.getTcProducto() != null) {
+                noParte = d.getTcProducto().getsNoParte() != null ? d.getTcProducto().getsNoParte() : "";
+                nombreProducto = d.getTcProducto().getsProducto() != null ? d.getTcProducto().getsProducto() : "";
+            }
+            if (nombreProducto.length() > 40) {
+                nombreProducto = nombreProducto.substring(0, 37) + "...";
+            }
+            int diferencia = d.getnCantidadContada() - d.getnCantidadTeoricaRef();
+            sb.append(String.format("%-20s %-40s %10d %10d %10d\n",
+                noParte, nombreProducto, d.getnCantidadTeoricaRef(), d.getnCantidadContada(), diferencia));
+        }
+
+        sb.append("\nTotal de productos ajustados: ").append(ajustados.size());
+
+        envioMail.enviarCorreoEstandar("fabela_mauricio@hotmail.com",
+            "Autorización de ajuste de inventario #" + inventario.getnId(), sb.toString());
+
+        System.out.println("[autorizarInventario] Correo de autorización enviado para inventario #" + inventario.getnId());
+    }
 
     private TwInventarioUbicacion obtenerInventarioPorId(Long inventarioId) throws Exception {
         return inventarioRepository.findById(inventarioId)
