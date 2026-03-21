@@ -33,6 +33,7 @@ import com.refacFabela.model.TcMoneda;
 import com.refacFabela.model.TcNivel;
 import com.refacFabela.model.TcRegimenFiscal;
 import com.refacFabela.model.TcTipoProveedor;
+import com.refacFabela.model.TcTipoRevendedor;
 import com.refacFabela.model.TcTipoVenta;
 import com.refacFabela.model.TcUsocfdi;
 import com.refacFabela.model.TwCaja;
@@ -396,6 +397,16 @@ public class CatalogosController {
 		} catch (Exception e) {
 
 			logger.error("Error al obtener tipo proveedor " + e);
+		}
+		return null;
+	}
+
+	@GetMapping("/getTipoRevendedor")
+	public List<TcTipoRevendedor> getTipoRevendedor() {
+		try {
+			return catalagosService.getTipoRevendedor();
+		} catch (Exception e) {
+			logger.error("Error al obtener tipo revendedor " + e);
 		}
 		return null;
 	}

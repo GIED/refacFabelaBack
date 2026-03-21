@@ -61,6 +61,10 @@ public class UsuarioServiceImp implements UsuarioService {
 		if (tcUsuario.getnIdCliente() != null) {
 			usu.setnIdCliente(tcUsuario.getnIdCliente());
 		}
+		// Actualizar nTipoRevendedor si viene en el DTO
+		if (tcUsuario.getnTipoRevendedor() != null) {
+			usu.setnTipoRevendedor(tcUsuario.getnTipoRevendedor());
+		}
 		if(tcUsuario.getnEstatus().equals(0)) {
 			usu.setnEstatus(0);
 		}
@@ -110,18 +114,18 @@ public class UsuarioServiceImp implements UsuarioService {
 			usuario.setnIdCliente(nuevoUsuario.getnIdCliente());
 		}
 		
-		TcUsuario newUsuario = usuarioRepository.save(usuario); 
+        // Si es revendedor, asignar el tipo de revendedor
+        if (nuevoUsuario.getnTipoRevendedor() != null) {
+            usuario.setnTipoRevendedor(nuevoUsuario.getnTipoRevendedor());
+        }
+
+		TcUsuario newUsuario = usuarioRepository.save(usuario);
 		
-		
-		
-		if (!nuevoUsuario.getRfcDistribuidor().equals("no aplica")) {
-			
+		if(!nuevoUsuario.getRfcDistribuidor().equals("no aplica")) {
 			TcCliente tcCliente= this.clienteService.consultaClienteRfc(nuevoUsuario.getRfcDistribuidor());
 			tcCliente.setnIdUsuario(newUsuario.getnId());
 			this.clienteService.guardarCliente(tcCliente);
 		}
-		
-		
 		
 	}
 	

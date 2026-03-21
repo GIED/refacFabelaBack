@@ -29,6 +29,7 @@ import com.refacFabela.model.TcMoneda;
 import com.refacFabela.model.TcNivel;
 import com.refacFabela.model.TcRegimenFiscal;
 import com.refacFabela.model.TcTipoProveedor;
+import com.refacFabela.model.TcTipoRevendedor;
 import com.refacFabela.model.TcTipoVenta;
 import com.refacFabela.model.TcUsocfdi;
 import com.refacFabela.model.TwCaja;
@@ -105,6 +106,8 @@ public class CatalogosServiceImp implements CatalagosService {
 	private TcEstatusFacturaProveedorRepository tcEstatusFacturaProveedorRepository;
 	@Autowired
 	private TcTipoProveedorRepository tcTipoProveedorRepository;
+	@Autowired
+	private com.refacFabela.repository.TcTipoRevendedorRepository tcTipoRevendedorRepository;
 
 	@Override
 	public TcCatalogogeneral actualizarTipoCambio(TcCatalogogeneral ccCatalogogeneral) {
@@ -295,6 +298,9 @@ public class CatalogosServiceImp implements CatalagosService {
 		return tcTipoProveedorRepository.getTipoProveedor();
 	}
 
-	
+	@Override
+	public List<TcTipoRevendedor> getTipoRevendedor() {
+		return tcTipoRevendedorRepository.getTipoRevendedor();
+	}
 
 }

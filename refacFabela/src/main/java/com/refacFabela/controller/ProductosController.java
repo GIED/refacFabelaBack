@@ -114,6 +114,18 @@ public class ProductosController {
 		return null;
 	}
 
+	@GetMapping("/buscarProductosRevendedor")
+	public List<TvStockProducto> buscarProductosRevendedor(
+			@RequestParam() String producto,
+			@RequestParam(required = false) Long nTipoRevendedor) {
+		try {
+			return productosService.buscarProductosRevendedor(producto, nTipoRevendedor);
+		} catch (Exception e) {
+			logger.error("Error al buscar productos para revendedor: " + e);
+		}
+		return null;
+	}
+
 	@GetMapping("/obtenerProductosNoParteLike")
 	public List<TcProducto> obtenerProductosNoParteLike(@RequestParam() String No_Parte) {
 

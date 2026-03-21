@@ -106,6 +106,77 @@ public  class utils {
 	
 	}
 	
+	/**
+	 * Calcula el precio para revendedores según su tipo.
+	 * tipoRevendedor: 1 = revendedor estándar (usa n_id_descuento directo),
+	 *                 2 = mayorista (descuento mejorado: n_id_descuento + 10% del gap con ganancia)
+	 */
+	public TcProducto calcularPrecioRevendedor(TcProducto tcProducto, Double dolar, Long tipoRevendedor) {
+		BigDecimal precioPeso = BigDecimal.ZERO;
+		BigDecimal precioPesofinalSinIva = BigDecimal.ZERO;
+		BigDecimal precio_unitario_calculado = BigDecimal.ZERO;
+		BigDecimal iva_unitario_calculado = BigDecimal.ZERO;
+		BigDecimal total_unitario_calculado = BigDecimal.ZERO;
+		BigDecimal iva = new BigDecimal("0.16");
+
+		// 1. Conversión de moneda
+		if (tcProducto.getsMoneda().equals("USD")) {
+			precioPeso = tcProducto.getnPrecio().multiply(BigDecimal.valueOf(dolar));
+		} else {
+			precioPeso = tcProducto.getnPrecio();
+		}
+
+		// 2. Aplicar ganancia (margen de utilidad)
+		precioPesofinalSinIva = precioPeso.add(
+			precioPeso.multiply(BigDecimal.valueOf(tcProducto.getTcGanancia().getnGanancia())));
+
+		// 3. Calcular precio unitario base (sin IVA) = precio con ganancia
+		BigDecimal precioBase = DateTimeUtil.truncarDosDecimales(precioPesofinalSinIva);
+
+		// 4. Calcular el descuento según tipo de revendedor
+		Long nIdDescuento = tcProducto.getnIdDescuento() != null ? tcProducto.getnIdDescuento() : 0L;
+		Long nIdGanancia = tcProducto.getTcGanancia().getnId();
+		double descuentoPorcentaje;
+
+		if (tipoRevendedor != null && tipoRevendedor == 3) {
+			// Mayorista (tc_tipo_revendedor.n_id=3): descuento mejorado
+			long extra = (long) Math.floor((nIdGanancia - nIdDescuento) * 0.10);
+			if (extra > 0) {
+				descuentoPorcentaje = (nIdDescuento + extra) / 100.0;
+			} else {
+				descuentoPorcentaje = nIdDescuento / 100.0;
+			}
+		} else if (tipoRevendedor != null && tipoRevendedor == 2) {
+			// RE VENDEDOR (tc_tipo_revendedor.n_id=2): descuento directo
+			descuentoPorcentaje = nIdDescuento / 100.0;
+		} else {
+			// REGULAR (tc_tipo_revendedor.n_id=1): sin descuento
+			descuentoPorcentaje = 0.0;
+		}
+
+		// 5. Calcular precio original (sin descuento) con IVA para comparación
+		BigDecimal ivaOriginal = DateTimeUtil.truncarDosDecimales(precioBase.multiply(iva));
+		BigDecimal precioOriginalConIva = precioBase.add(ivaOriginal);
+
+		// 6. Aplicar descuento al precio base
+		BigDecimal precioConDescuento = precioBase.multiply(
+			BigDecimal.ONE.subtract(BigDecimal.valueOf(descuentoPorcentaje)));
+		precio_unitario_calculado = DateTimeUtil.truncarDosDecimales(precioConDescuento);
+
+		// 7. Calcular IVA
+		iva_unitario_calculado = DateTimeUtil.truncarDosDecimales(
+			precio_unitario_calculado.multiply(iva));
+		total_unitario_calculado = precio_unitario_calculado.add(iva_unitario_calculado);
+
+		// 8. Setear precios en producto
+		tcProducto.setnPrecioOriginal(precioOriginalConIva);
+		tcProducto.setnPrecioPeso(total_unitario_calculado);
+		tcProducto.setnPrecioSinIva(precio_unitario_calculado);
+		tcProducto.setnPrecioConIva(total_unitario_calculado);
+		tcProducto.setnPrecioIva(iva_unitario_calculado);
+
+		return tcProducto;
+	}
 	
 	
 	public TwVentasProducto calcularPrecioGuardar(TcProducto tcProducto,  int cantidad ) {

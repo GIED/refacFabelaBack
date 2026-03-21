@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.refacFabela.utils.DateTimeUtil;
 
@@ -103,6 +104,8 @@ public class TcProducto implements Serializable {
 	@Column(name = "s_ruta_imagen")
 	private String sRutaImagen;
 	
+	@Transient
+	private BigDecimal nPrecioOriginal;
 	
 	
 
@@ -463,6 +466,14 @@ public class TcProducto implements Serializable {
 
 	public void setTcDescuento(TcGanancia tcDescuento) {
 		this.tcDescuento = tcDescuento;
+	}
+
+	public BigDecimal getnPrecioOriginal() {
+		return nPrecioOriginal;
+	}
+
+	public void setnPrecioOriginal(BigDecimal nPrecioOriginal) {
+		this.nPrecioOriginal = nPrecioOriginal;
 	}
 
 	@Override

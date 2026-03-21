@@ -185,6 +185,52 @@ public class ProductosServiceImp implements ProductosService {
 	}
 
 	@Override
+	public List<TvStockProducto> buscarProductosRevendedor(String producto, Long nTipoRevendedor) {
+		utils util = new utils();
+		TcCatalogogeneral tipoCambio = catalogosRepository.findBysClave("ValorCambio");
+		List<TvStockProducto> resultado = new ArrayList<>();
+		java.util.Set<Long> idsIncluidos = new java.util.HashSet<>();
+
+		// 1. Buscar productos principales que coincidan
+		List<TcProducto> productosEncontrados = productosRepository.ConsultaProductoLike(producto);
+
+		for (TcProducto prod : productosEncontrados) {
+			// Evitar duplicados si ya fue agregado como alternativo de otro producto
+			if (idsIncluidos.contains(prod.getnId())) {
+				continue;
+			}
+			// Obtener stock del producto
+			TvStockProducto stock = productoBodegasIdRepository.findBynIdProducto(prod.getnId());
+			if (stock != null) {
+				// Calcular precio según tipo revendedor
+				stock.setTcProducto(util.calcularPrecioRevendedor(prod, tipoCambio.getnValor(), nTipoRevendedor));
+				resultado.add(stock);
+				idsIncluidos.add(prod.getnId());
+
+				// 2. Buscar alternativos de este producto
+				List<TwProductosAlternativo> alternativos =
+					productosAlternativosRepository.consultaProductosAlternativos(prod.getnId(), 1);
+				for (TwProductosAlternativo alt : alternativos) {
+					Long idAlt = alt.getTcProductoAlternativo().getnId();
+					if (!idsIncluidos.contains(idAlt)) {
+						TvStockProducto stockAlt = productoBodegasIdRepository.findBynIdProducto(idAlt);
+						if (stockAlt != null) {
+							// Calcular precio del alternativo
+							stockAlt.setTcProducto(
+								util.calcularPrecioRevendedor(
+									alt.getTcProductoAlternativo(), tipoCambio.getnValor(), nTipoRevendedor));
+							resultado.add(stockAlt);
+							idsIncluidos.add(idAlt);
+						}
+					}
+				}
+			}
+		}
+
+		return resultado;
+	}
+
+	@Override
 	public List<TcProducto> obtenerNoParteLike(String No_Parte) {
 
 		return productosRepository.ConsultaNoParteLike(No_Parte);

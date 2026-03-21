@@ -48,6 +48,8 @@ public interface ProductosService {
 
 	public List<TcProducto> obtenerProductoLike(String Producto);
 
+	public List<TvStockProducto> buscarProductosRevendedor(String producto, Long nTipoRevendedor);
+
 	public List<TcProducto> obtenerNoParteLike(String No_Parte);
 
 	public TcProducto guardarProducto(TcProducto tcProducto);

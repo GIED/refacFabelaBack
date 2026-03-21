@@ -15,6 +15,7 @@ public class NuevoUsuario {
 	private Set<String> roles = new HashSet<>();
 	private String rfcDistribuidor;
 	private Long nIdCliente;
+	private Long nTipoRevendedor;
 	
 	
 	
@@ -68,6 +69,13 @@ public class NuevoUsuario {
 	}
 	public void setnIdCliente(Long nIdCliente) {
 		this.nIdCliente = nIdCliente;
+	}
+	
+	public Long getnTipoRevendedor() {
+		return nTipoRevendedor;
+	}
+	public void setnTipoRevendedor(Long nTipoRevendedor) {
+		this.nTipoRevendedor = nTipoRevendedor;
 	}
 	
 	@Override
