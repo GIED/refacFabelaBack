@@ -231,11 +231,6 @@
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="style1">
-		<conditionalStyle>
-			<style/>
-		</conditionalStyle>
-	</style>
 	<subDataset name="listaFormaPago" uuid="ab13083c-c3cd-434a-8ad4-6e50d557ca2f">
 		<field name="sFormaPago" class="java.lang.String"/>
 		<field name="nIdCaja" class="java.lang.Long"/>
