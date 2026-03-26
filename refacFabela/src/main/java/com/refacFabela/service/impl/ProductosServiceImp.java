@@ -1059,8 +1059,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 			TwProductobodega existente = productoBodegaRepository.obtenerStockBodega(
 					twProductobodega.getnIdProducto(), twProductobodega.getnIdBodega());
 			if (existente != null) {
-				// Ya existe: actualizar el registro existente en lugar de crear uno nuevo
-				existente.setnCantidad(twProductobodega.getnCantidad());
+				// Ya existe: actualizar solo la ubicación — nCantidad es responsabilidad de saveProductoFacturaIngreso
 				existente.setnIdAnaquel(twProductobodega.getnIdAnaquel());
 				existente.setnIdNivel(twProductobodega.getnIdNivel());
 				return twProductoBodegaRepository.save(existente);

@@ -25,6 +25,7 @@ import com.refacFabela.repository.TwFacturaProveedorProductoRepository;
 import com.refacFabela.repository.TwFacturasProveedorRepository;
 import com.refacFabela.repository.TwPedidoProductoRepository;
 import com.refacFabela.repository.TwPedidoRepository;
+import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TwProductoBodegaRepository;
 import com.refacFabela.repository.VwFacturaProductoBalanceRepository;
 import com.refacFabela.repository.VwFacturaProveedorBalanceRepository;
@@ -56,6 +57,8 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 	private TwFacturaProveedorProductoIngresoRepository twFacturaProveedorProductoIngresoRepository;
 	@Autowired
 	private TwProductoBodegaRepository twProductoBodegaRepository;
+	@Autowired
+	private ProductoBodegaRepository productoBodegaRepository;
 	@Autowired
 	private PedidosProductoRepository pedidosProductoRepository;
 	@Autowired
@@ -177,8 +180,39 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 	}
 
 	@Override
+	@Transactional
 	public TwFacturaProveedorProductoIngreso saveTwFacturaProveedorProductoIngreso(TwFacturaProveedorProductoIngreso twFacturaProveedorProductoIngreso) {
-		return twFacturaProveedorProductoIngresoRepository.save(twFacturaProveedorProductoIngreso);
+
+		// 1. Guardar el movimiento de ingreso (comportamiento original)
+		TwFacturaProveedorProductoIngreso saved =
+				twFacturaProveedorProductoIngresoRepository.save(twFacturaProveedorProductoIngreso);
+
+		// 2. Obtener el producto padre para extraer nIdProducto
+		TwFacturaProveedorProducto facturaProducto =
+				twFacturaProveedorProductoRepository.getById(
+						twFacturaProveedorProductoIngreso.getnIdFacturaProveedorProducto());
+		Long nIdProducto = facturaProducto.getnIdProducto();
+
+		// 3. Buscar bodega con lock pesimista (SELECT FOR UPDATE)
+		TwProductobodega bodega = productoBodegaRepository.obtenerStockBodegaForUpdate(
+				nIdProducto, twFacturaProveedorProductoIngreso.getnIdBodega());
+
+		if (bodega != null) {
+			// 4a. Bodega existe → sumar cantidad
+			bodega.setnCantidad(bodega.getnCantidad() + twFacturaProveedorProductoIngreso.getnCantidad());
+		} else {
+			// 4b. Bodega no existe → crear nueva fila
+			bodega = new TwProductobodega();
+			bodega.setnIdProducto(nIdProducto);
+			bodega.setnIdBodega(twFacturaProveedorProductoIngreso.getnIdBodega());
+			bodega.setnIdAnaquel(twFacturaProveedorProductoIngreso.getnIdAnaquel());
+			bodega.setnIdNivel(twFacturaProveedorProductoIngreso.getnIdNivel());
+			bodega.setnCantidad(twFacturaProveedorProductoIngreso.getnCantidad());
+			bodega.setnEstatus(1L);
+		}
+		productoBodegaRepository.save(bodega);
+
+		return saved;
 	}
 
 	@Override
