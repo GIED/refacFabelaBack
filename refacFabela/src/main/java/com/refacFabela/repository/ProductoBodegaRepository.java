@@ -30,6 +30,20 @@ public interface ProductoBodegaRepository extends JpaRepository<TwProductobodega
 	public TwProductobodega obtenerStockBodega(Long producto, Long bodega);
 	
 	/**
+	 * Busca registro de producto-bodega SIN filtrar por estatus del producto.
+	 * Usado en guardarProducto para evitar INSERT duplicado al reactivar productos.
+	 */
+	@Query("Select d from TwProductobodega d where d.nIdProducto =:producto and d.nIdBodega =:bodega")
+	public TwProductobodega obtenerStockBodegaSinEstatus(Long producto, Long bodega);
+	
+	/**
+	 * Obtiene TODAS las bodegas de un producto SIN filtrar por estatus del producto.
+	 * Usado para el borrado lógico (poner stock en 0 antes de desactivar).
+	 */
+	@Query("Select d from TwProductobodega d where d.nIdProducto =:id order by d.nIdBodega asc")
+	public List<TwProductobodega> findAllBynIdProducto(Long id);
+	
+	/**
 	 * Obtiene todas las bodegas de un producto CON bloqueo pesimista (SELECT FOR UPDATE).
 	 * Usar dentro de @Transactional para evitar race conditions en traspasos y ventas.
 	 */

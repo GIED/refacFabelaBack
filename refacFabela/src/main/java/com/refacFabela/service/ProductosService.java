@@ -54,6 +54,8 @@ public interface ProductosService {
 
 	public TcProducto guardarProducto(TcProducto tcProducto);
 
+	public TcProducto eliminarProducto(Long nIdProducto);
+
 	public TcProducto guardarProductoGeneral(TcProducto tcProducto);
 
 	public List<TcHistoriaPrecioProducto> historiaPrecioProducto(Long n_id);

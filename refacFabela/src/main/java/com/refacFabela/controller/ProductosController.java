@@ -152,6 +152,20 @@ public class ProductosController {
 		return null;
 	}
 
+	@PostMapping("/eliminarProducto")
+	public ResponseEntity<?> eliminarProducto(@RequestParam() Long nIdProducto) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			TcProducto producto = productosService.eliminarProducto(nIdProducto);
+			response.put("producto", producto);
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			logger.error("Error al eliminar el producto: " + e);
+			response.put("error", e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+
 	@GetMapping("/obtenerHistoriaPrecioProducto")
 	public List<TcHistoriaPrecioProducto> obtenerHistoriaPrecioProducto(@RequestParam() Long n_id) {
 

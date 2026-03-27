@@ -288,7 +288,6 @@ public class FacturasProveedorController {
 	 @PostMapping("/saveProductoFacturaIngreso")
 	    public ResponseEntity<TwFacturaProveedorProductoIngreso> saveProductoFacturaIngreso(@RequestBody TwFacturaProveedorProductoIngreso twFacturaProveedorProductoIngreso) {
 	        try {
-	        	System.err.println(twFacturaProveedorProductoIngreso);
 	            TwFacturaProveedorProductoIngreso productos = facturasProveedorService.saveTwFacturaProveedorProductoIngreso(twFacturaProveedorProductoIngreso);
 	            return new ResponseEntity<>(productos, HttpStatus.OK);
 	        } catch (Exception e) {
