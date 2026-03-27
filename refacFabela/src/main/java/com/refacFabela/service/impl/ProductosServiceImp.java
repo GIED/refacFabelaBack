@@ -276,8 +276,9 @@ public class ProductosServiceImp implements ProductosService {
 		
 		for (int i = 0; i < bodegas.size(); i++) {
 		
-			// Verificar por IDs (producto + bodega) en vez de nombre de bodega
-			bodegaExiste=productoBodegaRepository.obtenerStockBodega(nuevoProducto.getnId(), bodegas.get(i).getnId());
+			// Verificar por IDs (producto + bodega) SIN filtrar por estatus del producto
+			// para evitar INSERT duplicado al reactivar un producto con borrado lógico
+			bodegaExiste=productoBodegaRepository.obtenerStockBodegaSinEstatus(nuevoProducto.getnId(), bodegas.get(i).getnId());
 			System.err.println(bodegaExiste);
 			if(bodegaExiste==null) {
 				TwProductobodega bodegaNuevo= new TwProductobodega();				
@@ -316,6 +317,26 @@ public class ProductosServiceImp implements ProductosService {
 		return nuevoProducto;
 	}
 	
+	@Override
+	@Transactional
+	public TcProducto eliminarProducto(Long nIdProducto) {
+		TcProducto producto = productosRepository.findBynId(nIdProducto);
+		if (producto == null) {
+			throw new RuntimeException("Producto no encontrado con ID: " + nIdProducto);
+		}
+		
+		// Poner stock en 0 en todas las bodegas
+		List<TwProductobodega> bodegas = productoBodegaRepository.findAllBynIdProducto(nIdProducto);
+		for (TwProductobodega bodega : bodegas) {
+			bodega.setnCantidad(0);
+			productoBodegaRepository.save(bodega);
+		}
+		
+		// Borrado lógico
+		producto.setnEstatus(0);
+		return productosRepository.save(producto);
+	}
+
 	@Override
 	public TcProducto guardarProductoGeneral(TcProducto tcProducto) {
 
