@@ -51,6 +51,8 @@ public class PedidosServiceImpl implements PedidosService {
 	private TwHistoriaIngresoProductoRepository twHistoriaIngresoProductoRepository;
 	@Autowired
 	private TwComprasProductoPedidoRepository twComprasProductoPedidoRepository;
+	@Autowired
+	private envioMail envioMail;
 	
   
 	
@@ -187,13 +189,14 @@ public class PedidosServiceImpl implements PedidosService {
 
 			// SI EL PEDIDO ES GENERADO A PARTIR DE UNA VENTA POR PEDIDO SE ENVIA UN CORREO,
 			if (twPedido.getnIdVenta() != null) {
-				envioMail mail = new envioMail();
 				System.err.println("Entre a enviar el correo");
 				twVenta = ventasRepository.findBynId(twPedido.getnIdVenta());
 
-				mail.enviarCorreo(twVenta.getTcCliente().getsCorreo(),
+				envioMail.enviarCorreo(twVenta.getTcCliente().getsCorreo(),
 						"Pedido número " + twPedidoProducto.getnIdPedido() + " listo para su entrega",
-						"Estimado cliente, le informamos que su pedido ya se encuentra disponible para su entrega, favor de acudir a la sucursal para hacerle entrega.",
+						"<p>Le informamos que su pedido <strong>#" + twPedidoProducto.getnIdPedido()
+								+ "</strong> ya se encuentra disponible para entrega.</p>"
+								+ "<p>Puede acudir a la sucursal para recibirlo. Si requiere validar algun detalle antes de presentarse, con gusto le apoyaremos por los canales habituales de atencion.</p>",
 						"", "", 2);
 			}
 

@@ -72,6 +72,9 @@ public class TimbrarXml {
 	
 	@Autowired
 	private VentasRepository ventasRepository;
+	
+	@Autowired
+	private envioMail envioMail;
 
 	public String timbrarXml(Comprobante xml, Long idVenta, CabeceraXml cabecera, TcDatosFactura tcDatosFactura)
 			throws GeneralSecurityException, IOException, ParserConfigurationException, SAXException, Exception {
@@ -297,10 +300,11 @@ public class TimbrarXml {
                       
               
                         
-            envioMail enviar=new envioMail();
-       				enviar.enviarCorreo(venta.getTcCliente().getsCorreo(), 
+	      				envioMail.enviarCorreo(venta.getTcCliente().getsCorreo(), 
        						"Factura_"+venta.getnId(),
-       						"<p>Adjunto al presente factura No. "+venta.getnId()+"</p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
+	       					"<p>Adjuntamos la factura electr&oacute;nica <strong>No. "+venta.getnId()+"</strong> de su operaci&oacute;n.</p>"
+	       							+ "<p>En este correo encontrar&aacute; los archivos <strong>PDF</strong> y <strong>XML</strong> para su control administrativo y fiscal.</p>"
+	       							+ "<p>Gracias por su preferencia.</p>",
        						rutaRaiz,
        						nombreArchivo,
        						2
@@ -398,10 +402,11 @@ public class TimbrarXml {
                       
               
                         
-            envioMail enviar=new envioMail();
-       				enviar.enviarCorreo(venta.getTcCliente().getsCorreo(), 
+	      				envioMail.enviarCorreo(venta.getTcCliente().getsCorreo(), 
        						"Factura_"+venta.getnId(),
-       						"<p>Adjunto al presente factura No. "+venta.getnId()+"</p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
+	       					"<p>Adjuntamos la factura electr&oacute;nica <strong>No. "+venta.getnId()+"</strong> de su operaci&oacute;n.</p>"
+	       							+ "<p>En este correo encontrar&aacute; los archivos <strong>PDF</strong> y <strong>XML</strong> para su control administrativo y fiscal.</p>"
+	       							+ "<p>Gracias por su preferencia.</p>",
        						rutaRaiz,
        						nombreArchivo,
        						2

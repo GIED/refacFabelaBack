@@ -83,6 +83,9 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
     @Autowired
     private UsuariosRepository usuariosRepository;
 
+    @Autowired
+    private envioMail envioMail;
+
     @Override
     public InventarioUbicacionDto iniciarInventario(IniciarInventarioRequestDto request, Long usuarioId) throws Exception {
         // Validar que la ubicación exista
@@ -630,7 +633,7 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
 
         sb.append("\nTotal de productos ajustados: ").append(ajustados.size());
 
-        envioMail.enviarCorreoEstandar("fabela_mauricio@hotmail.com",
+         envioMail.enviarCorreoEstandar("fabela_mauricio@hotmail.com",
             "Autorización de ajuste de inventario #" + inventario.getnId(), sb.toString());
 
         System.out.println("[autorizarInventario] Correo de autorización enviado para inventario #" + inventario.getnId());

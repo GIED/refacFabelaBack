@@ -28,6 +28,8 @@ public class TraspasoServiceImpl implements TraspasoService {
 	private TwAjusteInventarioRepository twAjusteInventarioRepository;
 	@Autowired
 	private ProductosRepository productosRepository;
+	@Autowired
+	private envioMail envioMail;
 	
 	
 	/**
@@ -177,8 +179,7 @@ public class TraspasoServiceImpl implements TraspasoService {
 
 		// Envió de correo con el ajuste de inventario
 		String mensaje="Se realizó un ajuste de inventario del producto: "+tcProducto.getsNoParte()+"-"+tcProducto.getsProducto()+" Anterior: "+twAjustesInventario.getnCantidadAnterior()+" Cantidad Actual: "+twAjustesInventario.getnCantidadActual()+" Cantidad Ajustada: "+twAjustesInventario.getnTotalAjustado()+" Motivo: "+twAjustesInventario.getsMotivo();
-		envioMail enviar=new envioMail();
-		enviar.enviarCorreoEstandar("fabela_mauricio@hotmail.com", "Ajuste de inventario", mensaje);		
+		envioMail.enviarCorreoEstandar("fabela_mauricio@hotmail.com", "Ajuste de inventario", mensaje);		
 		
 		// Se guarda el ajuste 		
 		return twAjusteInventarioRepository.save(twAjustesInventario);

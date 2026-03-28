@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.ClassPathResource;
@@ -51,6 +52,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 public class ReporteServiceImpl implements ReporteService {
 	
 	 private static final Logger logger = LogManager.getLogger("errorLogger");
+	 @Autowired
+	 private envioMail envioMail;
 
 	 private BufferedImage imagenHeader;
 	 
@@ -107,10 +110,11 @@ public class ReporteServiceImpl implements ReporteService {
 	         pos.flush();
 	         pos.close();
 	         
-	         envioMail enviar=new envioMail();
-				enviar.enviarCorreo(reporteCotizacion.getCorreo(), 
+	         envioMail.enviarCorreo(reporteCotizacion.getCorreo(), 
 						"Cotización_"+reporteCotizacion.getFolioCotizacion(),
-						"<p>Adjunto al presente cotizaci&oacute;n No. "+reporteCotizacion.getFolioCotizacion()+"</p><p>No omito mencionar que estar&aacute; vigente durante 3 d&iacute;as h&aacute;biles. </p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
+						"<p>Adjuntamos la cotizaci&oacute;n <strong>No. "+reporteCotizacion.getFolioCotizacion()+"</strong> correspondiente a su solicitud.</p>"
+								+ "<p>Le recordamos que esta propuesta mantiene su vigencia durante <strong>3 d&iacute;as h&aacute;biles</strong>.</p>"
+								+ "<p>Quedamos atentos para apoyarle con cualquier aclaraci&oacute;n o con la confirmaci&oacute;n de su pedido.</p>",
 						ruta,
 						nombreArchivo,
 						1
