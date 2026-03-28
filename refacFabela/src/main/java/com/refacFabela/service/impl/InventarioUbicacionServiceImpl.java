@@ -633,7 +633,9 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
 
         sb.append("\nTotal de productos ajustados: ").append(ajustados.size());
 
-         envioMail.enviarCorreoEstandar("fabela_mauricio@hotmail.com",
+         envioMail.enviarCorreoEstandarConCopia(
+                envioMail.obtenerDestinatarioAjusteInventario(),
+                envioMail.obtenerCopiaAjusteInventario(),
             "Autorización de ajuste de inventario #" + inventario.getnId(), sb.toString());
 
         System.out.println("[autorizarInventario] Correo de autorización enviado para inventario #" + inventario.getnId());

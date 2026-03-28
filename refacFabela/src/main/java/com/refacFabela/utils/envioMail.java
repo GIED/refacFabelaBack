@@ -82,6 +82,48 @@ public class envioMail {
 		}
 	}
 
+	public void enviarCorreoEstandarConCopia(String destinatario, String copia, String asunto, String cuerpo) {
+		if (!tieneTexto(destinatario)) {
+			System.err.println("[envioMail] Correo estandar con copia no enviado: destinatario vacio.");
+			return;
+		}
+
+		String asuntoFinal = tieneTexto(asunto) ? asunto : "Notificacion " + EMPRESA_NOMBRE;
+
+		try {
+			Session session = crearSesion();
+			MimeMessage message = crearMensaje(session, destinatario, asuntoFinal, false);
+			agregarSiTieneTexto(message, Message.RecipientType.CC, copia);
+			message.setContent(construirContenidoCorreo(asuntoFinal, cuerpo, false, null, null, 0));
+			Transport.send(message, message.getAllRecipients());
+			System.out.println("[envioMail] Correo enviado a " + destinatario + " con copia a " + copia + " y asunto: " + asuntoFinal);
+		} catch (Exception e) {
+			System.err.println("[envioMail] Error al enviar correo estandar con copia a " + destinatario + " con asunto: " + asuntoFinal);
+			e.printStackTrace();
+		}
+	}
+
+	public String obtenerDestinatarioNotificacionInterna() {
+		if (tieneTexto(mailConfig.getNotificationTo())) {
+			return mailConfig.getNotificationTo().trim();
+		}
+		if (tieneTexto(mailConfig.getBccPrimary())) {
+			return mailConfig.getBccPrimary().trim();
+		}
+		return tieneTexto(mailConfig.getAccount()) ? mailConfig.getAccount().trim() : null;
+	}
+
+	public String obtenerDestinatarioAjusteInventario() {
+		if (tieneTexto(mailConfig.getInventoryAdjustmentTo())) {
+			return mailConfig.getInventoryAdjustmentTo().trim();
+		}
+		return obtenerDestinatarioNotificacionInterna();
+	}
+
+	public String obtenerCopiaAjusteInventario() {
+		return tieneTexto(mailConfig.getInventoryAdjustmentCc()) ? mailConfig.getInventoryAdjustmentCc().trim() : null;
+	}
+
 	private Session crearSesion() {
 		validarConfiguracion();
 		Properties properties = new Properties();

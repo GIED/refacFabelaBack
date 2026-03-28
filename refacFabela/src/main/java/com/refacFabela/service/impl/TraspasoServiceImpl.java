@@ -179,7 +179,11 @@ public class TraspasoServiceImpl implements TraspasoService {
 
 		// Envió de correo con el ajuste de inventario
 		String mensaje="Se realizó un ajuste de inventario del producto: "+tcProducto.getsNoParte()+"-"+tcProducto.getsProducto()+" Anterior: "+twAjustesInventario.getnCantidadAnterior()+" Cantidad Actual: "+twAjustesInventario.getnCantidadActual()+" Cantidad Ajustada: "+twAjustesInventario.getnTotalAjustado()+" Motivo: "+twAjustesInventario.getsMotivo();
-		envioMail.enviarCorreoEstandar("fabela_mauricio@hotmail.com", "Ajuste de inventario", mensaje);		
+		envioMail.enviarCorreoEstandarConCopia(
+				envioMail.obtenerDestinatarioAjusteInventario(),
+				envioMail.obtenerCopiaAjusteInventario(),
+				"Ajuste de inventario",
+				mensaje);		
 		
 		// Se guarda el ajuste 		
 		return twAjusteInventarioRepository.save(twAjustesInventario);

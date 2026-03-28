@@ -18,6 +18,9 @@ public class MailConfigProperties {
 	private String replyTo;
 	private String bccPrimary;
 	private String bccSecondary;
+	private String notificationTo;
+	private String inventoryAdjustmentTo;
+	private String inventoryAdjustmentCc;
 
 	public String getHost() {
 		return host;
@@ -105,5 +108,29 @@ public class MailConfigProperties {
 
 	public void setBccSecondary(String bccSecondary) {
 		this.bccSecondary = bccSecondary;
+	}
+
+	public String getNotificationTo() {
+		return notificationTo;
+	}
+
+	public void setNotificationTo(String notificationTo) {
+		this.notificationTo = notificationTo;
+	}
+
+	public String getInventoryAdjustmentTo() {
+		return inventoryAdjustmentTo;
+	}
+
+	public void setInventoryAdjustmentTo(String inventoryAdjustmentTo) {
+		this.inventoryAdjustmentTo = inventoryAdjustmentTo;
+	}
+
+	public String getInventoryAdjustmentCc() {
+		return inventoryAdjustmentCc;
+	}
+
+	public void setInventoryAdjustmentCc(String inventoryAdjustmentCc) {
+		this.inventoryAdjustmentCc = inventoryAdjustmentCc;
 	}
 }
