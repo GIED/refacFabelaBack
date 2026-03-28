@@ -80,12 +80,16 @@ public class JwtProvider {
 	}
 	
 	public String refreshToken(JwtDto jwtDto) throws ParseException {
+		if (jwtDto == null || jwtDto.getToken() == null || jwtDto.getToken().trim().isEmpty()) {
+			throw new IllegalArgumentException("Token vacío");
+		}
+
 		try {
 			Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(jwtDto.getToken());
-			// Token aún válido — retornarlo tal cual (no generar null)
+			logger.info("Refresh solicitado para un token vigente");
 			return jwtDto.getToken();
 		} catch (ExpiredJwtException e) {
-				logger.error("Refresh de token expirado, generando nuevo token");
+				logger.info("Refresh de token expirado, generando nuevo token");
 				JWT jwt = JWTParser.parse(jwtDto.getToken());
 				JWTClaimsSet claims = jwt.getJWTClaimsSet();
 				String usuario = claims.getSubject();
@@ -105,6 +109,9 @@ public class JwtProvider {
 						.setIssuedAt(new Date())
 						.setExpiration(new Date(new Date().getTime() + expiration * 1000L))
 						.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
+		} catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException | SignatureException e) {
+			logger.warn("Refresh rechazado por token inválido: {}", e.getMessage());
+			throw new IllegalArgumentException("Token inválido", e);
 		}
 	}
 

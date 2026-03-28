@@ -60,11 +60,16 @@ public class AuthController {
 	}
 	
 	@PostMapping("/refresh")
-	public ResponseEntity<JwtDto> refresh(@RequestBody JwtDto jwtDto) throws ParseException{
-		System.out.println(jwtDto.getToken());
-		String token = jwtProvider.refreshToken(jwtDto);
-		JwtDto jwt = new JwtDto(token);
-		return new ResponseEntity(jwt, HttpStatus.OK);
+	public ResponseEntity<?> refresh(@RequestBody JwtDto jwtDto) {
+		try {
+			String token = jwtProvider.refreshToken(jwtDto);
+			JwtDto jwt = new JwtDto(token);
+			return new ResponseEntity<>(jwt, HttpStatus.OK);
+		} catch (IllegalArgumentException | ParseException e) {
+			return new ResponseEntity<>(new Mensaje("La sesión ya no es válida. Inicia sesión nuevamente."), HttpStatus.UNAUTHORIZED);
+		} catch (Exception e) {
+			return new ResponseEntity<>(new Mensaje("No fue posible refrescar la sesión. Intenta nuevamente."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

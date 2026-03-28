@@ -988,3 +988,150 @@ Caused by: java.net.ConnectException: Connection timed out: connect
 2026-03-28 12:16:15 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
 2026-03-28 12:16:15 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 1.569 seconds (JVM running for 1467.307)
 2026-03-28 12:16:15 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-28 12:20:29 [Thread-46] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-28 12:20:29 [Thread-46] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-11 - Shutdown initiated...
+2026-03-28 12:20:29 [Thread-46] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-11 - Shutdown completed.
+2026-03-28 12:20:29 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 6340 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
+2026-03-28 12:20:29 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-28 12:20:29 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-28 12:20:29 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 178 ms. Found 80 JPA repository interfaces.
+2026-03-28 12:20:29 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@753046d8' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-03-28 12:20:29 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-03-28 12:20:30 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
+2026-03-28 12:20:30 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-28 12:20:30 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+2026-03-28 12:20:30 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
+2026-03-28 12:20:30 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 595 ms
+2026-03-28 12:20:30 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-28 12:20:30 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-28 12:20:30 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-12 - Starting...
+2026-03-28 12:20:30 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-12 - Start completed.
+2026-03-28 12:20:30 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-03-28 12:20:30 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-03-28 12:20:30 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-28 12:20:31 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-03-28 12:20:31 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-28 12:20:31 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
+2026-03-28 12:20:31 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 2.1 seconds (JVM running for 1723.791)
+2026-03-28 12:20:31 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-28 12:20:58 [http-nio-4043-exec-2] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-28 12:20:58 [http-nio-4043-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-28 12:20:58 [http-nio-4043-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-28 12:25:34 [http-nio-4043-exec-8] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@696f6047 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:25:39 [http-nio-4043-exec-8] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@6d0c8421 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:25:44 [http-nio-4043-exec-8] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1b8e8d43 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:25:49 [http-nio-4043-exec-8] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@502859c0 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:25:54 [http-nio-4043-exec-8] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@3b9d2b5a (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:25:59 [http-nio-4043-exec-8] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@17c19649 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:25:59 [http-nio-4043-exec-8] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 0, SQLState: 08003
+2026-03-28 12:25:59 [http-nio-4043-exec-8] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - HikariPool-12 - Connection is not available, request timed out after 30116ms.
+2026-03-28 12:25:59 [http-nio-4043-exec-8] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - No operations allowed after connection closed.
+2026-03-28 12:25:59 [http-nio-4043-exec-8] ERROR com.refacFabela.jwt.JwtTokenFilter - fallo en el método doFilter
+2026-03-28 12:26:04 [http-nio-4043-exec-5] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@11aaf001 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:26:09 [http-nio-4043-exec-5] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1b529b71 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:26:14 [http-nio-4043-exec-5] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@18bccf4c (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:26:19 [http-nio-4043-exec-4] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@72fb47c0 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:37:11 [http-nio-4043-exec-9] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@7a14b7a5 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:37:16 [http-nio-4043-exec-9] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@3e6469c0 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:37:21 [http-nio-4043-exec-9] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@2cc9d584 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:37:21 [Thread-50] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-28 12:37:21 [Thread-50] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-12 - Shutdown initiated...
+2026-03-28 12:37:21 [Thread-50] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-12 - Shutdown completed.
+2026-03-28 12:37:21 [http-nio-4043-exec-9] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-12 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@758e6104 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:37:22 [http-nio-4043-exec-9] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 0, SQLState: null
+2026-03-28 12:37:22 [http-nio-4043-exec-9] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - HikariPool-12 - Interrupted during connection acquisition
+2026-03-28 12:37:22 [http-nio-4043-exec-9] ERROR com.refacFabela.jwt.JwtTokenFilter - fallo en el método doFilter
+2026-03-28 12:37:22 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 6340 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
+2026-03-28 12:37:22 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-28 12:37:22 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-28 12:37:22 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 120 ms. Found 80 JPA repository interfaces.
+2026-03-28 12:37:22 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@2d2bf027' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-03-28 12:37:22 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-03-28 12:37:22 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
+2026-03-28 12:37:22 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-28 12:37:22 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+2026-03-28 12:37:22 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
+2026-03-28 12:37:22 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 443 ms
+2026-03-28 12:37:22 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-28 12:37:22 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-28 12:37:22 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-13 - Starting...
+2026-03-28 12:37:23 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-13 - Start completed.
+2026-03-28 12:37:23 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-03-28 12:37:23 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-03-28 12:37:23 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-28 12:37:24 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-03-28 12:37:24 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-28 12:37:24 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
+2026-03-28 12:37:24 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 2.649 seconds (JVM running for 2737.031)
+2026-03-28 12:37:24 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-28 12:38:02 [Thread-57] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-28 12:38:02 [Thread-57] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-13 - Shutdown initiated...
+2026-03-28 12:38:02 [Thread-57] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-13 - Shutdown completed.
+2026-03-28 12:38:03 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 6340 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
+2026-03-28 12:38:03 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-28 12:38:03 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-28 12:38:03 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 106 ms. Found 80 JPA repository interfaces.
+2026-03-28 12:38:03 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@75079ad9' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-03-28 12:38:03 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-03-28 12:38:03 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
+2026-03-28 12:38:03 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-28 12:38:03 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+2026-03-28 12:38:03 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
+2026-03-28 12:38:03 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 427 ms
+2026-03-28 12:38:03 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-28 12:38:03 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-28 12:38:03 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-14 - Starting...
+2026-03-28 12:38:03 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-14 - Start completed.
+2026-03-28 12:38:03 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-03-28 12:38:03 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-03-28 12:38:03 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-28 12:38:04 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-03-28 12:38:04 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-28 12:38:04 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
+2026-03-28 12:38:04 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 1.532 seconds (JVM running for 2776.82)
+2026-03-28 12:38:04 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-28 12:42:55 [http-nio-4043-exec-2] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-28 12:42:55 [http-nio-4043-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-28 12:42:55 [http-nio-4043-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-03-28 12:43:00 [http-nio-4043-exec-2] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-14 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@3a7fbd3c (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:43:05 [http-nio-4043-exec-2] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-14 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@75855e38 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:43:10 [http-nio-4043-exec-2] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-14 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@44bac9ec (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:43:15 [http-nio-4043-exec-2] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-14 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@15aaa177 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:43:20 [http-nio-4043-exec-2] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-14 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1150b7cb (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:43:25 [http-nio-4043-exec-2] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-14 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@11e45864 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:43:25 [http-nio-4043-exec-2] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 0, SQLState: 08003
+2026-03-28 12:43:25 [http-nio-4043-exec-2] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - HikariPool-14 - Connection is not available, request timed out after 30063ms.
+2026-03-28 12:43:25 [http-nio-4043-exec-2] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - No operations allowed after connection closed.
+2026-03-28 12:43:25 [http-nio-4043-exec-2] ERROR com.refacFabela.jwt.JwtTokenFilter - fallo en el método doFilter
+2026-03-28 12:43:25 [http-nio-4043-exec-4] INFO  com.refacFabela.jwt.JwtProvider - Refresh solicitado para un token vigente
+2026-03-28 12:43:30 [http-nio-4043-exec-5] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-14 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1aee8e2b (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:43:35 [http-nio-4043-exec-5] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-14 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1016e55b (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:43:40 [http-nio-4043-exec-5] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-14 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@3b652a62 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:43:45 [http-nio-4043-exec-5] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-14 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@439042bc (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-03-28 12:43:56 [Thread-61] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-28 12:43:56 [Thread-61] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-14 - Shutdown initiated...
+2026-03-28 12:43:56 [Thread-61] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-14 - Shutdown completed.
+2026-03-28 12:43:57 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 6340 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
+2026-03-28 12:43:57 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-28 12:43:57 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-28 12:43:58 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 212 ms. Found 80 JPA repository interfaces.
+2026-03-28 12:43:58 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@102876a7' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-03-28 12:43:58 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-03-28 12:43:58 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
+2026-03-28 12:43:58 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-28 12:43:58 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+2026-03-28 12:43:58 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
+2026-03-28 12:43:58 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 695 ms
+2026-03-28 12:43:58 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-28 12:43:58 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-28 12:43:58 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-15 - Starting...
+2026-03-28 12:43:58 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-15 - Start completed.
+2026-03-28 12:43:58 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-03-28 12:43:58 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-03-28 12:43:58 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-28 12:43:59 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-03-28 12:43:59 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
+2026-03-28 12:43:59 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 2.381 seconds (JVM running for 3132.197)
+2026-03-28 12:56:54 [http-nio-4043-exec-1] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-28 12:56:54 [http-nio-4043-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-28 12:56:54 [http-nio-4043-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
