@@ -17,8 +17,10 @@ import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.VwFacturaProductoBalance;
 import com.refacFabela.model.VwFacturaProveedorBalance;
+import com.refacFabela.model.TcProducto;
 import com.refacFabela.repository.BalanceFacturaProveedorRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
+import com.refacFabela.repository.ProductosRepository;
 import com.refacFabela.repository.TwAbonoFacturaProveedorRepository;
 import com.refacFabela.repository.TwFacturaProveedorProductoIngresoRepository;
 import com.refacFabela.repository.TwFacturaProveedorProductoRepository;
@@ -63,6 +65,8 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 	private PedidosProductoRepository pedidosProductoRepository;
 	@Autowired
 	private TwPedidoRepository twPedidoRepository;
+	@Autowired
+	private ProductosRepository productosRepository;
 	
 	@Override
 	public List<TwFacturasProveedor> obtenetTodas() {
@@ -163,7 +167,29 @@ public class TwFacturasProveedorServiceImpl implements FacturasProveedorService 
 
 	@Override
 	public TwFacturaProveedorProducto saveTwFacturaProveedorProductoId(TwFacturaProveedorProducto twFacturaProveedorProducto) {
-		// TODO Auto-generated method stub
+		if (twFacturaProveedorProducto.getnIdProducto() == null) {
+			throw new IllegalArgumentException("nIdProducto es obligatorio");
+		}
+
+		if (twFacturaProveedorProducto.getnIdMarca() == null) {
+			TcProducto producto = productosRepository.findBynId(twFacturaProveedorProducto.getnIdProducto());
+			if (producto == null) {
+				throw new IllegalArgumentException("No existe el producto asociado a la factura proveedor");
+			}
+			if (producto.getnIdMarca() == null) {
+				throw new IllegalStateException("El producto asociado no tiene marca configurada");
+			}
+			twFacturaProveedorProducto.setnIdMarca(producto.getnIdMarca());
+		}
+
+		if (twFacturaProveedorProducto.getdFechaRegistro() == null) {
+			twFacturaProveedorProducto.setdFechaRegistro(java.time.Instant.now());
+		}
+
+		if (twFacturaProveedorProducto.getnEstatus() == null) {
+			twFacturaProveedorProducto.setnEstatus(1L);
+		}
+
 		return twFacturaProveedorProductoRepository.save(twFacturaProveedorProducto);
 	}
 
