@@ -1,8 +1,11 @@
 package com.refacFabela.cdn;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import javax.annotation.PostConstruct;
 
@@ -17,6 +20,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 
 /**
  * Servicio de integración con Cloudflare R2 (S3-compatible).
@@ -155,6 +159,27 @@ public class CloudflareImageService {
             return true;
         } catch (Exception e) {
             System.err.println("❌ Error al eliminar imagen de R2 [" + objectKey + "]: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Descarga una imagen desde Cloudflare R2 directamente por S3 al repositorio local.
+     * Evita depender del dominio público del CDN para la sincronización interna.
+     */
+    public boolean descargarImagen(String objectKey, File destino) {
+        if (s3Client == null) {
+            return false;
+        }
+        try (S3Object objeto = s3Client.getObject(properties.getR2BucketName(), objectKey + ".jpg");
+             InputStream inputStream = objeto.getObjectContent()) {
+            if (destino.getParentFile() != null) {
+                Files.createDirectories(destino.getParentFile().toPath());
+            }
+            Files.copy(inputStream, destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        } catch (Exception e) {
+            System.err.println("❌ Error al descargar imagen desde R2 [" + objectKey + "]: " + e.getMessage());
             return false;
         }
     }

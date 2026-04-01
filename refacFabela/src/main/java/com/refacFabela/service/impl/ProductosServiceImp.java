@@ -78,6 +78,7 @@ import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.repository.VwSaldoVentaFavorDisponibleRepository;
 import com.refacFabela.service.ProductosService;
 import com.refacFabela.utils.DateTimeUtil;
+import com.refacFabela.utils.ImagenProductoService;
 import com.refacFabela.utils.subirArchivo;
 import com.refacFabela.utils.utils;
 
@@ -141,6 +142,8 @@ public class ProductosServiceImp implements ProductosService {
 	
 	@Autowired
 	private TwSaldoUtilizadoRepository twSaldoUtilizadoRepository;
+	@Autowired
+	private ImagenProductoService imagenProductoService;
 	@Autowired
 	private VwSaldoVentaFavorDisponibleRepository vwSaldoVentaFavorDisponibleRepository;
 	
@@ -254,8 +257,12 @@ public class ProductosServiceImp implements ProductosService {
 		        String nombreArchivo = tcProducto.getsNoParte() != null ? tcProducto.getsNoParte() : "sin_nombre";
 		        String rutaFinal = RUTA_IMAGENES + nombreArchivo + ".jpg";
 
-		        // Guarda solo la ruta relativa o nombre según lo que necesites
 		        tcProducto.setsRutaImagen(rutaFinal); 
+		        imagenProductoService.invalidarCache(nombreArchivo);
+		        String urlCloudflare = imagenProductoService.forzarSubidaCloudflare(nombreArchivo);
+		        if (urlCloudflare == null) {
+		        	System.err.println("No se pudo sincronizar la imagen del producto en Jemkal CDN: " + nombreArchivo);
+		        }
 		    } else {
 		        System.out.println("No se guardó imagen o no era válida.");
 		    }

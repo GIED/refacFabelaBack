@@ -164,9 +164,24 @@ public boolean procesarImagenProducto(TcProducto producto, String rutaBase, Stri
 
     if (rutaImagen.startsWith(costexBaseUrl)) {
         return guardarImagenDesdeUrl(rutaImagen, rutaFinalCompleta);
-    } else {
+    }
+
+    if (rutaImagen.startsWith("http://") || rutaImagen.startsWith("https://")) {
+        return guardarImagenDesdeUrl(rutaImagen, rutaFinalCompleta);
+    }
+
+    Path rutaImagenPath = Paths.get(rutaImagen);
+    if (Files.exists(rutaImagenPath)) {
+        Files.createDirectories(Paths.get(rutaFinalCompleta).getParent());
+        Files.copy(rutaImagenPath, Paths.get(rutaFinalCompleta), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        return true;
+    }
+
+    if (rutaImagen.startsWith("data:image")) {
         return guardarImagenDesdeBase64(rutaImagen, rutaFinalCompleta);
     }
+
+    return false;
 }
 
 

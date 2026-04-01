@@ -387,18 +387,15 @@ public class ProductosController {
 
 	/**
 	 * Resuelve la URL de imagen de un producto.
-	 * Prioridad: Costex CDN -> Cloudflare R2 -> Local (auto-sube a R2)
+	 * Prioridad: Jemkal CDN -> Local (auto-sube a R2) -> Costex CDN.
 	 */
 	@GetMapping(value = "/resolverImagenProducto", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Map<String, String>> resolverImagenProducto(@RequestParam String noParte) {
 		try {
-			// Primero intentar resolución real (Costex HEAD, Cloudflare, Local)
 			String urlResuelta = imagenProductoService.resolverUrlImagen(noParte);
 			boolean encontrada = urlResuelta != null;
-			// Si no se encontró en ningún CDN, usar fallback (URL directa de Costex para que el navegador intente)
-			String urlFinal = encontrada ? urlResuelta : imagenProductoService.resolverUrlImagenConFallback(noParte);
 			Map<String, String> respuesta = new HashMap<>();
-			respuesta.put("url", urlFinal);
+			respuesta.put("url", encontrada ? urlResuelta : "");
 			respuesta.put("encontrada", String.valueOf(encontrada));
 			return ResponseEntity.ok(respuesta);
 		} catch (Exception e) {
