@@ -121,9 +121,10 @@ public class CotizacionController {
 	}
 
 	@GetMapping("/consultaHistorialCotizacionesCliente")
-	public List<TwCotizacionesDetalle> consultaHistorialCotizacionesCliente(@RequestParam Long nIdCliente) {
+	public List<TwCotizacionesDetalle> consultaHistorialCotizacionesCliente(@RequestParam Long nIdCliente,
+			@RequestParam(required = false) Integer nMeses) {
 		try {
-			return cotizacionService.consultaHistorialCotizacionesCliente(nIdCliente);
+			return cotizacionService.consultaHistorialCotizacionesCliente(nIdCliente, nMeses);
 		} catch (Exception e) {
 			logger.error("Error al obtener historial cotizaciones cliente " + e);
 		}

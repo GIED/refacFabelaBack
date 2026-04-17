@@ -171,9 +171,10 @@ public class VentasController {
 	}
 
 	@GetMapping("/obtenerHistorialVentasCliente")
-	public List<TvVentaDetalle> obtenerHistorialVentasCliente(@RequestParam() Long nIdCliente) {
+	public List<TvVentaDetalle> obtenerHistorialVentasCliente(@RequestParam() Long nIdCliente,
+			@RequestParam(required = false) Integer nMeses) {
 		try {
-			return ventasService.consultaHistorialVentasCliente(nIdCliente);
+			return ventasService.consultaHistorialVentasCliente(nIdCliente, nMeses);
 		} catch (Exception e) {
 			logger.error("Error al obtener historial ventas cliente " + e);
 		}

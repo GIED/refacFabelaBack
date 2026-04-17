@@ -1,6 +1,7 @@
 package com.refacFabela.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -214,6 +215,16 @@ public class CotizacionServiceImpl implements CotizacionService {
 	@Override
 	public List<TwCotizacionesDetalle> consultaHistorialCotizacionesCliente(Long nIdCliente) {
 		return twCotizacionesRepository.findHistorialByCliente(nIdCliente);
+	}
+
+	@Override
+	public List<TwCotizacionesDetalle> consultaHistorialCotizacionesCliente(Long nIdCliente, Integer nMeses) {
+		if (nMeses == null || nMeses <= 0) {
+			return twCotizacionesRepository.findHistorialByCliente(nIdCliente);
+		}
+
+		String fechaInicio = LocalDate.now().minusMonths(nMeses).atStartOfDay().toString().replace('T', ' ');
+		return twCotizacionesRepository.findHistorialByClienteAndFecha(nIdCliente, fechaInicio);
 	}
 
 

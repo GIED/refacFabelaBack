@@ -19,5 +19,6 @@ public interface CotizacionService {
 	public List<TwCotizacionesProducto> consultaCotizacionClienteProducto(Long nIdCliente, Long nIdProducto);
 	public List<TwCotizacionesDetalle> consultaCotizacionesClienteVigente(Long nIdCliente);
 	public List<TwCotizacionesDetalle> consultaHistorialCotizacionesCliente(Long nIdCliente);
+	public List<TwCotizacionesDetalle> consultaHistorialCotizacionesCliente(Long nIdCliente, Integer nMeses);
 
 }

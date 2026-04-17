@@ -1,6 +1,7 @@
 package com.refacFabela.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -119,12 +120,22 @@ public class VentasServiceImpl implements VentasService {
 
 	@Override
 	public List<TvVentaDetalle> consultaHistorialVentasCliente(Long nIdCliente) {
-		return tvVentaDetalleRepository.findHistorialByNIdCliente(nIdCliente);
+		return tvVentaDetalleRepository.findHistorialOptimizadoByNIdCliente(nIdCliente);
+	}
+
+	@Override
+	public List<TvVentaDetalle> consultaHistorialVentasCliente(Long nIdCliente, Integer nMeses) {
+		if (nMeses == null || nMeses <= 0) {
+			return tvVentaDetalleRepository.findHistorialOptimizadoByNIdCliente(nIdCliente);
+		}
+
+		String fechaInicio = LocalDate.now().minusMonths(nMeses).atStartOfDay().toString().replace('T', ' ');
+		return tvVentaDetalleRepository.findHistorialOptimizadoByNIdClienteAndFecha(nIdCliente, fechaInicio);
 	}
 
 	@Override
 	public List<TvVentaDetalle> consultaPendientesVentasCliente(Long nIdCliente) {
-		return tvVentaDetalleRepository.findPendientesByNIdCliente(nIdCliente);
+		return tvVentaDetalleRepository.findPendientesOptimizadoByNIdCliente(nIdCliente);
 	}
 	
 	@Override

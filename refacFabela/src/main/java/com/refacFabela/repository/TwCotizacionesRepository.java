@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.refacFabela.model.TwCotizaciones;
@@ -26,6 +27,10 @@ public interface TwCotizacionesRepository extends JpaRepository<TwCotizacionesDe
 
 	@Query(value="Select * from tv_cotizacionDetalle where n_idCliente=:Cliente order by n_id desc ",   nativeQuery = true) 
 	public List<TwCotizacionesDetalle> findHistorialByCliente(Long Cliente);
+
+	@Query(value="Select * from tv_cotizacionDetalle where n_idCliente=:Cliente and (:fechaInicio is null or d_fecha >= :fechaInicio) order by n_id desc ", nativeQuery = true)
+	public List<TwCotizacionesDetalle> findHistorialByClienteAndFecha(@Param("Cliente") Long Cliente,
+			@Param("fechaInicio") String fechaInicio);
 
 
 }
