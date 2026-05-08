@@ -106,6 +106,12 @@ public class TcProducto implements Serializable {
 	
 	@Transient
 	private BigDecimal nPrecioOriginal;
+
+	@Transient
+	private Boolean bPrecioConvenioMayorista;
+
+	@Transient
+	private String sMensajePrecioConvenio;
 	
 	
 
@@ -474,6 +480,22 @@ public class TcProducto implements Serializable {
 
 	public void setnPrecioOriginal(BigDecimal nPrecioOriginal) {
 		this.nPrecioOriginal = nPrecioOriginal;
+	}
+
+	public Boolean getbPrecioConvenioMayorista() {
+		return bPrecioConvenioMayorista;
+	}
+
+	public void setbPrecioConvenioMayorista(Boolean bPrecioConvenioMayorista) {
+		this.bPrecioConvenioMayorista = bPrecioConvenioMayorista;
+	}
+
+	public String getsMensajePrecioConvenio() {
+		return sMensajePrecioConvenio;
+	}
+
+	public void setsMensajePrecioConvenio(String sMensajePrecioConvenio) {
+		this.sMensajePrecioConvenio = sMensajePrecioConvenio;
 	}
 
 	@Override

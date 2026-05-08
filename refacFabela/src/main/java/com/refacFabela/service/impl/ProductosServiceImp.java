@@ -64,6 +64,7 @@ import com.refacFabela.repository.TvVentasStockRepository;
 import com.refacFabela.repository.TwAjusteInventarioRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwMaquinaClienteRepository;
+import com.refacFabela.repository.TwMarcaDescuentoMayoristaRepository;
 import com.refacFabela.repository.TwProductoBodegaRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.TwSaldoUtilizadoRepository;
@@ -159,6 +160,9 @@ public class ProductosServiceImp implements ProductosService {
 	@Autowired
 	private TwProductoBodegaRepository twProductoBodegaRepository;
 
+	@Autowired
+	private TwMarcaDescuentoMayoristaRepository twMarcaDescuentoMayoristaRepository;
+
  
 	 private final subirArchivo archivoHelper = new subirArchivo(); // O inyectado si se convierte a @Component
 
@@ -206,7 +210,8 @@ public class ProductosServiceImp implements ProductosService {
 			TvStockProducto stock = productoBodegasIdRepository.findBynIdProducto(prod.getnId());
 			if (stock != null) {
 				// Calcular precio según tipo revendedor
-				stock.setTcProducto(util.calcularPrecioRevendedor(prod, tipoCambio.getnValor(), nTipoRevendedor));
+				stock.setTcProducto(util.calcularPrecioRevendedor(prod, tipoCambio.getnValor(), nTipoRevendedor,
+						twMarcaDescuentoMayoristaRepository));
 				resultado.add(stock);
 				idsIncluidos.add(prod.getnId());
 
@@ -221,7 +226,7 @@ public class ProductosServiceImp implements ProductosService {
 							// Calcular precio del alternativo
 							stockAlt.setTcProducto(
 								util.calcularPrecioRevendedor(
-									alt.getTcProductoAlternativo(), tipoCambio.getnValor(), nTipoRevendedor));
+									alt.getTcProductoAlternativo(), tipoCambio.getnValor(), nTipoRevendedor, twMarcaDescuentoMayoristaRepository));
 							resultado.add(stockAlt);
 							idsIncluidos.add(idAlt);
 						}

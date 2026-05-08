@@ -8,13 +8,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TwCaja;
+import com.refacFabela.model.TwMarcaDescuentoMayorista;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.CajaRepository;
+import com.refacFabela.repository.TwMarcaDescuentoMayoristaRepository;
 
 public  class utils {
 	
@@ -108,16 +111,30 @@ public  class utils {
 	
 	/**
 	 * Calcula el precio para revendedores según su tipo.
-	 * tipoRevendedor: 1 = revendedor estándar (usa n_id_descuento directo),
-	 *                 2 = mayorista (descuento mejorado: n_id_descuento + 10% del gap con ganancia)
+	 * 
+	 * tipoRevendedor:
+	 *   1 = Cliente Regular (sin descuento)
+	 *   2 = Revendedor (descuento directo de n_id_descuento)
+	 *   3 = Mayorista (descuento mejorado + soporte para ganancia de marca especial)
+	 * 
+	 * Para mayoristas (tipo=3):
+	 *   - Si la marca existe en tw_marca_descuento_mayorista (activa):
+	 *     Usa n_ganancia de la tabla en lugar de tc_productos.nIdGanancia
+	 *     SIN descuento 10% extra (ganancia pura de la tabla)
+	 *   - Si la marca NO existe:
+	 *     Usa ganancia normal de tc_productos.nIdGanancia
+	 *     CON descuento 10% extra del gap (comportamiento original)
 	 */
-	public TcProducto calcularPrecioRevendedor(TcProducto tcProducto, Double dolar, Long tipoRevendedor) {
+	public TcProducto calcularPrecioRevendedor(TcProducto tcProducto, Double dolar, Long tipoRevendedor,
+			TwMarcaDescuentoMayoristaRepository marcaDescuentoRepository) {
 		BigDecimal precioPeso = BigDecimal.ZERO;
 		BigDecimal precioPesofinalSinIva = BigDecimal.ZERO;
 		BigDecimal precio_unitario_calculado = BigDecimal.ZERO;
 		BigDecimal iva_unitario_calculado = BigDecimal.ZERO;
 		BigDecimal total_unitario_calculado = BigDecimal.ZERO;
 		BigDecimal iva = new BigDecimal("0.16");
+		tcProducto.setbPrecioConvenioMayorista(Boolean.FALSE);
+		tcProducto.setsMensajePrecioConvenio(null);
 
 		// 1. Conversión de moneda
 		if (tcProducto.getsMoneda().equals("USD")) {
@@ -127,8 +144,24 @@ public  class utils {
 		}
 
 		// 2. Aplicar ganancia (margen de utilidad)
+		// Regla nueva: solo para tipo 3 y marcas registradas se reemplaza la ganancia del producto.
+		BigDecimal gananciaAplicada = BigDecimal.valueOf(tcProducto.getTcGanancia().getnGanancia());
+
+		if (tipoRevendedor != null && tipoRevendedor == 3 && tcProducto.getnIdMarca() != null && marcaDescuentoRepository != null) {
+			// Mayorista: buscar si la marca tiene ganancia especial activa
+			Optional<TwMarcaDescuentoMayorista> marcaDescuento = 
+				marcaDescuentoRepository.findByNIdMarcaAndNEstatus(tcProducto.getnIdMarca(), 1);
+			
+			if (marcaDescuento.isPresent()) {
+				// Usar ganancia de la marca mayorista
+				gananciaAplicada = marcaDescuento.get().getnGanancia();
+				tcProducto.setbPrecioConvenioMayorista(Boolean.TRUE);
+				tcProducto.setsMensajePrecioConvenio("Precio especial por convenio");
+			}
+		}
+
 		precioPesofinalSinIva = precioPeso.add(
-			precioPeso.multiply(BigDecimal.valueOf(tcProducto.getTcGanancia().getnGanancia())));
+			precioPeso.multiply(gananciaAplicada));
 
 		// 3. Calcular precio unitario base (sin IVA) = precio con ganancia
 		BigDecimal precioBase = DateTimeUtil.truncarDosDecimales(precioPesofinalSinIva);
@@ -139,7 +172,7 @@ public  class utils {
 		double descuentoPorcentaje;
 
 		if (tipoRevendedor != null && tipoRevendedor == 3) {
-			// Mayorista (tc_tipo_revendedor.n_id=3): descuento mejorado
+			// Mayorista (tc_tipo_revendedor.n_id=3): mantiene lógica actual
 			long extra = (long) Math.floor((nIdGanancia - nIdDescuento) * 0.10);
 			if (extra > 0) {
 				descuentoPorcentaje = (nIdDescuento + extra) / 100.0;
