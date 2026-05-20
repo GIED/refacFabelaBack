@@ -460,6 +460,14 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
             throw new Exception("El producto " + productoId + " está inactivo y no debe formar parte del inventario");
         }
 
+        TwProductobodega pb = productoBodegaRepo.obtenerStockBodega(productoId, inventario.getnIdBodega());
+        Integer stockActualSistema = pb != null && pb.getnCantidad() != null ? pb.getnCantidad() : null;
+
+        if (requiereReconteoAntesDeAjuste(detalle, stockActualSistema)) {
+            throw new Exception("No se puede ajustar el producto " + productoId
+                + ": el stock actual cambió desde el levantamiento. Debe hacer re-conteo primero.");
+        }
+
         // Determinar la cantidad final: usar corregida si se proporcionó, si no la contada original
         Integer cantidadFinal;
         if (cantidadCorregida != null) {
@@ -484,8 +492,6 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
         }
 
         // Actualizar tw_productobodega con la cantidad final
-        TwProductobodega pb = productoBodegaRepo.obtenerStockBodega(productoId, inventario.getnIdBodega());
-
         if (pb != null) {
             pb.setnCantidad(cantidadFinal);
             pb.setnIdAnaquel(inventario.getnIdAnaquel());
@@ -539,11 +545,8 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
 
         Integer stockActual = pb.getnCantidad();
 
-        // Validacion robusta: permitir reconteo si el stock real cambio, aunque el flag persistido este desactualizado
-        Integer referenciaActual = detalle.getnCantidadTeoricaRef() != null ? detalle.getnCantidadTeoricaRef() : 0;
-        boolean requiereReconteoDinamico = !stockActual.equals(referenciaActual);
-        if (!requiereReconteoDinamico && !Boolean.TRUE.equals(detalle.getbRequiereReconteo())) {
-            throw new Exception("Este producto no requiere re-conteo. Stock es valido.");
+        if (!requiereReconteoAntesDeAjuste(detalle, stockActual)) {
+            throw new Exception("Este producto no requiere re-conteo. Solo aplica para diferencias pendientes con stock actualizado.");
         }
 
         // Actualizar el detalle del inventario
@@ -582,10 +585,14 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
             throw new Exception("Solo se pueden autorizar inventarios en estatus EN_REVISION");
         }
 
-        // VALIDACIÓN CRÍTICA: Verificar que NO haya productos con stock obsoleto (bRequiereReconteo = true)
+        // VALIDACIÓN CRÍTICA: solo bloquear por productos con diferencia pendiente cuyo stock cambió en sistema
         List<TwInventarioUbicacionDet> productosObsoletos = detalleRepository.findByInventarioId(inventarioId)
             .stream()
-            .filter(d -> Boolean.TRUE.equals(d.getbRequiereReconteo()))
+            .filter(this::tieneDiferenciaPendienteDeAjuste)
+            .filter(d -> requiereReconteoAntesDeAjuste(
+                d,
+                obtenerCantidadActualSistema(inventario.getnIdBodega(), d.getnIdProducto())
+            ))
             .collect(Collectors.toList());
 
         if (!productosObsoletos.isEmpty()) {
@@ -593,7 +600,7 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
                 .map(d -> d.getTcProducto() != null ? d.getTcProducto().getsNoParte() : "Desconocido")
                 .collect(Collectors.joining(", "));
             throw new Exception("No se puede autorizar el inventario: " + productosObsoletos.size() 
-                + " producto(s) con stock obsoleto requiere(n) re-conteo: " + productosStr);
+                + " producto(s) con diferencia tiene(n) stock actualizado y requiere(n) re-conteo: " + productosStr);
         }
 
         inventario.setnEstatus(ESTATUS_AUTORIZADO);
@@ -800,6 +807,43 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
         return dto;
     }
 
+    private boolean tieneDiferenciaPendienteDeAjuste(TwInventarioUbicacionDet detalle) {
+        if (Boolean.TRUE.equals(detalle.getbAjustado())) {
+            return false;
+        }
+
+        Integer cantidadContada = detalle.getnCantidadContada();
+        Integer cantidadReferencia = detalle.getnCantidadTeoricaRef();
+
+        if (cantidadContada == null || cantidadReferencia == null) {
+            return false;
+        }
+
+        return !cantidadContada.equals(cantidadReferencia);
+    }
+
+    private boolean requiereReconteoAntesDeAjuste(TwInventarioUbicacionDet detalle, Integer cantidadActualSistema) {
+        if (!tieneDiferenciaPendienteDeAjuste(detalle)) {
+            return false;
+        }
+
+        Integer cantidadReferencia = detalle.getnCantidadTeoricaRef() != null ? detalle.getnCantidadTeoricaRef() : 0;
+        if (cantidadActualSistema == null) {
+            return true;
+        }
+
+        return !cantidadActualSistema.equals(cantidadReferencia);
+    }
+
+    private Integer obtenerCantidadActualSistema(Long bodegaId, Long productoId) {
+        TwProductobodega productoBodegaActual = productoBodegaRepo.obtenerStockBodega(productoId, bodegaId);
+        if (productoBodegaActual == null || productoBodegaActual.getnCantidad() == null) {
+            return null;
+        }
+
+        return productoBodegaActual.getnCantidad();
+    }
+
     private InventarioUbicacionDetalleDto convertirDetalleADto(TwInventarioUbicacionDet detalle) {
         InventarioUbicacionDetalleDto dto = new InventarioUbicacionDetalleDto();
 
@@ -832,29 +876,16 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
         // VALIDACIÓN DE VIGENCIA: Consultar stock actual de tw_productobodega
         TwInventarioUbicacion inventario = detalle.getTwInventarioUbicacion();
         if (inventario != null) {
-            TwProductobodega productoBodegaActual = productoBodegaRepo.obtenerStockBodega(
-                detalle.getnIdProducto(),
-                inventario.getnIdBodega()
+            Integer cantidadActual = obtenerCantidadActualSistema(
+                inventario.getnIdBodega(),
+                detalle.getnIdProducto()
             );
 
-            if (productoBodegaActual != null) {
-                Integer cantidadActual = productoBodegaActual.getnCantidad() != null 
-                    ? productoBodegaActual.getnCantidad() : 0;
-                
-                dto.setnCantidadActualTwProductoBodega(cantidadActual);
+            dto.setnCantidadActualTwProductoBodega(cantidadActual != null ? cantidadActual : 0);
+            dto.setbRequiereReconteo(requiereReconteoAntesDeAjuste(detalle, cantidadActual));
 
-                // Detectar si stock cambió desde la referencia
-                boolean requiereReconteo = !cantidadActual.equals(detalle.getnCantidadTeoricaRef());
-                dto.setbRequiereReconteo(requiereReconteo);
-
-                // Calcular diferencia real respecto al stock actual
-                if (detalle.getnCantidadContada() != null) {
-                    dto.setnDiferenciaTiempoReal(detalle.getnCantidadContada() - cantidadActual);
-                }
-            } else {
-                // Producto no existe en tw_productobodega (probablemente fue removido)
-                dto.setnCantidadActualTwProductoBodega(0);
-                dto.setbRequiereReconteo(true);
+            if (detalle.getnCantidadContada() != null) {
+                dto.setnDiferenciaTiempoReal(detalle.getnCantidadContada() - (cantidadActual != null ? cantidadActual : 0));
             }
         }
 
