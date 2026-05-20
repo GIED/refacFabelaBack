@@ -114,6 +114,21 @@ public interface InventarioUbicacionService {
                                                   String motivoAjuste, Integer cantidadCorregida, Long usuarioId) throws Exception;
 
     /**
+     * Re-contar un producto con stock obsoleto (rol ALMACÉN/ADMIN).
+     * Cuando se detecta que el stock cambió desde el levantamiento inicial (bRequiereReconteo=true),
+     * se actualiza la referencia al stock actual y se captura la nueva cantidad contada.
+     * @param inventarioId ID del inventario
+     * @param productoId ID del producto a recontar
+     * @param nCantidadContada Nueva cantidad contada en el re-conteo
+     * @param sMotivo Motivo del re-conteo (cambio detectado, etc)
+     * @param usuarioId ID del usuario que hace el re-conteo
+     * @return Detalle actualizado sin flag de reconteo
+     * @throws Exception Si el inventario no está EN_REVISION o el producto no requiere reconteo
+     */
+    InventarioUbicacionDetalleDto recontarProducto(Long inventarioId, Long productoId,
+                                                   Integer nCantidadContada, String sMotivo, Long usuarioId) throws Exception;
+
+    /**
      * Autorizar inventario (rol ADMIN).
      * @param inventarioId ID del inventario
      * @param request Motivo de autorización

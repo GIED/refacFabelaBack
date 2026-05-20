@@ -38,6 +38,9 @@ public class TwInventarioUbicacionDet implements Serializable {
     @Column(name = "n_cantidad_contada")
     private Integer nCantidadContada; // NULL = pendiente
 
+    @Column(name = "n_diferencia")
+    private Integer nDiferencia; // nCantidadContada - nCantidadTeoricaRef (para visualización rápida)
+
     @Column(name = "n_estatus_linea", nullable = false)
     private Integer nEstatusLinea; // 1=PENDIENTE, 2=CONTADO, 3=RECONTAR
 
@@ -62,6 +65,19 @@ public class TwInventarioUbicacionDet implements Serializable {
 
     @Column(name = "n_id_usuario_ajuste")
     private Integer nIdUsuarioAjuste;
+
+    // Campos de re-conteo (para stock obsoleto detectado)
+    @Column(name = "b_requiere_reconteo")
+    private Boolean bRequiereReconteo; // TRUE si el stock cambió desde levantamiento inicial
+
+    @Column(name = "n_id_usuario_reconteo")
+    private Integer nIdUsuarioReconteo; // Quién hizo el re-conteo
+
+    @Column(name = "d_fecha_reconteo")
+    private LocalDateTime dFechaReconteo; // Cuándo se hizo el re-conteo
+
+    @Column(name = "s_motivo_reconteo", length = 500)
+    private String sMotivoReconteo; // Motivo del re-conteo
 
     // Relaciones ManyToOne
     @ManyToOne
@@ -138,6 +154,14 @@ public class TwInventarioUbicacionDet implements Serializable {
 
     public void setnCantidadContada(Integer nCantidadContada) {
         this.nCantidadContada = nCantidadContada;
+    }
+
+    public Integer getnDiferencia() {
+        return nDiferencia;
+    }
+
+    public void setnDiferencia(Integer nDiferencia) {
+        this.nDiferencia = nDiferencia;
     }
 
     public Integer getnEstatusLinea() {
@@ -234,5 +258,37 @@ public class TwInventarioUbicacionDet implements Serializable {
 
     public void setTcUsuarioAjuste(TcUsuario tcUsuarioAjuste) {
         this.tcUsuarioAjuste = tcUsuarioAjuste;
+    }
+
+    public Boolean getbRequiereReconteo() {
+        return bRequiereReconteo;
+    }
+
+    public void setbRequiereReconteo(Boolean bRequiereReconteo) {
+        this.bRequiereReconteo = bRequiereReconteo;
+    }
+
+    public Integer getnIdUsuarioReconteo() {
+        return nIdUsuarioReconteo;
+    }
+
+    public void setnIdUsuarioReconteo(Integer nIdUsuarioReconteo) {
+        this.nIdUsuarioReconteo = nIdUsuarioReconteo;
+    }
+
+    public LocalDateTime getdFechaReconteo() {
+        return dFechaReconteo;
+    }
+
+    public void setdFechaReconteo(LocalDateTime dFechaReconteo) {
+        this.dFechaReconteo = dFechaReconteo;
+    }
+
+    public String getsMotivoReconteo() {
+        return sMotivoReconteo;
+    }
+
+    public void setsMotivoReconteo(String sMotivoReconteo) {
+        this.sMotivoReconteo = sMotivoReconteo;
     }
 }

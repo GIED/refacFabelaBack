@@ -28,6 +28,11 @@ public class InventarioUbicacionDetalleDto implements Serializable {
     
     // Campos calculados
     private Integer nDiferencia; // contada - ref
+    
+    // Campos de validación de vigencia del inventario
+    private Integer nCantidadActualTwProductoBodega; // Stock ACTUAL en el momento de consulta
+    private Boolean bRequiereReconteo; // TRUE si stock cambió desde levantamiento
+    private Integer nDiferenciaTiempoReal; // Diferencia actual: contada - cantidadActualTwProductoBodega
 
     // Campos de ajuste individual (para autorización)
     private Boolean bAjustado;
@@ -174,6 +179,30 @@ public class InventarioUbicacionDetalleDto implements Serializable {
 
     public void setnDiferencia(Integer nDiferencia) {
         this.nDiferencia = nDiferencia;
+    }
+
+    public Integer getnCantidadActualTwProductoBodega() {
+        return nCantidadActualTwProductoBodega;
+    }
+
+    public void setnCantidadActualTwProductoBodega(Integer nCantidadActualTwProductoBodega) {
+        this.nCantidadActualTwProductoBodega = nCantidadActualTwProductoBodega;
+    }
+
+    public Boolean getbRequiereReconteo() {
+        return bRequiereReconteo;
+    }
+
+    public void setbRequiereReconteo(Boolean bRequiereReconteo) {
+        this.bRequiereReconteo = bRequiereReconteo;
+    }
+
+    public Integer getnDiferenciaTiempoReal() {
+        return nDiferenciaTiempoReal;
+    }
+
+    public void setnDiferenciaTiempoReal(Integer nDiferenciaTiempoReal) {
+        this.nDiferenciaTiempoReal = nDiferenciaTiempoReal;
     }
 
     public Boolean getbAjustado() {

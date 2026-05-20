@@ -118,7 +118,7 @@ public  class utils {
 	 *   3 = Mayorista (descuento mejorado + soporte para ganancia de marca especial)
 	 * 
 	 * Para mayoristas (tipo=3):
-	 *   - Si la marca existe en tw_marca_descuento_mayorista (activa):
+	 *   - Si la marca existe en tw_marca_descuento_mayorista:
 	 *     Usa n_ganancia de la tabla en lugar de tc_productos.nIdGanancia
 	 *     SIN descuento 10% extra (ganancia pura de la tabla)
 	 *   - Si la marca NO existe:
@@ -148,9 +148,9 @@ public  class utils {
 		BigDecimal gananciaAplicada = BigDecimal.valueOf(tcProducto.getTcGanancia().getnGanancia());
 
 		if (tipoRevendedor != null && tipoRevendedor == 3 && tcProducto.getnIdMarca() != null && marcaDescuentoRepository != null) {
-			// Mayorista: buscar si la marca tiene ganancia especial activa
+			// Mayorista: buscar si la marca tiene ganancia especial
 			Optional<TwMarcaDescuentoMayorista> marcaDescuento = 
-				marcaDescuentoRepository.findByNIdMarcaAndNEstatus(tcProducto.getnIdMarca(), 1);
+				marcaDescuentoRepository.findByNIdMarca(tcProducto.getnIdMarca());
 			
 			if (marcaDescuento.isPresent()) {
 				// Usar ganancia de la marca mayorista

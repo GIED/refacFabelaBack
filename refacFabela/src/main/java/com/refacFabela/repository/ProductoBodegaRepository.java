@@ -57,6 +57,22 @@ public interface ProductoBodegaRepository extends JpaRepository<TwProductobodega
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@Query("Select d from TwProductobodega d where d.nIdProducto =:producto and d.nIdBodega =:bodega and d.tcProducto.nEstatus = 1")
 	public TwProductobodega obtenerStockBodegaForUpdate(Long producto, Long bodega);
+	
+	/**
+	 * Busca un producto en una ubicación específica (bodega+anaquel+nivel).
+	 * Usado en autorización de inventario para validar vigencia de referencias.
+	 * 
+	 * @param producto ID del producto
+	 * @param bodega ID de la bodega
+	 * @param anaquel ID del anaquel
+	 * @param nivel ID del nivel
+	 * @return Optional con el registro si existe
+	 */
+	@Query("SELECT d FROM TwProductobodega d WHERE d.nIdProducto = :producto " +
+		   "AND d.nIdBodega = :bodega AND d.nIdAnaquel = :anaquel AND d.nIdNivel = :nivel " +
+		   "AND d.tcProducto.nEstatus = 1")
+	public java.util.Optional<TwProductobodega> findByProductoAndUbicacion(
+		Long producto, Long bodega, Long anaquel, Long nivel);
 	  
 	
 }

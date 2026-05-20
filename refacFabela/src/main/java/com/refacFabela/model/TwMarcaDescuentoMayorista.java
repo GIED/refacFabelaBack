@@ -1,7 +1,6 @@
 package com.refacFabela.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,18 +44,6 @@ public class TwMarcaDescuentoMayorista implements Serializable {
 	private java.math.BigDecimal nGanancia;
 
 	/**
-	 * Estado del registro: 1=Activo, 0=Inactivo
-	 */
-	@Column(name = "n_estatus")
-	private Integer nEstatus;
-
-	/**
-	 * Fecha de creación del registro (auto-poblada por BD)
-	 */
-	@Column(name = "d_fecha_creacion")
-	private Timestamp dFechaCreacion;
-
-	/**
 	 * Relación @ManyToOne con TcMarca
 	 * Permite acceder a datos de la marca (s_marca, etc.)
 	 */
@@ -75,10 +62,9 @@ public class TwMarcaDescuentoMayorista implements Serializable {
 	/**
 	 * Constructor completo
 	 */
-	public TwMarcaDescuentoMayorista(Long nIdMarca, java.math.BigDecimal nGanancia, Integer nEstatus) {
+	public TwMarcaDescuentoMayorista(Long nIdMarca, java.math.BigDecimal nGanancia) {
 		this.nIdMarca = nIdMarca;
 		this.nGanancia = nGanancia;
-		this.nEstatus = nEstatus;
 	}
 
 	// ============ GETTERS Y SETTERS ============
@@ -99,22 +85,6 @@ public class TwMarcaDescuentoMayorista implements Serializable {
 		this.nGanancia = nGanancia;
 	}
 
-	public Integer getnEstatus() {
-		return nEstatus;
-	}
-
-	public void setnEstatus(Integer nEstatus) {
-		this.nEstatus = nEstatus;
-	}
-
-	public Timestamp getdFechaCreacion() {
-		return dFechaCreacion;
-	}
-
-	public void setdFechaCreacion(Timestamp dFechaCreacion) {
-		this.dFechaCreacion = dFechaCreacion;
-	}
-
 	public TcMarca getTcMarca() {
 		return tcMarca;
 	}
@@ -125,20 +95,11 @@ public class TwMarcaDescuentoMayorista implements Serializable {
 
 	// ============ MÉTODOS DE UTILIDAD ============
 
-	/**
-	 * Verifica si el descuento de marca está activo
-	 */
-	public boolean isActivo() {
-		return nEstatus != null && nEstatus == 1;
-	}
-
 	@Override
 	public String toString() {
 		return "TwMarcaDescuentoMayorista{" +
 				"nIdMarca=" + nIdMarca +
 				", nGanancia=" + nGanancia +
-				", nEstatus=" + nEstatus +
-				", dFechaCreacion=" + dFechaCreacion +
 				'}';
 	}
 }

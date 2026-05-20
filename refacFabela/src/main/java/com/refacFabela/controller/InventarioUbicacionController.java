@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.refacFabela.dto.ActualizarConteoRequestDto;
 import com.refacFabela.dto.AjustarProductoRequestDto;
 import com.refacFabela.dto.AutorizarInventarioRequestDto;
+import com.refacFabela.dto.RecontarProductoRequestDto;
 import com.refacFabela.dto.IniciarInventarioRequestDto;
 import com.refacFabela.dto.InventarioUbicacionDetalleDto;
 import com.refacFabela.dto.InventarioUbicacionDto;
@@ -265,6 +266,38 @@ public class InventarioUbicacionController {
                         " del inventario " + id + ": " + e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new Mensaje("Error al ajustar producto: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * POST /inventarios-ubicacion/{id}/detalle/{productoId}/recontar
+     * Re-contar un producto que tiene stock obsoleto (rol ALMACEN/ADMIN).
+     * Cuando se detecta que el stock cambió desde el levantamiento inicial,
+     * se actualiza la referencia al stock actual y se captura la nueva cantidad contada.
+     */
+    @PostMapping("/{id}/detalle/{productoId}/recontar")
+    public ResponseEntity<?> recontarProducto(
+            @PathVariable Long id,
+            @PathVariable Long productoId,
+            @RequestBody RecontarProductoRequestDto request) {
+        try {
+            if (!tieneRol(RolNombre.ROLE_ALMACEN) && !tieneRol(RolNombre.ROLE_ADMIN)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new Mensaje("No tiene permisos para hacer re-conteo de productos"));
+            }
+
+            UsuarioPrincipal usuario = getUsuarioActual();
+            InventarioUbicacionDetalleDto detalle = inventarioService.recontarProducto(
+                id, productoId, request.getnCantidadContada(), request.getsMotivo(), usuario.getnId()
+            );
+
+            return ResponseEntity.ok(detalle);
+
+        } catch (Exception e) {
+            logger.error("Error al recontar producto " + productoId + 
+                        " del inventario " + id + ": " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new Mensaje("Error al recontar producto: " + e.getMessage()));
         }
     }
 

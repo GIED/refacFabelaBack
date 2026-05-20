@@ -508,12 +508,92 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
     }
 
     @Override
+    public InventarioUbicacionDetalleDto recontarProducto(Long inventarioId, Long productoId,
+                                                          Integer nCantidadContada, String sMotivo, Long usuarioId) throws Exception {
+        TwInventarioUbicacion inventario = obtenerInventarioPorId(inventarioId);
+
+        // Validar que el inventario esté en estado EN_REVISION
+        if (!inventario.getnEstatus().equals(ESTATUS_EN_REVISION)) {
+            throw new Exception("Solo se pueden recon tar productos de inventarios en estatus EN_REVISION");
+        }
+
+        // Buscar el detalle del producto
+        TwInventarioUbicacionDet detalle = detalleRepository.findByInventarioAndProducto(inventarioId, productoId)
+            .orElseThrow(() -> new Exception("Producto no encontrado en el inventario"));
+
+        // Validar que el producto esté activo
+        if (detalle.getTcProducto() == null || detalle.getTcProducto().getnEstatus() != 1) {
+            throw new Exception("El producto " + productoId + " está inactivo");
+        }
+
+        // Validar cantidad contada
+        if (nCantidadContada == null || nCantidadContada < 0) {
+            throw new Exception("La cantidad contada debe ser un número no-negativo");
+        }
+
+        // Obtener el stock actual de tw_productobodega
+        TwProductobodega pb = productoBodegaRepo.obtenerStockBodega(productoId, inventario.getnIdBodega());
+        if (pb == null || pb.getnCantidad() == null) {
+            throw new Exception("No se puede obtener el stock actual del producto");
+        }
+
+        Integer stockActual = pb.getnCantidad();
+
+        // Validacion robusta: permitir reconteo si el stock real cambio, aunque el flag persistido este desactualizado
+        Integer referenciaActual = detalle.getnCantidadTeoricaRef() != null ? detalle.getnCantidadTeoricaRef() : 0;
+        boolean requiereReconteoDinamico = !stockActual.equals(referenciaActual);
+        if (!requiereReconteoDinamico && !Boolean.TRUE.equals(detalle.getbRequiereReconteo())) {
+            throw new Exception("Este producto no requiere re-conteo. Stock es valido.");
+        }
+
+        // Actualizar el detalle del inventario
+        // 1. Actualizar la cantidad contada con la nueva cantidad
+        detalle.setnCantidadContada(nCantidadContada);
+
+        // 2. Actualizar la referencia al stock actual (sincronizar con lo que hay en tw_productobodega)
+        detalle.setnCantidadTeoricaRef(stockActual);
+
+        // 3. Recalcular la diferencia
+        Integer diferencia = nCantidadContada - stockActual;
+        detalle.setnDiferencia(diferencia);
+
+        // 4. Limpiar el flag de re-conteo (ya no requiere re-conteo después de esto)
+        detalle.setbRequiereReconteo(false);
+
+        // 5. Resetear el estatus de línea a PENDIENTE para que se re-evalúe
+        detalle.setnEstatusLinea(ESTATUS_LINEA_PENDIENTE);
+
+        // 6. Registrar quien hizo el re-conteo
+        detalle.setnIdUsuarioReconteo(usuarioId.intValue());
+        detalle.setdFechaReconteo(LocalDateTime.now());
+        detalle.setsMotivoReconteo(sMotivo);
+
+        detalleRepository.save(detalle);
+
+        return convertirDetalleADto(detalle);
+    }
+
+    @Override
     public InventarioUbicacionDto autorizarInventario(Long inventarioId, AutorizarInventarioRequestDto request,
                                                      Long usuarioId) throws Exception {
         TwInventarioUbicacion inventario = obtenerInventarioPorId(inventarioId);
 
         if (!inventario.getnEstatus().equals(ESTATUS_EN_REVISION)) {
             throw new Exception("Solo se pueden autorizar inventarios en estatus EN_REVISION");
+        }
+
+        // VALIDACIÓN CRÍTICA: Verificar que NO haya productos con stock obsoleto (bRequiereReconteo = true)
+        List<TwInventarioUbicacionDet> productosObsoletos = detalleRepository.findByInventarioId(inventarioId)
+            .stream()
+            .filter(d -> Boolean.TRUE.equals(d.getbRequiereReconteo()))
+            .collect(Collectors.toList());
+
+        if (!productosObsoletos.isEmpty()) {
+            String productosStr = productosObsoletos.stream()
+                .map(d -> d.getTcProducto() != null ? d.getTcProducto().getsNoParte() : "Desconocido")
+                .collect(Collectors.joining(", "));
+            throw new Exception("No se puede autorizar el inventario: " + productosObsoletos.size() 
+                + " producto(s) con stock obsoleto requiere(n) re-conteo: " + productosStr);
         }
 
         inventario.setnEstatus(ESTATUS_AUTORIZADO);
@@ -749,7 +829,36 @@ public class InventarioUbicacionServiceImpl implements InventarioUbicacionServic
             dto.setsNombreUsuarioCaptura(detalle.getTcUsuarioCaptura().getsNombreUsuario());
         }
 
-        // Calcular diferencia
+        // VALIDACIÓN DE VIGENCIA: Consultar stock actual de tw_productobodega
+        TwInventarioUbicacion inventario = detalle.getTwInventarioUbicacion();
+        if (inventario != null) {
+            TwProductobodega productoBodegaActual = productoBodegaRepo.obtenerStockBodega(
+                detalle.getnIdProducto(),
+                inventario.getnIdBodega()
+            );
+
+            if (productoBodegaActual != null) {
+                Integer cantidadActual = productoBodegaActual.getnCantidad() != null 
+                    ? productoBodegaActual.getnCantidad() : 0;
+                
+                dto.setnCantidadActualTwProductoBodega(cantidadActual);
+
+                // Detectar si stock cambió desde la referencia
+                boolean requiereReconteo = !cantidadActual.equals(detalle.getnCantidadTeoricaRef());
+                dto.setbRequiereReconteo(requiereReconteo);
+
+                // Calcular diferencia real respecto al stock actual
+                if (detalle.getnCantidadContada() != null) {
+                    dto.setnDiferenciaTiempoReal(detalle.getnCantidadContada() - cantidadActual);
+                }
+            } else {
+                // Producto no existe en tw_productobodega (probablemente fue removido)
+                dto.setnCantidadActualTwProductoBodega(0);
+                dto.setbRequiereReconteo(true);
+            }
+        }
+
+        // Calcular diferencia original (contada vs referencia capturada)
         if (detalle.getnCantidadContada() != null && detalle.getnCantidadTeoricaRef() != null) {
             dto.setnDiferencia(detalle.getnCantidadContada() - detalle.getnCantidadTeoricaRef());
         }
