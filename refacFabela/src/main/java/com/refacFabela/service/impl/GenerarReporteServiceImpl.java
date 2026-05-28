@@ -161,6 +161,7 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	
 		reporteCotizacion.setNombreCliente(listaProductos.get(0).getTwCotizaciones().getTcCliente().getsRazonSocial());
 		reporteCotizacion.setRfcCliente(listaProductos.get(0).getTwCotizaciones().getTcCliente().getsRfc());
+		reporteCotizacion.setnIdCliente(listaProductos.get(0).getTwCotizaciones().getTcCliente().getnId());
 		reporteCotizacion.setFolioCotizacion(listaProductos.get(0).getTwCotizaciones().getnId());
 		reporteCotizacion.setFecha(listaProductos.get(0).getTwCotizaciones().getdFecha());
 		reporteCotizacion.setCorreo(listaProductos.get(0).getTwCotizaciones().getTcCliente().getsCorreo());

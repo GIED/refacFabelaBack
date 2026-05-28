@@ -7,13 +7,16 @@ import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
+import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
+import javax.mail.SendFailedException;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -22,6 +25,8 @@ import javax.mail.internet.MimeMultipart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sun.mail.smtp.SMTPAddressFailedException;
+import com.sun.mail.smtp.SMTPSendFailedException;
 import com.refacFabela.config.MailConfigProperties;
 
 @Component
@@ -39,27 +44,47 @@ public class envioMail {
 
 	public String enviarCorreo(String correo, String paramasunto, String mensaje, String ruta, String nombreArchivo,
 			int tipo) {
-		if (!tieneTexto(correo)) {
+		ResultadoEnvioCorreo resultado = enviarCorreoDetallado(correo, paramasunto, mensaje, ruta, nombreArchivo, tipo);
+		return resultado.isEnviado() ? "SI" : "NO";
+	}
+
+	public ResultadoEnvioCorreo enviarCorreoDetallado(String correo, String paramasunto, String mensaje, String ruta,
+			String nombreArchivo, int tipo) {
+		String destinatario = normalizarTexto(correo);
+		if (!tieneTexto(destinatario)) {
 			System.err.println("[envioMail] Correo no enviado: destinatario vacio.");
-			return "NO";
+			return ResultadoEnvioCorreo.omitido("Destinatario vacio.");
 		}
 
 		String asunto = tieneTexto(paramasunto) ? paramasunto : "Notificacion " + EMPRESA_NOMBRE;
 		boolean incluirAdjuntos = tieneTexto(ruta) && tieneTexto(nombreArchivo);
 
 		try {
+			validarDestinatario(destinatario);
 			Session mailSession = crearSesion();
-			MimeMessage mensajeCorreo = crearMensaje(mailSession, correo, asunto, true);
+			MimeMessage mensajeCorreo = crearMensaje(mailSession, destinatario, asunto, true);
 			mensajeCorreo.setContent(construirContenidoCorreo(asunto, mensaje, incluirAdjuntos, ruta, nombreArchivo, tipo));
 			Transport.send(mensajeCorreo, mensajeCorreo.getAllRecipients());
-			System.out.println("[envioMail] Correo enviado a " + correo + " con asunto: " + asunto);
-			return "SI";
-		} catch (Exception e) {
-			System.err.println("[envioMail] Error al enviar correo a " + correo + " con asunto: " + asunto);
-			e.printStackTrace();
-			return "NO";
-		}
+			System.out.println("[envioMail] Correo enviado a " + destinatario + " con asunto: " + asunto);
+			return ResultadoEnvioCorreo.enviado("Correo enviado correctamente.");
+		} catch (AddressException e) {
+			System.err.println("[envioMail] Correo bloqueado por formato invalido: " + destinatario + ". " + obtenerMensajeError(e));
+			return ResultadoEnvioCorreo.bloqueado("Correo mal formado o no valido.", obtenerMensajeError(e));
+		} catch (MessagingException e) {
+			if (esErrorDestinatarioPermanente(e)) {
+				System.err.println("[envioMail] Correo bloqueado por rechazo del destinatario: " + destinatario + ". " + obtenerMensajeError(e));
+				return ResultadoEnvioCorreo.bloqueado("El servidor de correo rechazo la direccion del destinatario.",
+						obtenerMensajeError(e));
+			}
 
+			System.err.println("[envioMail] Error al enviar correo a " + destinatario + " con asunto: " + asunto);
+			e.printStackTrace();
+			return ResultadoEnvioCorreo.error("Fallo temporal o no clasificable al enviar correo.");
+		} catch (Exception e) {
+			System.err.println("[envioMail] Error al enviar correo a " + destinatario + " con asunto: " + asunto);
+			e.printStackTrace();
+			return ResultadoEnvioCorreo.error(obtenerMensajeError(e));
+		}
 	}
 	
 	public void enviarCorreoEstandar(String destinatario, String asunto, String cuerpo) {
@@ -319,6 +344,76 @@ public class envioMail {
 		return texto != null && !texto.trim().isEmpty();
 	}
 
+	private String normalizarTexto(String texto) {
+		if (texto == null) {
+			return null;
+		}
+
+		String textoNormalizado = texto.trim();
+		return textoNormalizado.isEmpty() ? null : textoNormalizado;
+	}
+
+	private void validarDestinatario(String destinatario) throws AddressException {
+		InternetAddress[] direcciones = InternetAddress.parse(destinatario, true);
+		for (InternetAddress direccion : direcciones) {
+			direccion.validate();
+		}
+	}
+
+	private boolean esErrorDestinatarioPermanente(MessagingException excepcion) {
+		Exception actual = excepcion;
+		while (actual != null) {
+			if (actual instanceof AddressException) {
+				return true;
+			}
+
+			if (actual instanceof SendFailedException) {
+				SendFailedException sendFailedException = (SendFailedException) actual;
+				if (tieneDirecciones(sendFailedException.getInvalidAddresses())) {
+					return true;
+				}
+			}
+
+			if (actual instanceof SMTPAddressFailedException) {
+				return esCodigoSmtpPermanente(((SMTPAddressFailedException) actual).getReturnCode());
+			}
+
+			if (actual instanceof SMTPSendFailedException) {
+				return esCodigoSmtpPermanente(((SMTPSendFailedException) actual).getReturnCode());
+			}
+
+			if (actual instanceof MessagingException) {
+				Exception siguiente = ((MessagingException) actual).getNextException();
+				if (siguiente != null && siguiente != actual) {
+					actual = siguiente;
+					continue;
+				}
+			}
+
+			Throwable causa = actual.getCause();
+			if (causa instanceof Exception && causa != actual) {
+				actual = (Exception) causa;
+				continue;
+			}
+
+			actual = null;
+		}
+
+		return false;
+	}
+
+	private boolean tieneDirecciones(Address[] direcciones) {
+		return direcciones != null && direcciones.length > 0;
+	}
+
+	private boolean esCodigoSmtpPermanente(int codigo) {
+		return codigo >= 500 && codigo < 600;
+	}
+
+	private String obtenerMensajeError(Exception excepcion) {
+		return excepcion != null && tieneTexto(excepcion.getMessage()) ? excepcion.getMessage() : "Sin detalle.";
+	}
+
 	private String escaparHtml(String texto) {
 		if (texto == null) {
 			return "";
@@ -340,6 +435,52 @@ public class envioMail {
 				|| !tieneTexto(mailConfig.getPassword()) || mailConfig.getPort() == null) {
 			throw new IllegalStateException(
 					"Configuracion SMTP incompleta. Revise mail.smtp.host, mail.smtp.port, mail.smtp.account y mail.smtp.password.");
+		}
+	}
+
+	public static final class ResultadoEnvioCorreo {
+		private final boolean enviado;
+		private final boolean bloquearCorreoCliente;
+		private final String motivoBloqueo;
+		private final String detalle;
+
+		private ResultadoEnvioCorreo(boolean enviado, boolean bloquearCorreoCliente, String motivoBloqueo, String detalle) {
+			this.enviado = enviado;
+			this.bloquearCorreoCliente = bloquearCorreoCliente;
+			this.motivoBloqueo = motivoBloqueo;
+			this.detalle = detalle;
+		}
+
+		public static ResultadoEnvioCorreo enviado(String detalle) {
+			return new ResultadoEnvioCorreo(true, false, null, detalle);
+		}
+
+		public static ResultadoEnvioCorreo omitido(String detalle) {
+			return new ResultadoEnvioCorreo(false, false, null, detalle);
+		}
+
+		public static ResultadoEnvioCorreo bloqueado(String motivoBloqueo, String detalle) {
+			return new ResultadoEnvioCorreo(false, true, motivoBloqueo, detalle);
+		}
+
+		public static ResultadoEnvioCorreo error(String detalle) {
+			return new ResultadoEnvioCorreo(false, false, null, detalle);
+		}
+
+		public boolean isEnviado() {
+			return enviado;
+		}
+
+		public boolean debeBloquearCorreoCliente() {
+			return bloquearCorreoCliente;
+		}
+
+		public String getMotivoBloqueo() {
+			return motivoBloqueo;
+		}
+
+		public String getDetalle() {
+			return detalle;
 		}
 	}
 

@@ -26,6 +26,7 @@ public class ReporteCotizacionDto implements Serializable{
 	private BigDecimal subTotal;
 	private BigDecimal ivaTotal;
 	private BigDecimal total;
+	private Long nIdCliente;
 	private String descripcionCatSat;
 	private String correo;
 	private String condicionEntrega;
@@ -157,6 +158,14 @@ public class ReporteCotizacionDto implements Serializable{
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
+	}
+
+	public Long getnIdCliente() {
+		return nIdCliente;
+	}
+
+	public void setnIdCliente(Long nIdCliente) {
+		this.nIdCliente = nIdCliente;
 	}
 
 	public String getDescripcionCatSat() {

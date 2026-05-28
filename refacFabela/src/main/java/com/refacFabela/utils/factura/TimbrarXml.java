@@ -47,7 +47,7 @@ import com.refacFabela.model.factura.CabeceraXml;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.FacturacionService;
 import com.refacFabela.service.VentasService;
-import com.refacFabela.utils.envioMail;
+import com.refacFabela.service.impl.CorreoClienteService;
 import com.refacFabela.utils.utils;
 import com.refacFabela.ws.com.microsoft.schemas._2003._10.serialization.arrays.ArrayOfstring;
 import com.refacFabela.ws.org.datacontract.schemas._2004._07.tes_tfd_v33.ArrayOfDetalleCFDICancelacion;
@@ -74,7 +74,7 @@ public class TimbrarXml {
 	private VentasRepository ventasRepository;
 	
 	@Autowired
-	private envioMail envioMail;
+	private CorreoClienteService correoClienteService;
 
 	public String timbrarXml(Comprobante xml, Long idVenta, CabeceraXml cabecera, TcDatosFactura tcDatosFactura)
 			throws GeneralSecurityException, IOException, ParserConfigurationException, SAXException, Exception {
@@ -300,7 +300,7 @@ public class TimbrarXml {
                       
               
                         
-	      				envioMail.enviarCorreo(venta.getTcCliente().getsCorreo(), 
+	      				correoClienteService.enviarCorreoCliente(venta.getnIdCliente(), 
        						"Factura_"+venta.getnId(),
 	       					"<p>Adjuntamos la factura electr&oacute;nica <strong>No. "+venta.getnId()+"</strong> de su operaci&oacute;n.</p>"
 	       							+ "<p>En este correo encontrar&aacute; los archivos <strong>PDF</strong> y <strong>XML</strong> para su control administrativo y fiscal.</p>"
@@ -402,7 +402,7 @@ public class TimbrarXml {
                       
               
                         
-	      				envioMail.enviarCorreo(venta.getTcCliente().getsCorreo(), 
+	      				correoClienteService.enviarCorreoCliente(venta.getnIdCliente(), 
        						"Factura_"+venta.getnId(),
 	       					"<p>Adjuntamos la factura electr&oacute;nica <strong>No. "+venta.getnId()+"</strong> de su operaci&oacute;n.</p>"
 	       							+ "<p>En este correo encontrar&aacute; los archivos <strong>PDF</strong> y <strong>XML</strong> para su control administrativo y fiscal.</p>"

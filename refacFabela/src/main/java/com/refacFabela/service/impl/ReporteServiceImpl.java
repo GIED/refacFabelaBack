@@ -42,7 +42,6 @@ import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.DateTimeUtil;
-import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
 import com.refacFabela.utils.factura.ConstantesFactura;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -53,7 +52,7 @@ public class ReporteServiceImpl implements ReporteService {
 	
 	 private static final Logger logger = LogManager.getLogger("errorLogger");
 	 @Autowired
-	 private envioMail envioMail;
+	 private CorreoClienteService correoClienteService;
 
 	 private BufferedImage imagenHeader;
 	 
@@ -110,7 +109,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         pos.flush();
 	         pos.close();
 	         
-	         envioMail.enviarCorreo(reporteCotizacion.getCorreo(), 
+	         correoClienteService.enviarCorreoCliente(reporteCotizacion.getnIdCliente(), 
 						"Cotización_"+reporteCotizacion.getFolioCotizacion(),
 						"<p>Adjuntamos la cotizaci&oacute;n <strong>No. "+reporteCotizacion.getFolioCotizacion()+"</strong> correspondiente a su solicitud.</p>"
 								+ "<p>Le recordamos que esta propuesta mantiene su vigencia durante <strong>3 d&iacute;as h&aacute;biles</strong>.</p>"

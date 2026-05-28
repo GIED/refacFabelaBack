@@ -61,6 +61,15 @@ public class TcCliente implements Serializable {
 	
 	@Column(name="n_datos_validados")
 	private Boolean nDatosValidados;
+
+	@Column(name="n_correo_bloqueado")
+	private Boolean nCorreoBloqueado;
+
+	@Column(name="s_motivo_bloqueo_correo")
+	private String sMotivoBloqueoCorreo;
+
+	@Column(name="d_fecha_bloqueo_correo")
+	private LocalDateTime dFechaBloqueoCorreo;
 	
 	@Column(name="n_id_dato_factura")
 	private Long nIdDatoFactura;
@@ -258,6 +267,30 @@ public class TcCliente implements Serializable {
 		this.nDatosValidados = nDatosValidados;
 	}
 
+	public Boolean getnCorreoBloqueado() {
+		return nCorreoBloqueado;
+	}
+
+	public void setnCorreoBloqueado(Boolean nCorreoBloqueado) {
+		this.nCorreoBloqueado = nCorreoBloqueado;
+	}
+
+	public String getsMotivoBloqueoCorreo() {
+		return sMotivoBloqueoCorreo;
+	}
+
+	public void setsMotivoBloqueoCorreo(String sMotivoBloqueoCorreo) {
+		this.sMotivoBloqueoCorreo = sMotivoBloqueoCorreo;
+	}
+
+	public LocalDateTime getdFechaBloqueoCorreo() {
+		return dFechaBloqueoCorreo;
+	}
+
+	public void setdFechaBloqueoCorreo(LocalDateTime dFechaBloqueoCorreo) {
+		this.dFechaBloqueoCorreo = dFechaBloqueoCorreo;
+	}
+
 	@Override
 	public String toString() {
 		return "TcCliente [nId=" + nId + ", d_fechaCredito=" + d_fechaCredito + ", nEstatus=" + nEstatus
@@ -265,7 +298,9 @@ public class TcCliente implements Serializable {
 				+ sCorreo + ", sDireccion=" + sDireccion + ", sRazonSocial=" + sRazonSocial + ", sRfc=" + sRfc
 				+ ", sTelefono=" + sTelefono + ", sClave=" + sClave + ", nIdUsuario=" + nIdUsuario + ", nCp=" + nCp
 				+ ", nIdRegimenFiscal=" + nIdRegimenFiscal + ", nDescuento=" + nDescuento + ", nDatosValidados="
-				+ nDatosValidados + ", nIdDatoFactura=" + nIdDatoFactura + ", tcUsuario=" + tcUsuario
+				+ nDatosValidados + ", nCorreoBloqueado=" + nCorreoBloqueado + ", sMotivoBloqueoCorreo="
+				+ sMotivoBloqueoCorreo + ", dFechaBloqueoCorreo=" + dFechaBloqueoCorreo + ", nIdDatoFactura="
+				+ nIdDatoFactura + ", tcUsuario=" + tcUsuario
 				+ ", tcRegimenFiscal=" + tcRegimenFiscal + ", tcCp=" + tcCp + "]";
 	}
 	

@@ -26,7 +26,6 @@ import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.PedidosService;
 import com.refacFabela.utils.DateTimeUtil;
-import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
 
 import antlr.Utils;
@@ -52,7 +51,7 @@ public class PedidosServiceImpl implements PedidosService {
 	@Autowired
 	private TwComprasProductoPedidoRepository twComprasProductoPedidoRepository;
 	@Autowired
-	private envioMail envioMail;
+	private CorreoClienteService correoClienteService;
 	
   
 	
@@ -192,7 +191,7 @@ public class PedidosServiceImpl implements PedidosService {
 				System.err.println("Entre a enviar el correo");
 				twVenta = ventasRepository.findBynId(twPedido.getnIdVenta());
 
-				envioMail.enviarCorreo(twVenta.getTcCliente().getsCorreo(),
+				correoClienteService.enviarCorreoCliente(twVenta.getnIdCliente(),
 						"Pedido número " + twPedidoProducto.getnIdPedido() + " listo para su entrega",
 						"<p>Le informamos que su pedido <strong>#" + twPedidoProducto.getnIdPedido()
 								+ "</strong> ya se encuentra disponible para entrega.</p>"
