@@ -1,339 +1,109 @@
-2026-05-19 18:45:26 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 17244 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
-2026-05-19 18:45:26 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
-2026-05-19 18:45:26 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2026-05-19 18:45:27 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-19 18:45:27 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 245 ms. Found 81 JPA repository interfaces.
-2026-05-19 18:45:28 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@38da5178' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2026-05-19 18:45:28 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2026-05-19 18:45:28 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
-2026-05-19 18:45:28 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-05-19 18:45:28 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
-2026-05-19 18:45:28 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
-2026-05-19 18:45:28 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2156 ms
-2026-05-19 18:45:28 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-05-19 18:45:29 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
-2026-05-19 18:45:29 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2026-05-19 18:45:29 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-05-19 18:45:29 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-05-19 18:45:29 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-2026-05-19 18:45:30 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2026-05-19 18:45:30 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-19 18:45:33 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
-2026-05-19 18:45:34 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
-2026-05-19 18:45:34 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 8.25 seconds (JVM running for 8.957)
-2026-05-19 18:45:35 [RMI TCP Connection(2)-127.0.0.1] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-19 18:45:35 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-05-19 18:45:35 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
-2026-05-19 18:47:50 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 32744 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
-2026-05-19 18:47:50 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
-2026-05-19 18:47:50 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2026-05-19 18:47:51 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-19 18:47:51 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 205 ms. Found 81 JPA repository interfaces.
-2026-05-19 18:47:52 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@6240e621' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2026-05-19 18:47:52 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2026-05-19 18:47:52 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
-2026-05-19 18:47:52 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-05-19 18:47:52 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
-2026-05-19 18:47:52 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
-2026-05-19 18:47:52 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1615 ms
-2026-05-19 18:47:52 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-05-19 18:47:52 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
-2026-05-19 18:47:53 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2026-05-19 18:47:53 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-05-19 18:47:53 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-05-19 18:47:53 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-2026-05-19 18:47:54 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2026-05-19 18:47:54 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-19 18:47:56 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
-2026-05-19 18:47:57 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
-2026-05-19 18:47:57 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 6.396 seconds (JVM running for 7.021)
-2026-05-19 18:47:59 [RMI TCP Connection(2)-127.0.0.1] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-19 18:47:59 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-05-19 18:47:59 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
-2026-05-19 19:03:29 [http-nio-127.0.0.1-4043-exec-9] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 1146, SQLState: 42S02
-2026-05-19 19:03:29 [http-nio-127.0.0.1-4043-exec-9] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Table 'refacfabelabd.tw_marca_descuento_mayorista' doesn't exist
-2026-05-19 19:03:29 [http-nio-127.0.0.1-4043-exec-9] ERROR errorLogger - Error al buscar productos para revendedor: org.springframework.dao.InvalidDataAccessResourceUsageException: could not extract ResultSet; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not extract ResultSet
-2026-05-19 19:06:11 [http-nio-127.0.0.1-4043-exec-3] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 1054, SQLState: 42S22
-2026-05-19 19:06:11 [http-nio-127.0.0.1-4043-exec-3] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Unknown column 'twmarcades0_.d_fecha_creacion' in 'field list'
-2026-05-19 19:06:11 [http-nio-127.0.0.1-4043-exec-3] ERROR errorLogger - Error al buscar productos para revendedor: org.springframework.dao.InvalidDataAccessResourceUsageException: could not extract ResultSet; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not extract ResultSet
-2026-05-19 19:55:52 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=49m29s43ms285µs400ns).
-2026-05-19 19:55:52 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@64ca6245 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-2026-05-19 19:55:52 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@2f5725e4 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-2026-05-19 19:55:52 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1838b201 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-2026-05-19 19:55:52 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@d0edf2e (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-2026-05-19 20:09:59 [http-nio-127.0.0.1-4043-exec-2] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 1054, SQLState: 42S22
-2026-05-19 20:09:59 [http-nio-127.0.0.1-4043-exec-2] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Unknown column 'twmarcades0_.d_fecha_creacion' in 'field list'
-2026-05-19 20:09:59 [http-nio-127.0.0.1-4043-exec-2] ERROR errorLogger - Error al buscar productos para revendedor: org.springframework.dao.InvalidDataAccessResourceUsageException: could not extract ResultSet; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not extract ResultSet
-2026-05-19 20:12:17 [http-nio-127.0.0.1-4043-exec-4] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 1054, SQLState: 42S22
-2026-05-19 20:12:17 [http-nio-127.0.0.1-4043-exec-4] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Unknown column 'twmarcades0_.d_fecha_creacion' in 'field list'
-2026-05-19 20:12:17 [http-nio-127.0.0.1-4043-exec-4] ERROR errorLogger - Error al buscar productos para revendedor: org.springframework.dao.InvalidDataAccessResourceUsageException: could not extract ResultSet; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not extract ResultSet
-2026-05-19 20:12:48 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 27184 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
-2026-05-19 20:12:48 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
-2026-05-19 20:12:48 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2026-05-19 20:12:49 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-19 20:12:49 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 219 ms. Found 81 JPA repository interfaces.
-2026-05-19 20:12:49 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@31acb80e' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2026-05-19 20:12:49 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2026-05-19 20:12:49 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
-2026-05-19 20:12:49 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-05-19 20:12:49 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
-2026-05-19 20:12:50 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
-2026-05-19 20:12:50 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1730 ms
-2026-05-19 20:12:50 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-05-19 20:12:50 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
-2026-05-19 20:12:50 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2026-05-19 20:12:50 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-05-19 20:12:52 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-05-19 20:12:52 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-2026-05-19 20:12:53 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2026-05-19 20:12:54 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-19 20:12:57 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
-2026-05-19 20:12:57 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
-2026-05-19 20:12:57 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 9.482 seconds (JVM running for 10.176)
-2026-05-19 20:13:00 [RMI TCP Connection(2)-127.0.0.1] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-19 20:13:00 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-05-19 20:13:00 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
-2026-05-19 20:13:07 [http-nio-127.0.0.1-4043-exec-1] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 1054, SQLState: 42S22
-2026-05-19 20:13:07 [http-nio-127.0.0.1-4043-exec-1] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Unknown column 'twmarcades0_.n_estatus' in 'field list'
-2026-05-19 20:13:07 [http-nio-127.0.0.1-4043-exec-1] ERROR errorLogger - Error al buscar productos para revendedor: org.springframework.dao.InvalidDataAccessResourceUsageException: could not extract ResultSet; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not extract ResultSet
-2026-05-19 20:14:43 [http-nio-127.0.0.1-4043-exec-3] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 1054, SQLState: 42S22
-2026-05-19 20:14:43 [http-nio-127.0.0.1-4043-exec-3] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Unknown column 'twmarcades0_.n_estatus' in 'field list'
-2026-05-19 20:14:43 [http-nio-127.0.0.1-4043-exec-3] ERROR errorLogger - Error al buscar productos para revendedor: org.springframework.dao.InvalidDataAccessResourceUsageException: could not extract ResultSet; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not extract ResultSet
-2026-05-19 20:14:55 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 3452 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
-2026-05-19 20:14:55 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
-2026-05-19 20:14:55 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2026-05-19 20:14:56 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-19 20:14:56 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 195 ms. Found 81 JPA repository interfaces.
-2026-05-19 20:14:57 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@5490dff6' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2026-05-19 20:14:57 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2026-05-19 20:14:57 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
-2026-05-19 20:14:57 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-05-19 20:14:57 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
-2026-05-19 20:14:57 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
-2026-05-19 20:14:57 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1446 ms
-2026-05-19 20:14:57 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-05-19 20:14:57 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
-2026-05-19 20:14:57 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2026-05-19 20:14:57 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-05-19 20:14:57 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-05-19 20:14:57 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-2026-05-19 20:14:58 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2026-05-19 20:14:58 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-19 20:15:01 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
-2026-05-19 20:15:01 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
-2026-05-19 20:15:01 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 6.065 seconds (JVM running for 6.608)
-2026-05-19 20:15:01 [RMI TCP Connection(3)-127.0.0.1] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-19 20:15:01 [RMI TCP Connection(3)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-05-19 20:15:01 [RMI TCP Connection(3)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
-2026-05-19 20:20:06 [http-nio-127.0.0.1-4043-exec-7] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
-2026-05-19 20:20:06 [http-nio-127.0.0.1-4043-exec-7] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
-2026-05-19 20:25:44 [http-nio-127.0.0.1-4043-exec-5] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 1054, SQLState: 42S22
-2026-05-19 20:25:44 [http-nio-127.0.0.1-4043-exec-5] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Unknown column 'twinventar0_.b_requiere_reconteo' in 'field list'
-2026-05-19 20:25:44 [http-nio-127.0.0.1-4043-exec-5] ERROR errorLogger - Error al listar inventarios pendientes: could not extract ResultSet; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not extract ResultSet
-org.springframework.dao.InvalidDataAccessResourceUsageException: could not extract ResultSet; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not extract ResultSet
-	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.convertHibernateAccessException(HibernateJpaDialect.java:259)
-	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:233)
-	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.translateExceptionIfPossible(AbstractEntityManagerFactoryBean.java:551)
-	at org.springframework.dao.support.ChainedPersistenceExceptionTranslator.translateExceptionIfPossible(ChainedPersistenceExceptionTranslator.java:61)
-	at org.springframework.dao.support.DataAccessUtils.translateIfNecessary(DataAccessUtils.java:242)
-	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:152)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:145)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:220)
-	at com.sun.proxy.$Proxy198.findByInventarioId(Unknown Source)
-	at com.refacFabela.service.impl.InventarioUbicacionServiceImpl.convertirADto(InventarioUbicacionServiceImpl.java:783)
-	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
-	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1382)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
-	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
-	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
-	at com.refacFabela.service.impl.InventarioUbicacionServiceImpl.listarInventariosPendientesAutorizacion(InventarioUbicacionServiceImpl.java:309)
-	at com.refacFabela.service.impl.InventarioUbicacionServiceImpl$$FastClassBySpringCGLIB$$c3387e89.invoke(<generated>)
-	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:793)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763)
-	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
-	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
-	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763)
-	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:708)
-	at com.refacFabela.service.impl.InventarioUbicacionServiceImpl$$EnhancerBySpringCGLIB$$fd8ad60b.listarInventariosPendientesAutorizacion(<generated>)
-	at com.refacFabela.controller.InventarioUbicacionController.listarInventariosPendientesAutorizacion(InventarioUbicacionController.java:427)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:102)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:111)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:327)
-	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:115)
-	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:81)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:121)
-	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:115)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:126)
-	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:81)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:105)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at com.refacFabela.jwt.JwtTokenFilter.doFilterInternal(JwtTokenFilter.java:55)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:102)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:149)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:103)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:89)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
-	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:110)
-	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:80)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:55)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:211)
-	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:183)
-	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
-	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
-	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.doFilterInternal(WebMvcMetricsFilter.java:96)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:926)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1791)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
-	at java.lang.Thread.run(Thread.java:748)
-Caused by: org.hibernate.exception.SQLGrammarException: could not extract ResultSet
-	at org.hibernate.exception.internal.SQLExceptionTypeDelegate.convert(SQLExceptionTypeDelegate.java:63)
-	at org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:42)
-	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:113)
-	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:99)
-	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.extract(ResultSetReturnImpl.java:67)
-	at org.hibernate.loader.Loader.getResultSet(Loader.java:2297)
-	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:2050)
-	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:2012)
-	at org.hibernate.loader.Loader.doQuery(Loader.java:948)
-	at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:349)
-	at org.hibernate.loader.Loader.doList(Loader.java:2843)
-	at org.hibernate.loader.Loader.doList(Loader.java:2825)
-	at org.hibernate.loader.Loader.listIgnoreQueryCache(Loader.java:2657)
-	at org.hibernate.loader.Loader.list(Loader.java:2652)
-	at org.hibernate.loader.hql.QueryLoader.list(QueryLoader.java:506)
-	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.list(QueryTranslatorImpl.java:400)
-	at org.hibernate.engine.query.spi.HQLQueryPlan.performList(HQLQueryPlan.java:219)
-	at org.hibernate.internal.SessionImpl.list(SessionImpl.java:1414)
-	at org.hibernate.query.internal.AbstractProducedQuery.doList(AbstractProducedQuery.java:1636)
-	at org.hibernate.query.internal.AbstractProducedQuery.list(AbstractProducedQuery.java:1604)
-	at org.hibernate.query.Query.getResultList(Query.java:165)
-	at org.springframework.data.jpa.repository.query.JpaQueryExecution$CollectionExecution.doExecute(JpaQueryExecution.java:126)
-	at org.springframework.data.jpa.repository.query.JpaQueryExecution.execute(JpaQueryExecution.java:88)
-	at org.springframework.data.jpa.repository.query.AbstractJpaQuery.doExecute(AbstractJpaQuery.java:155)
-	at org.springframework.data.jpa.repository.query.AbstractJpaQuery.execute(AbstractJpaQuery.java:143)
-	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.doInvoke(RepositoryMethodInvoker.java:137)
-	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.invoke(RepositoryMethodInvoker.java:121)
-	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.doInvoke(QueryExecutorMethodInterceptor.java:159)
-	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.invoke(QueryExecutorMethodInterceptor.java:138)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.data.projection.DefaultMethodInvokingMethodInterceptor.invoke(DefaultMethodInvokingMethodInterceptor.java:80)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
-	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
-	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:137)
-	... 132 common frames omitted
-Caused by: java.sql.SQLSyntaxErrorException: Unknown column 'twinventar0_.b_requiere_reconteo' in 'field list'
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
-	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
-	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.extract(ResultSetReturnImpl.java:57)
-	... 164 common frames omitted
-2026-05-19 21:14:40 [main] INFO  c.r.RefacFabelaApplicationTests - Starting RefacFabelaApplicationTests using Java 1.8.0_202 on Pedro with PID 9456 (started by pedro in d:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
-2026-05-19 21:14:40 [main] INFO  c.r.RefacFabelaApplicationTests - No active profile set, falling back to 1 default profile: "default"
-2026-05-19 21:14:41 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-19 21:14:41 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 221 ms. Found 81 JPA repository interfaces.
-2026-05-19 21:14:41 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@33634f04' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2026-05-19 21:14:41 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2026-05-19 21:14:42 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-05-19 21:14:42 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
-2026-05-19 21:14:42 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2026-05-19 21:14:42 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-05-19 21:14:43 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-05-19 21:14:43 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-2026-05-19 21:14:43 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2026-05-19 21:14:44 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-19 21:14:47 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
-2026-05-19 21:14:47 [main] INFO  c.r.RefacFabelaApplicationTests - Started RefacFabelaApplicationTests in 7.432 seconds (JVM running for 8.128)
-2026-05-19 21:14:47 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-05-19 21:14:47 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-05-19 21:14:47 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-05-19 21:27:01 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@16a47400 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-06-18 11:15:50 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 10220 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
+2026-06-18 11:15:50 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-18 11:15:50 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-18 11:15:51 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-18 11:15:52 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 228 ms. Found 81 JPA repository interfaces.
+2026-06-18 11:15:52 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@4fb8d9' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-06-18 11:15:52 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-06-18 11:15:52 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
+2026-06-18 11:15:52 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-18 11:15:52 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+2026-06-18 11:15:52 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
+2026-06-18 11:15:52 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1901 ms
+2026-06-18 11:15:53 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-18 11:15:53 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2026-06-18 11:15:53 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-06-18 11:15:53 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-18 11:15:53 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-18 11:15:53 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-06-18 11:15:54 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-06-18 11:15:54 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-18 11:15:57 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-06-18 11:15:57 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
+2026-06-18 11:15:57 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 7.282 seconds (JVM running for 8.078)
+2026-06-18 11:15:59 [RMI TCP Connection(2)-127.0.0.1] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-18 11:15:59 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-18 11:15:59 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-06-18 11:16:36 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 12952 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
+2026-06-18 11:16:36 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-18 11:16:36 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-18 11:16:37 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-18 11:16:37 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 215 ms. Found 81 JPA repository interfaces.
+2026-06-18 11:16:38 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@41af76c4' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-06-18 11:16:38 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-06-18 11:16:38 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
+2026-06-18 11:16:38 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-18 11:16:38 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+2026-06-18 11:16:38 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
+2026-06-18 11:16:38 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1579 ms
+2026-06-18 11:16:38 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-18 11:16:38 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2026-06-18 11:16:38 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-06-18 11:16:38 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-18 11:16:39 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-18 11:16:39 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-06-18 11:16:40 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-06-18 11:16:41 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-18 11:16:43 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-06-18 11:16:43 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
+2026-06-18 11:16:43 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 7.088 seconds (JVM running for 7.575)
+2026-06-18 11:16:45 [RMI TCP Connection(2)-127.0.0.1] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-18 11:16:45 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-18 11:16:45 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2026-06-18 11:26:28 [http-nio-127.0.0.1-4043-exec-2] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-06-18 11:26:28 [http-nio-127.0.0.1-4043-exec-2] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-06-18 11:30:19 [http-nio-127.0.0.1-4043-exec-1] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-06-18 11:30:19 [http-nio-127.0.0.1-4043-exec-1] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-06-18 11:30:20 [http-nio-127.0.0.1-4043-exec-1] INFO  errorLogger - [CorreoClienteService] Envio omitido para cliente 988 porque su correo esta bloqueado.
+2026-06-18 11:52:00 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 29276 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
+2026-06-18 11:52:00 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-18 11:52:00 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-18 11:52:01 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-18 11:52:02 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 193 ms. Found 81 JPA repository interfaces.
+2026-06-18 11:52:02 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@7f67ade4' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-06-18 11:52:02 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-06-18 11:52:02 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
+2026-06-18 11:52:02 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-18 11:52:02 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+2026-06-18 11:52:02 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
+2026-06-18 11:52:02 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1693 ms
+2026-06-18 11:52:02 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-18 11:52:03 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2026-06-18 11:52:03 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-06-18 11:52:03 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-18 11:52:03 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-18 11:52:03 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-06-18 11:52:04 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-06-18 11:52:04 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-18 11:52:07 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-06-18 11:52:07 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
+2026-06-18 11:52:07 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 6.782 seconds (JVM running for 7.287)
+2026-06-18 11:52:09 [RMI TCP Connection(2)-127.0.0.1] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-18 11:52:09 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-18 11:52:09 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-06-18 12:04:09 [http-nio-127.0.0.1-4043-exec-9] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcCp] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:04:09 [http-nio-127.0.0.1-4043-exec-9] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcUsuario] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:04:47 [http-nio-127.0.0.1-4043-exec-8] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcCp] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:04:47 [http-nio-127.0.0.1-4043-exec-8] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcRegimenFiscal] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:04:47 [http-nio-127.0.0.1-4043-exec-8] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcUsuario] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:07:29 [http-nio-127.0.0.1-4043-exec-10] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcCp] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:07:29 [http-nio-127.0.0.1-4043-exec-10] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcRegimenFiscal] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:07:29 [http-nio-127.0.0.1-4043-exec-10] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcUsuario] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:08:55 [http-nio-127.0.0.1-4043-exec-2] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcCp] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:08:55 [http-nio-127.0.0.1-4043-exec-2] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcRegimenFiscal] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:08:55 [http-nio-127.0.0.1-4043-exec-2] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcUsuario] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:09:24 [http-nio-127.0.0.1-4043-exec-10] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcCp] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:09:24 [http-nio-127.0.0.1-4043-exec-10] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcRegimenFiscal] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:09:24 [http-nio-127.0.0.1-4043-exec-10] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcUsuario] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:10:32 [http-nio-127.0.0.1-4043-exec-1] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcCp] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:10:32 [http-nio-127.0.0.1-4043-exec-1] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcRegimenFiscal] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:10:32 [http-nio-127.0.0.1-4043-exec-1] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcUsuario] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:11:16 [http-nio-127.0.0.1-4043-exec-10] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcCp] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:11:16 [http-nio-127.0.0.1-4043-exec-10] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcRegimenFiscal] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:11:16 [http-nio-127.0.0.1-4043-exec-10] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcUsuario] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:16:58 [http-nio-127.0.0.1-4043-exec-6] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcCp] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:16:58 [http-nio-127.0.0.1-4043-exec-6] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcRegimenFiscal] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:16:58 [http-nio-127.0.0.1-4043-exec-6] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcUsuario] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:17:10 [http-nio-127.0.0.1-4043-exec-7] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcCp] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:17:10 [http-nio-127.0.0.1-4043-exec-7] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcRegimenFiscal] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.
+2026-06-18 12:17:10 [http-nio-127.0.0.1-4043-exec-7] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcUsuario] property of the [com.refacFabela.model.TcCliente] entity was modified, but it won't be updated because the property is immutable.

@@ -21,6 +21,8 @@ import com.refacFabela.model.factura.CabeceraPagosXml;
 import com.refacFabela.model.factura.CabeceraXml;
 import com.refacFabela.model.factura.ConceptoXml;
 import com.refacFabela.model.factura.Impuesto;
+import com.refacFabela.model.TcCliente;
+import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.FacturaRepository;
 import com.refacFabela.repository.TcDatosFacturaRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
@@ -62,6 +64,9 @@ public class FacturacionServiceImpl implements FacturacionService {
 	@Autowired
 	private TrVentaCobroRepository trVentaCobroRepository;
 	
+	@Autowired
+	private ClientesRepository clientesRepository;
+	
 
 	@Override
 	public String venta(Long idVenta, String cveCfdi) throws Exception {
@@ -88,6 +93,10 @@ public class FacturacionServiceImpl implements FacturacionService {
 			//timbramos xml
 	        timbrarXml.timbrarXml(xml, idVenta, cabeceraXml, tcDatosFactura);
 	        
+	        TcCliente clienteActualizado = clientesRepository.findById(twVenta.getnIdCliente()).orElse(null);
+	        if (clienteActualizado != null && Boolean.TRUE.equals(clienteActualizado.getnCorreoBloqueado())) {
+	        	return "ok_correo_bloqueado";
+	        }
 	        return "ok";
 	        }
 			else {

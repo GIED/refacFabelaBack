@@ -55,10 +55,14 @@ public class FacturaController {
 	public ResponseEntity<?> venta(@RequestParam(required = false) Long nIdVenta , String cveCfdi) throws Exception {
 		
 		Map<String, Object> response = new HashMap();
+		String resultado = facturaService.venta(nIdVenta, cveCfdi);
 		
-		if (facturaService.venta(nIdVenta, cveCfdi).equals("ok")) {
+		if (resultado.startsWith("ok")) {
 			
 			response.put("mensaje", "Venta Facturada");
+			if (resultado.contains("correo_bloqueado")) {
+				response.put("avisoCorreo", "La factura se generó correctamente pero el correo del cliente está bloqueado. No se envió la notificación por correo.");
+			}
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 			
 		}else {		

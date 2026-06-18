@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.refacFabela.model.TcCliente;
+import com.refacFabela.model.TwCotizaciones;
+import com.refacFabela.repository.ClientesRepository;
+import com.refacFabela.repository.CotizacionRepository;
 import com.refacFabela.service.GeneraReporteService;
 
 @RestController
@@ -22,13 +26,31 @@ public class ReportesController {
 	
 	@Autowired
 	private GeneraReporteService generaReporteService;
+
+	@Autowired
+	private CotizacionRepository cotizacionRepository;
+
+	@Autowired
+	private ClientesRepository clientesRepository;
 	
 	@GetMapping(value = "/getCotizacion")
 	public @ResponseBody byte[] getCotizacion(HttpServletResponse response, @RequestParam(required = false) Long nIdCotizacion) {
 
 		// genera el pdf con la cotizacion guardada
 		try {
-			return generaReporteService.getCotizacionPDF(nIdCotizacion);
+			byte[] pdf = generaReporteService.getCotizacionPDF(nIdCotizacion);
+			try {
+				TwCotizaciones cot = cotizacionRepository.findById(nIdCotizacion).orElse(null);
+				Long nIdCliente = cot != null ? cot.getnIdCliente() : null;
+				TcCliente cliente = nIdCliente != null ? clientesRepository.findById(nIdCliente).orElse(null) : null;
+				if (cliente != null && Boolean.TRUE.equals(cliente.getnCorreoBloqueado())) {
+					response.setHeader("X-Aviso-Correo", "La cotizacion se genero correctamente pero el correo del cliente esta bloqueado. No se envio por correo.");
+				}
+			} catch (Exception ex) {
+				logger.warn("No se pudo verificar estado de correo del cliente para cotizacion " + nIdCotizacion);
+			}
+			response.setHeader("Access-Control-Expose-Headers", "X-Aviso-Correo");
+			return pdf;
 		} catch (Exception e) {
 			logger.error("Error al generar la cotizacion ", e);
 			return null;

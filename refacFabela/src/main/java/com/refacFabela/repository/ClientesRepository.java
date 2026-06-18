@@ -10,7 +10,8 @@ import com.refacFabela.model.TcCliente;
 @Repository
 public interface ClientesRepository extends JpaRepository<TcCliente, Long> {
 
-	public List<TcCliente> findBynEstatus(int estatus);
+    @Query("Select c from TcCliente c where c.nEstatus=:estatus order by c.sRazonSocial asc")
+    public List<TcCliente> findBynEstatus(int estatus);
 	
     @Query("Select c from TcCliente c where (c.sRfc like %:clienteBuscar% or c.sRazonSocial like %:clienteBuscar%) and c.nEstatus=1 order by c.sRazonSocial asc")
 	public List<TcCliente> buscarClineteLike(String clienteBuscar);
