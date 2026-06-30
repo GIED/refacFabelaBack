@@ -1,0 +1,252 @@
+{
+  "properties": [
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "Secret used to sign JWT tokens."
+    },
+    {
+      "name": "jwt.expiration",
+      "type": "java.lang.Integer",
+      "description": "JWT expiration time in seconds."
+    },
+    {
+      "name": "security.api.meta-compra.header-name",
+      "type": "java.lang.String",
+      "description": "Header name used to send API token for meta-compra endpoints."
+    },
+    {
+      "name": "security.api.meta-compra.token",
+      "type": "java.lang.String",
+      "description": "API token value for meta-compra endpoints."
+    },
+    {
+      "name": "mail.smtp.host",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "mail.smtp.port",
+      "type": "java.lang.Integer"
+    },
+    {
+      "name": "mail.smtp.auth",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "name": "mail.smtp.starttls-enable",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "name": "mail.smtp.connection-timeout",
+      "type": "java.lang.Integer"
+    },
+    {
+      "name": "mail.smtp.account",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "mail.smtp.password",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "mail.smtp.reply-to",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "mail.smtp.bcc-primary",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "mail.smtp.bcc-secondary",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "mail.smtp.notification-to",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "mail.smtp.inventory-adjustment-to",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "mail.smtp.inventory-adjustment-cc",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "mail.smtp.timeout",
+      "type": "java.lang.Integer"
+    },
+    {
+      "name": "cdn.costex.base-url",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "cloudflare.r2.account.id",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "cloudflare.r2.access.key.id",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "cloudflare.r2.secret.access.key",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "cloudflare.r2.bucket.name",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "cloudflare.r2.endpoint",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "cloudflare.r2.public.url",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "cdn.local.ruta-imagenes",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "ventas.internet.ruta-comprobantes",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturacion.proveedor-activo",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.sandbox",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "name": "facturoporti.base-url",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.log-raw-payloads",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "name": "facturoporti.auth.type",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.auth.token",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.auth.api-key",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.auth.username",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.auth.password",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.auth.client-id",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.auth.client-secret",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.timbrado-cfdi",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.timbrado-complemento-pago",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.cancelacion",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.consulta-estatus",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.solicitudes-pendientes",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.aceptar-cancelacion",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.rechazar-cancelacion",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.cfdi-relacionados",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.descarga-xml",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.descarga-pdf",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.envio-correo",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.consulta-timbres",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.consulta-plan",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.validar-rfc",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.validar-certificado",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.validar-efos-edos",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.catalogos-sat",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.codigo-postal",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.endpoints.descarga-masiva",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.timeout.connect-ms",
+      "type": "java.lang.Integer"
+    },
+    {
+      "name": "facturoporti.timeout.read-ms",
+      "type": "java.lang.Integer"
+    },
+    {
+      "name": "facturoporti.retry.max-attempts",
+      "type": "java.lang.Integer"
+    },
+    {
+      "name": "facturoporti.retry.backoff-ms",
+      "type": "java.lang.Integer"
+    }
+  ]
+}

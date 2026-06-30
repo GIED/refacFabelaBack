@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -51,6 +53,48 @@ public class VentasInternetController {
 	
 	@Autowired
 	private ClienteService clienteService;
+
+	@Value("${ventas.internet.ruta-comprobantes:${VENTAS_INTERNET_RUTA_COMPROBANTES:comprobantesInternet}}")
+	private String rutaComprobantesInternet;
+
+	private Path obtenerDirectorioComprobantes() throws IOException {
+		Path directorio = Paths.get(rutaComprobantesInternet).toAbsolutePath().normalize();
+		Files.createDirectories(directorio);
+		return directorio;
+	}
+
+	private Path resolverRutaComprobante(String nombreArchivo) throws IOException {
+		Path directorio = obtenerDirectorioComprobantes();
+		Path rutaArchivo = directorio.resolve(nombreArchivo).normalize();
+		if (!rutaArchivo.startsWith(directorio)) {
+			throw new IOException("Ruta de comprobante invalida");
+		}
+		return rutaArchivo;
+	}
+
+	private String generarNombreComprobante(MultipartFile archivo) {
+		String nombreOriginal = archivo.getOriginalFilename();
+		String nombreBase = nombreOriginal == null ? "comprobante" : nombreOriginal.replace("\\", "/");
+		int ultimaDiagonal = nombreBase.lastIndexOf('/');
+		if (ultimaDiagonal >= 0) {
+			nombreBase = nombreBase.substring(ultimaDiagonal + 1);
+		}
+		if (nombreBase.trim().isEmpty()) {
+			nombreBase = "comprobante";
+		}
+		return UUID.randomUUID().toString() + "_" + nombreBase;
+	}
+
+	private void eliminarComprobanteSilencioso(String nombreArchivo) {
+		if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
+			return;
+		}
+		try {
+			Files.deleteIfExists(resolverRutaComprobante(nombreArchivo));
+		} catch (IOException e) {
+			logger.warn("No fue posible eliminar el comprobante previo {}", nombreArchivo, e);
+		}
+	}
 	
 	
 	@PostMapping("/guardaRegistroCotizacionInternet")
@@ -92,48 +136,26 @@ public class VentasInternetController {
 		
 		
 		if (!archivo.isEmpty()) {
-			
-			if (comprobantePago.getsComprobante() == null) {
-				
-				nombreArchivo= UUID.randomUUID().toString() +"_"+ archivo.getOriginalFilename();
-				Path rutaArchivo = Paths.get("/opt/webserver/backEnd/refacFabela/comprobantesInternet").resolve(nombreArchivo).toAbsolutePath();	
-				try {
-					
-					Files.copy(archivo.getInputStream(), rutaArchivo);
-					
-					
-					
-					comprobantePago.setsComprobante(nombreArchivo);
-					comprobantePago.setnStatus(1);
-					comprobantePago.setdFechaCarga(DateTimeUtil.obtenerHoraExactaDeMexico());
-					
-					response.put("twPagoComprobanteInternet", this.ventaInternetService.guardarComprobante(comprobantePago));
-					response.put("mensaje", "comprobante subido correctamente: "+nombreArchivo);
-					
-					
-				} catch (IOException e) {
-					response.put("mensaje", "Error al subir el comprobante:  "+nombreArchivo);
-					return new ResponseEntity<Map<String , Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-				}
-				
-				
-			}else  {
-				
-				String nombreComprobanteAnterior = comprobantePago.getsComprobante();
-				
-				Path rutaAnterior = Paths.get("/opt/webserver/backEnd/refacFabela/comprobantesInternet").resolve(nombreComprobanteAnterior).toAbsolutePath();
-				File comprobanteAnterior = rutaAnterior.toFile();
-				
-				if (comprobanteAnterior.exists() && comprobanteAnterior.canRead()) {
-					comprobanteAnterior.delete();		
-				}
-				
+			String nombreComprobanteAnterior = comprobantePago.getsComprobante();
+			nombreArchivo = generarNombreComprobante(archivo);
+			try {
+				Path rutaArchivo = resolverRutaComprobante(nombreArchivo);
+				Files.copy(archivo.getInputStream(), rutaArchivo, StandardCopyOption.REPLACE_EXISTING);
+
 				comprobantePago.setsComprobante(nombreArchivo);
-				
-				
+				comprobantePago.setnStatus(1);
+				comprobantePago.setdFechaCarga(DateTimeUtil.obtenerHoraExactaDeMexico());
+
 				response.put("twPagoComprobanteInternet", this.ventaInternetService.guardarComprobante(comprobantePago));
 				response.put("mensaje", "comprobante subido correctamente: "+nombreArchivo);
-				
+				if (nombreComprobanteAnterior != null && !nombreComprobanteAnterior.trim().isEmpty()
+						&& !nombreComprobanteAnterior.equals(nombreArchivo)) {
+					eliminarComprobanteSilencioso(nombreComprobanteAnterior);
+				}
+			} catch (IOException e) {
+				logger.error("Error al subir comprobante {}", nombreArchivo, e);
+				response.put("mensaje", "Error al subir el comprobante:  "+nombreArchivo);
+				return new ResponseEntity<Map<String , Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			
 				
@@ -145,13 +167,12 @@ public class VentasInternetController {
 	
 	@GetMapping("verComprobante/{nombreComprobante:.+}")
 	public ResponseEntity<Resource> mostrarComprobante(@PathVariable String nombreComprobante){
-		Path rutaArchivo = Paths.get("/opt/webserver/backEnd/refacFabela/comprobantesInternet").resolve(nombreComprobante).toAbsolutePath();
 		Resource recurso= null;
 		try {
+			Path rutaArchivo = resolverRutaComprobante(nombreComprobante);
 			recurso= new UrlResource(rutaArchivo.toUri());
-		} catch (MalformedURLException e) {
-			
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw new RuntimeException("Error no se pudo cargar el comprobante: "+nombreComprobante, e);
 		}
 		
 		if (!recurso.exists() && !recurso.isReadable()) {

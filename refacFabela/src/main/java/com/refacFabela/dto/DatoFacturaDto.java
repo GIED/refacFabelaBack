@@ -5,6 +5,7 @@ public class DatoFacturaDto {
 	public Long nId;
 	public String sRfc;
 	public String sRazonSocial;
+	public Integer nPredeterminado;
 	public Long getnId() {
 		return nId;
 	}
@@ -22,6 +23,12 @@ public class DatoFacturaDto {
 	}
 	public void setsRazonSocial(String sRazonSocial) {
 		this.sRazonSocial = sRazonSocial;
+	}
+	public Integer getnPredeterminado() {
+		return nPredeterminado;
+	}
+	public void setnPredeterminado(Integer nPredeterminado) {
+		this.nPredeterminado = nPredeterminado;
 	}
 	
 	

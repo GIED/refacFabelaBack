@@ -1,260 +1,232 @@
 package com.refacFabela.service.impl;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.refacFabela.dto.CancelacionFacturaDto;
+import com.refacFabela.dto.SolicitudCancelacionAccionDto;
 import com.refacFabela.dto.SubirFacturaDto;
-import com.refacFabela.enums.TipoDoc;
+import com.refacFabela.facturacionv2.config.FacturacionProperties;
+import com.refacFabela.facturacionv2.dto.internal.CancelacionResponse;
+import com.refacFabela.facturacionv2.dto.internal.CfdiRelacionadosResponse;
+import com.refacFabela.facturacionv2.dto.internal.SolicitudCancelacionDto;
+import com.refacFabela.facturacionv2.dto.internal.StatusCfdiResponse;
+import com.refacFabela.facturacionv2.exception.FacturoPorTiClientException;
+import com.refacFabela.facturacionv2.service.PacFacturacionClient;
+import com.refacFabela.facturacionv2.service.impl.ComplementoPagoService;
+import com.refacFabela.facturacionv2.service.impl.FacturoPorTiCancelacionService;
+import com.refacFabela.facturacionv2.service.impl.FacturoPorTiConsultaService;
+import com.refacFabela.facturacionv2.service.impl.FacturoPorTiVentaService;
+import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TcDatosFactura;
-import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TwFacturacion;
 import com.refacFabela.model.TwVenta;
-import com.refacFabela.model.TwVentasProducto;
-import com.refacFabela.model.factura.CabeceraPagosXml;
-import com.refacFabela.model.factura.CabeceraXml;
-import com.refacFabela.model.factura.ConceptoXml;
-import com.refacFabela.model.factura.Impuesto;
-import com.refacFabela.model.TcCliente;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.FacturaRepository;
 import com.refacFabela.repository.TcDatosFacturaRepository;
-import com.refacFabela.repository.TrVentaCobroRepository;
-import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.FacturacionService;
 import com.refacFabela.utils.subirArchivo;
-import com.refacFabela.utils.utils;
-import com.refacFabela.utils.factura.GeneraXml;
-import com.refacFabela.utils.factura.TimbrarXml;
-import com.refacFabela.utils.factura.Transformar;
 
-import mx.grupocorasa.sat.cfd._40.Comprobante;
-
+import java.util.List;
 
 @Service
 public class FacturacionServiceImpl implements FacturacionService {
-	
-	@Autowired
-	private VentasRepository ventaRepository;
-	
-	@Autowired
-	private VentasProductoRepository ventasProductoRepository;
-	
-	@Autowired
-	private Transformar transformar;
-	
-	@Autowired
-	private GeneraXml generarXml;
-	
-	@Autowired TimbrarXml timbrarXml;
-	
-	@Autowired
-	private FacturaRepository FacturaRepository;
-	
-	@Autowired
-	private TcDatosFacturaRepository tcDatosFacturaRepository;
-	
-	@Autowired
-	private TrVentaCobroRepository trVentaCobroRepository;
-	
-	@Autowired
-	private ClientesRepository clientesRepository;
-	
+
+	private static final Logger logger = LogManager.getLogger("errorLogger");
+
+	private final VentasRepository ventaRepository;
+	private final ClientesRepository clientesRepository;
+	private final FacturaRepository facturaRepository;
+	private final TcDatosFacturaRepository tcDatosFacturaRepository;
+	private final FacturacionProperties facturacionProperties;
+	private final FacturoPorTiVentaService facturoPorTiVentaService;
+	private final FacturoPorTiCancelacionService facturoPorTiCancelacionService;
+	private final ComplementoPagoService complementoPagoService;
+	private final FacturoPorTiConsultaService facturoPorTiConsultaService;
+	private final PacFacturacionClient pacFacturacionClient;
+	private final DatosFacturaStorageResolver datosFacturaStorageResolver;
+
+	public FacturacionServiceImpl(VentasRepository ventaRepository,
+			ClientesRepository clientesRepository,
+			FacturaRepository facturaRepository,
+			TcDatosFacturaRepository tcDatosFacturaRepository,
+			FacturacionProperties facturacionProperties,
+			FacturoPorTiVentaService facturoPorTiVentaService,
+			FacturoPorTiCancelacionService facturoPorTiCancelacionService,
+			ComplementoPagoService complementoPagoService,
+			FacturoPorTiConsultaService facturoPorTiConsultaService,
+			PacFacturacionClient pacFacturacionClient,
+			DatosFacturaStorageResolver datosFacturaStorageResolver) {
+		this.ventaRepository = ventaRepository;
+		this.clientesRepository = clientesRepository;
+		this.facturaRepository = facturaRepository;
+		this.tcDatosFacturaRepository = tcDatosFacturaRepository;
+		this.facturacionProperties = facturacionProperties;
+		this.facturoPorTiVentaService = facturoPorTiVentaService;
+		this.facturoPorTiCancelacionService = facturoPorTiCancelacionService;
+		this.complementoPagoService = complementoPagoService;
+		this.facturoPorTiConsultaService = facturoPorTiConsultaService;
+		this.pacFacturacionClient = pacFacturacionClient;
+		this.datosFacturaStorageResolver = datosFacturaStorageResolver;
+	}
 
 	@Override
 	public String venta(Long idVenta, String cveCfdi) throws Exception {
-		
 		try {
-			
-			//System.out.println("llego");
-			
-			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);		
-			TcDatosFactura tcDatosFactura = tcDatosFacturaRepository.obtenerDatos(twVenta.getTcCliente().getnIdDatoFactura());
-			List<TrVentaCobro> listaVentaCobro=trVentaCobroRepository.findBynIdVenta(idVenta);
-			//System.err.println(tcDatosFactura);
-			
-			if(twVenta.getnIdFacturacion()==0L) {
-			List<TwVentasProducto> productosVendidos = this.ventasProductoRepository.findBynIdVenta(idVenta);	
-			
-			CabeceraXml cabeceraXml = transformar.objCabecera(productosVendidos, twVenta, cveCfdi, tcDatosFactura, listaVentaCobro);
-			List<ConceptoXml> listaConceptos = transformar.listaConceptos(productosVendidos);
-			Impuesto impuesto = transformar.obtenerImpuestoTotal(productosVendidos);
-			
-			Comprobante xml = generarXml.createComprobante(cabeceraXml, listaConceptos, impuesto,tcDatosFactura);
-			//System.err.println("Sali de aquí");
-			
-			//timbramos xml
-	        timbrarXml.timbrarXml(xml, idVenta, cabeceraXml, tcDatosFactura);
-	        
-	        TcCliente clienteActualizado = clientesRepository.findById(twVenta.getnIdCliente()).orElse(null);
-	        if (clienteActualizado != null && Boolean.TRUE.equals(clienteActualizado.getnCorreoBloqueado())) {
-	        	return "ok_correo_bloqueado";
-	        }
-	        return "ok";
-	        }
-			else {
-				return "Ya se facturó";
+			facturoPorTiVentaService.timbrarVenta(idVenta, cveCfdi);
+			TwVenta ventaActualizada = ventaRepository.findBynId(idVenta);
+			TcCliente clienteActualizado = null;
+			if (ventaActualizada != null && ventaActualizada.getnIdCliente() != null) {
+				clienteActualizado = clientesRepository.findById(ventaActualizada.getnIdCliente()).orElse(null);
 			}
-			
-		}catch (Exception e) {
+			if (clienteActualizado != null && Boolean.TRUE.equals(clienteActualizado.getnCorreoBloqueado())) {
+				return "ok_correo_bloqueado";
+			}
+			return "ok";
+		} catch (Exception e) {
+			logger.error("Error al facturar venta {} con cveCfdi {} usando proveedor activo {}", idVenta, cveCfdi,
+					facturacionProperties != null ? facturacionProperties.getProveedorActivo() : null, e);
 			return "Error al facturar";
 		}
-		
 	}
-	
-public String cancelaFactura(Long idVenta, String cveCfdi) throws Exception {
-		
+
+	@Override
+	public String cancelaFactura(Long idVenta, String cveCfdi) throws Exception {
 		try {
-			
-			//System.out.println("llego");
-			
-			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);		
-			
-			
-			if(twVenta.getnIdFacturacion()==0L) {
-			
-				
-				
-				
-				
-	        
-	        return "ok";
-	        }
-			else {
-				return "Ya se facturó";
-			}
-			
-		}catch (Exception e) {
+			facturoPorTiCancelacionService.cancelarVenta(idVenta, "02", null);
+			return "ok";
+		} catch (Exception e) {
+			logger.error("Error al cancelar venta {} usando proveedor activo {}", idVenta,
+					facturacionProperties != null ? facturacionProperties.getProveedorActivo() : null, e);
 			return "Error al facturar";
 		}
-		
 	}
-	
-public String complemento(Long idVenta, String cveCfdi) throws Exception {
-		
+
+	@Override
+	public String cancelaFactura(CancelacionFacturaDto cancelacionFacturaDto) throws Exception {
 		try {
-			
-			//System.out.println("llego");
-			
-			TwVenta twVenta = this.ventaRepository.findBynId(idVenta);			
-			
-			if(twVenta.getnIdFacturacion()==0L) {
-			List<TwVentasProducto> productosVendidos = this.ventasProductoRepository.findBynIdVenta(idVenta);
-			
-			
-			CabeceraPagosXml cabeceraXml = transformar.objCabeceraPagos(productosVendidos, twVenta, cveCfdi);
-			List<ConceptoXml> listaConceptos = transformar.listaConceptos(productosVendidos);
-			Impuesto impuesto = transformar.obtenerImpuestoTotal(productosVendidos);
-			
-			Comprobante xml = generarXml.createComprobantePagos(cabeceraXml, listaConceptos, impuesto);
-			
-			//timbramos xml
-	        timbrarXml.timbrarPagoXml(xml, idVenta, cabeceraXml);
-	        
-	        return "ok";
-	        }
-			else {
-				return "Ya se facturó";
-			}
-			
-		}catch (Exception e) {
+			facturoPorTiCancelacionService.cancelarVenta(
+					cancelacionFacturaDto.getnIdVenta(),
+					cancelacionFacturaDto.getMotivo(),
+					cancelacionFacturaDto.getFolioFiscalSustitucion());
+			return "ok";
+		} catch (Exception e) {
+			logger.error("Error al cancelar venta {} con motivo {} usando proveedor activo {}",
+					cancelacionFacturaDto.getnIdVenta(), cancelacionFacturaDto.getMotivo(),
+					facturacionProperties != null ? facturacionProperties.getProveedorActivo() : null, e);
 			return "Error al facturar";
 		}
-		
 	}
-	
+
+	@Override
+	public String complemento(Long idVenta, String cveCfdi) throws Exception {
+		try {
+			complementoPagoService.timbrarComplemento(idVenta, cveCfdi);
+			return "ok";
+		} catch (Exception e) {
+			logger.error("Error al timbrar complemento de pago para venta {} usando proveedor activo {}", idVenta,
+					facturacionProperties != null ? facturacionProperties.getProveedorActivo() : null, e);
+			return "Error al facturar";
+		}
+	}
+
 	@Override
 	public TwFacturacion guardar(TwFacturacion twFacturacion) {
-		return this.FacturaRepository.save(twFacturacion);
+		return facturaRepository.save(twFacturacion);
 	}
 
 	@Override
 	public int consultaCreditos(Long nDatoFactura) {
 		try {
-			TcDatosFactura tcDatosFactura=tcDatosFacturaRepository.obtenerDatos(nDatoFactura);
-			
-			if(tcDatosFactura == null) {
-				System.err.println("consultaCreditos - ERROR: tcDatosFactura es NULL para nDatoFactura=" + nDatoFactura);
+			TcDatosFactura tcDatosFactura = tcDatosFacturaRepository.obtenerDatos(nDatoFactura);
+			if (tcDatosFactura == null || tcDatosFactura.getsRfcEmisor() == null
+					|| tcDatosFactura.getsRfcEmisor().trim().isEmpty()) {
 				return 0;
 			}
-			
-			System.out.println("consultaCreditos - Usuario folios: " + tcDatosFactura.getsUsuarioFolios());
-			
-			int resultado = TimbrarXml.consultaFolio(tcDatosFactura);
-			System.out.println("consultaCreditos - Resultado consultaFolio: " + resultado);
-			return resultado;
+			return pacFacturacionClient.consultarCreditosDisponibles(tcDatosFactura.getsRfcEmisor());
+		} catch (FacturoPorTiClientException e) {
+			logger.warn("No fue posible consultar créditos FacturoPorTi para nDatoFactura {}: {}", nDatoFactura, e.getMessage());
+			return 0;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error al consultar créditos FacturoPorTi para nDatoFactura {}", nDatoFactura, e);
 			return 0;
 		}
 	}
 
 	@Override
+	public StatusCfdiResponse consultarEstatusCfdi(Long nIdVenta) throws Exception {
+		return facturoPorTiConsultaService.consultarEstatusCfdi(nIdVenta);
+	}
+
+	@Override
+	public CfdiRelacionadosResponse consultarCfdiRelacionados(Long nIdVenta) throws Exception {
+		return facturoPorTiConsultaService.consultarCfdiRelacionados(nIdVenta);
+	}
+
+	@Override
+	public List<SolicitudCancelacionDto> consultarSolicitudesPendientesCancelacion(Long nIdDatoFactura) throws Exception {
+		return facturoPorTiConsultaService.consultarSolicitudesPendientesCancelacion(nIdDatoFactura);
+	}
+
+	@Override
+	public CancelacionResponse aceptarSolicitudCancelacion(SolicitudCancelacionAccionDto solicitudCancelacionAccionDto) throws Exception {
+		return facturoPorTiConsultaService.aceptarSolicitudCancelacion(solicitudCancelacionAccionDto);
+	}
+
+	@Override
+	public CancelacionResponse rechazarSolicitudCancelacion(SolicitudCancelacionAccionDto solicitudCancelacionAccionDto) throws Exception {
+		return facturoPorTiConsultaService.rechazarSolicitudCancelacion(solicitudCancelacionAccionDto);
+	}
+
+	@Override
 	public SubirFacturaDto subirArchivo(MultipartFile file, MultipartFile fileXml, String venta, String uuid) throws Exception {
-		
-		
 		try {
-			
-			subirArchivo subir =new subirArchivo();
-			SubirFacturaDto subirFacturaDto=new SubirFacturaDto();
-			
-		System.err.println(TipoDoc.PDF_FACTURA.getPath());
-			
-			if(subir.subirArchivoFactura(file, Integer.valueOf(venta), TipoDoc.PDF_FACTURA.getPath()) && subir.subirArchivoFactura(fileXml, Integer.valueOf(venta), TipoDoc.XML_FACTURA.getPath())) {
-				subirFacturaDto.setMensaje("Se guardaron los documentos");
-				
-				TwVenta twVentas= new TwVenta();
-				TwFacturacion twFacturacion= new TwFacturacion();
-				
-				twVentas=ventaRepository.findBynId( Long.parseLong(venta));
-				
-				twFacturacion.setsUuid(uuid);
-				twFacturacion.setnEstatus(1);
-				twFacturacion.setnIdDatoFactura(1L);
-				twFacturacion.setN_idVenta( Long.parseLong(venta));
-				
-				twFacturacion=FacturaRepository.save(twFacturacion);
-				
-				twVentas.setnIdFacturacion(twFacturacion.getnId());
-				
-				ventaRepository.save(twVentas);
-				
-				
-				
-				
-				
-				
+			subirArchivo cargarArchivo = new subirArchivo();
+			SubirFacturaDto subirFacturaDto = new SubirFacturaDto();
+			Long idVenta = Long.parseLong(venta);
+			TwVenta twVenta = ventaRepository.findBynId(idVenta);
+
+			if (twVenta == null || twVenta.getTcCliente() == null || twVenta.getTcCliente().getnIdDatoFactura() == null) {
+				subirFacturaDto.setMensaje("No se encontró configuración fiscal para la venta");
 				return subirFacturaDto;
-				
-				
 			}
-			else {
+
+			TcDatosFactura tcDatosFactura = tcDatosFacturaRepository.obtenerDatos(twVenta.getTcCliente().getnIdDatoFactura());
+			if (tcDatosFactura == null) {
+				subirFacturaDto.setMensaje("No se encontró configuración fiscal para la venta");
+				return subirFacturaDto;
+			}
+
+			boolean pdfGuardado = cargarArchivo.subirArchivoFactura(file, Integer.valueOf(venta),
+					datosFacturaStorageResolver.resolveRutaPdf(tcDatosFactura));
+			boolean xmlGuardado = cargarArchivo.subirArchivoFactura(fileXml, Integer.valueOf(venta),
+					datosFacturaStorageResolver.resolveRutaXml(tcDatosFactura));
+			if (!pdfGuardado || !xmlGuardado) {
 				subirFacturaDto.setMensaje("No se guardaron los documentos");
 				return subirFacturaDto;
 			}
-			
-			
-			
-			
-			
-			
-		
-			
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
-		
-		
-		
-	}
-	
-	
 
+			TwFacturacion twFacturacion = new TwFacturacion();
+			twFacturacion.setsUuid(uuid);
+			twFacturacion.setnEstatus(1);
+			twFacturacion.setnIdDatoFactura(tcDatosFactura.getnId());
+			twFacturacion.setN_idVenta(idVenta);
+			twFacturacion = facturaRepository.save(twFacturacion);
+
+			twVenta.setnIdFacturacion(twFacturacion.getnId());
+			ventaRepository.save(twVenta);
+
+			subirFacturaDto.setMensaje("Se guardaron los documentos");
+			subirFacturaDto.setnIdVenta(idVenta);
+			subirFacturaDto.setSuuid(uuid);
+			subirFacturaDto.setEstatus(Boolean.TRUE);
+			return subirFacturaDto;
+		} catch (Exception e) {
+			logger.error("Error al subir documentos CFDI para venta {}", venta, e);
+			throw new Exception(e.getMessage(), e);
+		}
+	}
 }

@@ -103,6 +103,19 @@ public class CatalogosController {
 		return null;
 	}
 
+	@GetMapping("/catalogosDatoFacturaAsignables")
+	public List<DatoFacturaDto> catalogosDatoFacturaAsignables() {
+		try {
+
+			return catalagosService.catalogosDatoFacturaAsignables();
+
+		} catch (Exception e) {
+
+			logger.error("Error al obtener catalogo de dato factura asignable " + e);
+		}
+		return null;
+	}
+
 	@GetMapping("/catalogoCategoriaGeneral")
 	public List<TcCategoriaGeneral> consultaCategoriaGeneral() {
 		try {

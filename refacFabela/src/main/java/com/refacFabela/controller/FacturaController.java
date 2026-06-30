@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +19,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import com.refacFabela.dto.CancelacionFacturaDto;
+import com.refacFabela.dto.SolicitudCancelacionAccionDto;
 import com.refacFabela.dto.SubirFacturaDto;
 import com.refacFabela.enums.TipoDoc;
+import com.refacFabela.facturacionv2.dto.internal.CancelacionResponse;
+import com.refacFabela.facturacionv2.dto.internal.CfdiRelacionadosResponse;
+import com.refacFabela.facturacionv2.dto.internal.SolicitudCancelacionDto;
+import com.refacFabela.facturacionv2.dto.internal.StatusCfdiResponse;
 import com.refacFabela.model.TvVentasFactura;
 import com.refacFabela.service.FacturacionService;
 import com.refacFabela.service.GeneraReporteService;
@@ -88,6 +95,17 @@ public class FacturaController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@PostMapping("cancelar")
+	public ResponseEntity<?> cancelar(@RequestBody CancelacionFacturaDto cancelacionFacturaDto) throws Exception {
+		Map<String, Object> response = new HashMap();
+		if (facturaService.cancelaFactura(cancelacionFacturaDto).equals("ok")) {
+			response.put("mensaje", "Factura cancelada");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		}
+		response.put("mensaje", "error al cancelar la factura");
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
 	@GetMapping("complemento")
 	public ResponseEntity<?> complemento(@RequestParam(required = false) Long nIdVenta , String cveCfdi) throws Exception {
@@ -140,6 +158,56 @@ public class FacturaController {
 		} catch (Exception e) {
 			logger.error("Error al consultar creditos ", e);
 			return 0;
+		}
+	}
+
+	@GetMapping(value = "estatusSat")
+	public ResponseEntity<StatusCfdiResponse> consultarEstatusCfdi(@RequestParam(required = true) Long nIdVenta) {
+		try {
+			return ResponseEntity.ok(facturaService.consultarEstatusCfdi(nIdVenta));
+		} catch (Exception e) {
+			logger.error("Error al consultar estatus SAT para venta {}", nIdVenta, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+
+	@GetMapping(value = "cfdiRelacionados")
+	public ResponseEntity<CfdiRelacionadosResponse> consultarCfdiRelacionados(@RequestParam(required = true) Long nIdVenta) {
+		try {
+			return ResponseEntity.ok(facturaService.consultarCfdiRelacionados(nIdVenta));
+		} catch (Exception e) {
+			logger.error("Error al consultar CFDI relacionados para venta {}", nIdVenta, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+
+	@GetMapping(value = "solicitudesPendientes")
+	public ResponseEntity<List<SolicitudCancelacionDto>> consultarSolicitudesPendientes(@RequestParam(required = true) Long nIdDatoFactura) {
+		try {
+			return ResponseEntity.ok(facturaService.consultarSolicitudesPendientesCancelacion(nIdDatoFactura));
+		} catch (Exception e) {
+			logger.error("Error al consultar solicitudes pendientes para razón social {}", nIdDatoFactura, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+
+	@PostMapping(value = "solicitudesPendientes/aceptar")
+	public ResponseEntity<CancelacionResponse> aceptarSolicitudPendiente(@RequestBody SolicitudCancelacionAccionDto solicitudCancelacionAccionDto) {
+		try {
+			return ResponseEntity.ok(facturaService.aceptarSolicitudCancelacion(solicitudCancelacionAccionDto));
+		} catch (Exception e) {
+			logger.error("Error al aceptar solicitud pendiente para UUID {}", solicitudCancelacionAccionDto != null ? solicitudCancelacionAccionDto.getUuid() : null, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+
+	@PostMapping(value = "solicitudesPendientes/rechazar")
+	public ResponseEntity<CancelacionResponse> rechazarSolicitudPendiente(@RequestBody SolicitudCancelacionAccionDto solicitudCancelacionAccionDto) {
+		try {
+			return ResponseEntity.ok(facturaService.rechazarSolicitudCancelacion(solicitudCancelacionAccionDto));
+		} catch (Exception e) {
+			logger.error("Error al rechazar solicitud pendiente para UUID {}", solicitudCancelacionAccionDto != null ? solicitudCancelacionAccionDto.getUuid() : null, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 	

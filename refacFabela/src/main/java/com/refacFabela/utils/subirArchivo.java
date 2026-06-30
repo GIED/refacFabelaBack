@@ -31,8 +31,12 @@ public boolean subirArchivoFactura(MultipartFile file,  Integer nombreArchivo, S
 			byte[] bytes=file.getBytes();
 			//accede al nombre original del archivo
 			String fileOriginalName=file.getOriginalFilename();
+            if(fileOriginalName == null || ruta == null || ruta.trim().isEmpty()) {
+                return false;
+            }
+            String fileOriginalNameLower = fileOriginalName.toLowerCase();
 			
-			if(!fileOriginalName.endsWith(".pdf") && !fileOriginalName.endsWith(".xml")) {
+            if(!fileOriginalNameLower.endsWith(".pdf") && !fileOriginalNameLower.endsWith(".xml")) {
 				return false;
 			}
 			String fileExtension=fileOriginalName.substring(fileOriginalName.lastIndexOf("."));
@@ -40,6 +44,9 @@ public boolean subirArchivoFactura(MultipartFile file,  Integer nombreArchivo, S
 			String newFileName=fileName+fileExtension;			
 			
 			Path path= Paths.get(ruta+newFileName);
+            if (path.getParent() != null) {
+                Files.createDirectories(path.getParent());
+            }
 			System.err.println();
 			
 			Files.write(path,  bytes);

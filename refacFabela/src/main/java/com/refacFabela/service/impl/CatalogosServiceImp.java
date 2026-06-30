@@ -253,26 +253,33 @@ public class CatalogosServiceImp implements CatalagosService {
 
 	@Override
 	public List<DatoFacturaDto> catalogosDatoFactura() {
-		
-		
-		List<DatoFacturaDto> ListaDatoFacturaDto=new ArrayList<DatoFacturaDto>();
-		
-		List<TcDatosFactura> listaDatosFacturas=tcDatosFacturaRepository.findAll();
-		
-		for (int i = 0; i < listaDatosFacturas.size(); i++) {
-			DatoFacturaDto datoFacturaDto=new DatoFacturaDto();			
-			datoFacturaDto.setnId(listaDatosFacturas.get(i).getnId());
-			datoFacturaDto.setsRazonSocial(listaDatosFacturas.get(i).getsNombreEmisor());
-			datoFacturaDto.setsRfc(listaDatosFacturas.get(i).getsRfcEmisor());
-			
-			ListaDatoFacturaDto.add(datoFacturaDto);
-			
+		return construirCatalogoDatosFactura(false);
+	}
+
+	@Override
+	public List<DatoFacturaDto> catalogosDatoFacturaAsignables() {
+		return construirCatalogoDatosFactura(true);
+	}
+
+	private List<DatoFacturaDto> construirCatalogoDatosFactura(boolean excluirPruebas) {
+		List<DatoFacturaDto> listaDatoFacturaDto = new ArrayList<DatoFacturaDto>();
+		List<TcDatosFactura> listaDatosFacturas = tcDatosFacturaRepository.findAll(
+				Sort.by(Sort.Order.desc("nPredeterminado"), Sort.Order.asc("sNombreEmisor")));
+
+		for (TcDatosFactura datosFactura : listaDatosFacturas) {
+			if (excluirPruebas && (datosFactura == null || !datosFactura.isAsignable())) {
+				continue;
+			}
+
+			DatoFacturaDto datoFacturaDto = new DatoFacturaDto();
+			datoFacturaDto.setnId(datosFactura.getnId());
+			datoFacturaDto.setsRazonSocial(datosFactura.getsNombreEmisor());
+			datoFacturaDto.setsRfc(datosFactura.getsRfcEmisor());
+			datoFacturaDto.setnPredeterminado(datosFactura.getnPredeterminado());
+			listaDatoFacturaDto.add(datoFacturaDto);
 		}
-		
-		
-		
-		
-		return ListaDatoFacturaDto;
+
+		return listaDatoFacturaDto;
 	}
 
 	@Override

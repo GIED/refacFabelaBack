@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.refacFabela.model.TcDatosFactura;
-import com.refacFabela.model.TwPedidoProducto;
 
 @Repository
 public interface TcDatosFacturaRepository extends JpaRepository<TcDatosFactura, Long> {
@@ -15,6 +14,9 @@ public interface TcDatosFacturaRepository extends JpaRepository<TcDatosFactura, 
 	
 	@Query("Select c from TcDatosFactura c where c.nId= :nId")
 	TcDatosFactura obtenerDatos(Long nId);
+
+	@Query("Select c from TcDatosFactura c where lower(c.sRfcEmisor) = lower(:sRfcEmisor)")
+	TcDatosFactura findFirstByRfcEmisor(String sRfcEmisor);
 	
 	
 }

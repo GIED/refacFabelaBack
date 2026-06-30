@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Date;
@@ -16,9 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -43,13 +44,13 @@ import com.refacFabela.model.TwPedido;
 import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.DateTimeUtil;
 import com.refacFabela.utils.utils;
-import com.refacFabela.utils.factura.ConstantesFactura;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 @Service
 public class ReporteServiceImpl implements ReporteService {
-	
+
 	 private static final Logger logger = LogManager.getLogger("errorLogger");
 	 @Autowired
 	 private CorreoClienteService correoClienteService;
@@ -65,16 +66,56 @@ public class ReporteServiceImpl implements ReporteService {
 	         logger.error("Error al obtener imagen: " + e.getMessage());
 	      }
 	}
+
+	private File createTempPdfFile(String nombreArchivo) throws IOException {
+		Path tempDir = Files.createTempDirectory("refacfabela-report-");
+		return tempDir.resolve(nombreArchivo + ".pdf").toFile();
+	}
+
+	private String buildAttachmentRoot(File pdfFile) {
+		return pdfFile.getParentFile().getAbsolutePath() + File.separator;
+	}
+
+	private byte[] readAndCleanupPdf(File pdfFile) throws IOException {
+		try {
+			return Files.readAllBytes(pdfFile.toPath());
+		} finally {
+			cleanupPdfFile(pdfFile);
+		}
+	}
+
+	private void renderPdfReport(Resource resource, Map<String, Object> params, Object reportBean, File pdfFile) throws Exception {
+		InputStream inputStreamReport = resource.getInputStream();
+		FileOutputStream pos = new FileOutputStream(pdfFile);
+		JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
+		JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reportBean)), pos);
+		pos.flush();
+		pos.close();
+	}
+
+	private void cleanupPdfFile(File pdfFile) {
+		if (pdfFile == null) {
+			return;
+		}
+		try {
+			Files.deleteIfExists(pdfFile.toPath());
+			Path parent = pdfFile.toPath().getParent();
+			if (parent != null) {
+				Files.deleteIfExists(parent);
+			}
+		} catch (IOException e) {
+			logger.warn("No fue posible limpiar el archivo temporal de reporte {}", pdfFile.getAbsolutePath(), e);
+		}
+	}
 	
 	@Override
 	public byte[] generaCotizacionPDF(ReporteCotizacionDto reporteCotizacion,  List<ReporteCotizacionDto> listaProducto) {
 		 try {
 	         Resource resource = new ClassPathResource("/reports/plantillas/cotizacion.jrxml");
 	         final Map<String, Object> params = new HashMap<>();
-	         File pdfFile = null;
 	         String nombreArchivo = "cotizacion_"+reporteCotizacion.getFolioCotizacion();
-	         String ruta="/opt/webserver/backEnd/refacFabela/";
-	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+	         File pdfFile = createTempPdfFile(nombreArchivo);
+	         String ruta = buildAttachmentRoot(pdfFile);
 	         
 	         //aqui van los parametros
 	         params.put("logo", this.imagenHeader);
@@ -99,15 +140,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         
 	         
 	         
-	         // InputStream ligado al reporte
-	         InputStream inputStreamReport = resource.getInputStream();
-	         FileOutputStream pos = new FileOutputStream(pdfFile);
-	         JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
-	         JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reporteCotizacion)), pos);
-
-	         // Cierre de output stream
-	         pos.flush();
-	         pos.close();
+	         renderPdfReport(resource, params, reporteCotizacion, pdfFile);
 	         
 	         correoClienteService.enviarCorreoCliente(reporteCotizacion.getnIdCliente(), 
 						"Cotización_"+reporteCotizacion.getFolioCotizacion(),
@@ -118,21 +151,7 @@ public class ReporteServiceImpl implements ReporteService {
 						nombreArchivo,
 						1
 						);			
-	         // Se recuperan los bytes correspondientes al reporte
-	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-
-	         
-	        
-	         
-	         
-	         
-	         //Eliminar el archivo generado 	         
-	        
-	        	 pdfFile.delete();
-	         
-	         
-
-	         return bytesReporte;
+	         return readAndCleanupPdf(pdfFile);
 	      } catch (Exception e) {
 	         logger.error("Error en metodo generaCotizacionPDF(). Error al generar la cotizacion con id: " + reporteCotizacion.getFolioCotizacion(), e);
 	      }
@@ -158,9 +177,8 @@ public class ReporteServiceImpl implements ReporteService {
 			
 	         Resource resource = new ClassPathResource(ruta);
 	         final Map<String, Object> params = new HashMap<>();
-	         File pdfFile = null;
 	         String nombreArchivo = "venta_"+reporteVenta.getFolioVenta();
-	         pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + ".pdf");
+	         File pdfFile = createTempPdfFile(nombreArchivo);
 	        
 	         String fechaVencimiento=util.sumarRestarDiasFecha(reporteVenta.getFecha(), 30);
 
@@ -189,29 +207,9 @@ public class ReporteServiceImpl implements ReporteService {
 	         
 	         
 	         
-	         // InputStream ligado al reporte
-	         InputStream inputStreamReport = resource.getInputStream();
-	         FileOutputStream pos = new FileOutputStream(pdfFile);
-	         JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
-	         JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reporteVenta)), pos);
+	         renderPdfReport(resource, params, reporteVenta, pdfFile);
 
-	         // Cierre de output stream
-	         pos.flush();
-	         pos.close();
-
-	         // Se recuperan los bytes correspondientes al reporte
-	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-	         
-	         //envió de correo
-	        
-
-	         //Eliminar el archivo generado
-	        
-	        	 pdfFile.delete();
-	         
-	         
-
-	         return bytesReporte;
+	         return readAndCleanupPdf(pdfFile);
 	      } catch (Exception e) {
 	         logger.error("Error en metodo generaVentaPDF(). Error al generar la venta con id: " + reporteVenta.getFolioVenta(), e);
 	      }
@@ -233,9 +231,8 @@ public class ReporteServiceImpl implements ReporteService {
 			
 	         Resource resource = new ClassPathResource(ruta);
 	         final Map<String, Object> params = new HashMap<>();
-	         File pdfFile = null;
 	         String nombreArchivo = "SALDO_FAVOR_"+reporteVenta.getFolioVenta();
-	         pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + ".pdf");
+	         File pdfFile = createTempPdfFile(nombreArchivo);
 	        
 	         String fechaVencimiento=util.sumarRestarDiasFecha(reporteVenta.getFecha(), 30);
 
@@ -269,29 +266,9 @@ public class ReporteServiceImpl implements ReporteService {
 	         
 	         
 	         
-	         // InputStream ligado al reporte
-	         InputStream inputStreamReport = resource.getInputStream();
-	         FileOutputStream pos = new FileOutputStream(pdfFile);
-	         JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
-	         JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reporteVenta)), pos);
+	         renderPdfReport(resource, params, reporteVenta, pdfFile);
 
-	         // Cierre de output stream
-	         pos.flush();
-	         pos.close();
-
-	         // Se recuperan los bytes correspondientes al reporte
-	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-	         
-	         //envió de correo
-	        
-
-	         //Eliminar el archivo generado
-	        
-	        	 pdfFile.delete();
-	         
-	         
-
-	         return bytesReporte;
+	         return readAndCleanupPdf(pdfFile);
 	      } catch (Exception e) {
 	         logger.error("Error en metodo generarSaldoFacorPDF(). Error al generar el salado favor " + reporteVenta.getFolioVenta(), e);
 	      }
@@ -314,9 +291,8 @@ public class ReporteServiceImpl implements ReporteService {
 			
 	         Resource resource = new ClassPathResource(ruta);
 	         final Map<String, Object> params = new HashMap<>();
-	         File pdfFile = null;
 	         String nombreArchivo = "venta_"+reporteVenta.getFolioVenta();
-	         pdfFile = new File("/opt/webserver/backEnd/refacFabela/" + nombreArchivo + "_almacen.pdf");
+	         File pdfFile = createTempPdfFile(nombreArchivo + "_almacen");
 	        
 	         String fechaVencimiento=util.sumarRestarDiasFecha(reporteVenta.getFecha(), 30);
 
@@ -344,29 +320,9 @@ public class ReporteServiceImpl implements ReporteService {
 	         
 	         
 	         
-	         // InputStream ligado al reporte
-	         InputStream inputStreamReport = resource.getInputStream();
-	         FileOutputStream pos = new FileOutputStream(pdfFile);
-	         JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
-	         JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reporteVenta)), pos);
+	         renderPdfReport(resource, params, reporteVenta, pdfFile);
 
-	         // Cierre de output stream
-	         pos.flush();
-	         pos.close();
-
-	         // Se recuperan los bytes correspondientes al reporte
-	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-	         
-	         //envió de correo
-	        
-
-	         //Eliminar el archivo generado
-	        
-	        	 pdfFile.delete();
-	         
-	         
-
-	         return bytesReporte;
+	         return readAndCleanupPdf(pdfFile);
 	      } catch (Exception e) {
 	         logger.error("Error en metodo generaVentaPDF(). Error al generar la venta con id: " + reporteVenta.getFolioVenta(), e);
 	      }
@@ -388,10 +344,8 @@ public class ReporteServiceImpl implements ReporteService {
 			
 	         Resource resource = new ClassPathResource(ruta);
 	         final Map<String, Object> params = new HashMap<>();
-	         File pdfFile = null;
 	         String nombreArchivo = "abono_"+reporteVenta.getFolioVenta();
-	          ruta=ConstantesFactura.rutaRaiz;
-	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+	         File pdfFile = createTempPdfFile(nombreArchivo);
 	        
 	         String fechaVencimiento=util.sumarRestarDiasFecha(reporteVenta.getFecha(), 30);
 
@@ -424,18 +378,7 @@ public class ReporteServiceImpl implements ReporteService {
 	         
 	         
 	         
-	         // InputStream ligado al reporte
-	         InputStream inputStreamReport = resource.getInputStream();
-	         FileOutputStream pos = new FileOutputStream(pdfFile);
-	         JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
-	         JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reporteVenta)), pos);
-
-	         // Cierre de output stream
-	         pos.flush();
-	         pos.close();
-
-	         // Se recuperan los bytes correspondientes al reporte
-	         byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+	         renderPdfReport(resource, params, reporteVenta, pdfFile);
 
 	         //Eliminar el archivo generado
 	         
@@ -445,18 +388,15 @@ public class ReporteServiceImpl implements ReporteService {
 				enviar.enviarCorreo(reporteVenta.getCorreo(), 
 						"Venta a crédito "+reporteVenta.getFolioVenta(),
 						"<p>Adjunto al presente el historial de abonos del la venta a cr&eacute;dito "+reporteVenta.getFolioVenta()+"</p><p>No omito mencionar que la fecha limite para cubrir la totalidad de la nota es:"+fechaVencimiento+"  </p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
-						ruta,
+						buildAttachmentRoot(pdfFile),
 						nombreArchivo,
 						1
 						);		*/
 	         
 	         
 	        
-	        	 pdfFile.delete();
+	         return readAndCleanupPdf(pdfFile);
 	         
-	         
-
-	         return bytesReporte;
 	      } catch (Exception e) {
 	         logger.error("Error en metodo generaAbonoVentaPDF(). Error al generar la venta con id: " + reporteVenta.getFolioVenta(), e);
 	      }
@@ -469,11 +409,8 @@ public class ReporteServiceImpl implements ReporteService {
 		try {
 			Resource resource = new ClassPathResource("/reports/plantillas/ventaPedido.jrxml");
 			final Map<String, Object> params = new HashMap<>();
-			File pdfFile = null;
-			String ruta="";			
 			  String nombreArchivo = "venta_pedido_"+reporteVenta.getFolioVenta();
-	          ruta="/opt/webserver/backEnd/refacFabela/";
-	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+			File pdfFile = createTempPdfFile(nombreArchivo);
 	         utils util=new utils();
 			
 			//aqui van los parametros
@@ -517,26 +454,9 @@ public class ReporteServiceImpl implements ReporteService {
 			
 			
 			
-			// InputStream ligado al reporte
-			InputStream inputStreamReport = resource.getInputStream();
-			FileOutputStream pos = new FileOutputStream(pdfFile);
-			JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
-			JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reporteVenta)), pos);
-			
-			// Cierre de output stream
-			pos.flush();
-			pos.close();
-			
-			// Se recuperan los bytes correspondientes al reporte
-			byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-			
-			//Eliminar el archivo generado
-			
-			pdfFile.delete();
-			
-			
-			
-			return bytesReporte;
+			renderPdfReport(resource, params, reporteVenta, pdfFile);
+
+			return readAndCleanupPdf(pdfFile);
 		} catch (Exception e) {
 			logger.error("Error en metodo generaVentaPDF(). Error al generar la venta con id: " + reporteVenta.getFolioVenta(), e);
 		}
@@ -570,14 +490,10 @@ public class ReporteServiceImpl implements ReporteService {
 	public byte[] generaAbonoVentaClientePDF(TcCliente cliente, List<ReporteAbonoVentaCreditoDto> listaAbomoVenta, ReporteVentaDto reporteVenta) {
 		
 		try {
-			String ruta="";
 			Resource resource = new ClassPathResource("/reports/plantillas/historialAbonosVentas.jrxml");
 			final Map<String, Object> params = new HashMap<>();
-			File pdfFile = null;
 			String nombreArchivo = "historal_clinete_"+cliente.getsRfc();
-			
-			 ruta="/opt/webserver/backEnd/refacFabela/";
-	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+			File pdfFile = createTempPdfFile(nombreArchivo);
 			utils util= new utils();
 			
 			//aqui van los parametros
@@ -602,26 +518,9 @@ public class ReporteServiceImpl implements ReporteService {
 	        		
 			
 			
-			// InputStream ligado al reporte
-			InputStream inputStreamReport = resource.getInputStream();
-			FileOutputStream pos = new FileOutputStream(pdfFile);
-			JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
-			JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(reporteVenta)), pos);
-			
-			// Cierre de output stream
-			pos.flush();
-			pos.close();
-			
-			// Se recuperan los bytes correspondientes al reporte
-			byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-			
-			//Eliminar el archivo generado
-			
-			//pdfFile.delete();
-			
-			
-			
-			return bytesReporte;
+			renderPdfReport(resource, params, reporteVenta, pdfFile);
+
+			return readAndCleanupPdf(pdfFile);
 		} catch (Exception e) {
 			logger.error("Error en metodo generaVentaPDF(). Error al generar la venta con id: ", e);
 		}
@@ -633,14 +532,10 @@ public class ReporteServiceImpl implements ReporteService {
 	public byte[] generaPedidoPDF(TwPedido twPedido, List<PedidoProductoDto> listaPedidoProducto) {
 	
 		try {
-			String ruta="";
 			Resource resource = new ClassPathResource("/reports/plantillas/pedido.jrxml");
 			final Map<String, Object> params = new HashMap<>();
-			File pdfFile = null;
 			String nombreArchivo = "pedido_"+twPedido.getsCvePedido();
-			
-			 ruta="/opt/webserver/backEnd/refacFabela/";
-	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+			File pdfFile = createTempPdfFile(nombreArchivo);
 			utils util= new utils();
 			
 			//aqui van los parametros
@@ -657,26 +552,9 @@ public class ReporteServiceImpl implements ReporteService {
 	        System.err.println("El tamaño de la lista es:"+listaPedidoProducto.size());
 			
 			
-			// InputStream ligado al reporte
-			InputStream inputStreamReport = resource.getInputStream();
-			FileOutputStream pos = new FileOutputStream(pdfFile);
-			JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
-			JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(twPedido)), pos);
-			
-			// Cierre de output stream
-			pos.flush();
-			pos.close();
-			
-			// Se recuperan los bytes correspondientes al reporte
-			byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-			
-			//Eliminar el archivo generado
-			
-			//pdfFile.delete();
-			
-			
-			
-			return bytesReporte;
+			renderPdfReport(resource, params, twPedido, pdfFile);
+
+			return readAndCleanupPdf(pdfFile);
 		} catch (Exception e) {
 			logger.error("Error en metodo generaPDF(). Error al generar el pedido ", e);
 		}
@@ -691,14 +569,10 @@ public class ReporteServiceImpl implements ReporteService {
 			
 			System.err.println(balanceCajaDto);
 			
-			String ruta="";
 			Resource resource = new ClassPathResource("/reports/plantillas/corteCaja.jrxml");
 			final Map<String, Object> params = new HashMap<>();
-			File pdfFile = null;
 			String nombreArchivo = "caja_"+balanceCajaDto.getCaja();
-			
-			 ruta="/opt/webserver/backEnd/refacFabela/";
-	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+			File pdfFile = createTempPdfFile(nombreArchivo);
 			utils util= new utils();
 			
 			//aqui van los parametros
@@ -757,26 +631,9 @@ public class ReporteServiceImpl implements ReporteService {
 	      
 			
 			
-			// InputStream ligado al reporte
-			InputStream inputStreamReport = resource.getInputStream();
-			FileOutputStream pos = new FileOutputStream(pdfFile);
-			JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
-			JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(balanceCajaDto)), pos);
-			
-			// Cierre de output stream
-			pos.flush();
-			pos.close();
-			
-			// Se recuperan los bytes correspondientes al reporte
-			byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-			
-			//Eliminar el archivo generado
-			
-			//pdfFile.delete();
-			
-			
-			
-			return bytesReporte;
+			renderPdfReport(resource, params, balanceCajaDto, pdfFile);
+
+			return readAndCleanupPdf(pdfFile);
 			//return null;
 
 		} catch (Exception e) {
@@ -792,14 +649,10 @@ public class ReporteServiceImpl implements ReporteService {
 			
 		
 			
-			String ruta="";
 			Resource resource = new ClassPathResource("/reports/plantillas/inventario.jrxml");
 			final Map<String, Object> params = new HashMap<>();
-			File pdfFile = null;
 			String nombreArchivo = "inventario";
-			
-			 ruta="/opt/webserver/backEnd/refacFabela/";
-	         pdfFile = new File(ruta + nombreArchivo + ".pdf");
+			File pdfFile = createTempPdfFile(nombreArchivo);
 			utils util= new utils();
 			
 			//aqui van los parametros
@@ -808,26 +661,9 @@ public class ReporteServiceImpl implements ReporteService {
 		
 
 			
-			// InputStream ligado al reporte
-			InputStream inputStreamReport = resource.getInputStream();
-			FileOutputStream pos = new FileOutputStream(pdfFile);
-			JasperReport report = JasperCompileManager.compileReport(inputStreamReport);
-			JasperReportsUtils.renderAsPdf(report, params, new JRBeanCollectionDataSource(Collections.singleton(listaProductoBodega)), pos);
-			
-			// Cierre de output stream
-			pos.flush();
-			pos.close();
-			
-			// Se recuperan los bytes correspondientes al reporte
-			byte[] bytesReporte = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-			
-			//Eliminar el archivo generado
-			
-			//pdfFile.delete();
-			
-			
-			
-			return bytesReporte;
+			renderPdfReport(resource, params, listaProductoBodega, pdfFile);
+
+			return readAndCleanupPdf(pdfFile);
 			//return null;
 
 		} catch (Exception e) {

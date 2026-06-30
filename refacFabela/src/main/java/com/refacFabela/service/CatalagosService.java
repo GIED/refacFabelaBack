@@ -33,6 +33,7 @@ public interface CatalagosService {
 	public  TcCatalogogeneral consultaTipoCambioId(TcCatalogogeneral ccCatalogogeneral);
 	public List<TcClavesat> catalogoClaveSat();
 	public List<DatoFacturaDto> catalogosDatoFactura();
+	public List<DatoFacturaDto> catalogosDatoFacturaAsignables();
 	public List<TcCategoriaGeneral> catalogoCategoriaGeneral();
 	public List<TcCategoria> catalogoCategoriaId(int id);
 	public List<TcGanancia> catalogoGanancia();

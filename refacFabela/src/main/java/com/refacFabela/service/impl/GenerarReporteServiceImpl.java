@@ -73,7 +73,6 @@ import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.DateTimeUtil;
 import com.refacFabela.utils.envioMail;
 import com.refacFabela.utils.utils;
-import com.refacFabela.utils.factura.ConstantesFactura;
 
 import antlr.Utils;
 
@@ -133,6 +132,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	
 	@Autowired
 	private TcDatosFacturaRepository tcDatosFacturaRepository;
+
+	@Autowired
+	private DatosFacturaStorageResolver datosFacturaStorageResolver;
 	
 	@Autowired
 	private CotizacionRepository cotizacionRepository;
@@ -1164,60 +1166,38 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 	@Override
 	public byte[] getDocumento(Long nIdVenta, TipoDoc TipoDoc) {
-		String ruta="";
-		String rutaRaiz="";
-		File pdfFile = null;
-		
-		
-		if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.PDF_FACTURA)) {
-			
-			ruta=com.refacFabela.enums.TipoDoc.PDF_FACTURA.getPath();
-			rutaRaiz=ConstantesFactura.rutaRaiz;
-						    		    
-			 byte[] bytesReporte = null;
-			try {
-				  bytesReporte = Files.readAllBytes(Paths.get(ruta+ nIdVenta + ".pdf"));
-				  
-				 TwVenta twVenta= this.ventasRepository.getById(nIdVenta);
-				  
-				 /*
-				    envioMail enviar=new envioMail();
-       				enviar.enviarCorreo(twVenta.getTcCliente().getsCorreo(), 
-       						"Factura_"+nIdVenta.toString(),
-       						"<p>Adjunto al presente factura No. "+nIdVenta.toString()+"</p><p> Sin m&aacute;s por el momento envi&oacute; un cordial saludo.</p>",
-       						rutaRaiz,
-       						nIdVenta.toString(),
-       						2
-       						); */
-				
-			      return bytesReporte;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		try {
+			TwVenta twVenta = this.ventasRepository.getById(nIdVenta);
+			if (twVenta == null || twVenta.getTcCliente() == null || twVenta.getTcCliente().getnIdDatoFactura() == null) {
+				return null;
 			}
-			
-			
-			
-		} 
-		
-		else if(TipoDoc.equals(com.refacFabela.enums.TipoDoc.XML_FACTURA)) {
-			ruta=com.refacFabela.enums.TipoDoc.XML_FACTURA.getPath();
-		    
-			 byte[] bytesReporte = null;
-			try {
-				  bytesReporte = Files.readAllBytes(Paths.get(ruta+ nIdVenta + ".xml"));
-				
-			      return bytesReporte;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
+			TcDatosFactura tcDatosFactura = tcDatosFacturaRepository.getById(twVenta.getTcCliente().getnIdDatoFactura());
+			if (tcDatosFactura == null) {
+				return null;
 			}
+
+			String ruta;
+			String extension;
+			if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.PDF_FACTURA)) {
+				ruta = datosFacturaStorageResolver.resolveRutaPdf(tcDatosFactura);
+				extension = ".pdf";
+			} else if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.XML_FACTURA)) {
+				ruta = datosFacturaStorageResolver.resolveRutaXml(tcDatosFactura);
+				extension = ".xml";
+			} else {
+				return null;
+			}
+
+			if (ruta == null || ruta.trim().isEmpty()) {
+				return null;
+			}
+
+			return Files.readAllBytes(Paths.get(ruta + nIdVenta + extension));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
 		}
-		
-		
-		
-		
-		return null;
 	}
 
 	@Override
