@@ -1,6 +1,5 @@
 package com.refacFabela.service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,7 +15,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.text.Normalizer;
+import java.security.MessageDigest;
+import java.nio.charset.StandardCharsets;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.refacFabela.dto.provider.facturoporti.FacturoPorTiCancelacionRequest;
@@ -31,6 +34,7 @@ import com.refacFabela.dto.TimbradoResponse;
 
 @Component
 public class PacFacturacionMapper {
+	private static final Logger logger = LogManager.getLogger(PacFacturacionMapper.class);
 
 	private static final DateTimeFormatter CFDI_FECHA_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 	private static final String CAPITAL_REGIME_SUFFIX_PATTERN = "(?i),?\\s*(?:S\\.?\\s*A\\.?(?:\\s*P\\.?\\s*I\\.?|\\s*B\\.?|\\s*S\\.?)?\\s*DE\\s*C\\.?\\s*V\\.?|SOCIEDAD\\s+ANONIMA(?:\\s+PROMOTORA\\s+DE\\s+INVERSION|\\s+BURSATIL|\\s+SIMPLIFICADA)?\\s+DE\\s+CAPITAL\\s+VARIABLE|S\\.?\\s*DE\\s*R\\.?\\s*L\\.?(?:\\s*DE\\s*C\\.?\\s*V\\.?)?|S\\.?\\s*P\\.?\\s*R\\.?\\s*DE\\s*R\\.?\\s*L\\.?(?:\\s*DE\\s*C\\.?\\s*V\\.?)?)(\\s*)$";
@@ -55,7 +59,7 @@ public class PacFacturacionMapper {
 		datosGenerales.put("OpcionDecimales", Integer.valueOf(2));
 		datosGenerales.put("NumeroDecimales", Integer.valueOf(2));
 		datosGenerales.put("EnviaEmail", Boolean.FALSE);
-		datosGenerales.put("Logotipo", normalizeBase64Value(request.getMetadata() != null ? request.getMetadata().get("logo") : null));
+		datosGenerales.put("Logotipo", normalizeLogoValue(request.getMetadata() != null ? request.getMetadata().get("logo") : null));
 
 		encabezado.put("Fecha", formatCfdiFecha(request.getFecha()));
 		encabezado.put("Serie", request.getSerie());
@@ -157,7 +161,7 @@ public class PacFacturacionMapper {
 		datosGenerales.put("ReceptorEmailCC", request.getCorreo() != null ? request.getCorreo().getCc() : null);
 		datosGenerales.put("ReceptorEmailCCO", request.getCorreo() != null ? request.getCorreo().getBcc() : null);
 		datosGenerales.put("EmailMensaje", request.getCorreo() != null ? request.getCorreo().getMensaje() : null);
-		datosGenerales.put("Logotipo", normalizeBase64Value(request.getMetadata() != null ? request.getMetadata().get("logo") : null));
+		datosGenerales.put("Logotipo", normalizeLogoValue(request.getMetadata() != null ? request.getMetadata().get("logo") : null));
 
 		emisor.put("RFC", request.getRfcEmisor());
 		emisor.put("NombreRazonSocial", request.getMetadata() != null ? request.getMetadata().get("nombreEmisor") : null);
@@ -365,7 +369,7 @@ public class PacFacturacionMapper {
 			if (logoValue.isEmpty()) {
 				return "[LOGO_EMPTY]";
 			}
-			return "[LOGO length=" + logoValue.length() + "]";
+			return summarizeLogoValue(logoValue);
 		}
 
 		if (value instanceof Map) {
@@ -447,6 +451,155 @@ public class PacFacturacionMapper {
 		} catch (IllegalArgumentException e) {
 			return cleaned;
 		}
+	}
+
+	private String normalizeLogoValue(Object rawValue) {
+		String normalized = normalizeBase64Value(rawValue);
+		if (normalized == null || normalized.trim().isEmpty()) {
+			return null;
+		}
+
+		String cleaned = normalized.replaceAll("\\s+", "");
+		try {
+			byte[] decoded = Base64.getDecoder().decode(cleaned);
+			if (!isCompleteSupportedImage(decoded)) {
+				logger.warn("Logotipo posiblemente incompleto/corrupto (format={}, base64Length={}, decodedBytes={})",
+						detectImageFormat(decoded), Integer.valueOf(cleaned.length()), Integer.valueOf(decoded.length));
+			}
+			return Base64.getEncoder().encodeToString(decoded);
+		} catch (IllegalArgumentException e) {
+			logger.warn("Logotipo con base64 inválido/no estándar (base64Length={})", Integer.valueOf(cleaned.length()));
+			return cleaned;
+		}
+	}
+
+	private String summarizeLogoValue(String rawLogoValue) {
+		String source = rawLogoValue == null ? "" : rawLogoValue;
+		String cleaned = source.replaceAll("\\s+", "");
+		int plusCount = countChar(cleaned, '+');
+		int spaceCount = countChar(source, ' ');
+		int mod4 = cleaned.length() % 4;
+
+		boolean decodeOk;
+		int decodedBytes = 0;
+		String format = "unknown";
+		boolean complete = false;
+
+		try {
+			byte[] decoded = Base64.getDecoder().decode(cleaned);
+			decodeOk = true;
+			decodedBytes = decoded.length;
+			format = detectImageFormat(decoded);
+			complete = isCompleteSupportedImage(decoded);
+		} catch (IllegalArgumentException ex) {
+			decodeOk = false;
+		}
+
+		return "[LOGO len=" + source.length()
+				+ " cleanLen=" + cleaned.length()
+				+ " mod4=" + mod4
+				+ " plus=" + plusCount
+				+ " spaces=" + spaceCount
+				+ " decodeOk=" + decodeOk
+				+ " decodedBytes=" + decodedBytes
+				+ " format=" + format
+				+ " complete=" + complete
+				+ " sha256=" + shortSha256(cleaned)
+				+ "]";
+	}
+
+	private int countChar(String value, char target) {
+		if (value == null || value.isEmpty()) {
+			return 0;
+		}
+		int count = 0;
+		for (int i = 0; i < value.length(); i++) {
+			if (value.charAt(i) == target) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	private String shortSha256(String value) {
+		if (value == null) {
+			return "na";
+		}
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(value.getBytes(StandardCharsets.UTF_8));
+			StringBuilder hex = new StringBuilder();
+			for (byte b : hash) {
+				hex.append(String.format("%02x", b & 0xff));
+			}
+			return hex.substring(0, 16);
+		} catch (Exception ex) {
+			return "sha_error";
+		}
+	}
+
+	private boolean isCompleteSupportedImage(byte[] data) {
+		if (data == null || data.length < 4) {
+			return false;
+		}
+		if (isPng(data)) {
+			return hasPngIendChunk(data);
+		}
+		if (isJpeg(data)) {
+			return hasJpegEoi(data);
+		}
+		return true;
+	}
+
+	private String detectImageFormat(byte[] data) {
+		if (isPng(data)) {
+			return "png";
+		}
+		if (isJpeg(data)) {
+			return "jpeg";
+		}
+		return "unknown";
+	}
+
+	private boolean isPng(byte[] data) {
+		return data.length >= 8
+				&& (data[0] & 0xFF) == 0x89
+				&& (data[1] & 0xFF) == 0x50
+				&& (data[2] & 0xFF) == 0x4E
+				&& (data[3] & 0xFF) == 0x47
+				&& (data[4] & 0xFF) == 0x0D
+				&& (data[5] & 0xFF) == 0x0A
+				&& (data[6] & 0xFF) == 0x1A
+				&& (data[7] & 0xFF) == 0x0A;
+	}
+
+	private boolean hasPngIendChunk(byte[] data) {
+		if (data.length < 12) {
+			return false;
+		}
+		int n = data.length;
+		return (data[n - 12] & 0xFF) == 0x00
+				&& (data[n - 11] & 0xFF) == 0x00
+				&& (data[n - 10] & 0xFF) == 0x00
+				&& (data[n - 9] & 0xFF) == 0x00
+				&& (data[n - 8] & 0xFF) == 0x49
+				&& (data[n - 7] & 0xFF) == 0x45
+				&& (data[n - 6] & 0xFF) == 0x4E
+				&& (data[n - 5] & 0xFF) == 0x44
+				&& (data[n - 4] & 0xFF) == 0xAE
+				&& (data[n - 3] & 0xFF) == 0x42
+				&& (data[n - 2] & 0xFF) == 0x60
+				&& (data[n - 1] & 0xFF) == 0x82;
+	}
+
+	private boolean isJpeg(byte[] data) {
+		return data.length >= 2 && (data[0] & 0xFF) == 0xFF && (data[1] & 0xFF) == 0xD8;
+	}
+
+	private boolean hasJpegEoi(byte[] data) {
+		return data.length >= 2
+				&& (data[data.length - 2] & 0xFF) == 0xFF
+				&& (data[data.length - 1] & 0xFF) == 0xD9;
 	}
 
 	private BigDecimal calculateBase(BigDecimal total) {
