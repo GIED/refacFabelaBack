@@ -5,10 +5,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.refacFabela.dto.CancelacionFacturaDto;
 import com.refacFabela.dto.SolicitudCancelacionAccionDto;
 import com.refacFabela.dto.SubirFacturaDto;
-import com.refacFabela.facturacionv2.dto.internal.CancelacionResponse;
-import com.refacFabela.facturacionv2.dto.internal.CfdiRelacionadosResponse;
-import com.refacFabela.facturacionv2.dto.internal.SolicitudCancelacionDto;
-import com.refacFabela.facturacionv2.dto.internal.StatusCfdiResponse;
+import com.refacFabela.dto.CancelacionResponse;
+import com.refacFabela.dto.CfdiRelacionadosResponse;
+import com.refacFabela.dto.SolicitudCancelacionDto;
+import com.refacFabela.dto.StatusCfdiResponse;
 import com.refacFabela.model.TwFacturacion;
 
 import java.util.List;
@@ -39,3 +39,4 @@ public interface FacturacionService {
 
 
 }
+

@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -15,17 +16,16 @@ import java.util.Locale;
 
 public class DateTimeUtil {
 
-    private static final String ZONE_ID_MEXICO = "America/Mexico_City";
+    private static final ZoneOffset ZONA_MX_LEGAL = ZoneOffset.of("-06:00");
 
   
     public static LocalDateTime obtenerHoraExactaDeMexico() {
-        ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of(ZONE_ID_MEXICO));
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(ZONA_MX_LEGAL);
         return zonedDateTime.toLocalDateTime();
     }
     
     public static Date convertirALocalDateTimeEnMexicoADate(LocalDateTime fechaLocalDateTime) {
-        ZoneId zonaMexico = ZoneId.of(ZONE_ID_MEXICO); // Debe estar definido como constante
-        return Date.from(fechaLocalDateTime.atZone(zonaMexico).toInstant());
+        return Date.from(fechaLocalDateTime.atOffset(ZONA_MX_LEGAL).toInstant());
     }
     
     
@@ -38,7 +38,7 @@ public class DateTimeUtil {
         LocalDateTime truncada = fecha.truncatedTo(ChronoUnit.MINUTES);
 
         // Convertir a java.util.Date
-        Date fechaDate = Date.from(truncada.atZone(ZoneId.systemDefault()).toInstant());
+        Date fechaDate = Date.from(truncada.atOffset(ZONA_MX_LEGAL).toInstant());
 
         // Formatear como "dd/MM/yyyy HH:mm"
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -52,7 +52,7 @@ public class DateTimeUtil {
     }
     
  // ======= NUEVO: FORMATEO A STRING EN MX (dd/MM/yyyy HH:mm) =======
-    private static final ZoneId ZONA_MX = ZoneId.of(ZONE_ID_MEXICO);
+    private static final ZoneId ZONA_MX = ZONA_MX_LEGAL;
     private static final Locale LOCALE_MX = new Locale("es", "MX");
     private static final String PATRON_DDMMYYYY_HHMM = "dd/MM/yyyy HH:mm";
     private static final DateTimeFormatter FMT_MX =

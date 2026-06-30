@@ -89,6 +89,8 @@ set MAVEN_PROJECTBASEDIR=%MAVEN_BASEDIR%
 IF NOT "%MAVEN_PROJECTBASEDIR%"=="" goto endDetectBaseDir
 
 set EXEC_DIR=%CD%
+set SCRIPT_DIR=%~dp0
+if "%SCRIPT_DIR:~-1%"=="\" set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
 set WDIR=%EXEC_DIR%
 :findBaseDir
 IF EXIST "%WDIR%"\.mvn goto baseDirFound
@@ -103,8 +105,12 @@ cd "%EXEC_DIR%"
 goto endDetectBaseDir
 
 :baseDirNotFound
-set MAVEN_PROJECTBASEDIR=%EXEC_DIR%
 cd "%EXEC_DIR%"
+IF EXIST "%SCRIPT_DIR%"\.mvn (
+    set MAVEN_PROJECTBASEDIR=%SCRIPT_DIR%
+) ELSE (
+    set MAVEN_PROJECTBASEDIR=%EXEC_DIR%
+)
 
 :endDetectBaseDir
 

@@ -8,17 +8,17 @@ import org.springframework.web.multipart.MultipartFile;
 import com.refacFabela.dto.CancelacionFacturaDto;
 import com.refacFabela.dto.SolicitudCancelacionAccionDto;
 import com.refacFabela.dto.SubirFacturaDto;
-import com.refacFabela.facturacionv2.config.FacturacionProperties;
-import com.refacFabela.facturacionv2.dto.internal.CancelacionResponse;
-import com.refacFabela.facturacionv2.dto.internal.CfdiRelacionadosResponse;
-import com.refacFabela.facturacionv2.dto.internal.SolicitudCancelacionDto;
-import com.refacFabela.facturacionv2.dto.internal.StatusCfdiResponse;
-import com.refacFabela.facturacionv2.exception.FacturoPorTiClientException;
-import com.refacFabela.facturacionv2.service.PacFacturacionClient;
-import com.refacFabela.facturacionv2.service.impl.ComplementoPagoService;
-import com.refacFabela.facturacionv2.service.impl.FacturoPorTiCancelacionService;
-import com.refacFabela.facturacionv2.service.impl.FacturoPorTiConsultaService;
-import com.refacFabela.facturacionv2.service.impl.FacturoPorTiVentaService;
+import com.refacFabela.config.FacturacionProperties;
+import com.refacFabela.dto.CancelacionResponse;
+import com.refacFabela.dto.CfdiRelacionadosResponse;
+import com.refacFabela.dto.SolicitudCancelacionDto;
+import com.refacFabela.dto.StatusCfdiResponse;
+import com.refacFabela.exception.PacFacturacionClientException;
+import com.refacFabela.service.PacFacturacionClient;
+import com.refacFabela.service.impl.ComplementoPagoService;
+import com.refacFabela.service.impl.CancelacionFacturacionService;
+import com.refacFabela.service.impl.ConsultaFacturacionService;
+import com.refacFabela.service.impl.TimbradoVentaService;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TcDatosFactura;
 import com.refacFabela.model.TwFacturacion;
@@ -42,10 +42,10 @@ public class FacturacionServiceImpl implements FacturacionService {
 	private final FacturaRepository facturaRepository;
 	private final TcDatosFacturaRepository tcDatosFacturaRepository;
 	private final FacturacionProperties facturacionProperties;
-	private final FacturoPorTiVentaService facturoPorTiVentaService;
-	private final FacturoPorTiCancelacionService facturoPorTiCancelacionService;
+	private final TimbradoVentaService timbradoVentaService;
+	private final CancelacionFacturacionService cancelacionFacturacionService;
 	private final ComplementoPagoService complementoPagoService;
-	private final FacturoPorTiConsultaService facturoPorTiConsultaService;
+	private final ConsultaFacturacionService consultaFacturacionService;
 	private final PacFacturacionClient pacFacturacionClient;
 	private final DatosFacturaStorageResolver datosFacturaStorageResolver;
 
@@ -54,10 +54,10 @@ public class FacturacionServiceImpl implements FacturacionService {
 			FacturaRepository facturaRepository,
 			TcDatosFacturaRepository tcDatosFacturaRepository,
 			FacturacionProperties facturacionProperties,
-			FacturoPorTiVentaService facturoPorTiVentaService,
-			FacturoPorTiCancelacionService facturoPorTiCancelacionService,
+			TimbradoVentaService timbradoVentaService,
+			CancelacionFacturacionService cancelacionFacturacionService,
 			ComplementoPagoService complementoPagoService,
-			FacturoPorTiConsultaService facturoPorTiConsultaService,
+			ConsultaFacturacionService consultaFacturacionService,
 			PacFacturacionClient pacFacturacionClient,
 			DatosFacturaStorageResolver datosFacturaStorageResolver) {
 		this.ventaRepository = ventaRepository;
@@ -65,10 +65,10 @@ public class FacturacionServiceImpl implements FacturacionService {
 		this.facturaRepository = facturaRepository;
 		this.tcDatosFacturaRepository = tcDatosFacturaRepository;
 		this.facturacionProperties = facturacionProperties;
-		this.facturoPorTiVentaService = facturoPorTiVentaService;
-		this.facturoPorTiCancelacionService = facturoPorTiCancelacionService;
+		this.timbradoVentaService = timbradoVentaService;
+		this.cancelacionFacturacionService = cancelacionFacturacionService;
 		this.complementoPagoService = complementoPagoService;
-		this.facturoPorTiConsultaService = facturoPorTiConsultaService;
+		this.consultaFacturacionService = consultaFacturacionService;
 		this.pacFacturacionClient = pacFacturacionClient;
 		this.datosFacturaStorageResolver = datosFacturaStorageResolver;
 	}
@@ -76,7 +76,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 	@Override
 	public String venta(Long idVenta, String cveCfdi) throws Exception {
 		try {
-			facturoPorTiVentaService.timbrarVenta(idVenta, cveCfdi);
+			timbradoVentaService.timbrarVenta(idVenta, cveCfdi);
 			TwVenta ventaActualizada = ventaRepository.findBynId(idVenta);
 			TcCliente clienteActualizado = null;
 			if (ventaActualizada != null && ventaActualizada.getnIdCliente() != null) {
@@ -96,7 +96,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 	@Override
 	public String cancelaFactura(Long idVenta, String cveCfdi) throws Exception {
 		try {
-			facturoPorTiCancelacionService.cancelarVenta(idVenta, "02", null);
+			cancelacionFacturacionService.cancelarVenta(idVenta, "02", null);
 			return "ok";
 		} catch (Exception e) {
 			logger.error("Error al cancelar venta {} usando proveedor activo {}", idVenta,
@@ -108,7 +108,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 	@Override
 	public String cancelaFactura(CancelacionFacturaDto cancelacionFacturaDto) throws Exception {
 		try {
-			facturoPorTiCancelacionService.cancelarVenta(
+			cancelacionFacturacionService.cancelarVenta(
 					cancelacionFacturaDto.getnIdVenta(),
 					cancelacionFacturaDto.getMotivo(),
 					cancelacionFacturaDto.getFolioFiscalSustitucion());
@@ -147,7 +147,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 				return 0;
 			}
 			return pacFacturacionClient.consultarCreditosDisponibles(tcDatosFactura.getsRfcEmisor());
-		} catch (FacturoPorTiClientException e) {
+		} catch (PacFacturacionClientException e) {
 			logger.warn("No fue posible consultar créditos FacturoPorTi para nDatoFactura {}: {}", nDatoFactura, e.getMessage());
 			return 0;
 		} catch (Exception e) {
@@ -158,27 +158,27 @@ public class FacturacionServiceImpl implements FacturacionService {
 
 	@Override
 	public StatusCfdiResponse consultarEstatusCfdi(Long nIdVenta) throws Exception {
-		return facturoPorTiConsultaService.consultarEstatusCfdi(nIdVenta);
+		return consultaFacturacionService.consultarEstatusCfdi(nIdVenta);
 	}
 
 	@Override
 	public CfdiRelacionadosResponse consultarCfdiRelacionados(Long nIdVenta) throws Exception {
-		return facturoPorTiConsultaService.consultarCfdiRelacionados(nIdVenta);
+		return consultaFacturacionService.consultarCfdiRelacionados(nIdVenta);
 	}
 
 	@Override
 	public List<SolicitudCancelacionDto> consultarSolicitudesPendientesCancelacion(Long nIdDatoFactura) throws Exception {
-		return facturoPorTiConsultaService.consultarSolicitudesPendientesCancelacion(nIdDatoFactura);
+		return consultaFacturacionService.consultarSolicitudesPendientesCancelacion(nIdDatoFactura);
 	}
 
 	@Override
 	public CancelacionResponse aceptarSolicitudCancelacion(SolicitudCancelacionAccionDto solicitudCancelacionAccionDto) throws Exception {
-		return facturoPorTiConsultaService.aceptarSolicitudCancelacion(solicitudCancelacionAccionDto);
+		return consultaFacturacionService.aceptarSolicitudCancelacion(solicitudCancelacionAccionDto);
 	}
 
 	@Override
 	public CancelacionResponse rechazarSolicitudCancelacion(SolicitudCancelacionAccionDto solicitudCancelacionAccionDto) throws Exception {
-		return facturoPorTiConsultaService.rechazarSolicitudCancelacion(solicitudCancelacionAccionDto);
+		return consultaFacturacionService.rechazarSolicitudCancelacion(solicitudCancelacionAccionDto);
 	}
 
 	@Override
@@ -230,3 +230,4 @@ public class FacturacionServiceImpl implements FacturacionService {
 		}
 	}
 }
+
