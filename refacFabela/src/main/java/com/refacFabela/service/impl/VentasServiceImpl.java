@@ -4,8 +4,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,7 @@ import com.refacFabela.model.TvVentasFactura;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwCotizaciones;
+import com.refacFabela.model.TwFacturacion;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
 import com.refacFabela.model.TwProductobodega;
@@ -31,6 +36,7 @@ import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.CotizacionRepository;
+import com.refacFabela.repository.FacturaRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.ThStockProductoRepository;
@@ -81,6 +87,9 @@ public class VentasServiceImpl implements VentasService {
 	
 	@Autowired
 	private VentasFacturaRepository VentasFacturaRepository;
+
+	@Autowired
+	private FacturaRepository facturaRepository;
 	
 	@Autowired
 	private TrVentaCobroRepository trVentaCobroRepository;
@@ -774,7 +783,7 @@ public class VentasServiceImpl implements VentasService {
 
 	@Override
 	public List<TvVentasFactura> consultaVentasParaFactura() {
-				return this.VentasFacturaRepository.obtenerFacturas();
+				return completarEstatusFacturacion(this.VentasFacturaRepository.obtenerFacturas());
 	}
 
 
@@ -794,8 +803,45 @@ public class VentasServiceImpl implements VentasService {
 
 	@Override
 	public List<TvVentasFactura> consultaVentasFacturadas() {
+		return completarEstatusFacturacion(this.VentasFacturaRepository.obtenerVentasFacturadas());
+	}
 
-		return this.VentasFacturaRepository.obtenerVentasFacturadas();
+	private List<TvVentasFactura> completarEstatusFacturacion(List<TvVentasFactura> ventas) {
+		if (ventas == null || ventas.isEmpty()) {
+			return ventas;
+		}
+
+		Set<Long> idsFacturacion = new HashSet<Long>();
+		for (TvVentasFactura venta : ventas) {
+			if (venta != null && venta.getIdFactura() != null && venta.getIdFactura().longValue() > 0L) {
+				idsFacturacion.add(venta.getIdFactura());
+			}
+		}
+
+		if (idsFacturacion.isEmpty()) {
+			return ventas;
+		}
+
+		Map<Long, String> estadoPorFacturaId = new HashMap<Long, String>();
+		List<TwFacturacion> facturas = facturaRepository.findAllById(idsFacturacion);
+		for (TwFacturacion factura : facturas) {
+			if (factura != null && factura.getnId() != null) {
+				estadoPorFacturaId.put(factura.getnId(), factura.getsEstado());
+			}
+		}
+
+		for (TvVentasFactura venta : ventas) {
+			if (venta == null) {
+				continue;
+			}
+			if (venta.getIdFactura() == null || venta.getIdFactura().longValue() <= 0L) {
+				venta.setsEstadoFacturacion(null);
+				continue;
+			}
+			venta.setsEstadoFacturacion(estadoPorFacturaId.get(venta.getIdFactura()));
+		}
+
+		return ventas;
 	}
 
 

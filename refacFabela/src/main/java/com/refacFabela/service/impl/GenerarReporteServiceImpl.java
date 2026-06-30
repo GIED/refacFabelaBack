@@ -4,17 +4,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.ls.LSInput;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.refacFabela.dto.AbonoDto;
 import com.refacFabela.dto.AbonosDto;
@@ -53,6 +59,7 @@ import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.CotizacionProductoRepository;
 import com.refacFabela.repository.CotizacionRepository;
+import com.refacFabela.repository.FacturacionPacAuditRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
 import com.refacFabela.repository.TcDatosFacturaRepository;
@@ -68,6 +75,7 @@ import com.refacFabela.repository.TwVentaProductoCancelaRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
+import com.refacFabela.model.TwFacturacionPacAudit;
 import com.refacFabela.service.GeneraReporteService;
 import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.DateTimeUtil;
@@ -138,6 +146,12 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	
 	@Autowired
 	private CotizacionRepository cotizacionRepository;
+
+	@Autowired
+	private FacturacionPacAuditRepository facturacionPacAuditRepository;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 	
 
 	@Override
@@ -1167,6 +1181,10 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	@Override
 	public byte[] getDocumento(Long nIdVenta, TipoDoc TipoDoc) {
 		try {
+			if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.XML_ACUSE_CANCELACION)) {
+				return obtenerAcuseCancelacionDesdeAuditoria(nIdVenta);
+			}
+
 			TwVenta twVenta = this.ventasRepository.getById(nIdVenta);
 			if (twVenta == null || twVenta.getTcCliente() == null || twVenta.getTcCliente().getnIdDatoFactura() == null) {
 				return null;
@@ -1198,6 +1216,65 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	private byte[] obtenerAcuseCancelacionDesdeAuditoria(Long nIdVenta) {
+		if (nIdVenta == null) {
+			return null;
+		}
+
+		Optional<TwFacturacionPacAudit> auditoriaOptional = facturacionPacAuditRepository
+				.findUltimaCancelacionExitosa(nIdVenta, "cancelacion");
+		if (!auditoriaOptional.isPresent()) {
+			return null;
+		}
+
+		String responseJson = auditoriaOptional.get().getsResponseJson();
+		if (responseJson == null || responseJson.trim().isEmpty()) {
+			return null;
+		}
+
+		try {
+			JsonNode root = objectMapper.readTree(responseJson);
+			String acuse = firstNonEmpty(
+					readNodeText(root, "acuseBase64"),
+					readNodeText(root, "acuse"),
+					readNodeText(root, "xmlAcuse"));
+			if (acuse == null || acuse.trim().isEmpty()) {
+				return null;
+			}
+
+			String trimmed = acuse.trim();
+			if (trimmed.startsWith("<")) {
+				return trimmed.getBytes(StandardCharsets.UTF_8);
+			}
+
+			try {
+				return Base64.getDecoder().decode(trimmed);
+			} catch (IllegalArgumentException e) {
+				return trimmed.getBytes(StandardCharsets.UTF_8);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private String readNodeText(JsonNode root, String field) {
+		if (root == null || field == null || !root.has(field) || root.get(field).isNull()) {
+			return null;
+		}
+		String value = root.get(field).asText();
+		return value != null && !value.trim().isEmpty() && !"null".equalsIgnoreCase(value) ? value : null;
+	}
+
+	private String firstNonEmpty(String... values) {
+		for (String value : values) {
+			if (value != null && !value.trim().isEmpty()) {
+				return value;
+			}
+		}
+		return null;
 	}
 
 	@Override

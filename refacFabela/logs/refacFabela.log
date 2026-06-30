@@ -428,3 +428,29 @@ Caused by: java.net.ConnectException: Connection timed out: connect
 2026-06-30 16:47:42 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
 2026-06-30 16:47:43 [main] INFO  c.r.RefacFabelaApplicationTests - Started RefacFabelaApplicationTests in 28.822 seconds (JVM running for 29.419)
 2026-06-30 16:47:43 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-30 18:18:44 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 25252 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela)
+2026-06-30 18:18:44 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-30 18:18:44 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-30 18:18:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-30 18:18:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 154 ms. Found 82 JPA repository interfaces.
+2026-06-30 18:18:45 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@236694fe' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-06-30 18:18:45 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-06-30 18:18:45 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
+2026-06-30 18:18:45 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-30 18:18:45 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+2026-06-30 18:18:45 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
+2026-06-30 18:18:45 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1350 ms
+2026-06-30 18:18:46 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-30 18:18:46 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2026-06-30 18:18:46 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-06-30 18:18:46 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-30 18:18:46 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-30 18:18:46 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-06-30 18:18:46 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-06-30 18:18:46 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-30 18:18:49 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-06-30 18:18:49 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
+2026-06-30 18:18:49 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 5.01 seconds (JVM running for 5.266)
+2026-06-30 18:18:57 [http-nio-127.0.0.1-4043-exec-4] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-30 18:18:57 [http-nio-127.0.0.1-4043-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-30 18:18:57 [http-nio-127.0.0.1-4043-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms

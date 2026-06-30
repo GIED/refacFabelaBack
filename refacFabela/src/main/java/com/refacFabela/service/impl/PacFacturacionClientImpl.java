@@ -3,6 +3,7 @@ package com.refacFabela.service.impl;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
@@ -10,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -137,10 +140,10 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 		validateActiveProvider();
 		String endpoint = resolveEndpoint(CANCELACION_PATH);
 		FacturoPorTiCancelacionRequest providerRequest = mapper.toFacturoPorTiCancelacionRequest(request);
-		FacturoPorTiCancelacionResponse providerResponse = exchange(endpoint, HttpMethod.POST, providerRequest,
-				extractMetadataToken(request != null ? request.getMetadata() : null),
-				FacturoPorTiCancelacionResponse.class);
-		return mapper.toCancelacionResponse(providerResponse);
+		JsonNode root = exchangeForNode(endpoint, HttpMethod.POST, providerRequest,
+				request != null ? request.getRfcEmisor() : null,
+				extractMetadataToken(request != null ? request.getMetadata() : null));
+		return parseCancelacionCfdiResponse(root, request);
 	}
 
 	@Override
@@ -593,6 +596,105 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 		response.setAcuseBase64(findText(root, "acuse", "acuseBase64", "xmlAcuse"));
 		response.setRawResponse(mapper.toMap(root));
 		return response;
+	}
+
+	private CancelacionResponse parseCancelacionCfdiResponse(JsonNode root, CancelacionRequest request) {
+		CancelacionResponse response = new CancelacionResponse();
+		JsonNode estatus = root.path("estatus");
+		String codigo = firstNonEmpty(readText(estatus, "codigo"), readText(root, "codigo"));
+		String mensajeProveedor = firstNonEmpty(
+				buildProviderMessage(readText(estatus, "descripcion"), readText(estatus, "informacionTecnica")),
+				readText(root, "mensaje"),
+				readText(root, "mensajeError"),
+				readText(root, "descripcion"));
+
+		String acuse = findText(root, "acuse", "acuseBase64", "xmlAcuse");
+		String estatusUuid = extractSatTagValueFromAcuse(acuse, "EstatusUUID");
+		String uuidFromAcuse = extractSatTagValueFromAcuse(acuse, "UUID");
+
+		boolean success = "000".equals(codigo) || isSatCancelSuccess(estatusUuid);
+		response.setSuccess(Boolean.valueOf(success));
+		response.setUuid(firstNonEmpty(readText(root, "uuid"), request != null ? request.getUuid() : null, uuidFromAcuse));
+		response.setEstatus(resolveCancelacionEstatus(response.getSuccess(), firstNonEmpty(readText(root, "estatusCancelacion"), readText(root, "estado"), findText(root, "resultado")), estatusUuid));
+		response.setCodigoError(resolveCancelacionErrorCode(response.getSuccess(), firstNonEmpty(findText(root, "codigoError", "errorCode", "codigo", "codigoEstatus"), codigo), estatusUuid));
+		response.setMensajeError(resolveCancelacionMensaje(response.getSuccess(), mensajeProveedor, estatusUuid));
+		response.setAcuseBase64(acuse);
+		response.setRawResponse(mapper.toMap(root));
+		return response;
+	}
+
+	private boolean isSatCancelSuccess(String estatusUuid) {
+		return "201".equals(estatusUuid) || "202".equals(estatusUuid);
+	}
+
+	private String resolveCancelacionEstatus(Boolean success, String estatus, String estatusUuid) {
+		if (estatus != null && !estatus.trim().isEmpty()) {
+			return estatus;
+		}
+		if (!Boolean.TRUE.equals(success)) {
+			return "ERROR";
+		}
+		if ("202".equals(estatusUuid)) {
+			return "PREVIAMENTE_CANCELADO";
+		}
+		return "CANCELADO";
+	}
+
+	private String resolveCancelacionErrorCode(Boolean success, String codigoProveedor, String estatusUuid) {
+		if (Boolean.TRUE.equals(success)) {
+			return null;
+		}
+		return firstNonEmpty(codigoProveedor, estatusUuid);
+	}
+
+	private String resolveCancelacionMensaje(Boolean success, String mensajeProveedor, String estatusUuid) {
+		if (!Boolean.TRUE.equals(success)) {
+			if (mensajeProveedor != null && !mensajeProveedor.trim().isEmpty()) {
+				return mensajeProveedor;
+			}
+			if (estatusUuid != null) {
+				return "Cancelacion rechazada por SAT (EstatusUUID=" + estatusUuid + ").";
+			}
+			return null;
+		}
+		if (mensajeProveedor != null && !mensajeProveedor.trim().isEmpty()) {
+			return mensajeProveedor;
+		}
+		if ("202".equals(estatusUuid)) {
+			return "El CFDI ya se encontraba cancelado en SAT.";
+		}
+		if ("201".equals(estatusUuid)) {
+			return "Cancelacion aceptada por SAT.";
+		}
+		return null;
+	}
+
+	private String extractSatTagValueFromAcuse(String acuse, String tagName) {
+		if (acuse == null || tagName == null) {
+			return null;
+		}
+
+		String xml = acuse.trim();
+		if (xml.isEmpty()) {
+			return null;
+		}
+
+		if (!xml.startsWith("<")) {
+			try {
+				xml = new String(Base64.getDecoder().decode(xml), StandardCharsets.UTF_8).trim();
+			} catch (IllegalArgumentException e) {
+				return null;
+			}
+		}
+
+		String regex = "<(?:\\w+:)?" + tagName + ">\\s*([^<]+)\\s*</(?:\\w+:)?" + tagName + ">";
+		Matcher matcher = Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(xml);
+		if (!matcher.find()) {
+			return null;
+		}
+
+		String value = matcher.group(1);
+		return value != null ? value.trim() : null;
 	}
 
 	private JsonNode findArrayNode(JsonNode root, String... candidates) {
