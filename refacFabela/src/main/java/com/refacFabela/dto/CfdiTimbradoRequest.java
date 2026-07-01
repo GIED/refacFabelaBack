@@ -30,6 +30,7 @@ public class CfdiTimbradoRequest {
 	private ImpuestosDto impuestos;
 	private InformacionGlobalDto informacionGlobal;
 	private DatosCorreoDto correo;
+	private List<OtroPagoDto> otrosPagosRecibidos;
 	private Map<String, Object> addenda;
 	private Map<String, Object> metadata;
 
@@ -217,6 +218,14 @@ public class CfdiTimbradoRequest {
 		this.correo = correo;
 	}
 
+	public List<OtroPagoDto> getOtrosPagosRecibidos() {
+		return otrosPagosRecibidos;
+	}
+
+	public void setOtrosPagosRecibidos(List<OtroPagoDto> otrosPagosRecibidos) {
+		this.otrosPagosRecibidos = otrosPagosRecibidos;
+	}
+
 	public Map<String, Object> getAddenda() {
 		return addenda;
 	}
@@ -231,6 +240,28 @@ public class CfdiTimbradoRequest {
 
 	public void setMetadata(Map<String, Object> metadata) {
 		this.metadata = metadata;
+	}
+
+	public static class OtroPagoDto {
+
+		private String nombre;
+		private BigDecimal importe;
+
+		public String getNombre() {
+			return nombre;
+		}
+
+		public void setNombre(String nombre) {
+			this.nombre = nombre;
+		}
+
+		public BigDecimal getImporte() {
+			return importe;
+		}
+
+		public void setImporte(BigDecimal importe) {
+			this.importe = importe;
+		}
 	}
 
 	public static class EmisorDto {

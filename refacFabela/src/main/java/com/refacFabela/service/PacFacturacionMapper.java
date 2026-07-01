@@ -70,6 +70,21 @@ public class PacFacturacionMapper {
 		encabezado.put("LugarExpedicion", request.getLugarExpedicion());
 		encabezado.put("SubTotal", request.getSubtotal());
 		encabezado.put("Total", request.getTotal());
+		if (request.getOtrosPagosRecibidos() != null && !request.getOtrosPagosRecibidos().isEmpty()) {
+			List<Map<String, Object>> otrosPagosRecibidos = new ArrayList<Map<String, Object>>();
+			for (CfdiTimbradoRequest.OtroPagoDto otroPagoDto : request.getOtrosPagosRecibidos()) {
+				if (otroPagoDto == null) {
+					continue;
+				}
+				Map<String, Object> otroPago = new LinkedHashMap<String, Object>();
+				otroPago.put("Nombre", otroPagoDto.getNombre());
+				otroPago.put("Importe", otroPagoDto.getImporte());
+				otrosPagosRecibidos.add(otroPago);
+			}
+			if (!otrosPagosRecibidos.isEmpty()) {
+				encabezado.put("OtrosPagosRecibidos", otrosPagosRecibidos);
+			}
+		}
 
 		if (request.getEmisor() != null) {
 			emisor.put("RFC", request.getEmisor().getRfc());
