@@ -182,19 +182,17 @@ public class PacFacturacionMapper {
 		emisor.put("NombreRazonSocial", request.getMetadata() != null ? request.getMetadata().get("nombreEmisor") : null);
 		emisor.put("RegimenFiscal", request.getMetadata() != null ? request.getMetadata().get("regimenFiscal") : null);
 		if (request.getMetadata() != null && request.getMetadata().get("codigoPostalEmisor") != null) {
-			Map<String, Object> direccionEmisor = new LinkedHashMap<String, Object>();
-			direccionEmisor.put("CodigoPostal", request.getMetadata().get("codigoPostalEmisor"));
-			emisor.put("Direccion", direccionEmisor);
+			emisor.put("Direccion", buildDireccionList(request.getMetadata().get("codigoPostalEmisor")));
 		}
 
 		receptor.put("RFC", request.getRfcReceptor());
 		receptor.put("NombreRazonSocial", normalizeLegalName(request.getMetadata() != null ? request.getMetadata().get("nombreReceptor") : null));
 		receptor.put("UsoCFDI", request.getMetadata() != null ? request.getMetadata().get("usoCfdi") : null);
 		receptor.put("RegimenFiscal", request.getMetadata() != null ? request.getMetadata().get("regimenFiscalReceptor") : null);
-		Map<String, Object> direccionReceptor = new LinkedHashMap<String, Object>();
-		direccionReceptor.put("CodigoPostal", request.getMetadata() != null ? request.getMetadata().get("codigoPostalReceptor") : null);
-		receptor.put("Direccion", direccionReceptor);
+		receptor.put("Direccion", buildDireccionObject(request.getMetadata() != null ? request.getMetadata().get("codigoPostalReceptor") : null));
 
+		encabezado.put("CFDIsRelacionados", null);
+		encabezado.put("TipoRelacion", null);
 		encabezado.put("Emisor", emisor);
 		encabezado.put("Receptor", receptor);
 		encabezado.put("Fecha", formatCfdiFecha(request.getFechaPago()));
@@ -214,7 +212,7 @@ public class PacFacturacionMapper {
 		if (request.getPagos() != null) {
 			for (ComplementoPagoRequest.PagoDto pagoDto : request.getPagos()) {
 				Map<String, Object> pago = new LinkedHashMap<String, Object>();
-				pago.put("FechaPago", request.getFechaPago() != null ? request.getFechaPago().toString() : null);
+				pago.put("FechaPago", formatCfdiFecha(request.getFechaPago()));
 				pago.put("FormaPago", pagoDto.getFormaPago());
 				pago.put("Moneda", pagoDto.getMoneda());
 				pago.put("TipoCambio", pagoDto.getTipoCambio());
@@ -307,6 +305,29 @@ public class PacFacturacionMapper {
 			return null;
 		}
 		return fecha.withNano(0).format(CFDI_FECHA_FORMATTER);
+	}
+
+	private List<Map<String, Object>> buildDireccionList(Object codigoPostal) {
+		if (codigoPostal == null) {
+			return null;
+		}
+
+		Map<String, Object> direccion = new LinkedHashMap<String, Object>();
+		direccion.put("CodigoPostal", codigoPostal);
+
+		List<Map<String, Object>> direcciones = new ArrayList<Map<String, Object>>();
+		direcciones.add(direccion);
+		return direcciones;
+	}
+
+	private Map<String, Object> buildDireccionObject(Object codigoPostal) {
+		if (codigoPostal == null) {
+			return null;
+		}
+
+		Map<String, Object> direccion = new LinkedHashMap<String, Object>();
+		direccion.put("CodigoPostal", codigoPostal);
+		return direccion;
 	}
 
 	public String normalizeLegalName(Object rawValue) {

@@ -15,5 +15,6 @@ public interface GeneraReporteService {
 	public byte[] getReporteCaja(Long nIdCaja);
 	public byte[] getReporteInventario(Long nIBodega, Long nIdNivel, Long nIdAnaquel);
 	public byte[] getDocumento(Long nIdVenta, TipoDoc TipoDoc);
+	public byte[] getDocumentoComplemento(Long nIdComplemento, TipoDoc TipoDoc);
 
 }

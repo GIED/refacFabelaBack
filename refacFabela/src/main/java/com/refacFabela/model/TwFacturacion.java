@@ -36,6 +36,24 @@ public class TwFacturacion implements Serializable {
 	@Column(name = "s_uuid")
 	private String sUuid;
 
+	@Column(name = "s_clasificacion_fiscal", columnDefinition = "TEXT")
+	private String sClasificacionFiscal;
+
+	@Column(name = "s_metodo_pago_fiscal", columnDefinition = "TEXT")
+	private String sMetodoPagoFiscal;
+
+	@Column(name = "s_forma_pago_fiscal", columnDefinition = "TEXT")
+	private String sFormaPagoFiscal;
+
+	@Column(name = "s_uuid_complemento_pago", columnDefinition = "TEXT")
+	private String sUuidComplementoPago;
+
+	@Column(name = "s_estado_complemento", columnDefinition = "TEXT")
+	private String sEstadoComplemento;
+
+	@Column(name = "s_error_complemento", columnDefinition = "TEXT")
+	private String sErrorComplemento;
+
 	public TwFacturacion() {
 	}
 
@@ -125,6 +143,54 @@ public class TwFacturacion implements Serializable {
 
 	public void setS_cadenaOriginal(String s_cadenaOriginal) {
 		this.s_cadenaOriginal = s_cadenaOriginal;
+	}
+
+	public String getsClasificacionFiscal() {
+		return sClasificacionFiscal;
+	}
+
+	public void setsClasificacionFiscal(String sClasificacionFiscal) {
+		this.sClasificacionFiscal = sClasificacionFiscal;
+	}
+
+	public String getsMetodoPagoFiscal() {
+		return sMetodoPagoFiscal;
+	}
+
+	public void setsMetodoPagoFiscal(String sMetodoPagoFiscal) {
+		this.sMetodoPagoFiscal = sMetodoPagoFiscal;
+	}
+
+	public String getsFormaPagoFiscal() {
+		return sFormaPagoFiscal;
+	}
+
+	public void setsFormaPagoFiscal(String sFormaPagoFiscal) {
+		this.sFormaPagoFiscal = sFormaPagoFiscal;
+	}
+
+	public String getsUuidComplementoPago() {
+		return sUuidComplementoPago;
+	}
+
+	public void setsUuidComplementoPago(String sUuidComplementoPago) {
+		this.sUuidComplementoPago = sUuidComplementoPago;
+	}
+
+	public String getsEstadoComplemento() {
+		return sEstadoComplemento;
+	}
+
+	public void setsEstadoComplemento(String sEstadoComplemento) {
+		this.sEstadoComplemento = sEstadoComplemento;
+	}
+
+	public String getsErrorComplemento() {
+		return sErrorComplemento;
+	}
+
+	public void setsErrorComplemento(String sErrorComplemento) {
+		this.sErrorComplemento = sErrorComplemento;
 	}
 	
 	

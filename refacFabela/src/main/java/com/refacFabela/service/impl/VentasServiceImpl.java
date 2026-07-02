@@ -823,10 +823,16 @@ public class VentasServiceImpl implements VentasService {
 		}
 
 		Map<Long, String> estadoPorFacturaId = new HashMap<Long, String>();
+		Map<Long, String> estadoComplementoPorFacturaId = new HashMap<Long, String>();
+		Map<Long, String> clasificacionPorFacturaId = new HashMap<Long, String>();
+		Map<Long, String> uuidComplementoPorFacturaId = new HashMap<Long, String>();
 		List<TwFacturacion> facturas = facturaRepository.findAllById(idsFacturacion);
 		for (TwFacturacion factura : facturas) {
 			if (factura != null && factura.getnId() != null) {
 				estadoPorFacturaId.put(factura.getnId(), factura.getsEstado());
+				estadoComplementoPorFacturaId.put(factura.getnId(), factura.getsEstadoComplemento());
+				clasificacionPorFacturaId.put(factura.getnId(), factura.getsClasificacionFiscal());
+				uuidComplementoPorFacturaId.put(factura.getnId(), factura.getsUuidComplementoPago());
 			}
 		}
 
@@ -836,9 +842,15 @@ public class VentasServiceImpl implements VentasService {
 			}
 			if (venta.getIdFactura() == null || venta.getIdFactura().longValue() <= 0L) {
 				venta.setsEstadoFacturacion(null);
+				venta.setsEstadoComplemento(null);
+				venta.setsClasificacionFiscal(null);
+				venta.setsUuidComplementoPago(null);
 				continue;
 			}
 			venta.setsEstadoFacturacion(estadoPorFacturaId.get(venta.getIdFactura()));
+			venta.setsEstadoComplemento(estadoComplementoPorFacturaId.get(venta.getIdFactura()));
+			venta.setsClasificacionFiscal(clasificacionPorFacturaId.get(venta.getIdFactura()));
+			venta.setsUuidComplementoPago(uuidComplementoPorFacturaId.get(venta.getIdFactura()));
 		}
 
 		return ventas;

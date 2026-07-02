@@ -18,9 +18,11 @@ import org.apache.logging.log4j.Logger;
 
 import org.springframework.stereotype.Service;
 
+import com.refacFabela.dto.ClasificacionFacturacionVenta;
 import com.refacFabela.dto.CfdiTimbradoRequest;
 import com.refacFabela.dto.TimbradoResponse;
 import com.refacFabela.dto.AuditoriaPacDto;
+import com.refacFabela.enums.ClasificacionFacturacionPago;
 import com.refacFabela.exception.FacturacionException;
 import com.refacFabela.service.PacFacturacionMapper;
 import com.refacFabela.service.PacFacturacionClient;
@@ -62,6 +64,7 @@ public class TimbradoVentaService {
 	private final DatosFacturaStorageResolver datosFacturaStorageResolver;
 	private final AuditoriaPacService auditoriaPacService;
 	private final FacturacionMontoHelper facturacionMontoHelper;
+	private final ClasificacionFacturacionService clasificacionFacturacionService;
 
 	public TimbradoVentaService(VentasRepository ventasRepository,
 			VentasProductoRepository ventasProductoRepository,
@@ -75,7 +78,8 @@ public class TimbradoVentaService {
 			CorreoClienteService correoClienteService,
 			DatosFacturaStorageResolver datosFacturaStorageResolver,
 			AuditoriaPacService auditoriaPacService,
-			FacturacionMontoHelper facturacionMontoHelper) {
+			FacturacionMontoHelper facturacionMontoHelper,
+			ClasificacionFacturacionService clasificacionFacturacionService) {
 		this.ventasRepository = ventasRepository;
 		this.ventasProductoRepository = ventasProductoRepository;
 		this.trVentaCobroRepository = trVentaCobroRepository;
@@ -89,6 +93,7 @@ public class TimbradoVentaService {
 		this.datosFacturaStorageResolver = datosFacturaStorageResolver;
 		this.auditoriaPacService = auditoriaPacService;
 		this.facturacionMontoHelper = facturacionMontoHelper;
+		this.clasificacionFacturacionService = clasificacionFacturacionService;
 	}
 
 	public TimbradoResponse timbrarVenta(Long idVenta, String cveCfdi) {
@@ -114,13 +119,16 @@ public class TimbradoVentaService {
 			throw new FacturacionException("La venta no tiene cobros registrados para facturar.");
 		}
 
+		ClasificacionFacturacionVenta clasificacion = clasificacionFacturacionService.clasificarVenta(venta, productos,
+				cobros);
+
 		String nombreReceptorOriginal = venta.getTcCliente() != null ? venta.getTcCliente().getsRazonSocial() : null;
 		List<String> nombresReceptorIntentados = pacFacturacionMapper.buildLegalNameCandidates(nombreReceptorOriginal);
 		if (nombresReceptorIntentados.isEmpty()) {
 			nombresReceptorIntentados = Collections.singletonList(nombreReceptorOriginal);
 		}
 
-		CfdiTimbradoRequest request = buildRequest(venta, datosFactura, productos, cobros, cveCfdi,
+		CfdiTimbradoRequest request = buildRequest(venta, datosFactura, productos, cobros, clasificacion, cveCfdi,
 				nombresReceptorIntentados.get(0));
 		String correlationId = java.util.UUID.randomUUID().toString();
 		TimbradoResponse response = null;
@@ -168,6 +176,12 @@ public class TimbradoVentaService {
 					request != null && request.getReceptor() != null ? request.getReceptor().getNombre() : null));
 		}
 
+		response.setClasificacionFiscal(clasificacion.getClasificacion() != null ? clasificacion.getClasificacion().name() : null);
+		response.setMetodoPagoFiscal(clasificacion.getMetodoPagoFiscal());
+		response.setFormaPagoFiscal(clasificacion.getFormaPagoFiscal());
+		response.setComplementoInmediatoRequerido(Boolean.valueOf(
+				clasificacion.getClasificacion() == ClasificacionFacturacionPago.PPD_PAGO_MIXTO_COMPLEMENTO_INMEDIATO));
+
 		persistirFacturacion(venta, datosFactura, response);
 		guardarArchivos(datosFactura, idVenta, response);
 		enviarCorreoSiAplica(venta, datosFactura);
@@ -175,12 +189,13 @@ public class TimbradoVentaService {
 	}
 
 	private CfdiTimbradoRequest buildRequest(TwVenta venta, TcDatosFactura datosFactura,
-			List<TwVentasProducto> productos, List<TrVentaCobro> cobros, String cveCfdi, String nombreReceptor) {
+			List<TwVentasProducto> productos, List<TrVentaCobro> cobros,
+			ClasificacionFacturacionVenta clasificacion, String cveCfdi, String nombreReceptor) {
 		CfdiTimbradoRequest request = new CfdiTimbradoRequest();
 		request.setSerie(datosFactura.getsSerie());
 		request.setFolio(venta.getnId().toString());
 		request.setFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
-		request.setFormaPago(resolveFormaPago(venta, cobros, productos));
+		request.setFormaPago(clasificacion != null ? clasificacion.getFormaPagoFiscal() : null);
 		request.setCondicionesDePago("Pago en una sola exhibición");
 		request.setSubtotal(facturacionMontoHelper.calcularSubTotal(productos));
 		request.setDescuento(BigDecimal.ZERO);
@@ -189,10 +204,10 @@ public class TimbradoVentaService {
 		request.setTotal(facturacionMontoHelper.calcularTotal(productos));
 		request.setTipoDeComprobante("I");
 		request.setExportacion("01");
-		request.setMetodoPago(resolveMetodoPago(venta, cobros, productos));
+		request.setMetodoPago(clasificacion != null ? clasificacion.getMetodoPagoFiscal() : null);
 		request.setLugarExpedicion(resolveCodigoPostalEmisor(datosFactura));
 		request.setRazonSocialId(datosFactura.getnId());
-		request.setOtrosPagosRecibidos(buildOtrosPagosRecibidos(venta, cobros));
+		request.setOtrosPagosRecibidos(buildOtrosPagosRecibidos(clasificacion));
 
 		CfdiTimbradoRequest.EmisorDto emisor = new CfdiTimbradoRequest.EmisorDto();
 		emisor.setRfc(resolveRfcEmisor(datosFactura));
@@ -321,6 +336,14 @@ public class TimbradoVentaService {
 		facturacion.setnIdDatoFactura(datosFactura.getnId());
 		facturacion.setsUuid(response.getUuid());
 		facturacion.setsEstado(response.getEstatus() != null ? response.getEstatus() : "Timbrado");
+		facturacion.setsClasificacionFiscal(response.getClasificacionFiscal());
+		facturacion.setsMetodoPagoFiscal(response.getMetodoPagoFiscal());
+		facturacion.setsFormaPagoFiscal(response.getFormaPagoFiscal());
+		facturacion.setsEstadoComplemento("PPD".equalsIgnoreCase(response.getMetodoPagoFiscal())
+				? "PENDIENTE_COMPLEMENTO_PAGO"
+				: "NO_REQUIERE_COMPLEMENTO");
+		facturacion.setsUuidComplementoPago(null);
+		facturacion.setsErrorComplemento(null);
 		facturacion.setS_noCertificadoSat(response.getNoCertificadoSat());
 		facturacion.setS_selloCfd(response.getSelloCfd());
 		facturacion.setS_selloSat(response.getSelloSat());
@@ -429,108 +452,35 @@ public class TimbradoVentaService {
 		auditoriaPacService.registrar(auditoria);
 	}
 
-	private String resolveFormaPago(TwVenta venta, List<TrVentaCobro> cobros, List<TwVentasProducto> productos) {
-		if (isVentaContadoUnaExhibicionConMultiplesCobros(venta, cobros)) {
-			String formaPagoMayorMonto = resolveFormaPagoMayorMonto(cobros);
-			if (formaPagoMayorMonto != null) {
-				return formaPagoMayorMonto;
-			}
-		}
-
-		if (cobros.size() > 1 || (facturacionMontoHelper.calcularTotal(productos).compareTo(LIMITE_EFECTIVO) >= 0
-				&& venta.getTcFormapago() != null && Long.valueOf(1L).equals(venta.getTcFormapago().getnId()))) {
-			return "99";
-		}
-		return venta.getTcFormapago() != null ? venta.getTcFormapago().getsClave() : null;
-	}
-
-	private String resolveMetodoPago(TwVenta venta, List<TrVentaCobro> cobros, List<TwVentasProducto> productos) {
-		if (isVentaContadoUnaExhibicionConMultiplesCobros(venta, cobros)) {
-			return "PUE";
-		}
-
-		if (cobros.size() > 1 || (facturacionMontoHelper.calcularTotal(productos).compareTo(LIMITE_EFECTIVO) >= 0
-				&& venta.getTcFormapago() != null && Long.valueOf(1L).equals(venta.getTcFormapago().getnId()))) {
-			return "PPD";
-		}
-		return "PUE";
-	}
-
-	private List<CfdiTimbradoRequest.OtroPagoDto> buildOtrosPagosRecibidos(TwVenta venta, List<TrVentaCobro> cobros) {
-		if (!isVentaContadoUnaExhibicionConMultiplesCobros(venta, cobros)) {
-			return null;
-		}
-
-		Map<String, BigDecimal> montosPorFormaPago = new LinkedHashMap<String, BigDecimal>();
-		for (TrVentaCobro cobro : cobros) {
-			if (cobro == null) {
-				continue;
-			}
-			String nombreFormaPago = resolveNombreFormaPagoCobro(cobro);
-			if (nombreFormaPago == null || nombreFormaPago.trim().isEmpty()) {
-				continue;
-			}
-			BigDecimal monto = cobro.getnMonto() != null ? cobro.getnMonto() : BigDecimal.ZERO;
-			BigDecimal acumulado = montosPorFormaPago.get(nombreFormaPago);
-			montosPorFormaPago.put(nombreFormaPago, acumulado != null ? acumulado.add(monto) : monto);
-		}
-
-		if (montosPorFormaPago.isEmpty()) {
+	private List<CfdiTimbradoRequest.OtroPagoDto> buildOtrosPagosRecibidos(
+			ClasificacionFacturacionVenta clasificacion) {
+		if (clasificacion == null
+				|| clasificacion.getClasificacion() != ClasificacionFacturacionPago.PPD_PAGO_MIXTO_COMPLEMENTO_INMEDIATO
+				|| clasificacion.getMontosPorClaveSat() == null || clasificacion.getMontosPorClaveSat().isEmpty()) {
 			return null;
 		}
 
 		List<CfdiTimbradoRequest.OtroPagoDto> otrosPagosRecibidos = new ArrayList<CfdiTimbradoRequest.OtroPagoDto>();
-		for (Map.Entry<String, BigDecimal> entry : montosPorFormaPago.entrySet()) {
+		for (Map.Entry<String, BigDecimal> entry : clasificacion.getMontosPorClaveSat().entrySet()) {
 			CfdiTimbradoRequest.OtroPagoDto otroPagoDto = new CfdiTimbradoRequest.OtroPagoDto();
-			otroPagoDto.setNombre(entry.getKey());
+			otroPagoDto.setNombre(resolveNombreFormaPagoPorClave(entry.getKey()));
 			otroPagoDto.setImporte(entry.getValue());
 			otrosPagosRecibidos.add(otroPagoDto);
 		}
 		return otrosPagosRecibidos;
 	}
 
-	private boolean isVentaContadoUnaExhibicionConMultiplesCobros(TwVenta venta, List<TrVentaCobro> cobros) {
-		return venta != null && !Long.valueOf(1L).equals(venta.getnTipoPago()) && cobros != null && cobros.size() > 1;
-	}
-
-	private String resolveFormaPagoMayorMonto(List<TrVentaCobro> cobros) {
-		if (cobros == null || cobros.isEmpty()) {
+	private String resolveNombreFormaPagoPorClave(String claveSat) {
+		if (claveSat == null || claveSat.trim().isEmpty()) {
 			return null;
 		}
-
-		TrVentaCobro cobroMayor = null;
-		BigDecimal montoMayor = null;
-		for (TrVentaCobro cobro : cobros) {
-			if (cobro == null) {
-				continue;
-			}
-			BigDecimal monto = cobro.getnMonto() != null ? cobro.getnMonto() : BigDecimal.ZERO;
-			if (montoMayor == null || monto.compareTo(montoMayor) > 0) {
-				montoMayor = monto;
-				cobroMayor = cobro;
+		List<TcFormapago> formasPago = catalagoFormaPagoRepository.findBynEstatus(1);
+		for (TcFormapago formaPago : formasPago) {
+			if (formaPago != null && claveSat.equals(formaPago.getsClave())) {
+				return formaPago.getsDescripcion();
 			}
 		}
-
-		return resolveClaveFormaPagoCobro(cobroMayor);
-	}
-
-	private String resolveNombreFormaPagoCobro(TrVentaCobro cobro) {
-		if (cobro == null) {
-			return null;
-		}
-		if (cobro.getTcFormapago() != null && cobro.getTcFormapago().getsDescripcion() != null
-				&& !cobro.getTcFormapago().getsDescripcion().trim().isEmpty()) {
-			return cobro.getTcFormapago().getsDescripcion().trim();
-		}
-		if (cobro.getnIdFormaPago() == null) {
-			return null;
-		}
-
-		TcFormapago formaPago = catalagoFormaPagoRepository.findById(cobro.getnIdFormaPago()).orElse(null);
-		if (formaPago == null || formaPago.getsDescripcion() == null || formaPago.getsDescripcion().trim().isEmpty()) {
-			return null;
-		}
-		return formaPago.getsDescripcion().trim();
+		return claveSat;
 	}
 
 	private String resolveClaveFormaPagoCobro(TrVentaCobro cobro) {

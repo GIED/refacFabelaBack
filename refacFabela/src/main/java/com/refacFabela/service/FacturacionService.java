@@ -7,6 +7,8 @@ import com.refacFabela.dto.SolicitudCancelacionAccionDto;
 import com.refacFabela.dto.SubirFacturaDto;
 import com.refacFabela.dto.CancelacionResponse;
 import com.refacFabela.dto.CfdiRelacionadosResponse;
+import com.refacFabela.dto.ComplementoPagoHistorialDto;
+import com.refacFabela.dto.ResultadoFacturacionVentaDto;
 import com.refacFabela.dto.SolicitudCancelacionDto;
 import com.refacFabela.dto.StatusCfdiResponse;
 import com.refacFabela.model.TwFacturacion;
@@ -15,11 +17,12 @@ import java.util.List;
 
 public interface FacturacionService {
 	
-	public String venta(Long idVenta, String cveCfdi) throws Exception;
+	public ResultadoFacturacionVentaDto venta(Long idVenta, String cveCfdi) throws Exception;
 	public String cancelaFactura(Long idVenta, String cveCfdi) throws Exception;
 	public String cancelaFactura(CancelacionFacturaDto cancelacionFacturaDto) throws Exception;
 	
-	public String complemento(Long idVenta, String cveCfdi) throws Exception;
+	public ResultadoFacturacionVentaDto complemento(Long idVenta, String cveCfdi) throws Exception;
+	public ResultadoFacturacionVentaDto reintentarComplemento(Long nIdComplemento) throws Exception;
 	
 	public TwFacturacion guardar(TwFacturacion twFacturacion);
 	
@@ -34,6 +37,8 @@ public interface FacturacionService {
 	public CancelacionResponse aceptarSolicitudCancelacion(SolicitudCancelacionAccionDto solicitudCancelacionAccionDto) throws Exception;
 
 	public CancelacionResponse rechazarSolicitudCancelacion(SolicitudCancelacionAccionDto solicitudCancelacionAccionDto) throws Exception;
+
+	public List<ComplementoPagoHistorialDto> consultarComplementosPago(Long nIdVenta) throws Exception;
 	
 	public SubirFacturaDto subirArchivo(MultipartFile file, MultipartFile fileXml, String venta, String uuid) throws Exception;
 

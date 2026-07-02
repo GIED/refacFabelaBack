@@ -11,8 +11,11 @@ import com.refacFabela.dto.SubirFacturaDto;
 import com.refacFabela.config.FacturacionProperties;
 import com.refacFabela.dto.CancelacionResponse;
 import com.refacFabela.dto.CfdiRelacionadosResponse;
+import com.refacFabela.dto.ComplementoPagoHistorialDto;
+import com.refacFabela.dto.ResultadoFacturacionVentaDto;
 import com.refacFabela.dto.SolicitudCancelacionDto;
 import com.refacFabela.dto.StatusCfdiResponse;
+import com.refacFabela.dto.TimbradoResponse;
 import com.refacFabela.exception.PacFacturacionClientException;
 import com.refacFabela.service.PacFacturacionClient;
 import com.refacFabela.service.impl.ComplementoPagoService;
@@ -74,22 +77,77 @@ public class FacturacionServiceImpl implements FacturacionService {
 	}
 
 	@Override
-	public String venta(Long idVenta, String cveCfdi) throws Exception {
+	public ResultadoFacturacionVentaDto venta(Long idVenta, String cveCfdi) throws Exception {
+		ResultadoFacturacionVentaDto resultado = new ResultadoFacturacionVentaDto();
 		try {
-			timbradoVentaService.timbrarVenta(idVenta, cveCfdi);
+			TimbradoResponse timbradoIngreso = timbradoVentaService.timbrarVenta(idVenta, cveCfdi);
 			TwVenta ventaActualizada = ventaRepository.findBynId(idVenta);
 			TcCliente clienteActualizado = null;
 			if (ventaActualizada != null && ventaActualizada.getnIdCliente() != null) {
 				clienteActualizado = clientesRepository.findById(ventaActualizada.getnIdCliente()).orElse(null);
 			}
-			if (clienteActualizado != null && Boolean.TRUE.equals(clienteActualizado.getnCorreoBloqueado())) {
-				return "ok_correo_bloqueado";
+
+			resultado.setSuccess(true);
+			resultado.setClasificacionFiscal(timbradoIngreso.getClasificacionFiscal());
+			resultado.setMetodoPagoFiscal(timbradoIngreso.getMetodoPagoFiscal());
+			resultado.setFormaPagoFiscal(timbradoIngreso.getFormaPagoFiscal());
+			resultado.setUuidFacturaIngreso(timbradoIngreso.getUuid());
+			resultado.setEstadoFacturacion(timbradoIngreso.getEstatus());
+
+			TwFacturacion facturacion = ventaActualizada != null && ventaActualizada.getnIdFacturacion() != null
+					? facturaRepository.findById(ventaActualizada.getnIdFacturacion()).orElse(null)
+					: null;
+
+			if (timbradoIngreso.getComplementoInmediatoRequerido() != null
+					&& timbradoIngreso.getComplementoInmediatoRequerido().booleanValue()
+					&& facturacionProperties != null
+					&& facturacionProperties.getPagosMixtos() != null
+					&& facturacionProperties.getPagosMixtos().isGenerarComplementoInmediato()) {
+				try {
+					TimbradoResponse complemento = complementoPagoService.timbrarComplemento(idVenta, cveCfdi);
+					resultado.setUuidComplementoPago(complemento.getUuid());
+					resultado.setEstadoComplemento("FACTURADA_CON_COMPLEMENTO_PAGO");
+					resultado.setMensaje("Factura y complemento de pago generados correctamente.");
+				} catch (Exception complementoError) {
+					logger.error("Factura ingreso generada pero complemento de pago quedo pendiente para venta {}", idVenta,
+							complementoError);
+					resultado.setEstadoComplemento("PENDIENTE_COMPLEMENTO_PAGO");
+					resultado.setCodigoError("REP_ERROR");
+					resultado.setMensajeError(complementoError.getMessage());
+					resultado.setMensaje("Factura generada correctamente; el complemento de pago quedó pendiente.");
+				}
+			} else {
+				if (facturacion != null) {
+					resultado.setEstadoComplemento(facturacion.getsEstadoComplemento());
+					resultado.setUuidComplementoPago(facturacion.getsUuidComplementoPago());
+				} else {
+					resultado.setEstadoComplemento("NO_REQUIERE_COMPLEMENTO");
+				}
+				resultado.setMensaje("Venta Facturada");
 			}
-			return "ok";
+
+			if (clienteActualizado != null && Boolean.TRUE.equals(clienteActualizado.getnCorreoBloqueado())) {
+				resultado.setAvisoCorreo("La factura se generó correctamente pero el correo del cliente está bloqueado. No se envió la notificación por correo.");
+			}
+
+			facturacion = ventaActualizada != null && ventaActualizada.getnIdFacturacion() != null
+					? facturaRepository.findById(ventaActualizada.getnIdFacturacion()).orElse(null)
+					: facturacion;
+			if (facturacion != null) {
+				resultado.setEstadoFacturacion(facturacion.getsEstado());
+				resultado.setEstadoComplemento(facturacion.getsEstadoComplemento());
+				resultado.setUuidComplementoPago(facturacion.getsUuidComplementoPago());
+			}
+
+			return resultado;
 		} catch (Exception e) {
 			logger.error("Error al facturar venta {} con cveCfdi {} usando proveedor activo {}", idVenta, cveCfdi,
 					facturacionProperties != null ? facturacionProperties.getProveedorActivo() : null, e);
-			return "Error al facturar";
+			resultado.setSuccess(false);
+			resultado.setMensaje("Error al facturar la venta");
+			resultado.setCodigoError("TIMBRADO_ERROR");
+			resultado.setMensajeError(e.getMessage());
+			return resultado;
 		}
 	}
 
@@ -122,14 +180,53 @@ public class FacturacionServiceImpl implements FacturacionService {
 	}
 
 	@Override
-	public String complemento(Long idVenta, String cveCfdi) throws Exception {
+	public ResultadoFacturacionVentaDto complemento(Long idVenta, String cveCfdi) throws Exception {
+		ResultadoFacturacionVentaDto resultado = new ResultadoFacturacionVentaDto();
 		try {
-			complementoPagoService.timbrarComplemento(idVenta, cveCfdi);
-			return "ok";
+			TimbradoResponse complemento = complementoPagoService.timbrarComplemento(idVenta, cveCfdi);
+			TwVenta ventaActualizada = ventaRepository.findBynId(idVenta);
+			TwFacturacion facturacion = ventaActualizada != null && ventaActualizada.getnIdFacturacion() != null
+					? facturaRepository.findById(ventaActualizada.getnIdFacturacion()).orElse(null)
+					: null;
+			resultado.setSuccess(true);
+			resultado.setMensaje("Complemento registrado");
+			resultado.setUuidComplementoPago(complemento.getUuid());
+			resultado.setUuidFacturaIngreso(facturacion != null ? facturacion.getsUuid() : null);
+			resultado.setEstadoFacturacion(facturacion != null ? facturacion.getsEstado() : null);
+			resultado.setEstadoComplemento(facturacion != null ? facturacion.getsEstadoComplemento() : "FACTURADA_CON_COMPLEMENTO_PAGO");
+			resultado.setClasificacionFiscal(facturacion != null ? facturacion.getsClasificacionFiscal() : null);
+			resultado.setMetodoPagoFiscal(facturacion != null ? facturacion.getsMetodoPagoFiscal() : null);
+			resultado.setFormaPagoFiscal(facturacion != null ? facturacion.getsFormaPagoFiscal() : null);
+			return resultado;
 		} catch (Exception e) {
 			logger.error("Error al timbrar complemento de pago para venta {} usando proveedor activo {}", idVenta,
 					facturacionProperties != null ? facturacionProperties.getProveedorActivo() : null, e);
-			return "Error al facturar";
+			resultado.setSuccess(false);
+			resultado.setMensaje("Error al registrar complemento de pago");
+			resultado.setCodigoError("REP_ERROR");
+			resultado.setMensajeError(e.getMessage());
+			return resultado;
+		}
+	}
+
+	@Override
+	public ResultadoFacturacionVentaDto reintentarComplemento(Long nIdComplemento) throws Exception {
+		ResultadoFacturacionVentaDto resultado = new ResultadoFacturacionVentaDto();
+		try {
+			TimbradoResponse complemento = complementoPagoService.reintentarComplemento(nIdComplemento);
+			resultado.setSuccess(true);
+			resultado.setMensaje("Complemento reintentado correctamente");
+			resultado.setUuidComplementoPago(complemento.getUuid());
+			resultado.setEstadoComplemento("FACTURADA_CON_COMPLEMENTO_PAGO");
+			return resultado;
+		} catch (Exception e) {
+			logger.error("Error al reintentar complemento {} usando proveedor activo {}", nIdComplemento,
+					facturacionProperties != null ? facturacionProperties.getProveedorActivo() : null, e);
+			resultado.setSuccess(false);
+			resultado.setMensaje("Error al reintentar complemento de pago");
+			resultado.setCodigoError("REP_RETRY_ERROR");
+			resultado.setMensajeError(e.getMessage());
+			return resultado;
 		}
 	}
 
@@ -179,6 +276,11 @@ public class FacturacionServiceImpl implements FacturacionService {
 	@Override
 	public CancelacionResponse rechazarSolicitudCancelacion(SolicitudCancelacionAccionDto solicitudCancelacionAccionDto) throws Exception {
 		return consultaFacturacionService.rechazarSolicitudCancelacion(solicitudCancelacionAccionDto);
+	}
+
+	@Override
+	public List<ComplementoPagoHistorialDto> consultarComplementosPago(Long nIdVenta) throws Exception {
+		return complementoPagoService.consultarComplementosPago(nIdVenta);
 	}
 
 	@Override

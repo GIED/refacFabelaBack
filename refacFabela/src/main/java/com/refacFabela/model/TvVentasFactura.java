@@ -65,6 +65,15 @@ public class TvVentasFactura implements Serializable {
 
 	@Transient
 	private String sEstadoFacturacion;
+
+	@Transient
+	private String sEstadoComplemento;
+
+	@Transient
+	private String sClasificacionFiscal;
+
+	@Transient
+	private String sUuidComplementoPago;
 	
 	
 	
@@ -171,6 +180,30 @@ public class TvVentasFactura implements Serializable {
 
 	public void setsEstadoFacturacion(String sEstadoFacturacion) {
 		this.sEstadoFacturacion = sEstadoFacturacion;
+	}
+
+	public String getsEstadoComplemento() {
+		return sEstadoComplemento;
+	}
+
+	public void setsEstadoComplemento(String sEstadoComplemento) {
+		this.sEstadoComplemento = sEstadoComplemento;
+	}
+
+	public String getsClasificacionFiscal() {
+		return sClasificacionFiscal;
+	}
+
+	public void setsClasificacionFiscal(String sClasificacionFiscal) {
+		this.sClasificacionFiscal = sClasificacionFiscal;
+	}
+
+	public String getsUuidComplementoPago() {
+		return sUuidComplementoPago;
+	}
+
+	public void setsUuidComplementoPago(String sUuidComplementoPago) {
+		this.sUuidComplementoPago = sUuidComplementoPago;
 	}
 
 

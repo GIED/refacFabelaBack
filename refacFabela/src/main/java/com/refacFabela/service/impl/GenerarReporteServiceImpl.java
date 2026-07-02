@@ -1,5 +1,6 @@
 package com.refacFabela.service.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,6 +15,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +62,7 @@ import com.refacFabela.repository.CajaRepository;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.CotizacionProductoRepository;
 import com.refacFabela.repository.CotizacionRepository;
+import com.refacFabela.repository.FacturacionComplementoPagoRepository;
 import com.refacFabela.repository.FacturacionPacAuditRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
@@ -149,6 +153,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 	@Autowired
 	private FacturacionPacAuditRepository facturacionPacAuditRepository;
+
+	@Autowired
+	private FacturacionComplementoPagoRepository facturacionComplementoPagoRepository;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -1185,6 +1192,10 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				return obtenerAcuseCancelacionDesdeAuditoria(nIdVenta);
 			}
 
+			if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.ZIP_COMPLEMENTOS_PAGO)) {
+				return obtenerZipComplementosPago(nIdVenta);
+			}
+
 			TwVenta twVenta = this.ventasRepository.getById(nIdVenta);
 			if (twVenta == null || twVenta.getTcCliente() == null || twVenta.getTcCliente().getnIdDatoFactura() == null) {
 				return null;
@@ -1216,6 +1227,65 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	private byte[] obtenerZipComplementosPago(Long nIdVenta) {
+		if (nIdVenta == null) {
+			return null;
+		}
+
+		List<com.refacFabela.model.TwFacturacionComplementoPago> complementos = facturacionComplementoPagoRepository.findByVenta(nIdVenta);
+		if (complementos == null || complementos.isEmpty()) {
+			return null;
+		}
+
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ZipOutputStream zipOutputStream = new ZipOutputStream(baos)) {
+			boolean hasEntries = false;
+			for (com.refacFabela.model.TwFacturacionComplementoPago complemento : complementos) {
+				String suffix = complemento.getnParcialidad() != null
+						? String.format("%03d", complemento.getnParcialidad().intValue())
+						: String.valueOf(complemento.getnId());
+				byte[] xml = decodeBase64OrPlain(complemento.getsXmlTimbrado());
+				if (xml != null && xml.length > 0) {
+					agregarEntradaZip(zipOutputStream, "rep_parcialidad_" + suffix + ".xml", xml);
+					hasEntries = true;
+				}
+				byte[] pdf = obtenerPdfComplementoDesdeAuditoria(complemento.getsCorrelationId());
+				if (pdf != null && pdf.length > 0) {
+					agregarEntradaZip(zipOutputStream, "rep_parcialidad_" + suffix + ".pdf", pdf);
+					hasEntries = true;
+				}
+			}
+			zipOutputStream.finish();
+			return hasEntries ? baos.toByteArray() : null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public byte[] getDocumentoComplemento(Long nIdComplemento, TipoDoc TipoDoc) {
+		if (nIdComplemento == null || TipoDoc == null) {
+			return null;
+		}
+
+		Optional<com.refacFabela.model.TwFacturacionComplementoPago> complementoOptional = facturacionComplementoPagoRepository.findById(nIdComplemento);
+		if (!complementoOptional.isPresent()) {
+			return null;
+		}
+
+		com.refacFabela.model.TwFacturacionComplementoPago complemento = complementoOptional.get();
+		if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.XML_COMPLEMENTO_PAGO)) {
+			return decodeBase64OrPlain(complemento.getsXmlTimbrado());
+		}
+
+		if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.PDF_COMPLEMENTO_PAGO)) {
+			return obtenerPdfComplementoDesdeAuditoria(complemento.getsCorrelationId());
+		}
+
+		return null;
 	}
 
 	private byte[] obtenerAcuseCancelacionDesdeAuditoria(Long nIdVenta) {
@@ -1256,6 +1326,71 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private byte[] obtenerPdfComplementoDesdeAuditoria(String correlationId) {
+		if (correlationId == null || correlationId.trim().isEmpty()) {
+			return null;
+		}
+
+		Optional<TwFacturacionPacAudit> auditoriaOptional = facturacionPacAuditRepository.findTopByCorrelationId(correlationId);
+		if (!auditoriaOptional.isPresent()) {
+			return null;
+		}
+
+		String responseJson = auditoriaOptional.get().getsResponseJson();
+		if (responseJson == null || responseJson.trim().isEmpty()) {
+			return null;
+		}
+
+		try {
+			JsonNode root = objectMapper.readTree(responseJson);
+			String pdf = firstNonEmpty(readNodeText(root, "pdfBase64"), readNodeText(root, "pdf"));
+			byte[] pdfBytes = decodeBase64OrPlain(pdf);
+			if (pdfBytes != null && pdfBytes.length > 0) {
+				return pdfBytes;
+			}
+			String urlPdf = firstNonEmpty(readNodeText(root, "urlpdf"), readNodeText(root, "urlPdf"));
+			return downloadBytes(urlPdf);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private byte[] decodeBase64OrPlain(String value) {
+		if (value == null || value.trim().isEmpty()) {
+			return null;
+		}
+
+		String trimmed = value.trim();
+		if (trimmed.startsWith("<")) {
+			return trimmed.getBytes(StandardCharsets.UTF_8);
+		}
+
+		try {
+			return Base64.getDecoder().decode(trimmed);
+		} catch (IllegalArgumentException e) {
+			return trimmed.getBytes(StandardCharsets.UTF_8);
+		}
+	}
+
+	private void agregarEntradaZip(ZipOutputStream zipOutputStream, String entryName, byte[] content) throws IOException {
+		ZipEntry entry = new ZipEntry(entryName);
+		zipOutputStream.putNextEntry(entry);
+		zipOutputStream.write(content);
+		zipOutputStream.closeEntry();
+	}
+
+	private byte[] downloadBytes(String url) {
+		if (url == null || url.trim().isEmpty()) {
+			return null;
+		}
+		try {
+			return new org.springframework.web.client.RestTemplate().getForObject(url, byte[].class);
+		} catch (Exception e) {
 			return null;
 		}
 	}

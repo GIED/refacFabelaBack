@@ -25,6 +25,8 @@ import com.refacFabela.dto.SubirFacturaDto;
 import com.refacFabela.enums.TipoDoc;
 import com.refacFabela.dto.CancelacionResponse;
 import com.refacFabela.dto.CfdiRelacionadosResponse;
+import com.refacFabela.dto.ComplementoPagoHistorialDto;
+import com.refacFabela.dto.ResultadoFacturacionVentaDto;
 import com.refacFabela.dto.SolicitudCancelacionDto;
 import com.refacFabela.dto.StatusCfdiResponse;
 import com.refacFabela.model.TvVentasFactura;
@@ -60,23 +62,9 @@ public class FacturaController {
 	
 	@GetMapping("venta")
 	public ResponseEntity<?> venta(@RequestParam(required = false) Long nIdVenta , String cveCfdi) throws Exception {
-		
-		Map<String, Object> response = new HashMap();
-		String resultado = facturaService.venta(nIdVenta, cveCfdi);
-		
-		if (resultado.startsWith("ok")) {
-			
-			response.put("mensaje", "Venta Facturada");
-			if (resultado.contains("correo_bloqueado")) {
-				response.put("avisoCorreo", "La factura se generó correctamente pero el correo del cliente está bloqueado. No se envió la notificación por correo.");
-			}
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
-			
-		}else {		
-			
-			response.put("mensaje", "error al facturar la venta");
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		ResultadoFacturacionVentaDto resultado = facturaService.venta(nIdVenta, cveCfdi);
+		return new ResponseEntity<ResultadoFacturacionVentaDto>(resultado,
+				resultado != null && resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@GetMapping("cancelaFactura")
@@ -109,19 +97,16 @@ public class FacturaController {
 	
 	@GetMapping("complemento")
 	public ResponseEntity<?> complemento(@RequestParam(required = false) Long nIdVenta , String cveCfdi) throws Exception {
-		
-		Map<String, Object> response = new HashMap();
-		
-		if (facturaService.complemento(nIdVenta, cveCfdi).equals("ok")) {
-			
-			response.put("mensaje", "Complemento registrado");
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
-			
-		}else {		
-			
-			response.put("mensaje", "error al regfistrar complemento de pago");
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		ResultadoFacturacionVentaDto resultado = facturaService.complemento(nIdVenta, cveCfdi);
+		return new ResponseEntity<ResultadoFacturacionVentaDto>(resultado,
+				resultado != null && resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@PostMapping("complementos/reintentar")
+	public ResponseEntity<?> reintentarComplemento(@RequestParam(required = true) Long nIdComplemento) throws Exception {
+		ResultadoFacturacionVentaDto resultado = facturaService.reintentarComplemento(nIdComplemento);
+		return new ResponseEntity<ResultadoFacturacionVentaDto>(resultado,
+				resultado != null && resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@GetMapping("ventasParaFactura")
@@ -135,6 +120,16 @@ public class FacturaController {
 		
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.ventasService.consultaVentasFacturadas());
 	}
+
+	@GetMapping("complementos")
+	public ResponseEntity<List<ComplementoPagoHistorialDto>> consultarComplementos(@RequestParam(required = true) Long nIdVenta) {
+		try {
+			return ResponseEntity.ok(facturaService.consultarComplementosPago(nIdVenta));
+		} catch (Exception e) {
+			logger.error("Error al consultar complementos de pago para venta {}", nIdVenta, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 	
 	
 	
@@ -147,6 +142,18 @@ public class FacturaController {
 			return generaReporteService.getDocumento(nIdVenta, TipoDoc );
 		} catch (Exception e) {
 			logger.error("Error al desargar documento ", e);
+			return null;
+		}
+	}
+
+	@GetMapping(value = "getDocumentoComplemento")
+	public @ResponseBody byte[] getDocumentoComplemento(HttpServletResponse response,
+			@RequestParam(required = true) Long nIdComplemento,
+			@RequestParam(required = true) TipoDoc TipoDoc) {
+		try {
+			return generaReporteService.getDocumentoComplemento(nIdComplemento, TipoDoc);
+		} catch (Exception e) {
+			logger.error("Error al desargar documento de complemento", e);
 			return null;
 		}
 	}

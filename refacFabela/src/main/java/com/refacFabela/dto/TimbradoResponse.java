@@ -27,6 +27,10 @@ public class TimbradoResponse {
 	private String estatus;
 	private String codigoError;
 	private String mensajeError;
+	private String clasificacionFiscal;
+	private String metodoPagoFiscal;
+	private String formaPagoFiscal;
+	private Boolean complementoInmediatoRequerido;
 	private Map<String, Object> rawResponse;
 
 	public Boolean getSuccess() {
@@ -203,6 +207,38 @@ public class TimbradoResponse {
 
 	public void setMensajeError(String mensajeError) {
 		this.mensajeError = mensajeError;
+	}
+
+	public String getClasificacionFiscal() {
+		return clasificacionFiscal;
+	}
+
+	public void setClasificacionFiscal(String clasificacionFiscal) {
+		this.clasificacionFiscal = clasificacionFiscal;
+	}
+
+	public String getMetodoPagoFiscal() {
+		return metodoPagoFiscal;
+	}
+
+	public void setMetodoPagoFiscal(String metodoPagoFiscal) {
+		this.metodoPagoFiscal = metodoPagoFiscal;
+	}
+
+	public String getFormaPagoFiscal() {
+		return formaPagoFiscal;
+	}
+
+	public void setFormaPagoFiscal(String formaPagoFiscal) {
+		this.formaPagoFiscal = formaPagoFiscal;
+	}
+
+	public Boolean getComplementoInmediatoRequerido() {
+		return complementoInmediatoRequerido;
+	}
+
+	public void setComplementoInmediatoRequerido(Boolean complementoInmediatoRequerido) {
+		this.complementoInmediatoRequerido = complementoInmediatoRequerido;
 	}
 
 	public Map<String, Object> getRawResponse() {
