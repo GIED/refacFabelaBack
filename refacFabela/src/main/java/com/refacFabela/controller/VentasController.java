@@ -4,6 +4,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -372,16 +374,17 @@ public class VentasController {
 	
 	
 	@PostMapping("/guardarAbono")
-	public TwAbono obtenerProductoVendidoId(@RequestBody TwAbono abonoDto) {
+	public ResponseEntity<?> obtenerProductoVendidoId(@RequestBody TwAbono abonoDto) {
 
 		try {
-		
-			return productosService.guardarAbono(abonoDto);
+			return ResponseEntity.ok(productosService.guardarAbono(abonoDto));
+		} catch (IllegalStateException e) {
+			logger.warn("Intento bloqueado de guardar abono legacy: {}", e.getMessage());
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
-
-			logger.error("Error al obtener los productos vendidos por id" + e);
+			logger.error("Error al guardar abono legacy", e);
+			return new ResponseEntity<String>("No fue posible guardar el abono.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return null;
 	}
 	
 	@PostMapping("/calcularNuevoPrecio")

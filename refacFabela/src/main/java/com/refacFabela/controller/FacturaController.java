@@ -26,6 +26,7 @@ import com.refacFabela.enums.TipoDoc;
 import com.refacFabela.dto.CancelacionResponse;
 import com.refacFabela.dto.CfdiRelacionadosResponse;
 import com.refacFabela.dto.ComplementoPagoHistorialDto;
+import com.refacFabela.dto.FacturacionVentasRequestDto;
 import com.refacFabela.dto.ResultadoFacturacionVentaDto;
 import com.refacFabela.dto.SolicitudCancelacionDto;
 import com.refacFabela.dto.StatusCfdiResponse;
@@ -66,6 +67,13 @@ public class FacturaController {
 		return new ResponseEntity<ResultadoFacturacionVentaDto>(resultado,
 				resultado != null && resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+
+	@PostMapping("ventas/consolidada")
+	public ResponseEntity<?> ventaConsolidada(@RequestBody FacturacionVentasRequestDto requestDto) throws Exception {
+		ResultadoFacturacionVentaDto resultado = facturaService.ventaConsolidada(requestDto);
+		return new ResponseEntity<ResultadoFacturacionVentaDto>(resultado,
+				resultado != null && resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
 	@GetMapping("cancelaFactura")
 	public ResponseEntity<?> cancelaFactura(@RequestParam(required = false) Long nIdVenta , String cveCfdi) throws Exception {
@@ -98,6 +106,13 @@ public class FacturaController {
 	@GetMapping("complemento")
 	public ResponseEntity<?> complemento(@RequestParam(required = false) Long nIdVenta , String cveCfdi) throws Exception {
 		ResultadoFacturacionVentaDto resultado = facturaService.complemento(nIdVenta, cveCfdi);
+		return new ResponseEntity<ResultadoFacturacionVentaDto>(resultado,
+				resultado != null && resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@PostMapping("complemento/pago-cliente")
+	public ResponseEntity<?> complementoPagoCliente(@RequestParam(required = true) Long nIdPagoCliente) throws Exception {
+		ResultadoFacturacionVentaDto resultado = facturaService.complementoPagoCliente(nIdPagoCliente);
 		return new ResponseEntity<ResultadoFacturacionVentaDto>(resultado,
 				resultado != null && resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR);
 	}

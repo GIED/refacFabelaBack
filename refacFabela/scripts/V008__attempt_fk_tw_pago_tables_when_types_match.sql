@@ -1,0 +1,164 @@
+SET @ddl := (
+    SELECT IF(
+        EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id_cliente')
+        AND EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_clientes' AND COLUMN_NAME = 'n_id')
+        AND (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id_cliente') =
+            (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_clientes' AND COLUMN_NAME = 'n_id')
+        AND NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND CONSTRAINT_NAME = 'fk_tw_pago_cliente_cliente'),
+        'ALTER TABLE tw_pago_cliente ADD CONSTRAINT fk_tw_pago_cliente_cliente FOREIGN KEY (n_id_cliente) REFERENCES tc_clientes (n_id)',
+        'SELECT ''skip fk_tw_pago_cliente_cliente'''
+    )
+);
+PREPARE stmt FROM @ddl;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @ddl := (
+    SELECT IF(
+        EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id_dato_factura')
+        AND EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_datos_factura' AND COLUMN_NAME = 'n_id')
+        AND (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id_dato_factura') =
+            (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_datos_factura' AND COLUMN_NAME = 'n_id')
+        AND NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND CONSTRAINT_NAME = 'fk_tw_pago_cliente_dato_factura'),
+        'ALTER TABLE tw_pago_cliente ADD CONSTRAINT fk_tw_pago_cliente_dato_factura FOREIGN KEY (n_id_dato_factura) REFERENCES tc_datos_factura (n_id)',
+        'SELECT ''skip fk_tw_pago_cliente_dato_factura'''
+    )
+);
+PREPARE stmt FROM @ddl;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @ddl := (
+    SELECT IF(
+        EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id_forma_pago')
+        AND EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_formapago' AND COLUMN_NAME = 'n_id')
+        AND (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id_forma_pago') =
+            (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_formapago' AND COLUMN_NAME = 'n_id')
+        AND NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND CONSTRAINT_NAME = 'fk_tw_pago_cliente_forma_pago'),
+        'ALTER TABLE tw_pago_cliente ADD CONSTRAINT fk_tw_pago_cliente_forma_pago FOREIGN KEY (n_id_forma_pago) REFERENCES tc_formapago (n_id)',
+        'SELECT ''skip fk_tw_pago_cliente_forma_pago'''
+    )
+);
+PREPARE stmt FROM @ddl;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @ddl := (
+    SELECT IF(
+        EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id_usuario_registro')
+        AND EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_usuarios' AND COLUMN_NAME = 'n_id')
+        AND (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id_usuario_registro') =
+            (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_usuarios' AND COLUMN_NAME = 'n_id')
+        AND NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND CONSTRAINT_NAME = 'fk_tw_pago_cliente_usuario'),
+        'ALTER TABLE tw_pago_cliente ADD CONSTRAINT fk_tw_pago_cliente_usuario FOREIGN KEY (n_id_usuario_registro) REFERENCES tc_usuarios (n_id)',
+        'SELECT ''skip fk_tw_pago_cliente_usuario'''
+    )
+);
+PREPARE stmt FROM @ddl;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @ddl := (
+    SELECT IF(
+        EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id_caja')
+        AND EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_caja' AND COLUMN_NAME = 'n_id')
+        AND (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id_caja') =
+            (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_caja' AND COLUMN_NAME = 'n_id')
+        AND NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND CONSTRAINT_NAME = 'fk_tw_pago_cliente_caja'),
+        'ALTER TABLE tw_pago_cliente ADD CONSTRAINT fk_tw_pago_cliente_caja FOREIGN KEY (n_id_caja) REFERENCES tw_caja (n_id)',
+        'SELECT ''skip fk_tw_pago_cliente_caja'''
+    )
+);
+PREPARE stmt FROM @ddl;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @ddl := (
+    SELECT IF(
+        EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_pago_cliente')
+        AND EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id')
+        AND (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_pago_cliente') =
+            (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_cliente' AND COLUMN_NAME = 'n_id')
+        AND NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND CONSTRAINT_NAME = 'fk_tw_pago_aplicacion_pago'),
+        'ALTER TABLE tw_pago_aplicacion ADD CONSTRAINT fk_tw_pago_aplicacion_pago FOREIGN KEY (n_id_pago_cliente) REFERENCES tw_pago_cliente (n_id)',
+        'SELECT ''skip fk_tw_pago_aplicacion_pago'''
+    )
+);
+PREPARE stmt FROM @ddl;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @ddl := (
+    SELECT IF(
+        EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_cliente')
+        AND EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_clientes' AND COLUMN_NAME = 'n_id')
+        AND (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_cliente') =
+            (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_clientes' AND COLUMN_NAME = 'n_id')
+        AND NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND CONSTRAINT_NAME = 'fk_tw_pago_aplicacion_cliente'),
+        'ALTER TABLE tw_pago_aplicacion ADD CONSTRAINT fk_tw_pago_aplicacion_cliente FOREIGN KEY (n_id_cliente) REFERENCES tc_clientes (n_id)',
+        'SELECT ''skip fk_tw_pago_aplicacion_cliente'''
+    )
+);
+PREPARE stmt FROM @ddl;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @ddl := (
+    SELECT IF(
+        EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_venta')
+        AND EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_ventas' AND COLUMN_NAME = 'n_id')
+        AND (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_venta') =
+            (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_ventas' AND COLUMN_NAME = 'n_id')
+        AND NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND CONSTRAINT_NAME = 'fk_tw_pago_aplicacion_venta'),
+        'ALTER TABLE tw_pago_aplicacion ADD CONSTRAINT fk_tw_pago_aplicacion_venta FOREIGN KEY (n_id_venta) REFERENCES tw_ventas (n_id)',
+        'SELECT ''skip fk_tw_pago_aplicacion_venta'''
+    )
+);
+PREPARE stmt FROM @ddl;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @ddl := (
+    SELECT IF(
+        EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_facturacion')
+        AND EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_facturacion' AND COLUMN_NAME = 'n_id')
+        AND (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_facturacion') =
+            (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_facturacion' AND COLUMN_NAME = 'n_id')
+        AND NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND CONSTRAINT_NAME = 'fk_tw_pago_aplicacion_facturacion'),
+        'ALTER TABLE tw_pago_aplicacion ADD CONSTRAINT fk_tw_pago_aplicacion_facturacion FOREIGN KEY (n_id_facturacion) REFERENCES tw_facturacion (n_id)',
+        'SELECT ''skip fk_tw_pago_aplicacion_facturacion'''
+    )
+);
+PREPARE stmt FROM @ddl;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @ddl := (
+    SELECT IF(
+        EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_dato_factura')
+        AND EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_datos_factura' AND COLUMN_NAME = 'n_id')
+        AND (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_dato_factura') =
+            (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_datos_factura' AND COLUMN_NAME = 'n_id')
+        AND NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND CONSTRAINT_NAME = 'fk_tw_pago_aplicacion_dato_factura'),
+        'ALTER TABLE tw_pago_aplicacion ADD CONSTRAINT fk_tw_pago_aplicacion_dato_factura FOREIGN KEY (n_id_dato_factura) REFERENCES tc_datos_factura (n_id)',
+        'SELECT ''skip fk_tw_pago_aplicacion_dato_factura'''
+    )
+);
+PREPARE stmt FROM @ddl;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @ddl := (
+    SELECT IF(
+        EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_usuario')
+        AND EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_usuarios' AND COLUMN_NAME = 'n_id')
+        AND (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND COLUMN_NAME = 'n_id_usuario') =
+            (SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tc_usuarios' AND COLUMN_NAME = 'n_id')
+        AND NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'tw_pago_aplicacion' AND CONSTRAINT_NAME = 'fk_tw_pago_aplicacion_usuario'),
+        'ALTER TABLE tw_pago_aplicacion ADD CONSTRAINT fk_tw_pago_aplicacion_usuario FOREIGN KEY (n_id_usuario) REFERENCES tc_usuarios (n_id)',
+        'SELECT ''skip fk_tw_pago_aplicacion_usuario'''
+    )
+);
+PREPARE stmt FROM @ddl;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;

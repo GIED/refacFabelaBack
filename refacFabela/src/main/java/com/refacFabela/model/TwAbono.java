@@ -21,6 +21,9 @@ public class TwAbono implements Serializable {
 	@Column(name = "n_idVenta")
 	private Long nIdVenta;
 
+	@Column(name = "n_id_pago_cliente_canonico")
+	private Long nIdPagoClienteCanonico;
+
 	
 	@Column(name = "d_fecha")
 	private LocalDateTime dFecha;
@@ -49,6 +52,10 @@ public class TwAbono implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "n_idVenta", updatable = false, insertable = false)
 	private TwVenta twVenta;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "n_id_pago_cliente_canonico", insertable = false, updatable = false)
+	private TwPagoCliente twPagoClienteCanonico;
 
 	public TwAbono() {
 	}
@@ -126,6 +133,18 @@ public class TwAbono implements Serializable {
 	public void setTwVenta(TwVenta twVenta) {
 		this.twVenta = twVenta;
 	}
+
+	public Long getnIdPagoClienteCanonico() {
+		return nIdPagoClienteCanonico;
+	}
+
+	public void setnIdPagoClienteCanonico(Long nIdPagoClienteCanonico) {
+		this.nIdPagoClienteCanonico = nIdPagoClienteCanonico;
+	}
+
+	public TwPagoCliente getTwPagoClienteCanonico() {
+		return twPagoClienteCanonico;
+	}
 	
 	
 
@@ -144,7 +163,7 @@ public class TwAbono implements Serializable {
 	public String toString() {
 		return "TwAbono [nId=" + nId + ", nIdVenta=" + nIdVenta + ", dFecha=" + dFecha + ", nAbono=" + nAbono
 				+ ", nEstatus=" + nEstatus + ", tcFormapago=" + tcFormapago + ", twCaja=" + twCaja + ", tcUsuario="
-				+ tcUsuario + ", twVenta=" + twVenta + "]";
+				+ tcUsuario + ", twVenta=" + twVenta + ", nIdPagoClienteCanonico=" + nIdPagoClienteCanonico + "]";
 	}
 	
 	

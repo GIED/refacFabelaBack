@@ -42,6 +42,8 @@ import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentaProductoCancela;
 import com.refacFabela.model.TwVentaProductosTraer;
 import com.refacFabela.model.TwVentasProducto;
+import com.refacFabela.model.TwPagoAplicacion;
+import com.refacFabela.model.TwPagoCliente;
 import com.refacFabela.model.VwSaldoVentaFavorDisponible;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CajaRepository;
@@ -65,6 +67,8 @@ import com.refacFabela.repository.TwAjusteInventarioRepository;
 import com.refacFabela.repository.TwHistoriaIngresoProductoRepository;
 import com.refacFabela.repository.TwMaquinaClienteRepository;
 import com.refacFabela.repository.TwMarcaDescuentoMayoristaRepository;
+import com.refacFabela.repository.TwPagoAplicacionRepository;
+import com.refacFabela.repository.TwPagoClienteRepository;
 import com.refacFabela.repository.TwProductoBodegaRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.TwSaldoUtilizadoRepository;
@@ -134,6 +138,12 @@ public class ProductosServiceImp implements ProductosService {
 	
 	@Autowired
 	private TwVentaProductosTraerRepository twVentaProductosTraerRepository;
+
+	@Autowired
+	private TwPagoClienteRepository twPagoClienteRepository;
+
+	@Autowired
+	private TwPagoAplicacionRepository twPagoAplicacionRepository;
 
 	@Autowired
 	private TvStockProductoHistRepository tvStockProductoHistRepository;
@@ -519,11 +529,19 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 
 	@Override
 	public TwAbono guardarAbono(TwAbono abonoDto) {
+		throw new IllegalStateException(
+				"El registro manual de abonos quedó deshabilitado para créditos. Debes registrar un Pago Global y aplicar el saldo desde el módulo de pagos globales del cliente.");
+	}
+
+	private TwAbono guardarAbonoLegacy(TwAbono abonoDto) {
 	    abonoDto.setdFecha(DateTimeUtil.obtenerHoraExactaDeMexico());
 	    abonoVentaIdRepository.save(abonoDto);
 
 	    BigDecimal total_venta = BigDecimal.ZERO;
 	    BigDecimal total_abonos = BigDecimal.ZERO;
+	    BigDecimal total_abonos_previos = BigDecimal.ZERO;
+	    BigDecimal saldo_anterior = BigDecimal.ZERO;
+	    BigDecimal saldo_insoluto = BigDecimal.ZERO;
 
 	    // Se consulta el total de la venta
 	    List<TwVentasProducto> twVentasProducto = twProductosVentaRepository.findBynIdVenta(abonoDto.getnIdVenta());
@@ -537,7 +555,28 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	    for (TwAbono abono : twAbonos) {
 	        total_abonos = total_abonos.add(abono.getnAbono());
 	    }
+
+	    total_abonos_previos = total_abonos.subtract(abonoDto.getnAbono());
+	    if (total_abonos_previos.compareTo(BigDecimal.ZERO) < 0) {
+	    	total_abonos_previos = BigDecimal.ZERO;
+	    }
+
+	    saldo_anterior = total_venta.subtract(total_abonos_previos);
+	    if (saldo_anterior.compareTo(BigDecimal.ZERO) < 0) {
+	    	saldo_anterior = BigDecimal.ZERO;
+	    }
+
+	    saldo_insoluto = total_venta.subtract(total_abonos);
+	    if (saldo_insoluto.compareTo(BigDecimal.ZERO) < 0) {
+	    	saldo_insoluto = BigDecimal.ZERO;
+	    }
 	    System.err.println("Total abonos: " + total_abonos);
+
+	    Long nIdPagoClienteCanonico = registrarPagoCanonicoDesdeAbono(abonoDto, saldo_anterior, saldo_insoluto);
+	    abonoDto.setnIdPagoClienteCanonico(nIdPagoClienteCanonico);
+	    if (nIdPagoClienteCanonico != null) {
+	    	abonoVentaIdRepository.save(abonoDto);
+	    }
 
 	    // Si el total de abonos es igual al total de la venta, se registra la fecha de pago
 	    if (total_venta.compareTo(total_abonos) == 0) {
@@ -547,6 +586,57 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 	    }
 
 	    return abonoDto;
+	}
+
+	private Long registrarPagoCanonicoDesdeAbono(TwAbono abonoDto, BigDecimal saldoAnterior, BigDecimal saldoInsoluto) {
+		TwVenta venta = ventasRepository.findBynId(abonoDto.getnIdVenta());
+		if (venta == null || venta.getTcCliente() == null || venta.getTcCliente().getnIdDatoFactura() == null) {
+			return null;
+		}
+
+		if (abonoDto.getnAbono() == null || abonoDto.getnAbono().compareTo(BigDecimal.ZERO) <= 0) {
+			return null;
+		}
+
+		TwPagoCliente pagoCliente = new TwPagoCliente();
+		pagoCliente.setnIdCliente(venta.getnIdCliente());
+		pagoCliente.setnIdDatoFactura(venta.getTcCliente().getnIdDatoFactura());
+		pagoCliente.setdFechaRegistro(DateTimeUtil.obtenerHoraExactaDeMexico());
+		pagoCliente.setdFechaPago(abonoDto.getdFecha() != null ? abonoDto.getdFecha() : DateTimeUtil.obtenerHoraExactaDeMexico());
+		pagoCliente.setnImporteTotal(abonoDto.getnAbono());
+		pagoCliente.setnImporteAplicado(abonoDto.getnAbono());
+		pagoCliente.setnImporteDisponible(BigDecimal.ZERO);
+		pagoCliente.setsMoneda("MXN");
+		pagoCliente.setnIdFormaPago(abonoDto.getTcFormapago() != null ? abonoDto.getTcFormapago().getnId() : null);
+		pagoCliente.setsFormaPagoSat(abonoDto.getTcFormapago() != null ? abonoDto.getTcFormapago().getsClave() : null);
+		pagoCliente.setsDescripcionFormaPago(abonoDto.getTcFormapago() != null ? abonoDto.getTcFormapago().getsDescripcion() : null);
+		pagoCliente.setsObservaciones("Registro generado desde flujo legacy de abonos.");
+		pagoCliente.setnIdUsuarioRegistro(abonoDto.getTcUsuario() != null ? abonoDto.getTcUsuario().getnId() : venta.getnIdUsuario());
+		pagoCliente.setnIdCaja(abonoDto.getTwCaja() != null ? abonoDto.getTwCaja().getnId() : null);
+		pagoCliente.setnIdCorteCaja(abonoDto.getTwCaja() != null ? abonoDto.getTwCaja().getnId() : null);
+		pagoCliente.setsEstatus("APLICADO_TOTAL");
+		pagoCliente.setnConciliado(Boolean.FALSE);
+		pagoCliente.setnEstatus(1);
+		pagoCliente = twPagoClienteRepository.save(pagoCliente);
+
+		TwPagoAplicacion aplicacion = new TwPagoAplicacion();
+		aplicacion.setnIdPagoCliente(pagoCliente.getnId());
+		aplicacion.setnIdCliente(venta.getnIdCliente());
+		aplicacion.setnIdVenta(venta.getnId());
+		aplicacion.setnIdFacturacion(venta.getnIdFacturacion());
+		aplicacion.setnIdDatoFactura(venta.getTcCliente().getnIdDatoFactura());
+		aplicacion.setnMontoAplicado(abonoDto.getnAbono());
+		aplicacion.setnSaldoAnterior(saldoAnterior);
+		aplicacion.setnSaldoInsoluto(saldoInsoluto);
+		aplicacion.setnParcialidad(null);
+		aplicacion.setsEstatus("APLICADA");
+		aplicacion.setdFechaAplicacion(DateTimeUtil.obtenerHoraExactaDeMexico());
+		aplicacion.setnIdUsuario(pagoCliente.getnIdUsuarioRegistro());
+		aplicacion.setnOrdenAplicacion(1);
+		aplicacion.setsOrigenRegistro("LEGACY_ABONO");
+		aplicacion.setnEstatus(1);
+		twPagoAplicacionRepository.save(aplicacion);
+		return pagoCliente.getnId();
 	}
 
 	@Override

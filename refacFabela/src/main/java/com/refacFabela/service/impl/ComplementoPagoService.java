@@ -26,12 +26,16 @@ import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwFacturacionComplementoPago;
 import com.refacFabela.model.TwFacturacion;
+import com.refacFabela.model.TwPagoAplicacion;
+import com.refacFabela.model.TwPagoCliente;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.FacturacionComplementoPagoRepository;
 import com.refacFabela.repository.FacturaRepository;
 import com.refacFabela.repository.TcDatosFacturaRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
+import com.refacFabela.repository.TwPagoAplicacionRepository;
+import com.refacFabela.repository.TwPagoClienteRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.utils.DateTimeUtil;
@@ -47,6 +51,8 @@ public class ComplementoPagoService {
 	private final TrVentaCobroRepository trVentaCobroRepository;
 	private final AbonoVentaIdRepository abonoVentaIdRepository;
 	private final TcDatosFacturaRepository tcDatosFacturaRepository;
+	private final TwPagoClienteRepository twPagoClienteRepository;
+	private final TwPagoAplicacionRepository twPagoAplicacionRepository;
 	private final VentasProductoRepository ventasProductoRepository;
 	private final PacFacturacionClient pacFacturacionClient;
 	private final PacFacturacionMapper pacFacturacionMapper;
@@ -60,6 +66,8 @@ public class ComplementoPagoService {
 			TrVentaCobroRepository trVentaCobroRepository,
 			AbonoVentaIdRepository abonoVentaIdRepository,
 			TcDatosFacturaRepository tcDatosFacturaRepository,
+			TwPagoClienteRepository twPagoClienteRepository,
+			TwPagoAplicacionRepository twPagoAplicacionRepository,
 			VentasProductoRepository ventasProductoRepository,
 			PacFacturacionClient pacFacturacionClient,
 			PacFacturacionMapper pacFacturacionMapper,
@@ -72,6 +80,8 @@ public class ComplementoPagoService {
 		this.trVentaCobroRepository = trVentaCobroRepository;
 		this.abonoVentaIdRepository = abonoVentaIdRepository;
 		this.tcDatosFacturaRepository = tcDatosFacturaRepository;
+		this.twPagoClienteRepository = twPagoClienteRepository;
+		this.twPagoAplicacionRepository = twPagoAplicacionRepository;
 		this.ventasProductoRepository = ventasProductoRepository;
 		this.pacFacturacionClient = pacFacturacionClient;
 		this.pacFacturacionMapper = pacFacturacionMapper;
@@ -106,6 +116,9 @@ public class ComplementoPagoService {
 		TwFacturacion facturaOrigen = facturaRepository.findById(venta.getnIdFacturacion()).orElse(null);
 		if (facturaOrigen == null || facturaOrigen.getsUuid() == null || facturaOrigen.getsUuid().trim().isEmpty()) {
 			throw new FacturacionException("No existe UUID de la factura origen.");
+		}
+		if (esFacturaConsolidada(facturaOrigen)) {
+			throw new FacturacionException("La factura origen es consolidada. El REP debe generarse desde el flujo de pago canónico/global, no desde una venta individual.");
 		}
 		if (facturaOrigen.getsMetodoPagoFiscal() == null || facturaOrigen.getsFormaPagoFiscal() == null
 				|| !"PPD".equalsIgnoreCase(facturaOrigen.getsMetodoPagoFiscal())
@@ -246,6 +259,115 @@ public class ComplementoPagoService {
 		return timbrarComplemento(complemento.getnIdVenta(), request, pagosFuente, estadoComplementoVenta);
 	}
 
+	public TimbradoResponse timbrarComplementoPagoCliente(Long nIdPagoCliente) {
+		TwPagoCliente pagoCliente = twPagoClienteRepository.findBynId(nIdPagoCliente);
+		if (pagoCliente == null || pagoCliente.getnEstatus() == null || pagoCliente.getnEstatus().intValue() != 1) {
+			throw new FacturacionException("No existe el pago global indicado.");
+		}
+		List<TwPagoAplicacion> aplicaciones = twPagoAplicacionRepository.findActivasByPago(nIdPagoCliente);
+		if (aplicaciones == null || aplicaciones.isEmpty()) {
+			throw new FacturacionException("El pago global no tiene aplicaciones activas para timbrar REP.");
+		}
+
+		Collections.sort(aplicaciones, new Comparator<TwPagoAplicacion>() {
+			@Override
+			public int compare(TwPagoAplicacion left, TwPagoAplicacion right) {
+				if (left.getnOrdenAplicacion() == null && right.getnOrdenAplicacion() == null) {
+					return 0;
+				}
+				if (left.getnOrdenAplicacion() == null) {
+					return -1;
+				}
+				if (right.getnOrdenAplicacion() == null) {
+					return 1;
+				}
+				return left.getnOrdenAplicacion().compareTo(right.getnOrdenAplicacion());
+			}
+		});
+
+		List<TwPagoAplicacion> aplicacionesPendientes = new ArrayList<TwPagoAplicacion>();
+		for (TwPagoAplicacion aplicacion : aplicaciones) {
+			if (aplicacion == null || aplicacion.getnId() == null || aplicacion.getnIdVenta() == null
+					|| aplicacion.getnIdFacturacion() == null) {
+				continue;
+			}
+			if (!facturacionComplementoPagoRepository
+					.findActivosByOrigenPago(aplicacion.getnIdVenta(), "TW_PAGO_CLIENTE_APLICACION", aplicacion.getnId())
+					.isEmpty()) {
+				continue;
+			}
+			aplicacionesPendientes.add(aplicacion);
+		}
+
+		if (aplicacionesPendientes.isEmpty()) {
+			throw new FacturacionException("Las aplicaciones del pago global ya cuentan con REP timbrado.");
+		}
+
+		TcDatosFactura datosFactura = tcDatosFacturaRepository.obtenerDatos(pagoCliente.getnIdDatoFactura());
+		if (datosFactura == null) {
+			throw new FacturacionException("No existe configuración fiscal para el pago global.");
+		}
+
+		TwVenta ventaBase = ventasRepository.findBynId(aplicacionesPendientes.get(0).getnIdVenta());
+		if (ventaBase == null || ventaBase.getTcCliente() == null) {
+			throw new FacturacionException("No fue posible resolver el cliente del pago global.");
+		}
+
+		ComplementoPagoRequest request = construirRequestComplementoPagoCliente(pagoCliente, aplicacionesPendientes,
+				datosFactura, ventaBase);
+		String correlationId = UUID.randomUUID().toString();
+		TimbradoResponse response = null;
+		try {
+			response = pacFacturacionClient.timbrarComplementoPago(request);
+			if (response == null || !Boolean.TRUE.equals(response.getSuccess()) || response.getUuid() == null
+					|| response.getUuid().trim().isEmpty()) {
+				throw new FacturacionException(response != null && response.getMensajeError() != null
+						? response.getMensajeError()
+						: "No fue posible timbrar el complemento de pago global.");
+			}
+			persistirComplementoPagoCliente(aplicacionesPendientes, response, correlationId, null, null, 1);
+			registrarAuditoria("complemento-pago-global", correlationId, request, response, null, null);
+			return response;
+		} catch (Exception e) {
+			persistirComplementoPagoCliente(aplicacionesPendientes, response, correlationId,
+					response != null ? response.getCodigoError() : "REP_ERROR", e.getMessage(), 0);
+			registrarAuditoria("complemento-pago-global", correlationId, request, response, "REP_ERROR", e.getMessage());
+			throw e;
+		}
+	}
+
+	public List<TimbradoResponse> timbrarComplementosPagoClientePendientesVentas(List<Long> nIdsVenta) {
+		List<TimbradoResponse> response = new ArrayList<TimbradoResponse>();
+		if (nIdsVenta == null || nIdsVenta.isEmpty()) {
+			return response;
+		}
+
+		java.util.Set<Long> idsPagoCliente = new java.util.LinkedHashSet<Long>();
+		for (Long nIdVenta : nIdsVenta) {
+			if (nIdVenta == null) {
+				continue;
+			}
+			List<TwPagoAplicacion> aplicaciones = twPagoAplicacionRepository.findActivasByVenta(nIdVenta);
+			for (TwPagoAplicacion aplicacion : aplicaciones) {
+				if (aplicacion == null || aplicacion.getnId() == null || aplicacion.getnIdPagoCliente() == null
+						|| aplicacion.getnIdFacturacion() == null) {
+					continue;
+				}
+				if (!facturacionComplementoPagoRepository
+						.findActivosByOrigenPago(aplicacion.getnIdVenta(), "TW_PAGO_CLIENTE_APLICACION", aplicacion.getnId())
+						.isEmpty()) {
+					continue;
+				}
+				idsPagoCliente.add(aplicacion.getnIdPagoCliente());
+			}
+		}
+
+		for (Long nIdPagoCliente : idsPagoCliente) {
+			response.add(timbrarComplementoPagoCliente(nIdPagoCliente));
+		}
+		return response;
+	}
+
 	private List<ComplementoPagoRequest.PagoDto> buildPagos(List<PagoFuenteDto> pagosFuente, TwFacturacion facturaOrigen,
 			BigDecimal saldoAnteriorInicial, int parcialidadInicial) {
 		List<ComplementoPagoRequest.PagoDto> pagos = new ArrayList<ComplementoPagoRequest.PagoDto>();
@@ -278,6 +400,98 @@ public class ComplementoPagoService {
 		}
 
 		return pagos;
+	}
+
+	private ComplementoPagoRequest construirRequestComplementoPagoCliente(TwPagoCliente pagoCliente,
+			List<TwPagoAplicacion> aplicaciones, TcDatosFactura datosFactura, TwVenta ventaBase) {
+		ComplementoPagoRequest request = new ComplementoPagoRequest();
+		request.setRazonSocialId(datosFactura.getnId());
+		request.setUuidFactura(resolveUuidFacturaReferencia(aplicaciones));
+		request.setRfcEmisor(datosFactura.getsRfcEmisor());
+		request.setRfcReceptor(ventaBase.getTcCliente().getsRfc());
+		request.setMoneda(pagoCliente.getsMoneda() != null ? pagoCliente.getsMoneda() : "MXN");
+		request.setFechaPago(pagoCliente.getdFechaPago() != null ? pagoCliente.getdFechaPago()
+				: DateTimeUtil.obtenerHoraExactaDeMexico());
+
+		ComplementoPagoRequest.PagoDto pago = new ComplementoPagoRequest.PagoDto();
+		pago.setMonto(resolveMontoPagoGlobal(aplicaciones));
+		pago.setFormaPago(pagoCliente.getsFormaPagoSat());
+		pago.setMoneda(request.getMoneda());
+		pago.setTipoCambio(BigDecimal.ONE);
+		pago.setNumeroOperacion(pagoCliente.getnId() != null ? pagoCliente.getnId().toString() : null);
+		pago.setDocumentosRelacionados(buildDocumentosRelacionadosPagoCliente(aplicaciones));
+
+		List<ComplementoPagoRequest.PagoDto> pagos = new ArrayList<ComplementoPagoRequest.PagoDto>();
+		pagos.add(pago);
+		request.setPagos(pagos);
+
+		Map<String, Object> metadata = new HashMap<String, Object>();
+		metadata.put("certificado", datosFactura.getsCertificado());
+		metadata.put("llavePrivada", datosFactura.getsRutaKey());
+		metadata.put("passwordKey", datosFactura.getsPasswordKey());
+		metadata.put("logo", datosFactura.getsLogo());
+		metadata.put("nombreEmisor", datosFactura.getsNombreEmisor());
+		metadata.put("regimenFiscal", datosFactura.getsRegimenFiscal());
+		metadata.put("codigoPostalEmisor", datosFactura.getsCodigoPostal());
+		metadata.put("nombreReceptor", pacFacturacionMapper.normalizeLegalName(ventaBase.getTcCliente().getsRazonSocial()));
+		metadata.put("codigoPostalReceptor",
+				ventaBase.getTcCliente().getTcCp() != null ? ventaBase.getTcCliente().getTcCp().getsCp() : null);
+		metadata.put("regimenFiscalReceptor",
+				ventaBase.getTcCliente().getTcRegimenFiscal() != null
+						? ventaBase.getTcCliente().getTcRegimenFiscal().getsCveRegimen()
+						: null);
+		metadata.put("usoCfdi", USO_CFDI_COMPLEMENTO_PAGO);
+		metadata.put("serie", datosFactura.getsSerie());
+		metadata.put("folio", "PG" + pagoCliente.getnId());
+		request.setMetadata(metadata);
+		return request;
+	}
+
+	private String resolveUuidFacturaReferencia(List<TwPagoAplicacion> aplicaciones) {
+		for (TwPagoAplicacion aplicacion : aplicaciones) {
+			if (aplicacion == null || aplicacion.getnIdFacturacion() == null) {
+				continue;
+			}
+			TwFacturacion facturacion = facturaRepository.findById(aplicacion.getnIdFacturacion()).orElse(null);
+			if (facturacion != null && facturacion.getsUuid() != null && !facturacion.getsUuid().trim().isEmpty()) {
+				return facturacion.getsUuid();
+			}
+		}
+		return null;
+	}
+
+	private BigDecimal resolveMontoPagoGlobal(List<TwPagoAplicacion> aplicaciones) {
+		BigDecimal total = BigDecimal.ZERO;
+		for (TwPagoAplicacion aplicacion : aplicaciones) {
+			if (aplicacion != null && aplicacion.getnMontoAplicado() != null) {
+				total = total.add(aplicacion.getnMontoAplicado());
+			}
+		}
+		return total;
+	}
+
+	private List<ComplementoPagoRequest.DocumentoRelacionadoPagoDto> buildDocumentosRelacionadosPagoCliente(
+			List<TwPagoAplicacion> aplicaciones) {
+		List<ComplementoPagoRequest.DocumentoRelacionadoPagoDto> documentos = new ArrayList<ComplementoPagoRequest.DocumentoRelacionadoPagoDto>();
+		for (TwPagoAplicacion aplicacion : aplicaciones) {
+			TwFacturacion facturaOrigen = aplicacion != null && aplicacion.getnIdFacturacion() != null
+					? facturaRepository.findById(aplicacion.getnIdFacturacion()).orElse(null)
+					: null;
+			if (facturaOrigen == null || facturaOrigen.getsUuid() == null || facturaOrigen.getsUuid().trim().isEmpty()) {
+				throw new FacturacionException("Una aplicación del pago global no tiene factura origen timbrada.");
+			}
+
+			ComplementoPagoRequest.DocumentoRelacionadoPagoDto documento = new ComplementoPagoRequest.DocumentoRelacionadoPagoDto();
+			documento.setIdDocumento(facturaOrigen.getsUuid());
+			documento.setMonedaDr("MXN");
+			documento.setEquivalenciaDr(BigDecimal.ONE);
+			documento.setNumParcialidad(aplicacion.getnParcialidad());
+			documento.setImpSaldoAnt(aplicacion.getnSaldoAnterior() != null ? aplicacion.getnSaldoAnterior() : BigDecimal.ZERO);
+			documento.setImpPagado(aplicacion.getnMontoAplicado() != null ? aplicacion.getnMontoAplicado() : BigDecimal.ZERO);
+			documento.setImpSaldoInsoluto(aplicacion.getnSaldoInsoluto() != null ? aplicacion.getnSaldoInsoluto() : BigDecimal.ZERO);
+			documentos.add(documento);
+		}
+		return documentos;
 	}
 
 	private BigDecimal resolveSaldoInicial(TwVenta venta) {
@@ -384,6 +598,54 @@ public class ComplementoPagoService {
 				: "PENDIENTE_COMPLEMENTO_PAGO");
 		facturaOrigen.setsErrorComplemento(errorMessage);
 		facturaRepository.save(facturaOrigen);
+	}
+
+	private void persistirComplementoPagoCliente(List<TwPagoAplicacion> aplicaciones, TimbradoResponse response,
+			String correlationId, String codigoError, String errorMessage, int estatus) {
+		for (TwPagoAplicacion aplicacion : aplicaciones) {
+			if (aplicacion == null || aplicacion.getnIdVenta() == null || aplicacion.getnIdFacturacion() == null) {
+				continue;
+			}
+
+			TwFacturacionComplementoPago complemento = new TwFacturacionComplementoPago();
+			complemento.setnIdVenta(aplicacion.getnIdVenta());
+			complemento.setnIdFacturacion(aplicacion.getnIdFacturacion());
+			TwFacturacion facturaOrigen = facturaRepository.findById(aplicacion.getnIdFacturacion()).orElse(null);
+			complemento.setsUuidFacturaIngreso(facturaOrigen != null ? facturaOrigen.getsUuid() : null);
+			complemento.setsUuidComplementoPago(response != null ? response.getUuid() : null);
+			complemento.setsOrigenPago("TW_PAGO_CLIENTE_APLICACION");
+			complemento.setnIdPagoOrigen(aplicacion.getnId());
+			complemento.setnParcialidad(aplicacion.getnParcialidad());
+			complemento.setsFormaPagoSat(aplicacion.getTwPagoCliente() != null ? aplicacion.getTwPagoCliente().getsFormaPagoSat() : null);
+			complemento.setsDescripcionFormaPago(
+					aplicacion.getTwPagoCliente() != null ? aplicacion.getTwPagoCliente().getsDescripcionFormaPago() : null);
+			complemento.setnMontoPagado(aplicacion.getnMontoAplicado());
+			complemento.setnSaldoAnterior(aplicacion.getnSaldoAnterior());
+			complemento.setnSaldoInsoluto(aplicacion.getnSaldoInsoluto());
+			complemento.setdFechaPago(aplicacion.getdFechaAplicacion());
+			complemento.setsProveedor("facturoporti");
+			complemento.setsEstado(response != null && response.getEstatus() != null ? response.getEstatus()
+					: estatus == 1 ? "TIMBRADO" : "PENDIENTE_COMPLEMENTO_PAGO");
+			complemento.setnEstatus(Integer.valueOf(estatus));
+			complemento.setsXmlTimbrado(response != null ? response.getXmlBase64() : null);
+			complemento.setsCodigoError(codigoError);
+			complemento.setsErrorPac(errorMessage);
+			complemento.setsCorrelationId(correlationId);
+			complemento.setdFechaRegistro(LocalDateTime.now());
+			facturacionComplementoPagoRepository.save(complemento);
+
+			if (facturaOrigen != null) {
+				if (estatus == 1 && response != null && response.getUuid() != null && !response.getUuid().trim().isEmpty()) {
+					facturaOrigen.setsUuidComplementoPago(response.getUuid());
+				}
+				facturaOrigen.setsEstadoComplemento(estatus == 1 && aplicacion.getnSaldoInsoluto() != null
+						&& aplicacion.getnSaldoInsoluto().compareTo(BigDecimal.ZERO) <= 0
+							? "FACTURADA_CON_COMPLEMENTO_PAGO"
+							: "PENDIENTE_COMPLEMENTO_PAGO");
+				facturaOrigen.setsErrorComplemento(errorMessage);
+				facturaRepository.save(facturaOrigen);
+			}
+		}
 	}
 
 	private EstadoComplementoVenta resolveEstadoComplementoVenta(TwVenta venta, BigDecimal saldoFactura) {
@@ -537,6 +799,15 @@ public class ComplementoPagoService {
 		pagoFuente.setClaveFormaPagoSat(abono.getTcFormapago() != null ? abono.getTcFormapago().getsClave() : null);
 		pagoFuente.setDescripcionFormaPago(abono.getTcFormapago() != null ? abono.getTcFormapago().getsDescripcion() : null);
 		pagosPendientes.add(pagoFuente);
+	}
+
+	private boolean esFacturaConsolidada(TwFacturacion facturaOrigen) {
+		if (facturaOrigen == null || facturaOrigen.getnId() == null) {
+			return false;
+		}
+
+		List<TwVenta> ventasRelacionadas = ventasRepository.findBynIdFacturacion(facturaOrigen.getnId());
+		return ventasRelacionadas != null && ventasRelacionadas.size() > 1;
 	}
 
 	public static class PagoFuenteDto {

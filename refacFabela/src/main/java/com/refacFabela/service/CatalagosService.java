@@ -54,6 +54,7 @@ public interface CatalagosService {
 	public List<TcGasto> catalogoGasto();
 	public List<TcMoneda> catalogoMoneda();
 	public List<TcCuentaBancaria> consultarCuentasBancariasRazon(Long nIdRazonSoacial);
+	public List<TcCuentaBancaria> consultarCuentasBancariasActivas();
 	public List<TcEstatusFacturaProveedor> catalogoEstatusFacturaProveedor();
 	public List<TcTipoProveedor> getTipoProveedor();
 	public List<TcTipoRevendedor> getTipoRevendedor();

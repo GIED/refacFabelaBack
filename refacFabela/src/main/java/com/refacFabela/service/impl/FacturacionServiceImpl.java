@@ -12,6 +12,7 @@ import com.refacFabela.config.FacturacionProperties;
 import com.refacFabela.dto.CancelacionResponse;
 import com.refacFabela.dto.CfdiRelacionadosResponse;
 import com.refacFabela.dto.ComplementoPagoHistorialDto;
+import com.refacFabela.dto.FacturacionVentasRequestDto;
 import com.refacFabela.dto.ResultadoFacturacionVentaDto;
 import com.refacFabela.dto.SolicitudCancelacionDto;
 import com.refacFabela.dto.StatusCfdiResponse;
@@ -117,13 +118,38 @@ public class FacturacionServiceImpl implements FacturacionService {
 					resultado.setMensaje("Factura generada correctamente; el complemento de pago quedó pendiente.");
 				}
 			} else {
-				if (facturacion != null) {
-					resultado.setEstadoComplemento(facturacion.getsEstadoComplemento());
-					resultado.setUuidComplementoPago(facturacion.getsUuidComplementoPago());
-				} else {
-					resultado.setEstadoComplemento("NO_REQUIERE_COMPLEMENTO");
+				boolean repCanonicoProcesado = false;
+				if (esFacturaPpd99(timbradoIngreso)) {
+					try {
+						java.util.List<TimbradoResponse> complementosCanonicos = complementoPagoService
+								.timbrarComplementosPagoClientePendientesVentas(java.util.Collections.singletonList(idVenta));
+						if (complementosCanonicos != null && !complementosCanonicos.isEmpty()) {
+							TimbradoResponse ultimoComplemento = complementosCanonicos.get(complementosCanonicos.size() - 1);
+							resultado.setUuidComplementoPago(ultimoComplemento.getUuid());
+							resultado.setEstadoComplemento("FACTURADA_CON_COMPLEMENTO_PAGO");
+							resultado.setMensaje("Venta facturada y complemento(s) de pago canónico generado(s) correctamente.");
+							repCanonicoProcesado = true;
+						}
+					} catch (Exception complementoCanonicoError) {
+						logger.error("Venta facturada pero el REP del pago global quedó pendiente para venta {}", idVenta,
+								complementoCanonicoError);
+						resultado.setEstadoComplemento("PENDIENTE_COMPLEMENTO_PAGO");
+						resultado.setCodigoError("REP_PAGO_CLIENTE_ERROR");
+						resultado.setMensajeError(complementoCanonicoError.getMessage());
+						resultado.setMensaje("Venta facturada correctamente; el REP del pago global quedó pendiente.");
+						repCanonicoProcesado = true;
+					}
 				}
-				resultado.setMensaje("Venta Facturada");
+
+				if (!repCanonicoProcesado) {
+					if (facturacion != null) {
+						resultado.setEstadoComplemento(facturacion.getsEstadoComplemento());
+						resultado.setUuidComplementoPago(facturacion.getsUuidComplementoPago());
+					} else {
+						resultado.setEstadoComplemento("NO_REQUIERE_COMPLEMENTO");
+					}
+					resultado.setMensaje("Venta Facturada");
+				}
 			}
 
 			if (clienteActualizado != null && Boolean.TRUE.equals(clienteActualizado.getnCorreoBloqueado())) {
@@ -149,6 +175,69 @@ public class FacturacionServiceImpl implements FacturacionService {
 			resultado.setMensajeError(e.getMessage());
 			return resultado;
 		}
+	}
+
+	@Override
+	public ResultadoFacturacionVentaDto ventaConsolidada(FacturacionVentasRequestDto requestDto) throws Exception {
+		ResultadoFacturacionVentaDto resultado = new ResultadoFacturacionVentaDto();
+		try {
+			TimbradoResponse timbradoIngreso = timbradoVentaService.timbrarVentasConsolidadas(
+					requestDto != null ? requestDto.getnIdsVenta() : null,
+					requestDto != null ? requestDto.getCveCfdi() : null);
+
+			resultado.setSuccess(true);
+			resultado.setClasificacionFiscal(timbradoIngreso.getClasificacionFiscal());
+			resultado.setMetodoPagoFiscal(timbradoIngreso.getMetodoPagoFiscal());
+			resultado.setFormaPagoFiscal(timbradoIngreso.getFormaPagoFiscal());
+			resultado.setUuidFacturaIngreso(timbradoIngreso.getUuid());
+			resultado.setEstadoFacturacion(timbradoIngreso.getEstatus());
+
+			boolean repCanonicoProcesado = false;
+			if (esFacturaPpd99(timbradoIngreso)) {
+				try {
+					java.util.List<TimbradoResponse> complementosCanonicos = complementoPagoService
+							.timbrarComplementosPagoClientePendientesVentas(
+									requestDto != null ? requestDto.getnIdsVenta() : null);
+					if (complementosCanonicos != null && !complementosCanonicos.isEmpty()) {
+						TimbradoResponse ultimoComplemento = complementosCanonicos.get(complementosCanonicos.size() - 1);
+						resultado.setUuidComplementoPago(ultimoComplemento.getUuid());
+						resultado.setEstadoComplemento("FACTURADA_CON_COMPLEMENTO_PAGO");
+						resultado.setMensaje("Factura consolidada y complemento(s) de pago canónico generado(s) correctamente.");
+						repCanonicoProcesado = true;
+					}
+				} catch (Exception complementoCanonicoError) {
+					logger.error("Factura consolidada generada pero el REP del pago global quedó pendiente para ventas {}",
+							requestDto != null ? requestDto.getnIdsVenta() : null, complementoCanonicoError);
+					resultado.setEstadoComplemento("PENDIENTE_COMPLEMENTO_PAGO");
+					resultado.setCodigoError("REP_PAGO_CLIENTE_ERROR");
+					resultado.setMensajeError(complementoCanonicoError.getMessage());
+					resultado.setMensaje("Factura consolidada generada correctamente; el REP del pago global quedó pendiente.");
+					repCanonicoProcesado = true;
+				}
+			}
+
+			if (!repCanonicoProcesado) {
+				resultado.setEstadoComplemento("PPD".equalsIgnoreCase(timbradoIngreso.getMetodoPagoFiscal())
+						? "PENDIENTE_COMPLEMENTO_PAGO"
+						: "NO_REQUIERE_COMPLEMENTO");
+				resultado.setMensaje("Factura consolidada generada correctamente.");
+			}
+			return resultado;
+		} catch (Exception e) {
+			logger.error("Error al facturar ventas consolidadas usando proveedor activo {}",
+					facturacionProperties != null ? facturacionProperties.getProveedorActivo() : null, e);
+			resultado.setSuccess(false);
+			resultado.setMensaje("Error al facturar las ventas consolidadas");
+			resultado.setCodigoError("TIMBRADO_CONSOLIDADO_ERROR");
+			resultado.setMensajeError(e.getMessage());
+			return resultado;
+		}
+	}
+
+	private boolean esFacturaPpd99(TimbradoResponse timbradoIngreso) {
+		return timbradoIngreso != null
+				&& "PPD".equalsIgnoreCase(timbradoIngreso.getMetodoPagoFiscal())
+				&& "99".equalsIgnoreCase(timbradoIngreso.getFormaPagoFiscal());
 	}
 
 	@Override
@@ -204,6 +293,28 @@ public class FacturacionServiceImpl implements FacturacionService {
 			resultado.setSuccess(false);
 			resultado.setMensaje("Error al registrar complemento de pago");
 			resultado.setCodigoError("REP_ERROR");
+			resultado.setMensajeError(e.getMessage());
+			return resultado;
+		}
+	}
+
+	@Override
+	public ResultadoFacturacionVentaDto complementoPagoCliente(Long nIdPagoCliente) throws Exception {
+		ResultadoFacturacionVentaDto resultado = new ResultadoFacturacionVentaDto();
+		try {
+			TimbradoResponse complemento = complementoPagoService.timbrarComplementoPagoCliente(nIdPagoCliente);
+			resultado.setSuccess(true);
+			resultado.setMensaje("Complemento de pago global registrado");
+			resultado.setUuidComplementoPago(complemento.getUuid());
+			resultado.setEstadoComplemento("FACTURADA_CON_COMPLEMENTO_PAGO");
+			return resultado;
+		} catch (Exception e) {
+			logger.error("Error al timbrar complemento de pago global para pago cliente {} usando proveedor activo {}",
+					nIdPagoCliente,
+					facturacionProperties != null ? facturacionProperties.getProveedorActivo() : null, e);
+			resultado.setSuccess(false);
+			resultado.setMensaje("Error al registrar complemento de pago global");
+			resultado.setCodigoError("REP_PAGO_CLIENTE_ERROR");
 			resultado.setMensajeError(e.getMessage());
 			return resultado;
 		}

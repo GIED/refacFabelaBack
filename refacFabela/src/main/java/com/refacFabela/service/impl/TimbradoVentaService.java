@@ -30,12 +30,14 @@ import com.refacFabela.model.TcDatosFactura;
 import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TwFacturacion;
+import com.refacFabela.model.TwPagoAplicacion;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.CatalagoFormaPagoRepository;
 import com.refacFabela.repository.FacturaRepository;
 import com.refacFabela.repository.TcDatosFacturaRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
+import com.refacFabela.repository.TwPagoAplicacionRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.impl.DatosFacturaStorageResolver;
@@ -57,6 +59,7 @@ public class TimbradoVentaService {
 	private final CatalagoFormaPagoRepository catalagoFormaPagoRepository;
 	private final TcDatosFacturaRepository tcDatosFacturaRepository;
 	private final FacturaRepository facturaRepository;
+	private final TwPagoAplicacionRepository twPagoAplicacionRepository;
 	private final VentasService ventasService;
 	private final PacFacturacionClient pacFacturacionClient;
 	private final PacFacturacionMapper pacFacturacionMapper;
@@ -72,6 +75,7 @@ public class TimbradoVentaService {
 			CatalagoFormaPagoRepository catalagoFormaPagoRepository,
 			TcDatosFacturaRepository tcDatosFacturaRepository,
 			FacturaRepository facturaRepository,
+			TwPagoAplicacionRepository twPagoAplicacionRepository,
 			VentasService ventasService,
 			PacFacturacionClient pacFacturacionClient,
 			PacFacturacionMapper pacFacturacionMapper,
@@ -86,6 +90,7 @@ public class TimbradoVentaService {
 		this.catalagoFormaPagoRepository = catalagoFormaPagoRepository;
 		this.tcDatosFacturaRepository = tcDatosFacturaRepository;
 		this.facturaRepository = facturaRepository;
+		this.twPagoAplicacionRepository = twPagoAplicacionRepository;
 		this.ventasService = ventasService;
 		this.pacFacturacionClient = pacFacturacionClient;
 		this.pacFacturacionMapper = pacFacturacionMapper;
@@ -115,7 +120,7 @@ public class TimbradoVentaService {
 		if (productos == null || productos.isEmpty()) {
 			throw new FacturacionException("La venta no tiene productos para facturar.");
 		}
-		if (cobros == null || cobros.isEmpty()) {
+		if ((cobros == null || cobros.isEmpty()) && !Long.valueOf(1L).equals(venta.getnTipoPago())) {
 			throw new FacturacionException("La venta no tiene cobros registrados para facturar.");
 		}
 
@@ -185,6 +190,117 @@ public class TimbradoVentaService {
 		persistirFacturacion(venta, datosFactura, response);
 		guardarArchivos(datosFactura, idVenta, response);
 		enviarCorreoSiAplica(venta, datosFactura);
+		return response;
+	}
+
+	public TimbradoResponse timbrarVentasConsolidadas(List<Long> idsVenta, String cveCfdi) {
+		if (idsVenta == null || idsVenta.isEmpty()) {
+			throw new FacturacionException("Debes indicar al menos una venta para facturación consolidada.");
+		}
+
+		List<TwVenta> ventas = new ArrayList<TwVenta>();
+		List<TwVentasProducto> productos = new ArrayList<TwVentasProducto>();
+		List<TrVentaCobro> cobros = new ArrayList<TrVentaCobro>();
+		Long nIdCliente = null;
+		Long nIdDatoFactura = null;
+		boolean contieneCredito = false;
+
+		for (Long idVenta : idsVenta) {
+			TwVenta venta = ventasRepository.findBynId(idVenta);
+			if (venta == null) {
+				throw new FacturacionException("La venta " + idVenta + " no existe.");
+			}
+			if (venta.getnIdFacturacion() != null && venta.getnIdFacturacion().longValue() > 0L) {
+				throw new FacturacionException("La venta " + idVenta + " ya fue facturada.");
+			}
+			if (venta.getTcCliente() == null || venta.getTcCliente().getnIdDatoFactura() == null) {
+				throw new FacturacionException("La venta " + idVenta + " no tiene razón social fiscal configurada.");
+			}
+			if (nIdCliente == null) {
+				nIdCliente = venta.getnIdCliente();
+				nIdDatoFactura = venta.getTcCliente().getnIdDatoFactura();
+			} else {
+				if (!nIdCliente.equals(venta.getnIdCliente())) {
+					throw new FacturacionException("Todas las ventas consolidadas deben pertenecer al mismo cliente.");
+				}
+				if (!nIdDatoFactura.equals(venta.getTcCliente().getnIdDatoFactura())) {
+					throw new FacturacionException("Todas las ventas consolidadas deben usar la misma razón social emisora.");
+				}
+			}
+
+			List<TwVentasProducto> productosVenta = ventasProductoRepository.findBynIdVenta(idVenta);
+			List<TrVentaCobro> cobrosVenta = trVentaCobroRepository.findBynIdVenta(idVenta);
+			if (productosVenta == null || productosVenta.isEmpty()) {
+				throw new FacturacionException("La venta " + idVenta + " no tiene productos para facturar.");
+			}
+			if ((cobrosVenta == null || cobrosVenta.isEmpty()) && !Long.valueOf(1L).equals(venta.getnTipoPago())) {
+				throw new FacturacionException("La venta " + idVenta + " no tiene cobros registrados para facturar.");
+			}
+
+			ventas.add(venta);
+			productos.addAll(productosVenta);
+			cobros.addAll(cobrosVenta);
+			contieneCredito = contieneCredito || Long.valueOf(1L).equals(venta.getnTipoPago());
+		}
+
+		TwVenta ventaAncla = ventas.get(0);
+		TcDatosFactura datosFactura = tcDatosFacturaRepository.obtenerDatos(nIdDatoFactura);
+		if (datosFactura == null) {
+			throw new FacturacionException("No existe configuración fiscal para la razón social emisora.");
+		}
+
+		TwVenta ventaClasificacion = new TwVenta();
+		ventaClasificacion.setnId(ventaAncla.getnId());
+		ventaClasificacion.setnTipoPago(contieneCredito ? 1L : ventaAncla.getnTipoPago());
+		ventaClasificacion.setTcFormapago(ventaAncla.getTcFormapago());
+		ClasificacionFacturacionVenta clasificacion = clasificacionFacturacionService.clasificarVenta(ventaClasificacion,
+				productos, cobros);
+
+		String nombreReceptorOriginal = ventaAncla.getTcCliente() != null ? ventaAncla.getTcCliente().getsRazonSocial() : null;
+		List<String> nombresReceptorIntentados = pacFacturacionMapper.buildLegalNameCandidates(nombreReceptorOriginal);
+		if (nombresReceptorIntentados.isEmpty()) {
+			nombresReceptorIntentados = Collections.singletonList(nombreReceptorOriginal);
+		}
+
+		CfdiTimbradoRequest request = buildRequest(ventaAncla, datosFactura, productos, cobros, clasificacion, cveCfdi,
+				nombresReceptorIntentados.get(0));
+		String correlationId = java.util.UUID.randomUUID().toString();
+		TimbradoResponse response = null;
+		int intentoNombreReceptor = 1;
+		try {
+			for (int index = 0; index < nombresReceptorIntentados.size(); index++) {
+				String nombreReceptorIntentado = nombresReceptorIntentados.get(index);
+				request.getReceptor().setNombre(nombreReceptorIntentado);
+				intentoNombreReceptor = index + 1;
+				response = pacFacturacionClient.timbrarCfdi(request);
+				if (isTimbradoSuccessful(response)) {
+					break;
+				}
+				if (!shouldRetryReceiverName(response, index, nombresReceptorIntentados.size())) {
+					break;
+				}
+			}
+			registrarAuditoria(ventaAncla, request, response, correlationId, null, null,
+					nombreReceptorOriginal, nombresReceptorIntentados, intentoNombreReceptor);
+		} catch (Exception e) {
+			registrarAuditoria(ventaAncla, request, response, correlationId, "TIMBRADO_ERROR", e.getMessage(),
+					nombreReceptorOriginal, nombresReceptorIntentados, intentoNombreReceptor);
+			throw e;
+		}
+
+		if (!isTimbradoSuccessful(response)) {
+			throw new FacturacionException(buildTimbradoFailureMessage(response, nombreReceptorOriginal,
+					request != null && request.getReceptor() != null ? request.getReceptor().getNombre() : null));
+		}
+
+		response.setClasificacionFiscal(clasificacion.getClasificacion() != null ? clasificacion.getClasificacion().name() : null);
+		response.setMetodoPagoFiscal(clasificacion.getMetodoPagoFiscal());
+		response.setFormaPagoFiscal(clasificacion.getFormaPagoFiscal());
+		response.setComplementoInmediatoRequerido(Boolean.FALSE);
+
+		persistirFacturacionConsolidada(ventas, datosFactura, response);
+		guardarArchivos(datosFactura, extractVentaIds(ventas), response);
+		enviarCorreoSiAplica(ventaAncla, datosFactura);
 		return response;
 	}
 
@@ -353,11 +469,81 @@ public class TimbradoVentaService {
 
 		venta.setnIdFacturacion(facturacion.getnId());
 		ventasService.updateStatusVenta(venta);
+		actualizarAplicacionesCanonicasVenta(venta);
+	}
+
+	private void persistirFacturacionConsolidada(List<TwVenta> ventas, TcDatosFactura datosFactura, TimbradoResponse response) {
+		TwFacturacion facturacion = new TwFacturacion();
+		facturacion.setN_idVenta(ventas.get(0).getnId());
+		facturacion.setnIdDatoFactura(datosFactura.getnId());
+		facturacion.setsUuid(response.getUuid());
+		facturacion.setsEstado(response.getEstatus() != null ? response.getEstatus() : "Timbrado");
+		facturacion.setsClasificacionFiscal(response.getClasificacionFiscal());
+		facturacion.setsMetodoPagoFiscal(response.getMetodoPagoFiscal());
+		facturacion.setsFormaPagoFiscal(response.getFormaPagoFiscal());
+		facturacion.setsEstadoComplemento("PPD".equalsIgnoreCase(response.getMetodoPagoFiscal())
+				? "PENDIENTE_COMPLEMENTO_PAGO"
+				: "NO_REQUIERE_COMPLEMENTO");
+		facturacion.setsUuidComplementoPago(null);
+		facturacion.setsErrorComplemento(null);
+		facturacion.setS_noCertificadoSat(response.getNoCertificadoSat());
+		facturacion.setS_selloCfd(response.getSelloCfd());
+		facturacion.setS_selloSat(response.getSelloSat());
+		facturacion.setS_cadenaOriginal(response.getCadenaOriginalComplementoSat());
+		facturacion.setnEstatus(1);
+		facturacion = facturaRepository.save(facturacion);
+
+		for (TwVenta venta : ventas) {
+			venta.setnIdFacturacion(facturacion.getnId());
+			ventasService.updateStatusVenta(venta);
+			actualizarAplicacionesCanonicasVenta(venta);
+		}
+	}
+
+	private void actualizarAplicacionesCanonicasVenta(TwVenta venta) {
+		if (venta == null || venta.getnId() == null || venta.getnIdFacturacion() == null
+				|| venta.getnIdFacturacion().longValue() <= 0L) {
+			return;
+		}
+
+		List<TwPagoAplicacion> aplicaciones = twPagoAplicacionRepository.findActivasByVenta(venta.getnId());
+		for (TwPagoAplicacion aplicacion : aplicaciones) {
+			if (aplicacion == null) {
+				continue;
+			}
+			if (aplicacion.getnIdFacturacion() != null && aplicacion.getnIdFacturacion().longValue() > 0L) {
+				continue;
+			}
+			aplicacion.setnIdFacturacion(venta.getnIdFacturacion());
+			twPagoAplicacionRepository.save(aplicacion);
+		}
 	}
 
 	private void guardarArchivos(TcDatosFactura datosFactura, Long idVenta, TimbradoResponse response) {
 		guardarXml(datosFacturaStorageResolver.resolveRutaXml(datosFactura), idVenta, response.getXmlBase64());
 		guardarPdf(datosFacturaStorageResolver.resolveRutaPdf(datosFactura), idVenta, response.getPdfBase64());
+	}
+
+	private void guardarArchivos(TcDatosFactura datosFactura, List<Long> idsVenta, TimbradoResponse response) {
+		if (idsVenta == null) {
+			return;
+		}
+		for (Long idVenta : idsVenta) {
+			guardarArchivos(datosFactura, idVenta, response);
+		}
+	}
+
+	private List<Long> extractVentaIds(List<TwVenta> ventas) {
+		List<Long> ids = new ArrayList<Long>();
+		if (ventas == null) {
+			return ids;
+		}
+		for (TwVenta venta : ventas) {
+			if (venta != null && venta.getnId() != null) {
+				ids.add(venta.getnId());
+			}
+		}
+		return ids;
 	}
 
 	private void enviarCorreoSiAplica(TwVenta venta, TcDatosFactura datosFactura) {

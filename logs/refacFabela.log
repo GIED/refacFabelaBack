@@ -1,14 +1,11 @@
-2026-07-02 01:21:53 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@e681e8e (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-2026-07-02 01:22:05 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@4330140d (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-2026-07-02 01:22:46 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@6d5c4935 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-2026-07-02 01:22:47 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1d1d5411 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-2026-07-02 09:16:41 [http-nio-127.0.0.1-4043-exec-2] INFO  com.refacFabela.jwt.JwtProvider - Refresh de token expirado, generando nuevo token
-2026-07-02 09:17:11 [http-nio-127.0.0.1-4043-exec-10] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 0, SQLState: 08S01
-2026-07-02 09:17:11 [http-nio-127.0.0.1-4043-exec-10] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - HikariPool-1 - Connection is not available, request timed out after 30001ms.
-2026-07-02 09:17:11 [http-nio-127.0.0.1-4043-exec-10] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Communications link failure
+2026-07-06 10:23:34 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2d11h38m10s333ms669µs300ns).
+2026-07-06 10:24:54 [http-nio-127.0.0.1-4043-exec-3] INFO  com.refacFabela.jwt.JwtProvider - Refresh de token expirado, generando nuevo token
+2026-07-06 10:25:27 [http-nio-127.0.0.1-4043-exec-6] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 0, SQLState: 08S01
+2026-07-06 10:25:27 [http-nio-127.0.0.1-4043-exec-6] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - HikariPool-1 - Connection is not available, request timed out after 30010ms.
+2026-07-06 10:25:27 [http-nio-127.0.0.1-4043-exec-6] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Communications link failure
 
 The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-2026-07-02 09:17:11 [http-nio-127.0.0.1-4043-exec-10] ERROR com.refacFabela.jwt.JwtTokenFilter - Fallo en JwtTokenFilter para GET /api/refacFabela/facturacion/getDocumento
+2026-07-06 10:25:27 [http-nio-127.0.0.1-4043-exec-6] ERROR com.refacFabela.jwt.JwtTokenFilter - Fallo en JwtTokenFilter para GET /api/refacFabela/consultaClienteSaldo
 org.springframework.transaction.CannotCreateTransactionException: Could not open JPA EntityManager for transaction; nested exception is org.hibernate.exception.JDBCConnectionException: Unable to acquire JDBC Connection
 	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:467)
 	at org.springframework.transaction.support.AbstractPlatformTransactionManager.startTransaction(AbstractPlatformTransactionManager.java:400)
@@ -19,7 +16,7 @@ org.springframework.transaction.CannotCreateTransactionException: Could not open
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:708)
-	at com.refacFabela.service.impl.UsuarioServiceImp$$EnhancerBySpringCGLIB$$6923e6e9.getByNombreUsuario(<generated>)
+	at com.refacFabela.service.impl.UsuarioServiceImp$$EnhancerBySpringCGLIB$$8229fdc7.getByNombreUsuario(<generated>)
 	at com.refacFabela.service.impl.UserDetailsServiceImpl.loadUserByUsername(UserDetailsServiceImpl.java:21)
 	at com.refacFabela.jwt.JwtTokenFilter.doFilterInternal(JwtTokenFilter.java:43)
 	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
@@ -98,7 +95,7 @@ Caused by: org.hibernate.exception.JDBCConnectionException: Unable to acquire JD
 	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.beginTransaction(HibernateJpaDialect.java:164)
 	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:421)
 	... 73 common frames omitted
-Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30001ms.
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30010ms.
 	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:696)
 	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:197)
 	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:162)
@@ -130,7 +127,7 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 Caused by: com.mysql.cj.exceptions.CJCommunicationsException: Communications link failure
 
 The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.GeneratedConstructorAccessor133.newInstance(Unknown Source)
+	at sun.reflect.GeneratedConstructorAccessor154.newInstance(Unknown Source)
 	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
 	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
 	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:62)
@@ -142,7 +139,7 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 	at com.mysql.cj.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:945)
 	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:815)
 	... 14 common frames omitted
-Caused by: java.net.ConnectException: Connection timed out: connect
+Caused by: java.net.ConnectException: Connection refused: connect
 	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
 	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
 	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
@@ -154,9 +151,3 @@ Caused by: java.net.ConnectException: Connection timed out: connect
 	at com.mysql.cj.protocol.StandardSocketFactory.connect(StandardSocketFactory.java:153)
 	at com.mysql.cj.protocol.a.NativeSocketConnection.connect(NativeSocketConnection.java:63)
 	... 17 common frames omitted
-2026-07-02 10:52:35 [http-nio-127.0.0.1-4043-exec-9] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcCliente] property of the [com.refacFabela.model.TwCotizaciones] entity was modified, but it won't be updated because the property is immutable.
-2026-07-02 10:52:35 [http-nio-127.0.0.1-4043-exec-9] WARN  o.h.p.entity.AbstractEntityPersister - HHH000502: The [tcUsuario] property of the [com.refacFabela.model.TwCotizaciones] entity was modified, but it won't be updated because the property is immutable.
-2026-07-02 10:52:36 [http-nio-127.0.0.1-4043-exec-4] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
-2026-07-02 10:52:36 [http-nio-127.0.0.1-4043-exec-4] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
-2026-07-02 10:52:36 [http-nio-127.0.0.1-4043-exec-4] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
-2026-07-02 10:52:36 [http-nio-127.0.0.1-4043-exec-4] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.

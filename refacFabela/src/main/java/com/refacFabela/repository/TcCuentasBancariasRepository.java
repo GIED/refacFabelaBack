@@ -14,4 +14,7 @@ public interface TcCuentasBancariasRepository extends JpaRepository<TcCuentaBanc
 	@Query("select c from TcCuentaBancaria c where c.nIdRazonSocial=:nIdRazonSocial and c.nEstatus=1 ")
 	public List<TcCuentaBancaria> consultaCuentas(Long nIdRazonSocial);
 
+	@Query("select c from TcCuentaBancaria c where c.nEstatus=1 order by c.sBanco asc, c.sTerminacion asc")
+	public List<TcCuentaBancaria> consultaCuentasActivas();
+
 }

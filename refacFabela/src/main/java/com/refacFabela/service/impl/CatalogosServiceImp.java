@@ -300,6 +300,11 @@ public class CatalogosServiceImp implements CatalagosService {
 	}
 
 	@Override
+	public List<TcCuentaBancaria> consultarCuentasBancariasActivas() {
+		return tcCuentasBancariasRepository.consultaCuentasActivas();
+	}
+
+	@Override
 	public List<TcTipoProveedor> getTipoProveedor() {
 		
 		return tcTipoProveedorRepository.getTipoProveedor();

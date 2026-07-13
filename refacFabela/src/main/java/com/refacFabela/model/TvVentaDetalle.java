@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tv_ventadetalle")
@@ -84,6 +85,18 @@ public class TvVentaDetalle implements Serializable {
 	
 	@Column(name = "n_vencido")
 	private Boolean nVencido;
+
+	@Transient
+	private Long nIdPagoClienteCanonico;
+
+	@Transient
+	private String sEstadoPagoCanonico;
+
+	@Transient
+	private String sEstadoRepCanonico;
+
+	@Transient
+	private String sUuidRepCanonico;
 	
 	
 	
@@ -363,6 +376,38 @@ public class TvVentaDetalle implements Serializable {
 
 	public void setnSaldo(Boolean nSaldo) {
 		this.nSaldo = nSaldo;
+	}
+
+	public Long getnIdPagoClienteCanonico() {
+		return nIdPagoClienteCanonico;
+	}
+
+	public void setnIdPagoClienteCanonico(Long nIdPagoClienteCanonico) {
+		this.nIdPagoClienteCanonico = nIdPagoClienteCanonico;
+	}
+
+	public String getsEstadoPagoCanonico() {
+		return sEstadoPagoCanonico;
+	}
+
+	public void setsEstadoPagoCanonico(String sEstadoPagoCanonico) {
+		this.sEstadoPagoCanonico = sEstadoPagoCanonico;
+	}
+
+	public String getsEstadoRepCanonico() {
+		return sEstadoRepCanonico;
+	}
+
+	public void setsEstadoRepCanonico(String sEstadoRepCanonico) {
+		this.sEstadoRepCanonico = sEstadoRepCanonico;
+	}
+
+	public String getsUuidRepCanonico() {
+		return sUuidRepCanonico;
+	}
+
+	public void setsUuidRepCanonico(String sUuidRepCanonico) {
+		this.sUuidRepCanonico = sUuidRepCanonico;
 	}
 
 	@Override

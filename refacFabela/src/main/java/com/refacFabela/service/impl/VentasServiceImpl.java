@@ -27,6 +27,8 @@ import com.refacFabela.model.TwCotizaciones;
 import com.refacFabela.model.TwFacturacion;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
+import com.refacFabela.model.TwPagoAplicacion;
+import com.refacFabela.model.TwPagoCliente;
 import com.refacFabela.model.TwProductobodega;
 import com.refacFabela.model.TwSaldoUtilizado;
 import com.refacFabela.model.TwVenta;
@@ -34,8 +36,10 @@ import com.refacFabela.model.TwVentaProductosTraer;
 import com.refacFabela.model.TwVentasProducto;
 import com.refacFabela.repository.AbonoVentaIdRepository;
 import com.refacFabela.repository.CajaRepository;
+import com.refacFabela.repository.CatalagoFormaPagoRepository;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.CotizacionRepository;
+import com.refacFabela.repository.FacturacionComplementoPagoRepository;
 import com.refacFabela.repository.FacturaRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
@@ -43,6 +47,8 @@ import com.refacFabela.repository.ThStockProductoRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TvReporteDetalleVentaRepository;
 import com.refacFabela.repository.TvVentaDetalleRepository;
+import com.refacFabela.repository.TwPagoAplicacionRepository;
+import com.refacFabela.repository.TwPagoClienteRepository;
 import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.TwSaldoUtilizadoRepository;
 import com.refacFabela.repository.TwVentaProductosTraerRepository;
@@ -109,6 +115,18 @@ public class VentasServiceImpl implements VentasService {
 	@Autowired
 	private TvReporteDetalleVentaRepository tvReporteDetalleVentaRepository;
 
+	@Autowired
+	private CatalagoFormaPagoRepository catalagoFormaPagoRepository;
+
+	@Autowired
+	private TwPagoClienteRepository twPagoClienteRepository;
+
+	@Autowired
+	private TwPagoAplicacionRepository twPagoAplicacionRepository;
+
+	@Autowired
+	private FacturacionComplementoPagoRepository facturacionComplementoPagoRepository;
+
 	
 	
 	
@@ -123,8 +141,9 @@ public class VentasServiceImpl implements VentasService {
 
 	@Override
 	public List<TvVentaDetalle> consultaVentaDetalleId(Long nIdCliente, Long nTipoPago) {
-
-		return tvVentaDetalleRepository.consultaVentaDetalleId(nIdCliente, nTipoPago);
+		List<TvVentaDetalle> ventasDetalle = tvVentaDetalleRepository.consultaVentaDetalleId(nIdCliente, nTipoPago);
+		enriquecerEstadosCanonicos(ventasDetalle);
+		return ventasDetalle;
 	}
 
 	@Override
@@ -704,7 +723,8 @@ public class VentasServiceImpl implements VentasService {
 				ventaCobro.setnEstatus(1L);
 				ventaCobro.setnIdCaja(caja.getnId());
 				ventaCobro.setnMonto(tvVentaDetalle.getnAnticipo());
-				trVentaCobroRepository.save(ventaCobro);
+				ventaCobro = trVentaCobroRepository.save(ventaCobro);
+				registrarPagoCanonicoDesdeCobro(ventaCobro, "LEGACY_VENTA_COBRO");
 				System.err.println("Sali de guardar el anticipo");
 				
 				ventaCobroSaldo.setnIdVenta(venta.getnId());
@@ -714,7 +734,8 @@ public class VentasServiceImpl implements VentasService {
 				ventaCobroSaldo.setnIdCaja(caja.getnId());			
 				ventaCobroSaldo.setnMonto(tvVentaDetalle.getnSaldoFavor());
 				ventaCobroSaldo.setnIdFormaPago(11L);			
-				trVentaCobroRepository.save(ventaCobroSaldo);
+				ventaCobroSaldo = trVentaCobroRepository.save(ventaCobroSaldo);
+				registrarPagoCanonicoDesdeCobro(ventaCobroSaldo, "LEGACY_VENTA_COBRO");
 				System.err.println("Sali de guardar el saldo a favor");
 				
 				
@@ -742,7 +763,8 @@ public class VentasServiceImpl implements VentasService {
 				ventaCobro.setnEstatus(1L);
 				ventaCobro.setnIdCaja(caja.getnId());
 				ventaCobro.setnMonto(tvVentaDetalle.getnTotalVenta());
-				trVentaCobroRepository.save(ventaCobro);
+				ventaCobro = trVentaCobroRepository.save(ventaCobro);
+				registrarPagoCanonicoDesdeCobro(ventaCobro, "LEGACY_VENTA_COBRO");
 				
 			}
 			
@@ -755,7 +777,8 @@ public class VentasServiceImpl implements VentasService {
 			ventaCobro.setnEstatus(1L);
 			ventaCobro.setnIdCaja(caja.getnId());
 			ventaCobro.setnMonto(tvVentaDetalle.getnAnticipo());
-			trVentaCobroRepository.save(ventaCobro);
+			ventaCobro = trVentaCobroRepository.save(ventaCobro);
+			registrarPagoCanonicoDesdeCobro(ventaCobro, "LEGACY_VENTA_COBRO");
 		}					
 
 		System.err.println("El descuento es de "+tvVentaDetalle.getDescuento());
@@ -765,6 +788,177 @@ public class VentasServiceImpl implements VentasService {
 		
 		
 		return tvVentaDetalle;
+	}
+
+	private void registrarPagoCanonicoDesdeCobro(TrVentaCobro ventaCobro, String origenRegistro) {
+		if (ventaCobro == null || ventaCobro.getnIdVenta() == null || ventaCobro.getnMonto() == null
+				|| ventaCobro.getnMonto().compareTo(BigDecimal.ZERO) <= 0) {
+			return;
+		}
+
+		TwVenta venta = ventasRepository.findBynId(ventaCobro.getnIdVenta());
+		if (venta == null || venta.getTcCliente() == null || venta.getTcCliente().getnIdDatoFactura() == null) {
+			return;
+		}
+
+		BigDecimal totalVenta = BigDecimal.ZERO;
+		List<TwVentasProducto> productosVenta = ventasProductoRepository.findBynIdVenta(ventaCobro.getnIdVenta());
+		for (TwVentasProducto producto : productosVenta) {
+			if (producto.getnTotalPartida() != null) {
+				totalVenta = totalVenta.add(producto.getnTotalPartida());
+			}
+		}
+
+		BigDecimal totalCobros = BigDecimal.ZERO;
+		List<TrVentaCobro> cobrosVenta = trVentaCobroRepository.findBynIdVenta(ventaCobro.getnIdVenta());
+		for (TrVentaCobro cobro : cobrosVenta) {
+			if (cobro.getnMonto() != null) {
+				totalCobros = totalCobros.add(cobro.getnMonto());
+			}
+		}
+
+		BigDecimal totalCobrosPrevios = totalCobros.subtract(ventaCobro.getnMonto());
+		if (totalCobrosPrevios.compareTo(BigDecimal.ZERO) < 0) {
+			totalCobrosPrevios = BigDecimal.ZERO;
+		}
+
+		BigDecimal saldoAnterior = totalVenta.subtract(totalCobrosPrevios);
+		if (saldoAnterior.compareTo(BigDecimal.ZERO) < 0) {
+			saldoAnterior = BigDecimal.ZERO;
+		}
+
+		BigDecimal saldoInsoluto = totalVenta.subtract(totalCobros);
+		if (saldoInsoluto.compareTo(BigDecimal.ZERO) < 0) {
+			saldoInsoluto = BigDecimal.ZERO;
+		}
+
+		TwPagoCliente pagoCliente = new TwPagoCliente();
+		pagoCliente.setnIdCliente(venta.getnIdCliente());
+		pagoCliente.setnIdDatoFactura(venta.getTcCliente().getnIdDatoFactura());
+		pagoCliente.setdFechaRegistro(DateTimeUtil.obtenerHoraExactaDeMexico());
+		pagoCliente.setdFechaPago(ventaCobro.getdFecha() != null ? ventaCobro.getdFecha() : DateTimeUtil.obtenerHoraExactaDeMexico());
+		pagoCliente.setnImporteTotal(ventaCobro.getnMonto());
+		pagoCliente.setnImporteAplicado(ventaCobro.getnMonto());
+		pagoCliente.setnImporteDisponible(BigDecimal.ZERO);
+		pagoCliente.setsMoneda("MXN");
+		pagoCliente.setnIdFormaPago(ventaCobro.getnIdFormaPago());
+		if (ventaCobro.getnIdFormaPago() != null) {
+			com.refacFabela.model.TcFormapago formaPago = catalagoFormaPagoRepository.findById(ventaCobro.getnIdFormaPago())
+					.orElse(null);
+			if (formaPago != null) {
+				pagoCliente.setsFormaPagoSat(formaPago.getsClave());
+				pagoCliente.setsDescripcionFormaPago(formaPago.getsDescripcion());
+			}
+		}
+		pagoCliente.setsObservaciones("Registro generado desde flujo legacy de cobros de venta.");
+		pagoCliente.setnIdUsuarioRegistro(venta.getnIdUsuario());
+		pagoCliente.setnIdCaja(ventaCobro.getnIdCaja());
+		pagoCliente.setnIdCorteCaja(ventaCobro.getnIdCaja());
+		pagoCliente.setsEstatus("APLICADO_TOTAL");
+		pagoCliente.setnConciliado(Boolean.FALSE);
+		pagoCliente.setnEstatus(1);
+		pagoCliente = twPagoClienteRepository.save(pagoCliente);
+
+		TwPagoAplicacion aplicacion = new TwPagoAplicacion();
+		aplicacion.setnIdPagoCliente(pagoCliente.getnId());
+		aplicacion.setnIdCliente(venta.getnIdCliente());
+		aplicacion.setnIdVenta(venta.getnId());
+		aplicacion.setnIdFacturacion(venta.getnIdFacturacion());
+		aplicacion.setnIdDatoFactura(venta.getTcCliente().getnIdDatoFactura());
+		aplicacion.setnMontoAplicado(ventaCobro.getnMonto());
+		aplicacion.setnSaldoAnterior(saldoAnterior);
+		aplicacion.setnSaldoInsoluto(saldoInsoluto);
+		Integer parcialidad = twPagoAplicacionRepository.maxParcialidadActivaVenta(venta.getnId());
+		aplicacion.setnParcialidad(parcialidad == null || parcialidad.intValue() <= 0 ? 1 : parcialidad + 1);
+		aplicacion.setsEstatus("APLICADA");
+		aplicacion.setdFechaAplicacion(DateTimeUtil.obtenerHoraExactaDeMexico());
+		aplicacion.setnIdUsuario(venta.getnIdUsuario());
+		aplicacion.setnOrdenAplicacion(cobrosVenta.size());
+		aplicacion.setsOrigenRegistro(origenRegistro);
+		aplicacion.setnEstatus(1);
+		twPagoAplicacionRepository.save(aplicacion);
+	}
+
+	private void enriquecerEstadosCanonicos(List<TvVentaDetalle> ventasDetalle) {
+		if (ventasDetalle == null) {
+			return;
+		}
+		for (TvVentaDetalle detalle : ventasDetalle) {
+			enriquecerEstadoCanonico(detalle);
+		}
+	}
+
+	private void enriquecerEstadoCanonico(TvVentaDetalle detalle) {
+		if (detalle == null || detalle.getnId() == null) {
+			return;
+		}
+
+		List<TwPagoAplicacion> aplicaciones = twPagoAplicacionRepository.findActivasByVenta(detalle.getnId());
+		if (aplicaciones == null || aplicaciones.isEmpty()) {
+			detalle.setsEstadoPagoCanonico("SIN_PAGO_CANONICO");
+			detalle.setsEstadoRepCanonico(resolveEstadoRepSinAplicaciones(detalle.getnId()));
+			return;
+		}
+
+		TwPagoAplicacion ultimaAplicacion = aplicaciones.get(aplicaciones.size() - 1);
+		detalle.setnIdPagoClienteCanonico(ultimaAplicacion.getnIdPagoCliente());
+		TwPagoCliente pagoCliente = ultimaAplicacion.getTwPagoCliente() != null
+				? ultimaAplicacion.getTwPagoCliente()
+				: twPagoClienteRepository.findBynId(ultimaAplicacion.getnIdPagoCliente());
+		detalle.setsEstadoPagoCanonico(pagoCliente != null && pagoCliente.getsEstatus() != null
+				? pagoCliente.getsEstatus()
+				: "APLICADA");
+
+		java.util.Set<Long> idsAplicacion = new java.util.HashSet<Long>();
+		for (TwPagoAplicacion aplicacion : aplicaciones) {
+			if (aplicacion != null && aplicacion.getnId() != null) {
+				idsAplicacion.add(aplicacion.getnId());
+			}
+		}
+
+		java.util.List<com.refacFabela.model.TwFacturacionComplementoPago> complementos = facturacionComplementoPagoRepository.findByVenta(detalle.getnId());
+		com.refacFabela.model.TwFacturacionComplementoPago ultimoTimbrado = null;
+		com.refacFabela.model.TwFacturacionComplementoPago ultimoFallido = null;
+		for (com.refacFabela.model.TwFacturacionComplementoPago complemento : complementos) {
+			if (complemento == null || !"TW_PAGO_CLIENTE_APLICACION".equalsIgnoreCase(complemento.getsOrigenPago())
+					|| complemento.getnIdPagoOrigen() == null || !idsAplicacion.contains(complemento.getnIdPagoOrigen())) {
+				continue;
+			}
+			if (complemento.getnEstatus() != null && complemento.getnEstatus().intValue() == 1) {
+				ultimoTimbrado = complemento;
+			}
+			if (complemento.getnEstatus() != null && complemento.getnEstatus().intValue() == 0) {
+				ultimoFallido = complemento;
+			}
+		}
+
+		if (ultimoTimbrado != null) {
+			detalle.setsEstadoRepCanonico("TIMBRADO");
+			detalle.setsUuidRepCanonico(ultimoTimbrado.getsUuidComplementoPago());
+			return;
+		}
+
+		if (ultimoFallido != null) {
+			detalle.setsEstadoRepCanonico("FALLIDO");
+			return;
+		}
+
+		detalle.setsEstadoRepCanonico(resolveEstadoRepSinAplicaciones(detalle.getnId()));
+	}
+
+	private String resolveEstadoRepSinAplicaciones(Long nIdVenta) {
+		TwVenta venta = ventasRepository.findBynId(nIdVenta);
+		if (venta == null || venta.getnIdFacturacion() == null || venta.getnIdFacturacion().longValue() <= 0L) {
+			return "NO_FACTURADA";
+		}
+		TwFacturacion facturacion = facturaRepository.findById(venta.getnIdFacturacion()).orElse(null);
+		if (facturacion == null) {
+			return "NO_FACTURADA";
+		}
+		if ("PPD".equalsIgnoreCase(facturacion.getsMetodoPagoFiscal()) && "99".equalsIgnoreCase(facturacion.getsFormaPagoFiscal())) {
+			return "PENDIENTE";
+		}
+		return "NO_REQUIERE";
 	}
 	
 	
@@ -818,21 +1012,19 @@ public class VentasServiceImpl implements VentasService {
 			}
 		}
 
-		if (idsFacturacion.isEmpty()) {
-			return ventas;
-		}
-
 		Map<Long, String> estadoPorFacturaId = new HashMap<Long, String>();
 		Map<Long, String> estadoComplementoPorFacturaId = new HashMap<Long, String>();
 		Map<Long, String> clasificacionPorFacturaId = new HashMap<Long, String>();
 		Map<Long, String> uuidComplementoPorFacturaId = new HashMap<Long, String>();
-		List<TwFacturacion> facturas = facturaRepository.findAllById(idsFacturacion);
-		for (TwFacturacion factura : facturas) {
-			if (factura != null && factura.getnId() != null) {
-				estadoPorFacturaId.put(factura.getnId(), factura.getsEstado());
-				estadoComplementoPorFacturaId.put(factura.getnId(), factura.getsEstadoComplemento());
-				clasificacionPorFacturaId.put(factura.getnId(), factura.getsClasificacionFiscal());
-				uuidComplementoPorFacturaId.put(factura.getnId(), factura.getsUuidComplementoPago());
+		if (!idsFacturacion.isEmpty()) {
+			List<TwFacturacion> facturas = facturaRepository.findAllById(idsFacturacion);
+			for (TwFacturacion factura : facturas) {
+				if (factura != null && factura.getnId() != null) {
+					estadoPorFacturaId.put(factura.getnId(), factura.getsEstado());
+					estadoComplementoPorFacturaId.put(factura.getnId(), factura.getsEstadoComplemento());
+					clasificacionPorFacturaId.put(factura.getnId(), factura.getsClasificacionFiscal());
+					uuidComplementoPorFacturaId.put(factura.getnId(), factura.getsUuidComplementoPago());
+				}
 			}
 		}
 
@@ -853,7 +1045,106 @@ public class VentasServiceImpl implements VentasService {
 			venta.setsUuidComplementoPago(uuidComplementoPorFacturaId.get(venta.getIdFactura()));
 		}
 
+		enriquecerEstadosCanonicosFacturacion(ventas);
+
 		return ventas;
+	}
+
+	private void enriquecerEstadosCanonicosFacturacion(List<TvVentasFactura> ventas) {
+		if (ventas == null) {
+			return;
+		}
+		for (TvVentasFactura venta : ventas) {
+			enriquecerEstadoCanonicoFacturacion(venta);
+		}
+	}
+
+	private void enriquecerEstadoCanonicoFacturacion(TvVentasFactura venta) {
+		if (venta == null || venta.getnId() == null) {
+			return;
+		}
+
+		List<TwPagoAplicacion> aplicaciones = twPagoAplicacionRepository.findActivasByVenta(venta.getnId());
+		if (aplicaciones == null || aplicaciones.isEmpty()) {
+			venta.setnIdPagoClienteCanonico(null);
+			venta.setsEstadoPagoCanonico("SIN_PAGO_CANONICO");
+			venta.setsEstadoRepCanonico(null);
+			venta.setsUuidRepCanonico(null);
+			return;
+		}
+
+		TwPagoAplicacion ultimaAplicacion = aplicaciones.get(aplicaciones.size() - 1);
+		venta.setnIdPagoClienteCanonico(ultimaAplicacion.getnIdPagoCliente());
+		TwPagoCliente pagoCliente = ultimaAplicacion.getTwPagoCliente() != null
+				? ultimaAplicacion.getTwPagoCliente()
+				: twPagoClienteRepository.findBynId(ultimaAplicacion.getnIdPagoCliente());
+		venta.setsEstadoPagoCanonico(pagoCliente != null && pagoCliente.getsEstatus() != null
+				? pagoCliente.getsEstatus()
+				: "APLICADA");
+		venta.setsUuidRepCanonico(null);
+
+		java.util.Set<Long> idsAplicacion = new java.util.HashSet<Long>();
+		boolean tieneAplicacionesSinFactura = false;
+		for (TwPagoAplicacion aplicacion : aplicaciones) {
+			if (aplicacion == null) {
+				continue;
+			}
+			if (aplicacion.getnId() != null) {
+				idsAplicacion.add(aplicacion.getnId());
+			}
+			if (aplicacion.getnIdFacturacion() == null || aplicacion.getnIdFacturacion().longValue() <= 0L) {
+				tieneAplicacionesSinFactura = true;
+			}
+		}
+
+		List<com.refacFabela.model.TwFacturacionComplementoPago> complementos = facturacionComplementoPagoRepository.findByVenta(venta.getnId());
+		com.refacFabela.model.TwFacturacionComplementoPago ultimoTimbrado = null;
+		com.refacFabela.model.TwFacturacionComplementoPago ultimoFallido = null;
+		for (com.refacFabela.model.TwFacturacionComplementoPago complemento : complementos) {
+			if (complemento == null || !"TW_PAGO_CLIENTE_APLICACION".equalsIgnoreCase(complemento.getsOrigenPago())
+					|| complemento.getnIdPagoOrigen() == null || !idsAplicacion.contains(complemento.getnIdPagoOrigen())) {
+				continue;
+			}
+			if (complemento.getnEstatus() != null && complemento.getnEstatus().intValue() == 1) {
+				ultimoTimbrado = complemento;
+			}
+			if (complemento.getnEstatus() != null && complemento.getnEstatus().intValue() == 0) {
+				ultimoFallido = complemento;
+			}
+		}
+
+		if (ultimoTimbrado != null) {
+			venta.setsEstadoRepCanonico("TIMBRADO");
+			venta.setsUuidRepCanonico(ultimoTimbrado.getsUuidComplementoPago());
+			return;
+		}
+
+		if (ultimoFallido != null) {
+			venta.setsEstadoRepCanonico("FALLIDO");
+			return;
+		}
+
+		if (tieneAplicacionesSinFactura) {
+			venta.setsEstadoRepCanonico("PENDIENTE_FACTURACION");
+			return;
+		}
+
+		if (venta.getIdFactura() == null || venta.getIdFactura().longValue() <= 0L) {
+			venta.setsEstadoRepCanonico("NO_FACTURADA");
+			return;
+		}
+
+		TwFacturacion facturacion = facturaRepository.findById(venta.getIdFactura()).orElse(null);
+		if (facturacion == null) {
+			venta.setsEstadoRepCanonico("NO_FACTURADA");
+			return;
+		}
+		if ("PPD".equalsIgnoreCase(facturacion.getsMetodoPagoFiscal())
+				&& "99".equalsIgnoreCase(facturacion.getsFormaPagoFiscal())) {
+			venta.setsEstadoRepCanonico("PENDIENTE");
+			return;
+		}
+		venta.setsEstadoRepCanonico("NO_REQUIERE");
 	}
 
 

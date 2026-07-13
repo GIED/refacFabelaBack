@@ -74,6 +74,18 @@ public class TvVentasFactura implements Serializable {
 
 	@Transient
 	private String sUuidComplementoPago;
+
+	@Transient
+	private Long nIdPagoClienteCanonico;
+
+	@Transient
+	private String sEstadoPagoCanonico;
+
+	@Transient
+	private String sEstadoRepCanonico;
+
+	@Transient
+	private String sUuidRepCanonico;
 	
 	
 	
@@ -204,6 +216,38 @@ public class TvVentasFactura implements Serializable {
 
 	public void setsUuidComplementoPago(String sUuidComplementoPago) {
 		this.sUuidComplementoPago = sUuidComplementoPago;
+	}
+
+	public Long getnIdPagoClienteCanonico() {
+		return nIdPagoClienteCanonico;
+	}
+
+	public void setnIdPagoClienteCanonico(Long nIdPagoClienteCanonico) {
+		this.nIdPagoClienteCanonico = nIdPagoClienteCanonico;
+	}
+
+	public String getsEstadoPagoCanonico() {
+		return sEstadoPagoCanonico;
+	}
+
+	public void setsEstadoPagoCanonico(String sEstadoPagoCanonico) {
+		this.sEstadoPagoCanonico = sEstadoPagoCanonico;
+	}
+
+	public String getsEstadoRepCanonico() {
+		return sEstadoRepCanonico;
+	}
+
+	public void setsEstadoRepCanonico(String sEstadoRepCanonico) {
+		this.sEstadoRepCanonico = sEstadoRepCanonico;
+	}
+
+	public String getsUuidRepCanonico() {
+		return sUuidRepCanonico;
+	}
+
+	public void setsUuidRepCanonico(String sUuidRepCanonico) {
+		this.sUuidRepCanonico = sUuidRepCanonico;
 	}
 
 

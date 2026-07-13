@@ -400,6 +400,16 @@ public class CatalogosController {
 		}
 		return null;
 	}
+
+	@GetMapping("/getCuentasBanciarias")
+	public List<TcCuentaBancaria> obtenerCuentasBancariasActivas() {
+		try {
+			return catalagosService.consultarCuentasBancariasActivas();
+		} catch (Exception e) {
+			logger.error("Error al obtener cuentas bancarias activas " + e);
+		}
+		return null;
+	}
 	
 	@GetMapping("/getTipoProveedor")
 	public List<TcTipoProveedor> getTipoProveedor() {

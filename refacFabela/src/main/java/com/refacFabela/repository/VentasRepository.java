@@ -13,6 +13,7 @@ import com.refacFabela.model.TwVenta;
 public interface VentasRepository extends JpaRepository<TwVenta, Long> {
 
 	public TwVenta findBynId(Long nIdVenta);	
+	public List<TwVenta> findBynIdFacturacion(Long nIdFacturacion);
 	@Query("Select e from TwVenta e where e.nIdCotizacion=:nIdCotizacion ")
 	public TwVenta obtnerVentaIdCotizacion(Long nIdCotizacion);
 	@Query("Select e from TwVenta e where e.nIdCaja=:nIdCaja ")
