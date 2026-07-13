@@ -90,6 +90,32 @@ public class DateTimeUtil {
                 .withLocale(LOCALE_MX);
         return ldt.atZone(ZONA_MX).format(fmt);
     }
+
+    /**
+     * Normaliza fechas que pueden llegar desfasadas por conversión UTC -> LocalDateTime
+     * (p.ej. cliente web serializa Date con "Z"). Si detecta una fecha futura sospechosa,
+     * intenta convertirla desde UTC a MX; si sigue fuera de rango, usa la hora actual MX.
+     */
+    public static LocalDateTime normalizarFechaMxPosibleUtc(LocalDateTime fecha) {
+        LocalDateTime ahoraMx = obtenerHoraExactaDeMexico().withNano(0);
+        if (fecha == null) {
+            return ahoraMx;
+        }
+
+        LocalDateTime normalizada = fecha.withNano(0);
+        if (normalizada.isAfter(ahoraMx.plusMinutes(5))) {
+            LocalDateTime corregidaDesdeUtc = normalizada.atOffset(ZoneOffset.UTC)
+                    .atZoneSameInstant(ZONA_MX_LEGAL)
+                    .toLocalDateTime()
+                    .withNano(0);
+            if (!corregidaDesdeUtc.isAfter(ahoraMx.plusMinutes(5))) {
+                return corregidaDesdeUtc;
+            }
+            return ahoraMx;
+        }
+
+        return normalizada;
+    }
     
     
     

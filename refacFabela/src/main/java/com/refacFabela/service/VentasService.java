@@ -1,5 +1,6 @@
 package com.refacFabela.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.refacFabela.dto.TvVentaDetalleDto;
@@ -36,7 +37,8 @@ public interface VentasService {
 	public List<TvReporteDetalleVenta> obtenerVentasDetalleCaja(Long nId);
 
 	public List<TvVentasFactura> consultaVentasParaFactura();
-	public List<TvVentasFactura> consultaVentasFacturadas();
+	public List<TvVentasFactura> consultaVentasFacturadas(String periodo, LocalDate fechaInicio, LocalDate fechaFin,
+			String estatus, String buscar);
 	public List<TrVentaCobro> consultarPagoId(Long idVenta);
 	public void eliminarCobroIdVenta(Long idVenta);
 

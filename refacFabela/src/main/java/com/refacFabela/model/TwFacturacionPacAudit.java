@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
@@ -40,14 +39,6 @@ public class TwFacturacionPacAudit implements Serializable {
 	@Column(name = "s_metodo_http")
 	private String sMetodoHttp;
 
-	@Lob
-	@Column(name = "s_request_json", columnDefinition = "LONGTEXT")
-	private String sRequestJson;
-
-	@Lob
-	@Column(name = "s_response_json", columnDefinition = "LONGTEXT")
-	private String sResponseJson;
-
 	@Column(name = "n_http_status")
 	private Integer nHttpStatus;
 
@@ -77,10 +68,6 @@ public class TwFacturacionPacAudit implements Serializable {
 
 	@Column(name = "s_usuario")
 	private String sUsuario;
-
-	@Lob
-	@Column(name = "s_metadata_json", columnDefinition = "LONGTEXT")
-	private String sMetadataJson;
 
 	public Long getnId() {
 		return nId;
@@ -136,22 +123,6 @@ public class TwFacturacionPacAudit implements Serializable {
 
 	public void setsMetodoHttp(String sMetodoHttp) {
 		this.sMetodoHttp = sMetodoHttp;
-	}
-
-	public String getsRequestJson() {
-		return sRequestJson;
-	}
-
-	public void setsRequestJson(String sRequestJson) {
-		this.sRequestJson = sRequestJson;
-	}
-
-	public String getsResponseJson() {
-		return sResponseJson;
-	}
-
-	public void setsResponseJson(String sResponseJson) {
-		this.sResponseJson = sResponseJson;
 	}
 
 	public Integer getnHttpStatus() {
@@ -232,13 +203,5 @@ public class TwFacturacionPacAudit implements Serializable {
 
 	public void setsUsuario(String sUsuario) {
 		this.sUsuario = sUsuario;
-	}
-
-	public String getsMetadataJson() {
-		return sMetadataJson;
-	}
-
-	public void setsMetadataJson(String sMetadataJson) {
-		this.sMetadataJson = sMetadataJson;
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,8 @@ import com.refacFabela.model.TvVentasFactura;
 import com.refacFabela.service.FacturacionService;
 import com.refacFabela.service.GeneraReporteService;
 import com.refacFabela.service.VentasService;
+
+import java.time.LocalDate;
 
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST })
@@ -131,9 +134,15 @@ public class FacturaController {
 	}
 	
 	@GetMapping("ventasFacturadas")
-	public ResponseEntity<List<TvVentasFactura>> consultaVentasFacturadas(){
+	public ResponseEntity<List<TvVentasFactura>> consultaVentasFacturadas(
+			@RequestParam(required = false) String periodo,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
+			@RequestParam(required = false) String estatus,
+			@RequestParam(required = false) String buscar){
 		
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.ventasService.consultaVentasFacturadas());
+		return ResponseEntity.status(HttpStatus.ACCEPTED)
+				.body(this.ventasService.consultaVentasFacturadas(periodo, fechaInicio, fechaFin, estatus, buscar));
 	}
 
 	@GetMapping("complementos")

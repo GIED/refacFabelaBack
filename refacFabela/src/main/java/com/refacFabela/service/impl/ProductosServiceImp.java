@@ -602,7 +602,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		pagoCliente.setnIdCliente(venta.getnIdCliente());
 		pagoCliente.setnIdDatoFactura(venta.getTcCliente().getnIdDatoFactura());
 		pagoCliente.setdFechaRegistro(DateTimeUtil.obtenerHoraExactaDeMexico());
-		pagoCliente.setdFechaPago(abonoDto.getdFecha() != null ? abonoDto.getdFecha() : DateTimeUtil.obtenerHoraExactaDeMexico());
+		pagoCliente.setdFechaPago(DateTimeUtil.normalizarFechaMxPosibleUtc(abonoDto.getdFecha()));
 		pagoCliente.setnImporteTotal(abonoDto.getnAbono());
 		pagoCliente.setnImporteAplicado(abonoDto.getnAbono());
 		pagoCliente.setnImporteDisponible(BigDecimal.ZERO);

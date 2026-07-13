@@ -1,0 +1,1 @@
+UPDATE tw_facturacion_complemento_pago SET n_estatus = 0 WHERE s_uuid_complemento_pago is null AND n_estatus = 1;

@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -21,9 +23,6 @@ import java.util.zip.ZipOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.ls.LSInput;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.refacFabela.dto.AbonoDto;
 import com.refacFabela.dto.AbonosDto;
@@ -49,6 +48,8 @@ import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwCotizaciones;
 import com.refacFabela.model.TwCotizacionesProducto;
+import com.refacFabela.model.TwFacturacionPacAudit;
+import com.refacFabela.model.TwFacturacionPacAuditDetalle;
 import com.refacFabela.model.TwGasto;
 import com.refacFabela.model.TwPedido;
 import com.refacFabela.model.TwPedidoProducto;
@@ -63,6 +64,7 @@ import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.CotizacionProductoRepository;
 import com.refacFabela.repository.CotizacionRepository;
 import com.refacFabela.repository.FacturacionComplementoPagoRepository;
+import com.refacFabela.repository.FacturacionPacAuditDetalleRepository;
 import com.refacFabela.repository.FacturacionPacAuditRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
 import com.refacFabela.repository.ProductoBodegaRepository;
@@ -79,7 +81,6 @@ import com.refacFabela.repository.TwVentaProductoCancelaRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
-import com.refacFabela.model.TwFacturacionPacAudit;
 import com.refacFabela.service.GeneraReporteService;
 import com.refacFabela.service.ReporteService;
 import com.refacFabela.utils.DateTimeUtil;
@@ -155,10 +156,10 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	private FacturacionPacAuditRepository facturacionPacAuditRepository;
 
 	@Autowired
-	private FacturacionComplementoPagoRepository facturacionComplementoPagoRepository;
+	private FacturacionPacAuditDetalleRepository facturacionPacAuditDetalleRepository;
 
 	@Autowired
-	private ObjectMapper objectMapper;
+	private FacturacionComplementoPagoRepository facturacionComplementoPagoRepository;
 	
 
 	@Override
@@ -1299,34 +1300,22 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			return null;
 		}
 
-		String responseJson = auditoriaOptional.get().getsResponseJson();
-		if (responseJson == null || responseJson.trim().isEmpty()) {
+		TwFacturacionPacAudit auditoria = auditoriaOptional.get();
+		String acuse = obtenerValorAuditoriaDetalle(auditoria.getnId(), "RESPONSE", "acuseBase64", "acuse",
+				"xmlAcuse");
+		if (acuse == null || acuse.trim().isEmpty()) {
 			return null;
 		}
 
+		String trimmed = acuse.trim();
+		if (trimmed.startsWith("<")) {
+			return trimmed.getBytes(StandardCharsets.UTF_8);
+		}
+
 		try {
-			JsonNode root = objectMapper.readTree(responseJson);
-			String acuse = firstNonEmpty(
-					readNodeText(root, "acuseBase64"),
-					readNodeText(root, "acuse"),
-					readNodeText(root, "xmlAcuse"));
-			if (acuse == null || acuse.trim().isEmpty()) {
-				return null;
-			}
-
-			String trimmed = acuse.trim();
-			if (trimmed.startsWith("<")) {
-				return trimmed.getBytes(StandardCharsets.UTF_8);
-			}
-
-			try {
-				return Base64.getDecoder().decode(trimmed);
-			} catch (IllegalArgumentException e) {
-				return trimmed.getBytes(StandardCharsets.UTF_8);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			return Base64.getDecoder().decode(trimmed);
+		} catch (IllegalArgumentException e) {
+			return trimmed.getBytes(StandardCharsets.UTF_8);
 		}
 	}
 
@@ -1340,24 +1329,81 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			return null;
 		}
 
-		String responseJson = auditoriaOptional.get().getsResponseJson();
-		if (responseJson == null || responseJson.trim().isEmpty()) {
+		TwFacturacionPacAudit auditoria = auditoriaOptional.get();
+		String pdf = obtenerValorAuditoriaDetalle(auditoria.getnId(), "RESPONSE", "pdfBase64", "pdf");
+		byte[] pdfBytes = decodeBase64OrPlain(pdf);
+		if (pdfBytes != null && pdfBytes.length > 0) {
+			return pdfBytes;
+		}
+
+		String urlPdf = obtenerValorAuditoriaDetalle(auditoria.getnId(), "RESPONSE", "urlpdf", "urlPdf");
+		return downloadBytes(urlPdf);
+	}
+
+	private String obtenerValorAuditoriaDetalle(Long nIdAuditoria, String bloque, String... claves) {
+		if (nIdAuditoria == null || bloque == null || claves == null || claves.length == 0) {
 			return null;
 		}
 
-		try {
-			JsonNode root = objectMapper.readTree(responseJson);
-			String pdf = firstNonEmpty(readNodeText(root, "pdfBase64"), readNodeText(root, "pdf"));
-			byte[] pdfBytes = decodeBase64OrPlain(pdf);
-			if (pdfBytes != null && pdfBytes.length > 0) {
-				return pdfBytes;
-			}
-			String urlPdf = firstNonEmpty(readNodeText(root, "urlpdf"), readNodeText(root, "urlPdf"));
-			return downloadBytes(urlPdf);
-		} catch (Exception e) {
-			e.printStackTrace();
+		List<TwFacturacionPacAuditDetalle> detalles = facturacionPacAuditDetalleRepository
+				.findDetalleAuditoriaByBloque(nIdAuditoria, bloque);
+		if (detalles == null || detalles.isEmpty()) {
 			return null;
 		}
+
+		Map<String, String> valoresExactos = new LinkedHashMap<String, String>();
+		Map<String, String> valoresPorSuffix = new LinkedHashMap<String, String>();
+		for (TwFacturacionPacAuditDetalle detalle : detalles) {
+			if (detalle == null || detalle.getsClave() == null) {
+				continue;
+			}
+			String clave = detalle.getsClave();
+			if (!valoresExactos.containsKey(clave)) {
+				valoresExactos.put(clave, detalle.getsValor());
+			}
+			String suffix = extractSuffixKey(clave);
+			if (suffix != null && !suffix.isEmpty() && !valoresPorSuffix.containsKey(suffix)) {
+				valoresPorSuffix.put(suffix, detalle.getsValor());
+			}
+		}
+
+		for (String clave : claves) {
+			String valor = valoresExactos.get(clave);
+			if (valor != null && !valor.trim().isEmpty()) {
+				return valor;
+			}
+
+			valor = valoresPorSuffix.get(clave);
+			if (valor != null && !valor.trim().isEmpty()) {
+				return valor;
+			}
+		}
+		return null;
+	}
+
+	private String extractSuffixKey(String rutaClave) {
+		if (rutaClave == null) {
+			return null;
+		}
+		String trimmed = rutaClave.trim();
+		if (trimmed.isEmpty()) {
+			return trimmed;
+		}
+
+		int dotIndex = trimmed.lastIndexOf('.');
+		if (dotIndex >= 0 && dotIndex + 1 < trimmed.length()) {
+			trimmed = trimmed.substring(dotIndex + 1);
+		}
+
+		int bracketIndex = trimmed.lastIndexOf(']');
+		if (bracketIndex == trimmed.length() - 1) {
+			int open = trimmed.lastIndexOf('[');
+			if (open > 0) {
+				trimmed = trimmed.substring(0, open);
+			}
+		}
+
+		return trimmed;
 	}
 
 	private byte[] decodeBase64OrPlain(String value) {
@@ -1393,14 +1439,6 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		} catch (Exception e) {
 			return null;
 		}
-	}
-
-	private String readNodeText(JsonNode root, String field) {
-		if (root == null || field == null || !root.has(field) || root.get(field).isNull()) {
-			return null;
-		}
-		String value = root.get(field).asText();
-		return value != null && !value.trim().isEmpty() && !"null".equalsIgnoreCase(value) ? value : null;
 	}
 
 	private String firstNonEmpty(String... values) {

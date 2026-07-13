@@ -2,6 +2,7 @@ package com.refacFabela.service.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -836,7 +837,7 @@ public class VentasServiceImpl implements VentasService {
 		pagoCliente.setnIdCliente(venta.getnIdCliente());
 		pagoCliente.setnIdDatoFactura(venta.getTcCliente().getnIdDatoFactura());
 		pagoCliente.setdFechaRegistro(DateTimeUtil.obtenerHoraExactaDeMexico());
-		pagoCliente.setdFechaPago(ventaCobro.getdFecha() != null ? ventaCobro.getdFecha() : DateTimeUtil.obtenerHoraExactaDeMexico());
+		pagoCliente.setdFechaPago(DateTimeUtil.normalizarFechaMxPosibleUtc(ventaCobro.getdFecha()));
 		pagoCliente.setnImporteTotal(ventaCobro.getnMonto());
 		pagoCliente.setnImporteAplicado(ventaCobro.getnMonto());
 		pagoCliente.setnImporteDisponible(BigDecimal.ZERO);
@@ -996,8 +997,111 @@ public class VentasServiceImpl implements VentasService {
 
 
 	@Override
-	public List<TvVentasFactura> consultaVentasFacturadas() {
-		return completarEstatusFacturacion(this.VentasFacturaRepository.obtenerVentasFacturadas());
+	public List<TvVentasFactura> consultaVentasFacturadas(String periodo, LocalDate fechaInicio, LocalDate fechaFin,
+			String estatus, String buscar) {
+		LocalDate[] rangoConsulta = resolveRangoConsultaFacturadas(periodo, fechaInicio, fechaFin);
+		LocalDate fechaInicioConsulta = rangoConsulta[0];
+		LocalDate fechaFinConsulta = rangoConsulta[1];
+		LocalDateTime inicio = fechaInicioConsulta != null ? fechaInicioConsulta.atStartOfDay() : null;
+		LocalDateTime fin = fechaFinConsulta != null ? fechaFinConsulta.atTime(23, 59, 59) : null;
+		List<TvVentasFactura> ventas = completarEstatusFacturacion(
+				this.VentasFacturaRepository.obtenerVentasFacturadasFiltradas(inicio, fin, trimToNull(buscar)));
+		return filtrarVentasFacturadasPorEstatus(ventas, estatus);
+	}
+
+	private LocalDate[] resolveRangoConsultaFacturadas(String periodo, LocalDate fechaInicio, LocalDate fechaFin) {
+		LocalDate fechaHasta = fechaFin != null ? fechaFin : DateTimeUtil.obtenerHoraExactaDeMexico().toLocalDate();
+		String periodoNormalizado = periodo != null ? periodo.trim().toUpperCase() : "60D";
+		LocalDate fechaDesde;
+
+		switch (periodoNormalizado) {
+		case "3M":
+			fechaDesde = fechaHasta.minusMonths(3);
+			break;
+		case "6M":
+			fechaDesde = fechaHasta.minusMonths(6);
+			break;
+		case "CUSTOM":
+			fechaDesde = fechaInicio != null ? fechaInicio : fechaHasta.minusDays(60);
+			break;
+		case "60D":
+		default:
+			fechaDesde = fechaHasta.minusDays(60);
+			break;
+		}
+
+		if (fechaDesde != null && fechaDesde.isAfter(fechaHasta)) {
+			LocalDate temporal = fechaDesde;
+			fechaDesde = fechaHasta;
+			fechaHasta = temporal;
+		}
+
+		return new LocalDate[] { fechaDesde, fechaHasta };
+	}
+
+	private List<TvVentasFactura> filtrarVentasFacturadasPorEstatus(List<TvVentasFactura> ventas, String estatus) {
+		String estatusNormalizado = trimToNull(estatus);
+		if (ventas == null || ventas.isEmpty() || estatusNormalizado == null || "TODOS".equalsIgnoreCase(estatusNormalizado)) {
+			return ventas;
+		}
+
+		List<TvVentasFactura> filtradas = new ArrayList<TvVentasFactura>();
+		for (TvVentasFactura venta : ventas) {
+			if (venta == null) {
+				continue;
+			}
+
+			String estadoFacturacion = venta.getsEstadoFacturacion() != null ? venta.getsEstadoFacturacion().trim().toUpperCase() : "";
+			String estadoComplemento = venta.getsEstadoComplemento() != null ? venta.getsEstadoComplemento().trim().toUpperCase() : "";
+			String estadoRepCanonico = venta.getsEstadoRepCanonico() != null ? venta.getsEstadoRepCanonico().trim().toUpperCase() : "";
+			boolean cancelada = estadoFacturacion.contains("CANCEL");
+
+			if ("FACTURADA".equalsIgnoreCase(estatusNormalizado) && venta.getIdFactura() != null
+					&& venta.getIdFactura().longValue() > 0L && !cancelada) {
+				filtradas.add(venta);
+				continue;
+			}
+
+			if ("CANCELADA".equalsIgnoreCase(estatusNormalizado) && cancelada) {
+				filtradas.add(venta);
+				continue;
+			}
+
+			if ("REP_TIMBRADO".equalsIgnoreCase(estatusNormalizado)
+					&& ("TIMBRADO".equalsIgnoreCase(estadoRepCanonico)
+							|| "FACTURADA_CON_COMPLEMENTO_PAGO".equalsIgnoreCase(estadoComplemento))) {
+				filtradas.add(venta);
+				continue;
+			}
+
+			if ("REP_PENDIENTE".equalsIgnoreCase(estatusNormalizado)
+					&& ("PENDIENTE".equalsIgnoreCase(estadoRepCanonico)
+							|| "PENDIENTE_COMPLEMENTO_PAGO".equalsIgnoreCase(estadoComplemento))) {
+				filtradas.add(venta);
+				continue;
+			}
+
+			if ("REP_FALLIDO".equalsIgnoreCase(estatusNormalizado)
+					&& "FALLIDO".equalsIgnoreCase(estadoRepCanonico)) {
+				filtradas.add(venta);
+				continue;
+			}
+
+			if ("REP_PENDIENTE_FACTURACION".equalsIgnoreCase(estatusNormalizado)
+					&& "PENDIENTE_FACTURACION".equalsIgnoreCase(estadoRepCanonico)) {
+				filtradas.add(venta);
+			}
+		}
+
+		return filtradas;
+	}
+
+	private String trimToNull(String valor) {
+		if (valor == null) {
+			return null;
+		}
+		String normalizado = valor.trim();
+		return normalizado.isEmpty() ? null : normalizado;
 	}
 
 	private List<TvVentasFactura> completarEstatusFacturacion(List<TvVentasFactura> ventas) {

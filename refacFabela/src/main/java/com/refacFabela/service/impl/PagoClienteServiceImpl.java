@@ -115,7 +115,7 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		pago.setnIdCliente(registroDto.getnIdCliente());
 		pago.setnIdDatoFactura(registroDto.getnIdDatoFactura());
 		pago.setdFechaRegistro(DateTimeUtil.obtenerHoraExactaDeMexico());
-		pago.setdFechaPago(registroDto.getFechaPago() != null ? registroDto.getFechaPago() : DateTimeUtil.obtenerHoraExactaDeMexico());
+		pago.setdFechaPago(DateTimeUtil.normalizarFechaMxPosibleUtc(registroDto.getFechaPago()));
 		pago.setnImporteTotal(registroDto.getImporteTotal());
 		pago.setnImporteAplicado(BigDecimal.ZERO);
 		pago.setnImporteDisponible(registroDto.getImporteTotal());
@@ -266,6 +266,29 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 
 		for (PagoAplicacionManualLineaDto linea : requestDto.getLineas()) {
 			TwVenta venta = ventasRepository.findBynId(linea.getnIdVenta());
+			if (venta == null) {
+				throw new IllegalArgumentException("No existe la venta " + linea.getnIdVenta() + " para aplicar el pago.");
+			}
+			if (venta.getnIdFacturacion() == null || venta.getnIdFacturacion().longValue() <= 0L) {
+				throw new IllegalArgumentException(
+						"La venta " + linea.getnIdVenta() + " no está facturada. Primero debes facturarla para relacionarla a un pago global.");
+			}
+			TwFacturacion facturacionVenta = facturaRepository.findById(venta.getnIdFacturacion()).orElse(null);
+			if (facturacionVenta == null || facturacionVenta.getsUuid() == null
+					|| facturacionVenta.getsUuid().trim().isEmpty()) {
+				throw new IllegalArgumentException(
+						"La venta " + linea.getnIdVenta() + " no tiene UUID de factura válido para generar complemento de pago.");
+			}
+			if (facturacionVenta.getsEstado() != null
+					&& facturacionVenta.getsEstado().toUpperCase().contains("CANCEL")) {
+				throw new IllegalArgumentException(
+						"La venta " + linea.getnIdVenta() + " tiene la factura cancelada y no puede recibir aplicación de pago global.");
+			}
+			if (!"PPD".equalsIgnoreCase(facturacionVenta.getsMetodoPagoFiscal())
+					|| !"99".equalsIgnoreCase(facturacionVenta.getsFormaPagoFiscal())) {
+				throw new IllegalArgumentException(
+						"La venta " + linea.getnIdVenta() + " debe estar facturada como PPD/99 para relacionar pagos globales y generar REP.");
+			}
 			if (!esVentaElegibleParaAplicacion(venta, pago.getnIdCliente(), pago.getnIdDatoFactura())) {
 				throw new IllegalArgumentException("La venta " + linea.getnIdVenta() + " no es elegible para aplicar este pago.");
 			}
@@ -328,14 +351,24 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		if (!venta.getnIdCliente().equals(nIdCliente)) {
 			return false;
 		}
-		if (venta.getnIdFacturacion() == null || venta.getnIdFacturacion().longValue() == 0L) {
-			return true;
+		if (venta.getnIdFacturacion() == null || venta.getnIdFacturacion().longValue() <= 0L) {
+			return false;
 		}
 		TwFacturacion facturacion = facturaRepository.findById(venta.getnIdFacturacion()).orElse(null);
 		if (facturacion == null) {
-			return true;
+			return false;
 		}
-		return facturacion.getsEstado() == null || !facturacion.getsEstado().toUpperCase().contains("CANCEL");
+		if (facturacion.getsEstado() != null && facturacion.getsEstado().toUpperCase().contains("CANCEL")) {
+			return false;
+		}
+		if (facturacion.getsUuid() == null || facturacion.getsUuid().trim().isEmpty()) {
+			return false;
+		}
+		if (!"PPD".equalsIgnoreCase(facturacion.getsMetodoPagoFiscal())
+				|| !"99".equalsIgnoreCase(facturacion.getsFormaPagoFiscal())) {
+			return false;
+		}
+		return true;
 	}
 
 	private FacturaCreditoPendienteDto construirFacturaPendiente(TwVenta venta, TvVentaDetalle detalleBase) {

@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -31,6 +32,7 @@ import com.refacFabela.dto.CancelacionResponse;
 import com.refacFabela.dto.CfdiTimbradoRequest;
 import com.refacFabela.dto.ComplementoPagoRequest;
 import com.refacFabela.dto.TimbradoResponse;
+import com.refacFabela.utils.DateTimeUtil;
 
 @Component
 public class PacFacturacionMapper {
@@ -161,6 +163,9 @@ public class PacFacturacionMapper {
 		Map<String, Object> complemento = new LinkedHashMap<String, Object>();
 		Map<String, Object> pagosV20 = new LinkedHashMap<String, Object>();
 		List<Map<String, Object>> pagos = new ArrayList<Map<String, Object>>();
+		LocalDateTime fechaTimbradoMx = DateTimeUtil.obtenerHoraExactaDeMexico().withNano(0);
+		LocalDateTime fechaPagoNormalizada = normalizeFechaPagoComplemento(request != null ? request.getFechaPago() : null,
+				fechaTimbradoMx);
 
 		datosGenerales.put("Version", "4.0");
 		datosGenerales.put("CSD", normalizeBase64Value(request.getMetadata() != null ? request.getMetadata().get("certificado") : null));
@@ -195,7 +200,7 @@ public class PacFacturacionMapper {
 		encabezado.put("TipoRelacion", null);
 		encabezado.put("Emisor", emisor);
 		encabezado.put("Receptor", receptor);
-		encabezado.put("Fecha", formatCfdiFecha(request.getFechaPago()));
+		encabezado.put("Fecha", formatCfdiFecha(fechaTimbradoMx));
 		encabezado.put("Serie", request.getMetadata() != null ? request.getMetadata().get("serie") : null);
 		encabezado.put("Folio", request.getMetadata() != null ? request.getMetadata().get("folio") : null);
 		encabezado.put("MetodoPago", null);
@@ -212,7 +217,7 @@ public class PacFacturacionMapper {
 		if (request.getPagos() != null) {
 			for (ComplementoPagoRequest.PagoDto pagoDto : request.getPagos()) {
 				Map<String, Object> pago = new LinkedHashMap<String, Object>();
-				pago.put("FechaPago", formatCfdiFecha(request.getFechaPago()));
+				pago.put("FechaPago", formatCfdiFecha(fechaPagoNormalizada));
 				pago.put("FormaPago", pagoDto.getFormaPago());
 				pago.put("Moneda", pagoDto.getMoneda());
 				pago.put("TipoCambio", pagoDto.getTipoCambio());
@@ -305,6 +310,35 @@ public class PacFacturacionMapper {
 			return null;
 		}
 		return fecha.withNano(0).format(CFDI_FECHA_FORMATTER);
+	}
+
+	private LocalDateTime normalizeFechaPagoComplemento(LocalDateTime fechaPago, LocalDateTime fechaTimbradoMx) {
+		LocalDateTime ahoraMx = fechaTimbradoMx != null
+				? fechaTimbradoMx.withNano(0)
+				: DateTimeUtil.obtenerHoraExactaDeMexico().withNano(0);
+		if (fechaPago == null) {
+			return ahoraMx;
+		}
+
+		LocalDateTime normalizada = fechaPago.withNano(0);
+		if (normalizada.isAfter(ahoraMx.plusMinutes(5))) {
+			LocalDateTime corregidaDesdeUtc = normalizada.atOffset(ZoneOffset.UTC)
+					.atZoneSameInstant(ZoneOffset.of("-06:00"))
+					.toLocalDateTime()
+					.withNano(0);
+
+			if (!corregidaDesdeUtc.isAfter(ahoraMx.plusMinutes(5))) {
+				logger.warn("FechaPago de complemento fuera de rango ({}), se normaliza desde UTC a MX ({})",
+						normalizada, corregidaDesdeUtc);
+				return corregidaDesdeUtc;
+			}
+
+			logger.warn("FechaPago de complemento fuera de rango ({}), se ajusta a hora actual MX ({})",
+					normalizada, ahoraMx);
+			return ahoraMx;
+		}
+
+		return normalizada;
 	}
 
 	private List<Map<String, Object>> buildDireccionList(Object codigoPostal) {
