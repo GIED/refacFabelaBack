@@ -18,6 +18,13 @@ public class PagoAplicacionLineaDto {
 	private String origenRegistro;
 	private LocalDateTime fechaPago;
 	private LocalDateTime fechaAplicacion;
+	private String folioVenta;
+	private LocalDateTime fechaVenta;
+	private String uuidFactura;
+	private String estadoFactura;
+	private String metodoPagoFiscal;
+	private String formaPagoFiscal;
+	private String estadoComplemento;
 	private String formaPagoSat;
 	private String descripcionFormaPago;
 	private String referenciaPago;
@@ -125,6 +132,62 @@ public class PagoAplicacionLineaDto {
 
 	public void setFechaAplicacion(LocalDateTime fechaAplicacion) {
 		this.fechaAplicacion = fechaAplicacion;
+	}
+
+	public String getFolioVenta() {
+		return folioVenta;
+	}
+
+	public void setFolioVenta(String folioVenta) {
+		this.folioVenta = folioVenta;
+	}
+
+	public LocalDateTime getFechaVenta() {
+		return fechaVenta;
+	}
+
+	public void setFechaVenta(LocalDateTime fechaVenta) {
+		this.fechaVenta = fechaVenta;
+	}
+
+	public String getUuidFactura() {
+		return uuidFactura;
+	}
+
+	public void setUuidFactura(String uuidFactura) {
+		this.uuidFactura = uuidFactura;
+	}
+
+	public String getEstadoFactura() {
+		return estadoFactura;
+	}
+
+	public void setEstadoFactura(String estadoFactura) {
+		this.estadoFactura = estadoFactura;
+	}
+
+	public String getMetodoPagoFiscal() {
+		return metodoPagoFiscal;
+	}
+
+	public void setMetodoPagoFiscal(String metodoPagoFiscal) {
+		this.metodoPagoFiscal = metodoPagoFiscal;
+	}
+
+	public String getFormaPagoFiscal() {
+		return formaPagoFiscal;
+	}
+
+	public void setFormaPagoFiscal(String formaPagoFiscal) {
+		this.formaPagoFiscal = formaPagoFiscal;
+	}
+
+	public String getEstadoComplemento() {
+		return estadoComplemento;
+	}
+
+	public void setEstadoComplemento(String estadoComplemento) {
+		this.estadoComplemento = estadoComplemento;
 	}
 
 	public String getFormaPagoSat() {

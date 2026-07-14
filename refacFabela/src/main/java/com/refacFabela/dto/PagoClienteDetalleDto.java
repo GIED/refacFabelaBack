@@ -43,6 +43,7 @@ public class PagoClienteDetalleDto {
 	private String estatus;
 	private String estadoRepCanonico;
 	private String uuidRepCanonico;
+	private Long nIdComplementoRepCanonico;
 	private Boolean conciliado;
 	private LocalDateTime fechaConciliacion;
 	private List<PagoAplicacionLineaDto> aplicaciones = new ArrayList<PagoAplicacionLineaDto>();
@@ -333,6 +334,14 @@ public class PagoClienteDetalleDto {
 
 	public void setUuidRepCanonico(String uuidRepCanonico) {
 		this.uuidRepCanonico = uuidRepCanonico;
+	}
+
+	public Long getnIdComplementoRepCanonico() {
+		return nIdComplementoRepCanonico;
+	}
+
+	public void setnIdComplementoRepCanonico(Long nIdComplementoRepCanonico) {
+		this.nIdComplementoRepCanonico = nIdComplementoRepCanonico;
 	}
 
 	public Boolean getConciliado() {

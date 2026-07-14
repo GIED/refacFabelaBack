@@ -3,6 +3,7 @@ package com.refacFabela.service.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.refacFabela.dto.CancelacionFacturaDto;
@@ -115,7 +116,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 					resultado.setEstadoComplemento("PENDIENTE_COMPLEMENTO_PAGO");
 					resultado.setCodigoError("REP_ERROR");
 					resultado.setMensajeError(complementoError.getMessage());
-					resultado.setMensaje("Factura generada correctamente; el complemento de pago quedó pendiente.");
+					resultado.setMensaje("Factura generada correctamente; el complemento de pago quedÃ³ pendiente.");
 				}
 			} else {
 				boolean repCanonicoProcesado = false;
@@ -127,16 +128,16 @@ public class FacturacionServiceImpl implements FacturacionService {
 							TimbradoResponse ultimoComplemento = complementosCanonicos.get(complementosCanonicos.size() - 1);
 							resultado.setUuidComplementoPago(ultimoComplemento.getUuid());
 							resultado.setEstadoComplemento("FACTURADA_CON_COMPLEMENTO_PAGO");
-							resultado.setMensaje("Venta facturada y complemento(s) de pago canónico generado(s) correctamente.");
+							resultado.setMensaje("Venta facturada y complemento(s) de pago canÃ³nico generado(s) correctamente.");
 							repCanonicoProcesado = true;
 						}
 					} catch (Exception complementoCanonicoError) {
-						logger.error("Venta facturada pero el REP del pago global quedó pendiente para venta {}", idVenta,
+						logger.error("Venta facturada pero el REP del pago global quedÃ³ pendiente para venta {}", idVenta,
 								complementoCanonicoError);
 						resultado.setEstadoComplemento("PENDIENTE_COMPLEMENTO_PAGO");
 						resultado.setCodigoError("REP_PAGO_CLIENTE_ERROR");
 						resultado.setMensajeError(complementoCanonicoError.getMessage());
-						resultado.setMensaje("Venta facturada correctamente; el REP del pago global quedó pendiente.");
+						resultado.setMensaje("Venta facturada correctamente; el REP del pago global quedÃ³ pendiente.");
 						repCanonicoProcesado = true;
 					}
 				}
@@ -153,7 +154,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 			}
 
 			if (clienteActualizado != null && Boolean.TRUE.equals(clienteActualizado.getnCorreoBloqueado())) {
-				resultado.setAvisoCorreo("La factura se generó correctamente pero el correo del cliente está bloqueado. No se envió la notificación por correo.");
+				resultado.setAvisoCorreo("La factura se generÃ³ correctamente pero el correo del cliente estÃ¡ bloqueado. No se enviÃ³ la notificaciÃ³n por correo.");
 			}
 
 			facturacion = ventaActualizada != null && ventaActualizada.getnIdFacturacion() != null
@@ -202,16 +203,16 @@ public class FacturacionServiceImpl implements FacturacionService {
 						TimbradoResponse ultimoComplemento = complementosCanonicos.get(complementosCanonicos.size() - 1);
 						resultado.setUuidComplementoPago(ultimoComplemento.getUuid());
 						resultado.setEstadoComplemento("FACTURADA_CON_COMPLEMENTO_PAGO");
-						resultado.setMensaje("Factura consolidada y complemento(s) de pago canónico generado(s) correctamente.");
+						resultado.setMensaje("Factura consolidada y complemento(s) de pago canÃ³nico generado(s) correctamente.");
 						repCanonicoProcesado = true;
 					}
 				} catch (Exception complementoCanonicoError) {
-					logger.error("Factura consolidada generada pero el REP del pago global quedó pendiente para ventas {}",
+					logger.error("Factura consolidada generada pero el REP del pago global quedÃ³ pendiente para ventas {}",
 							requestDto != null ? requestDto.getnIdsVenta() : null, complementoCanonicoError);
 					resultado.setEstadoComplemento("PENDIENTE_COMPLEMENTO_PAGO");
 					resultado.setCodigoError("REP_PAGO_CLIENTE_ERROR");
 					resultado.setMensajeError(complementoCanonicoError.getMessage());
-					resultado.setMensaje("Factura consolidada generada correctamente; el REP del pago global quedó pendiente.");
+					resultado.setMensaje("Factura consolidada generada correctamente; el REP del pago global quedÃ³ pendiente.");
 					repCanonicoProcesado = true;
 				}
 			}
@@ -299,6 +300,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public ResultadoFacturacionVentaDto complementoPagoCliente(Long nIdPagoCliente) throws Exception {
 		ResultadoFacturacionVentaDto resultado = new ResultadoFacturacionVentaDto();
 		try {
@@ -356,10 +358,10 @@ public class FacturacionServiceImpl implements FacturacionService {
 			}
 			return pacFacturacionClient.consultarCreditosDisponibles(tcDatosFactura.getsRfcEmisor());
 		} catch (PacFacturacionClientException e) {
-			logger.warn("No fue posible consultar créditos FacturoPorTi para nDatoFactura {}: {}", nDatoFactura, e.getMessage());
+			logger.warn("No fue posible consultar crÃ©ditos FacturoPorTi para nDatoFactura {}: {}", nDatoFactura, e.getMessage());
 			return 0;
 		} catch (Exception e) {
-			logger.error("Error al consultar créditos FacturoPorTi para nDatoFactura {}", nDatoFactura, e);
+			logger.error("Error al consultar crÃ©ditos FacturoPorTi para nDatoFactura {}", nDatoFactura, e);
 			return 0;
 		}
 	}
@@ -403,13 +405,13 @@ public class FacturacionServiceImpl implements FacturacionService {
 			TwVenta twVenta = ventaRepository.findBynId(idVenta);
 
 			if (twVenta == null || twVenta.getTcCliente() == null || twVenta.getTcCliente().getnIdDatoFactura() == null) {
-				subirFacturaDto.setMensaje("No se encontró configuración fiscal para la venta");
+				subirFacturaDto.setMensaje("No se encontrÃ³ configuraciÃ³n fiscal para la venta");
 				return subirFacturaDto;
 			}
 
 			TcDatosFactura tcDatosFactura = tcDatosFacturaRepository.obtenerDatos(twVenta.getTcCliente().getnIdDatoFactura());
 			if (tcDatosFactura == null) {
-				subirFacturaDto.setMensaje("No se encontró configuración fiscal para la venta");
+				subirFacturaDto.setMensaje("No se encontrÃ³ configuraciÃ³n fiscal para la venta");
 				return subirFacturaDto;
 			}
 
@@ -443,4 +445,5 @@ public class FacturacionServiceImpl implements FacturacionService {
 		}
 	}
 }
+
 

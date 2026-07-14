@@ -222,6 +222,9 @@ public class PacFacturacionMapper {
 				pago.put("Moneda", pagoDto.getMoneda());
 				pago.put("TipoCambio", pagoDto.getTipoCambio());
 
+				BigDecimal totalTrasladosBaseIva16Pago = BigDecimal.ZERO;
+				BigDecimal totalTrasladosImpuestoIva16Pago = BigDecimal.ZERO;
+
 				List<Map<String, Object>> documentosRelacionados = new ArrayList<Map<String, Object>>();
 				if (pagoDto.getDocumentosRelacionados() != null) {
 					for (ComplementoPagoRequest.DocumentoRelacionadoPagoDto documentoDto : pagoDto.getDocumentosRelacionados()) {
@@ -251,6 +254,8 @@ public class PacFacturacionMapper {
 						impuestosDocumento.put("Trasladados", trasladosDocumento);
 						documento.put("Impuestos", impuestosDocumento);
 						documentosRelacionados.add(documento);
+						totalTrasladosBaseIva16Pago = totalTrasladosBaseIva16Pago.add(base);
+						totalTrasladosImpuestoIva16Pago = totalTrasladosImpuestoIva16Pago.add(iva);
 						totalTrasladosBaseIva16 = totalTrasladosBaseIva16.add(base);
 						totalTrasladosImpuestoIva16 = totalTrasladosImpuestoIva16.add(iva);
 					}
@@ -260,8 +265,8 @@ public class PacFacturacionMapper {
 				Map<String, Object> impuestosPago = new LinkedHashMap<String, Object>();
 				List<Map<String, Object>> trasladosPago = new ArrayList<Map<String, Object>>();
 				Map<String, Object> trasladoPago = new LinkedHashMap<String, Object>();
-				BigDecimal basePago = calculateBase(pagoDto.getMonto());
-				BigDecimal ivaPago = pagoDto.getMonto() != null ? pagoDto.getMonto().subtract(basePago) : BigDecimal.ZERO;
+				BigDecimal basePago = totalTrasladosBaseIva16Pago;
+				BigDecimal ivaPago = totalTrasladosImpuestoIva16Pago;
 				trasladoPago.put("Impuesto", Integer.valueOf(2));
 				trasladoPago.put("Factor", Integer.valueOf(1));
 				trasladoPago.put("Base", basePago);
@@ -397,7 +402,7 @@ public class PacFacturacionMapper {
 			return null;
 		}
 		normalized = Normalizer.normalize(normalized, Normalizer.Form.NFD).replaceAll("\\p{M}+", "");
-		normalized = normalized.replaceAll("[\"'`´.,;:()]+", " ");
+		normalized = normalized.replaceAll("[\"'`Â´.,;:()]+", " ");
 		normalized = normalized.replaceAll(CAPITAL_REGIME_SUFFIX_PATTERN, "");
 		normalized = normalized.replaceAll("\\s{2,}", " ").trim();
 		if (upperCase) {
@@ -538,7 +543,7 @@ public class PacFacturacionMapper {
 			}
 			return Base64.getEncoder().encodeToString(decoded);
 		} catch (IllegalArgumentException e) {
-			logger.warn("Logotipo con base64 inválido/no estándar (base64Length={})", Integer.valueOf(cleaned.length()));
+			logger.warn("Logotipo con base64 invÃ¡lido/no estÃ¡ndar (base64Length={})", Integer.valueOf(cleaned.length()));
 			return cleaned;
 		}
 	}
@@ -752,3 +757,4 @@ public class PacFacturacionMapper {
 		return value != null ? String.valueOf(value) : null;
 	}
 }
+

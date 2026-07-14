@@ -193,7 +193,13 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 
 		for (TvVentaDetalle pendiente : pendientes) {
 			TwVenta venta = ventasRepository.findBynId(pendiente.getnId());
-			if (!esVentaElegibleParaAplicacion(venta, nIdCliente, nIdDatoFactura)) {
+			if (venta == null || venta.getTcCliente() == null) {
+				continue;
+			}
+			if (!Long.valueOf(1L).equals(venta.getnTipoPago())) {
+				continue;
+			}
+			if (!venta.getnIdCliente().equals(nIdCliente)) {
 				continue;
 			}
 
@@ -216,12 +222,23 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		}
 
 		List<FacturaCreditoPendienteDto> pendientes = consultarFacturasPendientesCliente(pago.getnIdCliente(), pago.getnIdDatoFactura());
-		if (pendientes.isEmpty()) {
+		List<FacturaCreditoPendienteDto> pendientesElegibles = new ArrayList<FacturaCreditoPendienteDto>();
+		for (FacturaCreditoPendienteDto pendiente : pendientes) {
+			if (pendiente == null || pendiente.getnIdVenta() == null) {
+				continue;
+			}
+			TwVenta venta = ventasRepository.findBynId(pendiente.getnIdVenta());
+			if (!esVentaElegibleParaAplicacion(venta, pago.getnIdCliente(), pago.getnIdDatoFactura())) {
+				continue;
+			}
+			pendientesElegibles.add(pendiente);
+		}
+		if (pendientesElegibles.isEmpty()) {
 			throw new IllegalArgumentException("No hay facturas pendientes elegibles para aplicar este pago.");
 		}
 
 		BigDecimal disponible = pago.getnImporteDisponible();
-		for (FacturaCreditoPendienteDto pendiente : pendientes) {
+		for (FacturaCreditoPendienteDto pendiente : pendientesElegibles) {
 			if (disponible.compareTo(BigDecimal.ZERO) <= 0) {
 				break;
 			}
@@ -284,8 +301,7 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 				throw new IllegalArgumentException(
 						"La venta " + linea.getnIdVenta() + " tiene la factura cancelada y no puede recibir aplicación de pago global.");
 			}
-			if (!"PPD".equalsIgnoreCase(facturacionVenta.getsMetodoPagoFiscal())
-					|| !"99".equalsIgnoreCase(facturacionVenta.getsFormaPagoFiscal())) {
+			if (!esFacturaPpd99(facturacionVenta)) {
 				throw new IllegalArgumentException(
 						"La venta " + linea.getnIdVenta() + " debe estar facturada como PPD/99 para relacionar pagos globales y generar REP.");
 			}
@@ -364,8 +380,7 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		if (facturacion.getsUuid() == null || facturacion.getsUuid().trim().isEmpty()) {
 			return false;
 		}
-		if (!"PPD".equalsIgnoreCase(facturacion.getsMetodoPagoFiscal())
-				|| !"99".equalsIgnoreCase(facturacion.getsFormaPagoFiscal())) {
+		if (!esFacturaPpd99(facturacion)) {
 			return false;
 		}
 		return true;
@@ -421,7 +436,7 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		if (facturacion.getsEstado() != null && facturacion.getsEstado().toUpperCase().contains("CANCEL")) {
 			return "FACTURA_CANCELADA";
 		}
-		if ("PPD".equalsIgnoreCase(facturacion.getsMetodoPagoFiscal()) && "99".equalsIgnoreCase(facturacion.getsFormaPagoFiscal())) {
+		if (esFacturaPpd99(facturacion)) {
 			return "FACTURA_PPD_99";
 		}
 		return "FACTURA_EMITIDA";
@@ -657,6 +672,30 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		linea.setOrdenAplicacion(aplicacion.getnOrdenAplicacion());
 		linea.setOrigenRegistro(aplicacion.getsOrigenRegistro());
 		linea.setFechaAplicacion(aplicacion.getdFechaAplicacion());
+		TwVenta venta = null;
+		if (aplicacion.getnIdVenta() != null) {
+			venta = ventasRepository.findBynId(aplicacion.getnIdVenta());
+			if (venta != null) {
+				linea.setFolioVenta(venta.getsFolioVenta());
+				linea.setFechaVenta(venta.getdFechaVenta());
+				if (linea.getnIdFacturacion() == null || linea.getnIdFacturacion().longValue() <= 0L) {
+					linea.setnIdFacturacion(venta.getnIdFacturacion());
+				}
+			}
+		}
+
+		Long nIdFacturacion = linea.getnIdFacturacion();
+		if (nIdFacturacion != null && nIdFacturacion.longValue() > 0L) {
+			TwFacturacion facturacion = facturaRepository.findById(nIdFacturacion).orElse(null);
+			if (facturacion != null) {
+				linea.setUuidFactura(facturacion.getsUuid());
+				linea.setEstadoFactura(facturacion.getsEstado());
+				linea.setMetodoPagoFiscal(facturacion.getsMetodoPagoFiscal());
+				linea.setFormaPagoFiscal(facturacion.getsFormaPagoFiscal());
+				linea.setEstadoComplemento(facturacion.getsEstadoComplemento());
+			}
+		}
+
 		if (aplicacion.getTwPagoCliente() != null) {
 			linea.setFechaPago(aplicacion.getTwPagoCliente().getdFechaPago());
 			linea.setFormaPagoSat(aplicacion.getTwPagoCliente().getsFormaPagoSat());
@@ -721,6 +760,7 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		if (ultimoTimbrado != null) {
 			dto.setEstadoRepCanonico("TIMBRADO");
 			dto.setUuidRepCanonico(ultimoTimbrado.getsUuidComplementoPago());
+			dto.setnIdComplementoRepCanonico(ultimoTimbrado.getnId());
 			return;
 		}
 
@@ -762,11 +802,34 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		if (facturacion == null) {
 			return "NO_FACTURADA";
 		}
-		if ("PPD".equalsIgnoreCase(facturacion.getsMetodoPagoFiscal())
-				&& "99".equalsIgnoreCase(facturacion.getsFormaPagoFiscal())) {
+		if (esFacturaPpd99(facturacion)) {
 			return "PENDIENTE";
 		}
 		return "NO_REQUIERE";
+	}
+
+	private boolean esFacturaPpd99(TwFacturacion facturacion) {
+		return facturacion != null
+				&& esMetodoPagoPpd(facturacion.getsMetodoPagoFiscal())
+				&& esFormaPago99PorDefinir(facturacion.getsFormaPagoFiscal());
+	}
+
+	private boolean esMetodoPagoPpd(String metodoPagoFiscal) {
+		String metodo = trimToNull(metodoPagoFiscal);
+		return metodo != null && "PPD".equalsIgnoreCase(metodo);
+	}
+
+	private boolean esFormaPago99PorDefinir(String formaPagoFiscal) {
+		String forma = trimToNull(formaPagoFiscal);
+		if (forma == null) {
+			return false;
+		}
+		String normalized = forma.toUpperCase();
+		return "99".equals(normalized)
+				|| normalized.startsWith("99 ")
+				|| normalized.startsWith("99-")
+				|| normalized.startsWith("99 -")
+				|| normalized.contains("POR DEFINIR");
 	}
 
 	private String trimToNull(String value) {
