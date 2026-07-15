@@ -515,7 +515,7 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 
 		BigDecimal totalAbonoLegacy = detalleBase != null && detalleBase.getnTotalAbono() != null
 				? detalleBase.getnTotalAbono()
-				: BigDecimal.ZERO;
+				: totalAbonosLegacyVenta(venta.getnId());
 		BigDecimal totalAplicadoCanonico = totalAplicadoCanonicoNoReflejadoEnAbonos(venta.getnId());
 		BigDecimal totalAplicado = totalAbonoLegacy.add(totalAplicadoCanonico);
 		BigDecimal saldoPendiente = totalVenta.subtract(totalAplicado);
@@ -601,6 +601,22 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		return total;
 	}
 
+	private BigDecimal totalAbonosLegacyVenta(Long nIdVenta) {
+		List<TwAbono> abonos = abonoVentaIdRepository.findBynIdVenta(nIdVenta);
+		if (abonos == null || abonos.isEmpty()) {
+			return BigDecimal.ZERO;
+		}
+
+		BigDecimal total = BigDecimal.ZERO;
+		for (TwAbono abono : abonos) {
+			if (abono == null || abono.getnAbono() == null) {
+				continue;
+			}
+			total = total.add(abono.getnAbono());
+		}
+		return total;
+	}
+
 	private TwAbono resolveAbonoCanonicoRelacionado(List<TwAbono> abonosCanonicosDisponibles, TwPagoAplicacion aplicacion) {
 		if (abonosCanonicosDisponibles == null || abonosCanonicosDisponibles.isEmpty() || aplicacion == null
 				|| aplicacion.getnIdPagoCliente() == null || aplicacion.getnMontoAplicado() == null) {
@@ -653,6 +669,7 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		aplicacion.setnEstatus(1);
 		twPagoAplicacionRepository.save(aplicacion);
 		registrarAbonoCanonico(pago, venta, aplicacion);
+		actualizarFechaLiquidacionCredito(venta, saldoInsoluto, aplicacion.getdFechaAplicacion());
 	}
 
 	private void registrarAbonoCanonico(TwPagoCliente pago, TwVenta venta, TwPagoAplicacion aplicacion) {
@@ -678,6 +695,18 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		abono.setTwCaja(caja);
 		abono.setTcUsuario(usuario);
 		abonoVentaIdRepository.save(abono);
+	}
+
+	private void actualizarFechaLiquidacionCredito(TwVenta venta, BigDecimal saldoInsoluto, java.time.LocalDateTime fechaAplicacion) {
+		if (venta == null || saldoInsoluto == null || saldoInsoluto.compareTo(BigDecimal.ZERO) != 0) {
+			return;
+		}
+		if (venta.getdFechaPagoCredito() != null) {
+			return;
+		}
+
+		venta.setdFechaPagoCredito(fechaAplicacion != null ? fechaAplicacion : DateTimeUtil.obtenerHoraExactaDeMexico());
+		ventasRepository.save(venta);
 	}
 
 	private PagoAplicacionResultadoDto refreshPagoAplicado(Long nIdPagoCliente) {

@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -64,6 +65,7 @@ import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.CotizacionProductoRepository;
 import com.refacFabela.repository.CotizacionRepository;
 import com.refacFabela.repository.FacturacionComplementoPagoRepository;
+import com.refacFabela.repository.FacturaRepository;
 import com.refacFabela.repository.FacturacionPacAuditDetalleRepository;
 import com.refacFabela.repository.FacturacionPacAuditRepository;
 import com.refacFabela.repository.PedidosProductoRepository;
@@ -160,6 +162,9 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 	@Autowired
 	private FacturacionComplementoPagoRepository facturacionComplementoPagoRepository;
+
+	@Autowired
+	private FacturaRepository facturaRepository;
 	
 
 	@Override
@@ -1190,7 +1195,27 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	public byte[] getDocumento(Long nIdVenta, TipoDoc TipoDoc) {
 		try {
 			if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.XML_ACUSE_CANCELACION)) {
-				return obtenerAcuseCancelacionDesdeAuditoria(nIdVenta);
+				byte[] local = readDocumentoLocal(pathAcuseCancelacionVenta(nIdVenta, "xml"));
+				if (local != null) {
+					return local;
+				}
+				byte[] remoto = obtenerAcuseCancelacionDesdeAuditoria(nIdVenta);
+				if (remoto != null && remoto.length > 0) {
+					writeDocumentoLocal(pathAcuseCancelacionVenta(nIdVenta, "xml"), remoto);
+				}
+				return remoto;
+			}
+
+			if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.PDF_ACUSE_CANCELACION)) {
+				byte[] local = readDocumentoLocal(pathAcuseCancelacionVenta(nIdVenta, "pdf"));
+				if (local != null) {
+					return local;
+				}
+				byte[] remoto = obtenerPdfAcuseCancelacionDesdeAuditoria(nIdVenta);
+				if (remoto != null && remoto.length > 0) {
+					writeDocumentoLocal(pathAcuseCancelacionVenta(nIdVenta, "pdf"), remoto);
+				}
+				return remoto;
 			}
 
 			if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.ZIP_COMPLEMENTOS_PAGO)) {
@@ -1223,7 +1248,17 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				return null;
 			}
 
-			return Files.readAllBytes(Paths.get(ruta + nIdVenta + extension));
+			Path storagePath = Paths.get(ruta + nIdVenta + extension);
+			if (Files.exists(storagePath)) {
+				return Files.readAllBytes(storagePath);
+			}
+
+			byte[] localMirror = readDocumentoLocal(pathFacturaVenta(nIdVenta, TipoDoc));
+			if (localMirror != null) {
+				return localMirror;
+			}
+
+			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -1279,11 +1314,27 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 		com.refacFabela.model.TwFacturacionComplementoPago complemento = complementoOptional.get();
 		if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.XML_COMPLEMENTO_PAGO)) {
-			return decodeBase64OrPlain(complemento.getsXmlTimbrado());
+			byte[] local = readDocumentoLocal(pathComplementoDocumento(nIdComplemento, "xml"));
+			if (local != null) {
+				return local;
+			}
+			byte[] xml = decodeBase64OrPlain(complemento.getsXmlTimbrado());
+			if (xml != null && xml.length > 0) {
+				writeDocumentoLocal(pathComplementoDocumento(nIdComplemento, "xml"), xml);
+			}
+			return xml;
 		}
 
 		if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.PDF_COMPLEMENTO_PAGO)) {
-			return obtenerPdfComplementoDesdeAuditoria(complemento.getsCorrelationId());
+			byte[] local = readDocumentoLocal(pathComplementoDocumento(nIdComplemento, "pdf"));
+			if (local != null) {
+				return local;
+			}
+			byte[] pdf = obtenerPdfComplementoDesdeAuditoria(complemento.getsCorrelationId());
+			if (pdf != null && pdf.length > 0) {
+				writeDocumentoLocal(pathComplementoDocumento(nIdComplemento, "pdf"), pdf);
+			}
+			return pdf;
 		}
 
 		return null;
@@ -1317,6 +1368,31 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		} catch (IllegalArgumentException e) {
 			return trimmed.getBytes(StandardCharsets.UTF_8);
 		}
+	}
+
+	private byte[] obtenerPdfAcuseCancelacionDesdeAuditoria(Long nIdVenta) {
+		if (nIdVenta == null) {
+			return null;
+		}
+
+		Optional<TwFacturacionPacAudit> auditoriaOptional = facturacionPacAuditRepository
+				.findUltimaCancelacionExitosa(nIdVenta, "cancelacion");
+		if (!auditoriaOptional.isPresent()) {
+			return null;
+		}
+
+		TwFacturacionPacAudit auditoria = auditoriaOptional.get();
+		String pdf = obtenerValorAuditoriaDetalle(auditoria.getnId(), "RESPONSE",
+				"pdfAcuseBase64", "acusePdfBase64", "pdfCancelacionBase64", "pdfBase64",
+				"pdfAcuse", "acusePdf", "pdfCancelacion", "pdf");
+		byte[] pdfBytes = decodeBase64OrPlain(pdf);
+		if (pdfBytes != null && pdfBytes.length > 0) {
+			return pdfBytes;
+		}
+
+		String urlPdf = obtenerValorAuditoriaDetalle(auditoria.getnId(), "RESPONSE",
+				"urlPdfAcuse", "acusePdfUrl", "urlPdfCancelacion", "pdfAcuseUrl", "pdfUrl", "urlPdf", "pdf");
+		return downloadBytes(urlPdf);
 	}
 
 	private byte[] obtenerPdfComplementoDesdeAuditoria(String correlationId) {
@@ -1420,6 +1496,86 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			return Base64.getDecoder().decode(trimmed);
 		} catch (IllegalArgumentException e) {
 			return trimmed.getBytes(StandardCharsets.UTF_8);
+		}
+	}
+
+	private Path pathFacturaVenta(Long nIdVenta, TipoDoc tipoDoc) {
+		TwVenta venta = nIdVenta != null ? ventasRepository.findBynId(nIdVenta) : null;
+		if (venta == null || venta.getTcCliente() == null || venta.getTcCliente().getnIdDatoFactura() == null) {
+			return null;
+		}
+		TcDatosFactura datosFactura = tcDatosFacturaRepository.findById(venta.getTcCliente().getnIdDatoFactura()).orElse(null);
+		if (datosFactura == null) {
+			return null;
+		}
+		String ruta = TipoDoc.XML_FACTURA.equals(tipoDoc)
+				? datosFacturaStorageResolver.resolveRutaXml(datosFactura)
+				: datosFacturaStorageResolver.resolveRutaPdf(datosFactura);
+		String ext = TipoDoc.XML_FACTURA.equals(tipoDoc) ? "xml" : "pdf";
+		return ruta != null ? Paths.get(ruta + nIdVenta + "." + ext) : null;
+	}
+
+	private Path pathComplementoDocumento(Long nIdComplemento, String ext) {
+		if (nIdComplemento == null) {
+			return null;
+		}
+		Optional<com.refacFabela.model.TwFacturacionComplementoPago> complementoOptional = facturacionComplementoPagoRepository.findById(nIdComplemento);
+		if (!complementoOptional.isPresent()) {
+			return null;
+		}
+		com.refacFabela.model.TwFacturacionComplementoPago complemento = complementoOptional.get();
+		TwFacturacion factura = complemento.getnIdFacturacion() != null ? facturaRepository.findById(complemento.getnIdFacturacion()).orElse(null) : null;
+		if (factura == null || factura.getnIdDatoFactura() == null) {
+			return null;
+		}
+		TcDatosFactura datosFactura = tcDatosFacturaRepository.findById(factura.getnIdDatoFactura()).orElse(null);
+		if (datosFactura == null) {
+			return null;
+		}
+		String rutaRaiz = datosFacturaStorageResolver.resolveRutaRaiz(datosFactura);
+		return rutaRaiz != null ? Paths.get(rutaRaiz, "complementos", ext, String.valueOf(nIdComplemento) + "." + ext) : null;
+	}
+
+	private Path pathAcuseCancelacionVenta(Long nIdVenta, String ext) {
+		TwVenta venta = nIdVenta != null ? ventasRepository.findBynId(nIdVenta) : null;
+		if (venta == null || venta.getTcCliente() == null || venta.getTcCliente().getnIdDatoFactura() == null) {
+			return null;
+		}
+		TcDatosFactura datosFactura = tcDatosFacturaRepository.findById(venta.getTcCliente().getnIdDatoFactura()).orElse(null);
+		if (datosFactura == null) {
+			return null;
+		}
+		String rutaRaiz = datosFacturaStorageResolver.resolveRutaRaiz(datosFactura);
+		return rutaRaiz != null && ext != null && !ext.trim().isEmpty()
+				? Paths.get(rutaRaiz, "cancelaciones", ext, String.valueOf(nIdVenta) + "." + ext)
+				: null;
+	}
+
+	private byte[] readDocumentoLocal(Path path) {
+		if (path == null) {
+			return null;
+		}
+		try {
+			if (!Files.exists(path)) {
+				return null;
+			}
+			return Files.readAllBytes(path);
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	private void writeDocumentoLocal(Path path, byte[] data) {
+		if (path == null || data == null || data.length == 0) {
+			return;
+		}
+		try {
+			if (path.getParent() != null) {
+				Files.createDirectories(path.getParent());
+			}
+			Files.write(path, data);
+		} catch (IOException ignored) {
+			// Best effort mirror write; serving should continue with in-memory bytes.
 		}
 	}
 
