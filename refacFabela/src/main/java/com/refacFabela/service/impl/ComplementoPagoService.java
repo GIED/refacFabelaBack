@@ -264,6 +264,9 @@ public class ComplementoPagoService {
 		if (pagoCliente == null || pagoCliente.getnEstatus() == null || pagoCliente.getnEstatus().intValue() != 1) {
 			throw new FacturacionException("No existe el pago global indicado.");
 		}
+		if (Boolean.FALSE.equals(pagoCliente.getnFacturarRep())) {
+			throw new FacturacionException("El pago global se registró como no facturable y no debe timbrarse en SAT.");
+		}
 		List<TwPagoAplicacion> aplicaciones = twPagoAplicacionRepository.findActivasByPago(nIdPagoCliente);
 		if (aplicaciones == null || aplicaciones.isEmpty()) {
 			throw new FacturacionException("El pago global no tiene aplicaciones activas para timbrar REP.");
@@ -296,14 +299,13 @@ public class ComplementoPagoService {
 				continue;
 			}
 			if (resolveFacturaOrigenAplicacion(aplicacion, true) == null) {
-				throw new FacturacionException(
-						"El pago global aún tiene ventas aplicadas sin factura de ingreso timbrada.");
+				continue;
 			}
 			aplicacionesPendientes.add(aplicacion);
 		}
 
 		if (aplicacionesPendientes.isEmpty()) {
-			throw new FacturacionException("Las aplicaciones del pago global ya cuentan con REP timbrado.");
+			throw new FacturacionException("El pago global no tiene aplicaciones facturadas timbrables todavía.");
 		}
 
 		TcDatosFactura datosFactura = tcDatosFacturaRepository.obtenerDatos(pagoCliente.getnIdDatoFactura());
@@ -457,8 +459,13 @@ public class ComplementoPagoService {
 			return false;
 		}
 
+		TwPagoCliente pagoCliente = twPagoClienteRepository.findBynId(nIdPagoCliente);
+		if (pagoCliente == null || Boolean.FALSE.equals(pagoCliente.getnFacturarRep())) {
+			return false;
+		}
+
 		List<TwPagoAplicacion> aplicaciones = twPagoAplicacionRepository.findActivasByPago(nIdPagoCliente);
-		boolean tienePendientes = false;
+		boolean tienePendientesTimbrables = false;
 		for (TwPagoAplicacion aplicacion : aplicaciones) {
 			if (aplicacion == null || aplicacion.getnId() == null || aplicacion.getnIdVenta() == null) {
 				continue;
@@ -468,12 +475,12 @@ public class ComplementoPagoService {
 					.isEmpty()) {
 				continue;
 			}
-			tienePendientes = true;
 			if (resolveFacturaOrigenAplicacion(aplicacion, true) == null) {
-				return false;
+				continue;
 			}
+			tienePendientesTimbrables = true;
 		}
-		return tienePendientes;
+		return tienePendientesTimbrables;
 	}
 
 	private TwFacturacion resolveFacturaOrigenAplicacion(TwPagoAplicacion aplicacion, boolean persistirRelacion) {

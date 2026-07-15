@@ -41,6 +41,7 @@ public class PagoClienteDetalleDto {
 	private Long nIdCaja;
 	private Long nIdCorteCaja;
 	private String estatus;
+	private Boolean facturarPago;
 	private String estadoRepCanonico;
 	private String uuidRepCanonico;
 	private Long nIdComplementoRepCanonico;
@@ -318,6 +319,14 @@ public class PagoClienteDetalleDto {
 
 	public void setEstatus(String estatus) {
 		this.estatus = estatus;
+	}
+
+	public Boolean getFacturarPago() {
+		return facturarPago;
+	}
+
+	public void setFacturarPago(Boolean facturarPago) {
+		this.facturarPago = facturarPago;
 	}
 
 	public String getEstadoRepCanonico() {

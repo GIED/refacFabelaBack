@@ -857,6 +857,7 @@ public class VentasServiceImpl implements VentasService {
 		pagoCliente.setnIdCorteCaja(ventaCobro.getnIdCaja());
 		pagoCliente.setsEstatus("APLICADO_TOTAL");
 		pagoCliente.setnConciliado(Boolean.FALSE);
+		pagoCliente.setnFacturarRep(Boolean.TRUE);
 		pagoCliente.setnEstatus(1);
 		pagoCliente = twPagoClienteRepository.save(pagoCliente);
 

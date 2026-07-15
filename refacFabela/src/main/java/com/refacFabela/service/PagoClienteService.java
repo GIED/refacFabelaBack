@@ -7,6 +7,7 @@ import com.refacFabela.dto.PagoAplicacionLineaDto;
 import com.refacFabela.dto.PagoAplicacionAutomaticaRequestDto;
 import com.refacFabela.dto.PagoAplicacionManualRequestDto;
 import com.refacFabela.dto.PagoAplicacionResultadoDto;
+import com.refacFabela.dto.PagoComprobanteCorreoResponseDto;
 import com.refacFabela.dto.PagoClienteDetalleDto;
 import com.refacFabela.dto.PagoClienteRegistroDto;
 
@@ -25,4 +26,8 @@ public interface PagoClienteService {
 	PagoAplicacionResultadoDto aplicarPagoAutomatico(Long nIdPagoCliente, PagoAplicacionAutomaticaRequestDto requestDto);
 
 	PagoAplicacionResultadoDto aplicarPagoManual(Long nIdPagoCliente, PagoAplicacionManualRequestDto requestDto);
+
+	byte[] descargarPaqueteComprobante(Long nIdPagoCliente);
+
+	PagoComprobanteCorreoResponseDto enviarComprobanteCorreo(Long nIdPagoCliente);
 }

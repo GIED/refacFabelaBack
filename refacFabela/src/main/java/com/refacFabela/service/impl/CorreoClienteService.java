@@ -1,5 +1,7 @@
 package com.refacFabela.service.impl;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,35 @@ public class CorreoClienteService {
 
 		envioMail.ResultadoEnvioCorreo resultado = mailSender.enviarCorreoDetallado(cliente.getsCorreo(), asunto,
 				mensaje, ruta, nombreArchivo, tipo);
+
+		if (resultado.debeBloquearCorreoCliente()) {
+			bloquearCorreoCliente(cliente, resultado.getMotivoBloqueo());
+		}
+
+		return resultado;
+	}
+
+	public envioMail.ResultadoEnvioCorreo enviarCorreoClienteConAdjuntos(Long clienteId, String asunto, String mensaje,
+			List<envioMail.AdjuntoCorreo> adjuntos) {
+		TcCliente cliente = obtenerCliente(clienteId);
+		if (cliente == null) {
+			logger.warn("[CorreoClienteService] No se encontro el cliente {} para enviar correo con asunto {}.", clienteId,
+					asunto);
+			return envioMail.ResultadoEnvioCorreo.omitido("Cliente no encontrado.");
+		}
+
+		if (!bloqueoCorreoClienteHabilitado) {
+			return mailSender.enviarCorreoDetalladoConAdjuntos(cliente.getsCorreo(), asunto, mensaje, adjuntos);
+		}
+
+		if (Boolean.TRUE.equals(cliente.getnCorreoBloqueado())) {
+			logger.info("[CorreoClienteService] Envio omitido para cliente {} porque su correo esta bloqueado.",
+					cliente.getnId());
+			return envioMail.ResultadoEnvioCorreo.omitido("Correo bloqueado para el cliente.");
+		}
+
+		envioMail.ResultadoEnvioCorreo resultado = mailSender.enviarCorreoDetalladoConAdjuntos(cliente.getsCorreo(), asunto,
+				mensaje, adjuntos);
 
 		if (resultado.debeBloquearCorreoCliente()) {
 			bloquearCorreoCliente(cliente, resultado.getMotivoBloqueo());

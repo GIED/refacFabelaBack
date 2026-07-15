@@ -1,10 +1,17 @@
 package com.refacFabela.service.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +23,10 @@ import com.refacFabela.dto.PagoAplicacionManualLineaDto;
 import com.refacFabela.dto.PagoAplicacionManualRequestDto;
 import com.refacFabela.dto.PagoAplicacionLineaDto;
 import com.refacFabela.dto.PagoAplicacionResultadoDto;
+import com.refacFabela.dto.PagoComprobanteCorreoResponseDto;
 import com.refacFabela.dto.PagoClienteDetalleDto;
 import com.refacFabela.dto.PagoClienteRegistroDto;
+import com.refacFabela.enums.TipoDoc;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TcDatosFactura;
 import com.refacFabela.model.TcFormapago;
@@ -44,8 +53,10 @@ import com.refacFabela.repository.TwPagoClienteRepository;
 import com.refacFabela.repository.TwProductosVentaRepository;
 import com.refacFabela.repository.UsuariosRepository;
 import com.refacFabela.repository.VentasRepository;
+import com.refacFabela.service.GeneraReporteService;
 import com.refacFabela.service.PagoClienteService;
 import com.refacFabela.utils.DateTimeUtil;
+import com.refacFabela.utils.envioMail;
 
 @Service
 public class PagoClienteServiceImpl implements PagoClienteService {
@@ -95,6 +106,12 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 
 	@Autowired
 	private UsuariosRepository usuariosRepository;
+
+	@Autowired
+	private GeneraReporteService generaReporteService;
+
+	@Autowired
+	private CorreoClienteService correoClienteService;
 
 	@Transactional
 	@Override
@@ -146,6 +163,7 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		pago.setnIdCorteCaja(registroDto.getnIdCorteCaja());
 		pago.setsEstatus(ESTATUS_REGISTRADO);
 		pago.setnConciliado(Boolean.FALSE);
+		pago.setnFacturarRep(resolveFacturarPago(registroDto.getFacturarPago()));
 		pago.setnEstatus(1);
 
 		TwPagoCliente saved = twPagoClienteRepository.save(pago);
@@ -161,6 +179,79 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 
 		List<TwPagoAplicacion> aplicaciones = twPagoAplicacionRepository.findActivasByPago(nIdPagoCliente);
 		return toDetalleDto(pago, aplicaciones);
+	}
+
+	@Override
+	public byte[] descargarPaqueteComprobante(Long nIdPagoCliente) {
+		TwPagoCliente pago = obtenerPagoValido(nIdPagoCliente);
+		List<TwPagoAplicacion> aplicaciones = twPagoAplicacionRepository.findActivasByPago(nIdPagoCliente);
+		if (aplicaciones == null || aplicaciones.isEmpty()) {
+			throw new IllegalArgumentException("El pago global no tiene aplicaciones registradas para generar comprobantes.");
+		}
+
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream(); ZipOutputStream zip = new ZipOutputStream(baos)) {
+			StringBuilder omisiones = new StringBuilder();
+			agregarEntradaZip(zip, "resumen_pago_global_" + pago.getnId() + ".txt", construirResumenPago(pago, aplicaciones).getBytes(StandardCharsets.UTF_8));
+
+			TwFacturacionComplementoPago complemento = resolveComplementoTimbradoPago(aplicaciones);
+			if (complemento != null && complemento.getnId() != null) {
+				tryAgregarEntradaZip(zip, omisiones, "complemento/complemento_pago_" + pago.getnId() + ".pdf",
+						generaReporteService.getDocumentoComplemento(complemento.getnId(), TipoDoc.PDF_COMPLEMENTO_PAGO));
+				tryAgregarEntradaZip(zip, omisiones, "complemento/complemento_pago_" + pago.getnId() + ".xml",
+						generaReporteService.getDocumentoComplemento(complemento.getnId(), TipoDoc.XML_COMPLEMENTO_PAGO));
+			}
+
+			Set<Long> ventasIncluidas = new LinkedHashSet<Long>();
+			for (TwPagoAplicacion aplicacion : aplicaciones) {
+				if (aplicacion == null || aplicacion.getnIdVenta() == null || !ventasIncluidas.add(aplicacion.getnIdVenta())) {
+					continue;
+				}
+
+				Long nIdVenta = aplicacion.getnIdVenta();
+				tryAgregarEntradaZip(zip, omisiones, "abonos/abono_venta_" + nIdVenta + ".pdf", generaReporteService.getAbonoVentaIdPDF(nIdVenta));
+
+				TwVenta venta = ventasRepository.findBynId(nIdVenta);
+				if (venta != null && venta.getnIdFacturacion() != null && venta.getnIdFacturacion().longValue() > 0L) {
+					tryAgregarEntradaZip(zip, omisiones, "facturas/factura_venta_" + nIdVenta + ".pdf", generaReporteService.getDocumento(nIdVenta, TipoDoc.PDF_FACTURA));
+					tryAgregarEntradaZip(zip, omisiones, "facturas/factura_venta_" + nIdVenta + ".xml", generaReporteService.getDocumento(nIdVenta, TipoDoc.XML_FACTURA));
+				}
+			}
+
+			if (omisiones.length() > 0) {
+				agregarEntradaZip(zip, "resumen_documentos_omitidos.txt", omisiones.toString().getBytes(StandardCharsets.UTF_8));
+			}
+
+			zip.finish();
+			return baos.toByteArray();
+		} catch (IOException e) {
+			throw new IllegalStateException("No fue posible construir el paquete del comprobante del pago global.", e);
+		}
+	}
+
+	@Override
+	public PagoComprobanteCorreoResponseDto enviarComprobanteCorreo(Long nIdPagoCliente) {
+		TwPagoCliente pago = obtenerPagoValido(nIdPagoCliente);
+		byte[] paquete = descargarPaqueteComprobante(nIdPagoCliente);
+		if (paquete == null || paquete.length == 0) {
+			throw new IllegalArgumentException("No fue posible generar el comprobante del pago global para enviarlo por correo.");
+		}
+
+		String asunto = "Comprobante de pago global #" + pago.getnId();
+		String mensaje = "<p>Adjunto encontrará el comprobante del pago global registrado en su cuenta, junto con los documentos relacionados disponibles.</p>"
+				+ "<p>Si requiere apoyo adicional, puede responder directamente a este correo.</p>";
+
+		envioMail.ResultadoEnvioCorreo resultado = correoClienteService.enviarCorreoClienteConAdjuntos(
+				pago.getnIdCliente(), asunto, mensaje,
+				java.util.Collections.singletonList(new envioMail.AdjuntoCorreo(
+						"comprobante_pago_global_" + pago.getnId() + ".zip", "application/zip", paquete)));
+
+		PagoComprobanteCorreoResponseDto response = new PagoComprobanteCorreoResponseDto();
+		response.setnIdPagoCliente(pago.getnId());
+		response.setCorreoDestino(pago.getTcCliente() != null ? pago.getTcCliente().getsCorreo() : null);
+		response.setEnviado(resultado.isEnviado());
+		response.setBloqueado(resultado.debeBloquearCorreoCliente());
+		response.setDetalle(resultado.getDetalle());
+		return response;
 	}
 
 	@Override
@@ -228,7 +319,11 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 				continue;
 			}
 			TwVenta venta = ventasRepository.findBynId(pendiente.getnIdVenta());
-			if (!esVentaElegibleParaAplicacion(venta, pago.getnIdCliente(), pago.getnIdDatoFactura())) {
+			if (Boolean.TRUE.equals(resolveFacturarPago(pago.getnFacturarRep()))) {
+				if (!esVentaElegibleParaAplicacion(venta, pago.getnIdCliente(), pago.getnIdDatoFactura())) {
+					continue;
+				}
+			} else if (!esVentaSinFacturaAplicableParaPagoGlobal(venta, pago.getnIdCliente())) {
 				continue;
 			}
 			pendientesElegibles.add(pendiente);
@@ -286,27 +381,20 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 			if (venta == null) {
 				throw new IllegalArgumentException("No existe la venta " + linea.getnIdVenta() + " para aplicar el pago.");
 			}
-			if (venta.getnIdFacturacion() == null || venta.getnIdFacturacion().longValue() <= 0L) {
-				throw new IllegalArgumentException(
-						"La venta " + linea.getnIdVenta() + " no está facturada. Primero debes facturarla para relacionarla a un pago global.");
-			}
-			TwFacturacion facturacionVenta = facturaRepository.findById(venta.getnIdFacturacion()).orElse(null);
-			if (facturacionVenta == null || facturacionVenta.getsUuid() == null
-					|| facturacionVenta.getsUuid().trim().isEmpty()) {
-				throw new IllegalArgumentException(
-						"La venta " + linea.getnIdVenta() + " no tiene UUID de factura válido para generar complemento de pago.");
-			}
-			if (facturacionVenta.getsEstado() != null
-					&& facturacionVenta.getsEstado().toUpperCase().contains("CANCEL")) {
-				throw new IllegalArgumentException(
-						"La venta " + linea.getnIdVenta() + " tiene la factura cancelada y no puede recibir aplicación de pago global.");
-			}
-			if (!esFacturaPpd99(facturacionVenta)) {
-				throw new IllegalArgumentException(
-						"La venta " + linea.getnIdVenta() + " debe estar facturada como PPD/99 para relacionar pagos globales y generar REP.");
-			}
-			if (!esVentaElegibleParaAplicacion(venta, pago.getnIdCliente(), pago.getnIdDatoFactura())) {
-				throw new IllegalArgumentException("La venta " + linea.getnIdVenta() + " no es elegible para aplicar este pago.");
+			boolean facturarPago = Boolean.TRUE.equals(resolveFacturarPago(pago.getnFacturarRep()));
+			if (facturarPago) {
+				if (!esVentaElegibleParaAplicacion(venta, pago.getnIdCliente(), pago.getnIdDatoFactura())) {
+					throw new IllegalArgumentException(
+							"La venta " + linea.getnIdVenta() + " debe estar facturada en PPD/99 y vigente para generar complemento de pago.");
+				}
+			} else {
+				if (esVentaElegibleParaAplicacion(venta, pago.getnIdCliente(), pago.getnIdDatoFactura())) {
+					throw new IllegalArgumentException(
+							"La venta " + linea.getnIdVenta() + " ya es relacionable y el pago debe registrarse como facturable para generar su complemento de pago.");
+				}
+				if (!esVentaSinFacturaAplicableParaPagoGlobal(venta, pago.getnIdCliente())) {
+					throw new IllegalArgumentException("La venta " + linea.getnIdVenta() + " debe estar sin factura para aplicar un pago no facturable.");
+				}
 			}
 
 			TvVentaDetalle detallePendiente = tvVentaDetalleRepository.consultaVentaDetalleId(venta.getnId());
@@ -384,6 +472,33 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 			return false;
 		}
 		return true;
+	}
+
+	private boolean esVentaAplicableParaPagoGlobal(TwVenta venta, Long nIdCliente) {
+		if (venta == null || venta.getTcCliente() == null) {
+			return false;
+		}
+		if (!Long.valueOf(1L).equals(venta.getnTipoPago())) {
+			return false;
+		}
+		if (nIdCliente == null || !venta.getnIdCliente().equals(nIdCliente)) {
+			return false;
+		}
+		if (venta.getnIdFacturacion() == null || venta.getnIdFacturacion().longValue() <= 0L) {
+			return true;
+		}
+		TwFacturacion facturacion = facturaRepository.findById(venta.getnIdFacturacion()).orElse(null);
+		if (facturacion == null) {
+			return true;
+		}
+		return facturacion.getsEstado() == null || !facturacion.getsEstado().toUpperCase().contains("CANCEL");
+	}
+
+	private boolean esVentaSinFacturaAplicableParaPagoGlobal(TwVenta venta, Long nIdCliente) {
+		if (!esVentaAplicableParaPagoGlobal(venta, nIdCliente)) {
+			return false;
+		}
+		return venta.getnIdFacturacion() == null || venta.getnIdFacturacion().longValue() <= 0L;
 	}
 
 	private FacturaCreditoPendienteDto construirFacturaPendiente(TwVenta venta, TvVentaDetalle detalleBase) {
@@ -607,6 +722,68 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		return origenRegistro.trim();
 	}
 
+	private Boolean resolveFacturarPago(Boolean facturarPago) {
+		return facturarPago == null ? Boolean.TRUE : facturarPago;
+	}
+
+	private String construirResumenPago(TwPagoCliente pago, List<TwPagoAplicacion> aplicaciones) {
+		StringBuilder resumen = new StringBuilder();
+		resumen.append("Pago global #").append(pago.getnId()).append('\n');
+		resumen.append("Cliente: ").append(pago.getnIdCliente()).append('\n');
+		resumen.append("Fecha de pago: ").append(pago.getdFechaPago()).append('\n');
+		resumen.append("Importe total: ").append(pago.getnImporteTotal()).append('\n');
+		resumen.append("Importe aplicado: ").append(pago.getnImporteAplicado()).append('\n');
+		resumen.append("Importe disponible: ").append(pago.getnImporteDisponible()).append('\n');
+		resumen.append("Facturable SAT: ").append(Boolean.TRUE.equals(resolveFacturarPago(pago.getnFacturarRep())) ? "SI" : "NO").append("\n\n");
+		resumen.append("Ventas relacionadas:\n");
+		for (TwPagoAplicacion aplicacion : aplicaciones) {
+			if (aplicacion == null) {
+				continue;
+			}
+			resumen.append("- Venta ").append(aplicacion.getnIdVenta())
+					.append(" | Monto aplicado: ").append(aplicacion.getnMontoAplicado())
+					.append(" | Parcialidad: ").append(aplicacion.getnParcialidad())
+					.append(" | Saldo insoluto: ").append(aplicacion.getnSaldoInsoluto())
+					.append('\n');
+		}
+		return resumen.toString();
+	}
+
+	private void agregarEntradaZip(ZipOutputStream zip, String nombreEntrada, byte[] contenido) throws IOException {
+		if (contenido == null || contenido.length == 0) {
+			return;
+		}
+		ZipEntry entry = new ZipEntry(nombreEntrada);
+		zip.putNextEntry(entry);
+		zip.write(contenido);
+		zip.closeEntry();
+	}
+
+	private void tryAgregarEntradaZip(ZipOutputStream zip, StringBuilder omisiones, String nombreEntrada, byte[] contenido)
+			throws IOException {
+		if (contenido == null || contenido.length == 0) {
+			omisiones.append(nombreEntrada).append(" => sin contenido").append('\n');
+			return;
+		}
+		agregarEntradaZip(zip, nombreEntrada, contenido);
+	}
+
+	private TwFacturacionComplementoPago resolveComplementoTimbradoPago(List<TwPagoAplicacion> aplicaciones) {
+		TwFacturacionComplementoPago ultimoTimbrado = null;
+		for (TwPagoAplicacion aplicacion : aplicaciones) {
+			if (aplicacion == null || aplicacion.getnIdVenta() == null || aplicacion.getnId() == null) {
+				continue;
+			}
+			List<TwFacturacionComplementoPago> complementos = facturacionComplementoPagoRepository.findActivosByOrigenPago(
+					aplicacion.getnIdVenta(), "TW_PAGO_CLIENTE_APLICACION", aplicacion.getnId());
+			for (TwFacturacionComplementoPago complemento : complementos) {
+				ultimoTimbrado = complemento;
+			}
+		}
+		return ultimoTimbrado;
+	}
+
+
 	private PagoClienteDetalleDto toDetalleDto(TwPagoCliente pago, List<TwPagoAplicacion> aplicaciones) {
 		PagoClienteDetalleDto dto = new PagoClienteDetalleDto();
 		dto.setnId(pago.getnId());
@@ -643,6 +820,7 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 		dto.setnIdCaja(pago.getnIdCaja());
 		dto.setnIdCorteCaja(pago.getnIdCorteCaja());
 		dto.setEstatus(pago.getsEstatus());
+		dto.setFacturarPago(resolveFacturarPago(pago.getnFacturarRep()));
 		enriquecerEstadoRepCanonico(dto, aplicaciones);
 		dto.setConciliado(pago.getnConciliado());
 		dto.setFechaConciliacion(pago.getdFechaConciliacion());

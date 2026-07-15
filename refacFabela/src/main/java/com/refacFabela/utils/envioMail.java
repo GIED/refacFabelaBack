@@ -2,6 +2,7 @@ package com.refacFabela.utils;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Date;
 import java.util.Properties;
 
@@ -21,6 +22,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -64,6 +66,51 @@ public class envioMail {
 			Session mailSession = crearSesion();
 			MimeMessage mensajeCorreo = crearMensaje(mailSession, destinatario, asunto, true);
 			mensajeCorreo.setContent(construirContenidoCorreo(asunto, mensaje, incluirAdjuntos, ruta, nombreArchivo, tipo));
+			Transport.send(mensajeCorreo, mensajeCorreo.getAllRecipients());
+			System.out.println("[envioMail] Correo enviado a " + destinatario + " con asunto: " + asunto);
+			return ResultadoEnvioCorreo.enviado("Correo enviado correctamente.");
+		} catch (AddressException e) {
+			System.err.println("[envioMail] Correo bloqueado por formato invalido: " + destinatario + ". " + obtenerMensajeError(e));
+			return ResultadoEnvioCorreo.bloqueado("Correo mal formado o no valido.", obtenerMensajeError(e));
+		} catch (MessagingException e) {
+			if (esErrorDestinatarioPermanente(e)) {
+				System.err.println("[envioMail] Correo bloqueado por rechazo del destinatario: " + destinatario + ". " + obtenerMensajeError(e));
+				return ResultadoEnvioCorreo.bloqueado("El servidor de correo rechazo la direccion del destinatario.",
+						obtenerMensajeError(e));
+			}
+
+			System.err.println("[envioMail] Error al enviar correo a " + destinatario + " con asunto: " + asunto);
+			e.printStackTrace();
+			return ResultadoEnvioCorreo.error("Fallo temporal o no clasificable al enviar correo.");
+		} catch (Exception e) {
+			System.err.println("[envioMail] Error al enviar correo a " + destinatario + " con asunto: " + asunto);
+			e.printStackTrace();
+			return ResultadoEnvioCorreo.error(obtenerMensajeError(e));
+		}
+	}
+
+	public ResultadoEnvioCorreo enviarCorreoDetalladoConAdjuntos(String correo, String paramasunto, String mensaje,
+			List<AdjuntoCorreo> adjuntos) {
+		String destinatario = normalizarTexto(correo);
+		if (!tieneTexto(destinatario)) {
+			System.err.println("[envioMail] Correo no enviado: destinatario vacio.");
+			return ResultadoEnvioCorreo.omitido("Destinatario vacio.");
+		}
+
+		String asunto = tieneTexto(paramasunto) ? paramasunto : "Notificacion " + EMPRESA_NOMBRE;
+		boolean incluirAdjuntos = adjuntos != null && !adjuntos.isEmpty();
+
+		try {
+			validarDestinatario(destinatario);
+			Session mailSession = crearSesion();
+			MimeMessage mensajeCorreo = crearMensaje(mailSession, destinatario, asunto, true);
+			Multipart multipart = construirContenidoCorreo(asunto, mensaje, false, null, null, 0);
+			if (incluirAdjuntos) {
+				for (AdjuntoCorreo adjunto : adjuntos) {
+					agregarAdjunto(multipart, adjunto);
+				}
+			}
+			mensajeCorreo.setContent(multipart);
 			Transport.send(mensajeCorreo, mensajeCorreo.getAllRecipients());
 			System.out.println("[envioMail] Correo enviado a " + destinatario + " con asunto: " + asunto);
 			return ResultadoEnvioCorreo.enviado("Correo enviado correctamente.");
@@ -237,6 +284,18 @@ public class envioMail {
 		MimeBodyPart adjunto = new MimeBodyPart();
 		adjunto.setDataHandler(new DataHandler(new FileDataSource(archivo)));
 		adjunto.setFileName(nombreVisible);
+		multipart.addBodyPart(adjunto);
+	}
+
+	private void agregarAdjunto(Multipart multipart, AdjuntoCorreo archivo) throws MessagingException {
+		if (archivo == null || archivo.getContenido() == null || archivo.getContenido().length == 0 || !tieneTexto(archivo.getNombreArchivo())) {
+			return;
+		}
+
+		MimeBodyPart adjunto = new MimeBodyPart();
+		String contentType = tieneTexto(archivo.getContentType()) ? archivo.getContentType() : "application/octet-stream";
+		adjunto.setDataHandler(new DataHandler(new ByteArrayDataSource(archivo.getContenido(), contentType)));
+		adjunto.setFileName(archivo.getNombreArchivo());
 		multipart.addBodyPart(adjunto);
 	}
 
@@ -481,6 +540,30 @@ public class envioMail {
 
 		public String getDetalle() {
 			return detalle;
+		}
+	}
+
+	public static final class AdjuntoCorreo {
+		private final String nombreArchivo;
+		private final String contentType;
+		private final byte[] contenido;
+
+		public AdjuntoCorreo(String nombreArchivo, String contentType, byte[] contenido) {
+			this.nombreArchivo = nombreArchivo;
+			this.contentType = contentType;
+			this.contenido = contenido;
+		}
+
+		public String getNombreArchivo() {
+			return nombreArchivo;
+		}
+
+		public String getContentType() {
+			return contentType;
+		}
+
+		public byte[] getContenido() {
+			return contenido;
 		}
 	}
 

@@ -130,6 +130,9 @@ public class TwPagoCliente implements Serializable {
 	@Column(name = "n_conciliado")
 	private Boolean nConciliado;
 
+	@Column(name = "n_facturar_rep")
+	private Boolean nFacturarRep;
+
 	@Column(name = "n_estatus")
 	private Integer nEstatus;
 
@@ -439,6 +442,14 @@ public class TwPagoCliente implements Serializable {
 
 	public void setnConciliado(Boolean nConciliado) {
 		this.nConciliado = nConciliado;
+	}
+
+	public Boolean getnFacturarRep() {
+		return nFacturarRep;
+	}
+
+	public void setnFacturarRep(Boolean nFacturarRep) {
+		this.nFacturarRep = nFacturarRep;
 	}
 
 	public Integer getnEstatus() {

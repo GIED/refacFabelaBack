@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import com.refacFabela.dto.FacturaCreditoPendienteDto;
 import com.refacFabela.dto.PagoAplicacionAutomaticaRequestDto;
 import com.refacFabela.dto.PagoAplicacionManualRequestDto;
 import com.refacFabela.dto.PagoAplicacionResultadoDto;
+import com.refacFabela.dto.PagoComprobanteCorreoResponseDto;
 import com.refacFabela.dto.PagoClienteDetalleDto;
 import com.refacFabela.dto.PagoClienteRegistroDto;
 import com.refacFabela.service.PagoClienteService;
@@ -118,6 +120,35 @@ public class PagoClienteController {
 		} catch (Exception e) {
 			logger.error("Error al aplicar pago manualmente", e);
 			return new ResponseEntity<String>("No fue posible aplicar el pago manualmente.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping(value = "/{nIdPagoCliente}/comprobante/paquete", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public ResponseEntity<?> descargarPaqueteComprobante(@PathVariable Long nIdPagoCliente) {
+		try {
+			byte[] contenido = pagoClienteService.descargarPaqueteComprobante(nIdPagoCliente);
+			if (contenido == null || contenido.length == 0) {
+				return new ResponseEntity<String>("No fue posible generar el paquete del comprobante de pago.", HttpStatus.NOT_FOUND);
+			}
+			return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(contenido);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			logger.error("Error al descargar paquete del comprobante del pago global", e);
+			return new ResponseEntity<String>("No fue posible generar el paquete del comprobante del pago global.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping("/{nIdPagoCliente}/comprobante/correo")
+	public ResponseEntity<?> enviarComprobanteCorreo(@PathVariable Long nIdPagoCliente) {
+		try {
+			PagoComprobanteCorreoResponseDto resultado = pagoClienteService.enviarComprobanteCorreo(nIdPagoCliente);
+			return ResponseEntity.ok(resultado);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			logger.error("Error al enviar por correo el comprobante del pago global", e);
+			return new ResponseEntity<String>("No fue posible enviar el comprobante del pago global al correo del cliente.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

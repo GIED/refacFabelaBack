@@ -31,6 +31,7 @@ public class PagoClienteRegistroDto {
 	private String redTarjeta;
 	private String comprobanteUrl;
 	private String observaciones;
+	private Boolean facturarPago;
 	private Long nIdUsuarioRegistro;
 	private Long nIdCaja;
 	private Long nIdCorteCaja;
@@ -241,6 +242,14 @@ public class PagoClienteRegistroDto {
 
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
+	}
+
+	public Boolean getFacturarPago() {
+		return facturarPago;
+	}
+
+	public void setFacturarPago(Boolean facturarPago) {
+		this.facturarPago = facturarPago;
 	}
 
 	public Long getnIdUsuarioRegistro() {

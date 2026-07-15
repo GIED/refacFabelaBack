@@ -616,6 +616,7 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 		pagoCliente.setnIdCorteCaja(abonoDto.getTwCaja() != null ? abonoDto.getTwCaja().getnId() : null);
 		pagoCliente.setsEstatus("APLICADO_TOTAL");
 		pagoCliente.setnConciliado(Boolean.FALSE);
+		pagoCliente.setnFacturarRep(Boolean.TRUE);
 		pagoCliente.setnEstatus(1);
 		pagoCliente = twPagoClienteRepository.save(pagoCliente);
 
