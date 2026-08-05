@@ -12,12 +12,15 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -49,6 +52,7 @@ import com.refacFabela.model.TwAbono;
 import com.refacFabela.model.TwCaja;
 import com.refacFabela.model.TwCotizaciones;
 import com.refacFabela.model.TwCotizacionesProducto;
+import com.refacFabela.model.TwFacturacion;
 import com.refacFabela.model.TwFacturacionPacAudit;
 import com.refacFabela.model.TwFacturacionPacAuditDetalle;
 import com.refacFabela.model.TwGasto;
@@ -1236,10 +1240,10 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			String extension;
 			if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.PDF_FACTURA)) {
 				ruta = datosFacturaStorageResolver.resolveRutaPdf(tcDatosFactura);
-				extension = ".pdf";
+				extension = "pdf";
 			} else if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.XML_FACTURA)) {
 				ruta = datosFacturaStorageResolver.resolveRutaXml(tcDatosFactura);
-				extension = ".xml";
+				extension = "xml";
 			} else {
 				return null;
 			}
@@ -1248,9 +1252,12 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				return null;
 			}
 
-			Path storagePath = Paths.get(ruta + nIdVenta + extension);
-			if (Files.exists(storagePath)) {
-				return Files.readAllBytes(storagePath);
+			List<Path> documentosFactura = obtenerDocumentosFacturaVenta(ruta, nIdVenta, extension);
+			if (!documentosFactura.isEmpty()) {
+				if (documentosFactura.size() == 1) {
+					return Files.readAllBytes(documentosFactura.get(0));
+				}
+				return zipDocumentosFactura(documentosFactura, nIdVenta, extension);
 			}
 
 			byte[] localMirror = readDocumentoLocal(pathFacturaVenta(nIdVenta, TipoDoc));
@@ -1261,6 +1268,89 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private List<Path> obtenerDocumentosFacturaVenta(String ruta, Long nIdVenta, String extension) {
+		if (ruta == null || ruta.trim().isEmpty() || nIdVenta == null || extension == null || extension.trim().isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		Path directorio = Paths.get(ruta);
+		if (!Files.exists(directorio) || !Files.isDirectory(directorio)) {
+			return Collections.emptyList();
+		}
+
+		String ventaToken = String.valueOf(nIdVenta);
+		String nombrePrincipal = ventaToken + "." + extension;
+		String prefijoParcial = ventaToken + "_P";
+		String sufijoExtension = "." + extension;
+
+		List<Path> documentos = new ArrayList<Path>();
+		try (Stream<Path> stream = Files.list(directorio)) {
+			stream.filter(Files::isRegularFile)
+					.filter(path -> {
+						String fileName = path.getFileName().toString();
+						return fileName.equalsIgnoreCase(nombrePrincipal)
+								|| (fileName.startsWith(prefijoParcial) && fileName.endsWith(sufijoExtension));
+					})
+					.sorted(Comparator.comparingInt(path ->
+						extraerIndiceParcial(path.getFileName().toString(), ventaToken, extension)))
+					.forEach(documentos::add);
+		} catch (IOException e) {
+			return Collections.emptyList();
+		}
+
+		return documentos;
+	}
+
+	private int extraerIndiceParcial(String fileName, String ventaToken, String extension) {
+		if (fileName == null || ventaToken == null || extension == null) {
+			return Integer.MAX_VALUE;
+		}
+
+		String nombrePrincipal = ventaToken + "." + extension;
+		if (fileName.equalsIgnoreCase(nombrePrincipal)) {
+			return 1;
+		}
+
+		String prefijoParcial = ventaToken + "_P";
+		String sufijoExtension = "." + extension;
+		if (!fileName.startsWith(prefijoParcial) || !fileName.endsWith(sufijoExtension)) {
+			return Integer.MAX_VALUE;
+		}
+
+		String indice = fileName.substring(prefijoParcial.length(), fileName.length() - sufijoExtension.length());
+		try {
+			return Integer.parseInt(indice);
+		} catch (NumberFormatException ex) {
+			return Integer.MAX_VALUE;
+		}
+	}
+
+	private byte[] zipDocumentosFactura(List<Path> documentos, Long nIdVenta, String extension) {
+		if (documentos == null || documentos.isEmpty()) {
+			return null;
+		}
+
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ZipOutputStream zipOutputStream = new ZipOutputStream(baos)) {
+			boolean hasEntries = false;
+			for (Path path : documentos) {
+				if (path == null || !Files.exists(path) || !Files.isRegularFile(path)) {
+					continue;
+				}
+				byte[] data = Files.readAllBytes(path);
+				if (data == null || data.length == 0) {
+					continue;
+				}
+				agregarEntradaZip(zipOutputStream, path.getFileName().toString(), data);
+				hasEntries = true;
+			}
+			zipOutputStream.finish();
+			return hasEntries ? baos.toByteArray() : null;
+		} catch (IOException e) {
 			return null;
 		}
 	}

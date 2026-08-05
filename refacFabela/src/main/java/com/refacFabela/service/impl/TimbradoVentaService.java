@@ -1,6 +1,7 @@
 package com.refacFabela.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import com.refacFabela.dto.ClasificacionFacturacionVenta;
 import com.refacFabela.dto.CfdiTimbradoRequest;
+import com.refacFabela.dto.FacturaParcialDto;
+import com.refacFabela.dto.ResultadoFacturacionVentaDto;
 import com.refacFabela.dto.TimbradoResponse;
 import com.refacFabela.dto.AuditoriaPacDto;
 import com.refacFabela.enums.ClasificacionFacturacionPago;
@@ -191,6 +195,145 @@ public class TimbradoVentaService {
 		guardarArchivos(datosFactura, idVenta, response);
 		enviarCorreoSiAplica(venta, datosFactura);
 		return response;
+	}
+
+	public ResultadoFacturacionVentaDto timbrarVentaDivididaEfectivo(Long idVenta, String cveCfdi) {
+		TwVenta venta = ventasRepository.findBynId(idVenta);
+		if (venta == null) {
+			throw new FacturacionException("La venta no existe.");
+		}
+		if (venta.getnIdFacturacion() != null && venta.getnIdFacturacion().longValue() > 0L) {
+			throw new FacturacionException("La venta ya fue facturada.");
+		}
+		if (Long.valueOf(1L).equals(venta.getnTipoPago())) {
+			throw new FacturacionException("La facturación dividida solo aplica para ventas de contado.");
+		}
+
+		TcDatosFactura datosFactura = tcDatosFacturaRepository.obtenerDatos(venta.getTcCliente().getnIdDatoFactura());
+		if (datosFactura == null) {
+			throw new FacturacionException("No existe configuración fiscal para la razón social emisora.");
+		}
+
+		List<TwVentasProducto> productos = ventasProductoRepository.findBynIdVenta(idVenta);
+		List<TrVentaCobro> cobros = trVentaCobroRepository.findBynIdVenta(idVenta);
+		if (productos == null || productos.isEmpty()) {
+			throw new FacturacionException("La venta no tiene productos para facturar.");
+		}
+		if (cobros == null || cobros.isEmpty()) {
+			throw new FacturacionException("La venta no tiene cobros registrados para facturar.");
+		}
+		if (!isCobroExclusivoEfectivo(cobros)) {
+			throw new FacturacionException("La facturación dividida solo aplica cuando todos los cobros son en efectivo (SAT 01).");
+		}
+
+		BigDecimal totalVenta = facturacionMontoHelper.calcularTotal(productos);
+		if (totalVenta.compareTo(LIMITE_EFECTIVO) <= 0) {
+			throw new FacturacionException("La venta no requiere división porque su monto es menor o igual a $2000.00.");
+		}
+
+		List<BigDecimal> segmentos = construirSegmentosDivision(totalVenta);
+
+		String nombreReceptorOriginal = venta.getTcCliente() != null ? venta.getTcCliente().getsRazonSocial() : null;
+		List<String> nombresReceptorIntentados = pacFacturacionMapper.buildLegalNameCandidates(nombreReceptorOriginal);
+		if (nombresReceptorIntentados.isEmpty()) {
+			nombresReceptorIntentados = Collections.singletonList(nombreReceptorOriginal);
+		}
+
+		TwFacturacion facturacionPrincipal = null;
+		List<FacturaParcialDto> facturasParciales = new ArrayList<FacturaParcialDto>();
+		for (int index = 0; index < segmentos.size(); index++) {
+			BigDecimal montoParcial = segmentos.get(index);
+
+			// Para evitar CFDI40180, cada parcial se calcula con una relación fiscal consistente
+			// (importe traslado dentro de límites SAT sobre la base gravable).
+			BigDecimal subtotalParcial = DateTimeUtil.truncarDosDecimales(
+					montoParcial.divide(BigDecimal.ONE.add(TASA_IVA), 6, RoundingMode.HALF_UP));
+			BigDecimal ivaParcial = DateTimeUtil.truncarDosDecimales(montoParcial.subtract(subtotalParcial));
+
+			CfdiTimbradoRequest request = buildRequest(venta, datosFactura, productos, cobros, null, cveCfdi,
+					nombresReceptorIntentados.get(0));
+			request.setFolio(venta.getnId() + "-P" + (index + 1));
+			request.setFormaPago("01");
+			request.setMetodoPago("PUE");
+			request.setCondicionesDePago("Pago en una sola exhibición");
+			request.setSubtotal(subtotalParcial);
+			request.setTotal(montoParcial);
+			request.setImpuestos(buildImpuestosParcial(ivaParcial));
+			request.setConceptos(buildConceptoParcial(venta, productos, subtotalParcial, ivaParcial, index + 1,
+					segmentos.size()));
+
+			String correlationId = java.util.UUID.randomUUID().toString();
+			TimbradoResponse response = null;
+			int intentoNombreReceptor = 1;
+			try {
+				for (int intento = 0; intento < nombresReceptorIntentados.size(); intento++) {
+					String nombreReceptorIntentado = nombresReceptorIntentados.get(intento);
+					request.getReceptor().setNombre(nombreReceptorIntentado);
+					intentoNombreReceptor = intento + 1;
+					response = pacFacturacionClient.timbrarCfdi(request);
+					if (isTimbradoSuccessful(response)) {
+						break;
+					}
+					if (!shouldRetryReceiverName(response, intento, nombresReceptorIntentados.size())) {
+						break;
+					}
+				}
+				registrarAuditoria(venta, request, response, correlationId, null, null, nombreReceptorOriginal,
+						nombresReceptorIntentados, intentoNombreReceptor);
+			} catch (Exception e) {
+				registrarAuditoria(venta, request, response, correlationId, "TIMBRADO_DIVIDIDO_ERROR", e.getMessage(),
+						nombreReceptorOriginal, nombresReceptorIntentados, intentoNombreReceptor);
+				throw e;
+			}
+
+			if (!isTimbradoSuccessful(response)) {
+				throw new FacturacionException(buildTimbradoFailureMessage(response, nombreReceptorOriginal,
+						request != null && request.getReceptor() != null ? request.getReceptor().getNombre() : null));
+			}
+
+			response.setClasificacionFiscal(ClasificacionFacturacionPago.PUE_UNA_FORMA.name());
+			response.setMetodoPagoFiscal("PUE");
+			response.setFormaPagoFiscal("01");
+			response.setComplementoInmediatoRequerido(Boolean.FALSE);
+
+			TwFacturacion facturacionParcial = persistirFacturacionParcial(venta, datosFactura, response);
+			if (facturacionPrincipal == null) {
+				facturacionPrincipal = facturacionParcial;
+			}
+			guardarArchivosParcial(datosFactura, idVenta, index + 1, response);
+
+			FacturaParcialDto parcialDto = new FacturaParcialDto();
+			parcialDto.setParcial(Integer.valueOf(index + 1));
+			parcialDto.setUuid(response.getUuid());
+			parcialDto.setFolio(request.getFolio());
+			parcialDto.setEstado(response.getEstatus());
+			parcialDto.setMonto(montoParcial);
+			parcialDto.setnIdFacturacion(facturacionParcial.getnId());
+			facturasParciales.add(parcialDto);
+		}
+
+		if (facturacionPrincipal == null) {
+			throw new FacturacionException("No se generó ninguna factura parcial para la venta.");
+		}
+
+		venta.setnIdFacturacion(facturacionPrincipal.getnId());
+		ventasService.updateStatusVenta(venta);
+		actualizarAplicacionesCanonicasVenta(venta);
+		enviarCorreoSiAplica(venta, datosFactura);
+
+		ResultadoFacturacionVentaDto resultado = new ResultadoFacturacionVentaDto();
+		resultado.setSuccess(true);
+		resultado.setMensaje("Venta facturada en modo dividido correctamente.");
+		resultado.setClasificacionFiscal(ClasificacionFacturacionPago.PUE_UNA_FORMA.name());
+		resultado.setMetodoPagoFiscal("PUE");
+		resultado.setFormaPagoFiscal("01");
+		resultado.setEstadoFacturacion(facturacionPrincipal.getsEstado());
+		resultado.setEstadoComplemento("NO_REQUIERE_COMPLEMENTO");
+		resultado.setUuidFacturaIngreso(facturacionPrincipal.getsUuid());
+		resultado.setTotalFacturasParciales(Integer.valueOf(facturasParciales.size()));
+		resultado.setMontoTotalFacturado(totalVenta);
+		resultado.setFacturasParciales(facturasParciales);
+		return resultado;
 	}
 
 	public TimbradoResponse timbrarVentasConsolidadas(List<Long> idsVenta, String cveCfdi) {
@@ -472,6 +615,27 @@ public class TimbradoVentaService {
 		actualizarAplicacionesCanonicasVenta(venta);
 	}
 
+	private TwFacturacion persistirFacturacionParcial(TwVenta venta, TcDatosFactura datosFactura,
+			TimbradoResponse response) {
+		TwFacturacion facturacion = new TwFacturacion();
+		facturacion.setN_idVenta(venta.getnId());
+		facturacion.setnIdDatoFactura(datosFactura.getnId());
+		facturacion.setsUuid(response.getUuid());
+		facturacion.setsEstado(response.getEstatus() != null ? response.getEstatus() : "Timbrado");
+		facturacion.setsClasificacionFiscal(response.getClasificacionFiscal());
+		facturacion.setsMetodoPagoFiscal(response.getMetodoPagoFiscal());
+		facturacion.setsFormaPagoFiscal(response.getFormaPagoFiscal());
+		facturacion.setsEstadoComplemento("NO_REQUIERE_COMPLEMENTO");
+		facturacion.setsUuidComplementoPago(null);
+		facturacion.setsErrorComplemento(null);
+		facturacion.setS_noCertificadoSat(response.getNoCertificadoSat());
+		facturacion.setS_selloCfd(response.getSelloCfd());
+		facturacion.setS_selloSat(response.getSelloSat());
+		facturacion.setS_cadenaOriginal(response.getCadenaOriginalComplementoSat());
+		facturacion.setnEstatus(1);
+		return facturaRepository.save(facturacion);
+	}
+
 	private void persistirFacturacionConsolidada(List<TwVenta> ventas, TcDatosFactura datosFactura, TimbradoResponse response) {
 		TwFacturacion facturacion = new TwFacturacion();
 		facturacion.setN_idVenta(ventas.get(0).getnId());
@@ -524,6 +688,17 @@ public class TimbradoVentaService {
 		guardarPdf(datosFacturaStorageResolver.resolveRutaPdf(datosFactura), idVenta, response.getPdfBase64());
 	}
 
+	private void guardarArchivosParcial(TcDatosFactura datosFactura, Long idVenta, int parcial,
+			TimbradoResponse response) {
+		if (parcial <= 1) {
+			guardarArchivos(datosFactura, idVenta, response);
+			return;
+		}
+		String token = idVenta + "_P" + parcial;
+		guardarXml(datosFacturaStorageResolver.resolveRutaXml(datosFactura), token, response.getXmlBase64());
+		guardarPdf(datosFacturaStorageResolver.resolveRutaPdf(datosFactura), token, response.getPdfBase64());
+	}
+
 	private void guardarArchivos(TcDatosFactura datosFactura, List<Long> idsVenta, TimbradoResponse response) {
 		if (idsVenta == null) {
 			return;
@@ -563,10 +738,14 @@ public class TimbradoVentaService {
 	}
 
 	private void guardarXml(String ruta, Long idVenta, String xmlContent) {
+		guardarXml(ruta, String.valueOf(idVenta), xmlContent);
+	}
+
+	private void guardarXml(String ruta, String fileToken, String xmlContent) {
 		if (ruta == null || ruta.trim().isEmpty() || xmlContent == null || xmlContent.trim().isEmpty()) {
 			return;
 		}
-		Path path = Paths.get(ruta + idVenta + ".xml");
+		Path path = Paths.get(ruta + fileToken + ".xml");
 		try {
 			if (path.getParent() != null) {
 				Files.createDirectories(path.getParent());
@@ -578,10 +757,14 @@ public class TimbradoVentaService {
 	}
 
 	private void guardarPdf(String ruta, Long idVenta, String pdfBase64) {
+		guardarPdf(ruta, String.valueOf(idVenta), pdfBase64);
+	}
+
+	private void guardarPdf(String ruta, String fileToken, String pdfBase64) {
 		if (ruta == null || ruta.trim().isEmpty() || pdfBase64 == null || pdfBase64.trim().isEmpty()) {
 			return;
 		}
-		Path path = Paths.get(ruta + idVenta + ".pdf");
+		Path path = Paths.get(ruta + fileToken + ".pdf");
 		try {
 			if (path.getParent() != null) {
 				Files.createDirectories(path.getParent());
@@ -686,5 +869,81 @@ public class TimbradoVentaService {
 			return null;
 		}
 		return formaPago.getsClave().trim();
+	}
+
+	private boolean isCobroExclusivoEfectivo(List<TrVentaCobro> cobros) {
+		if (cobros == null || cobros.isEmpty()) {
+			return false;
+		}
+		for (TrVentaCobro cobro : cobros) {
+			String claveSat = resolveClaveFormaPagoCobro(cobro);
+			if (!"01".equals(claveSat)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private List<BigDecimal> construirSegmentosDivision(BigDecimal totalVenta) {
+		List<BigDecimal> segmentos = new ArrayList<BigDecimal>();
+		BigDecimal restante = DateTimeUtil.truncarDosDecimales(totalVenta);
+		BigDecimal limiteSuperior = new BigDecimal("1999.00");
+		while (restante.compareTo(limiteSuperior) > 0) {
+			int aleatorio = ThreadLocalRandom.current().nextInt(1950, 2000);
+			BigDecimal parcial = new BigDecimal(aleatorio).setScale(2, RoundingMode.UNNECESSARY);
+			segmentos.add(parcial);
+			restante = DateTimeUtil.truncarDosDecimales(restante.subtract(parcial));
+		}
+		if (restante.compareTo(BigDecimal.ZERO) > 0) {
+			segmentos.add(DateTimeUtil.truncarDosDecimales(restante));
+		}
+		return segmentos;
+	}
+
+	private CfdiTimbradoRequest.ImpuestosDto buildImpuestosParcial(BigDecimal ivaParcial) {
+		CfdiTimbradoRequest.ImpuestosDto impuestos = new CfdiTimbradoRequest.ImpuestosDto();
+		impuestos.setTotalImpuestosTrasladados(DateTimeUtil.truncarDosDecimales(ivaParcial));
+		impuestos.setTotalImpuestosRetenidos(BigDecimal.ZERO);
+		return impuestos;
+	}
+
+	private List<CfdiTimbradoRequest.ConceptoDto> buildConceptoParcial(TwVenta venta,
+			List<TwVentasProducto> productos, BigDecimal subtotalParcial, BigDecimal ivaParcial,
+			int parcial, int totalParciales) {
+		TwVentasProducto referencia = productos.get(0);
+		CfdiTimbradoRequest.ConceptoDto concepto = new CfdiTimbradoRequest.ConceptoDto();
+		concepto.setClaveProdServ(referencia != null && referencia.getTcProducto() != null
+				&& referencia.getTcProducto().getTcClavesat() != null
+				&& referencia.getTcProducto().getTcClavesat().getsClavesat() != null
+				? referencia.getTcProducto().getTcClavesat().getsClavesat()
+				: "01010101");
+		concepto.setNoIdentificacion(referencia != null && referencia.getTcProducto() != null
+				&& referencia.getTcProducto().getnId() != null
+				? referencia.getTcProducto().getnId().toString()
+				: String.valueOf(venta.getnId()));
+		concepto.setCantidad(BigDecimal.ONE);
+		concepto.setClaveUnidad("H87");
+		concepto.setUnidad("PZA");
+		concepto.setDescripcion("Facturación dividida venta #" + venta.getnId() + " parcial " + parcial + "/"
+				+ totalParciales);
+		concepto.setValorUnitario(DateTimeUtil.truncarDosDecimales(subtotalParcial));
+		concepto.setImporte(DateTimeUtil.truncarDosDecimales(subtotalParcial));
+		concepto.setDescuento(BigDecimal.ZERO);
+		concepto.setObjetoImp("02");
+
+		CfdiTimbradoRequest.ImpuestoTrasladoDto traslado = new CfdiTimbradoRequest.ImpuestoTrasladoDto();
+		traslado.setBase(DateTimeUtil.truncarDosDecimales(subtotalParcial).toPlainString());
+		traslado.setImpuesto("002");
+		traslado.setTipoFactor("Tasa");
+		traslado.setTasaOCuota(TASA_IVA);
+		traslado.setImporte(DateTimeUtil.truncarDosDecimales(ivaParcial));
+
+		List<CfdiTimbradoRequest.ImpuestoTrasladoDto> traslados = new ArrayList<CfdiTimbradoRequest.ImpuestoTrasladoDto>();
+		traslados.add(traslado);
+		concepto.setTraslados(traslados);
+
+		List<CfdiTimbradoRequest.ConceptoDto> conceptos = new ArrayList<CfdiTimbradoRequest.ConceptoDto>();
+		conceptos.add(concepto);
+		return conceptos;
 	}
 }

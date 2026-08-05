@@ -9,6 +9,7 @@ import com.refacFabela.dto.CancelacionResponse;
 import com.refacFabela.dto.CfdiRelacionadosResponse;
 import com.refacFabela.dto.ComplementoPagoHistorialDto;
 import com.refacFabela.dto.FacturacionVentasRequestDto;
+import com.refacFabela.dto.FacturacionVentaDivididaRequestDto;
 import com.refacFabela.dto.ResultadoFacturacionVentaDto;
 import com.refacFabela.dto.SolicitudCancelacionDto;
 import com.refacFabela.dto.StatusCfdiResponse;
@@ -19,6 +20,7 @@ import java.util.List;
 public interface FacturacionService {
 	
 	public ResultadoFacturacionVentaDto venta(Long idVenta, String cveCfdi) throws Exception;
+	public ResultadoFacturacionVentaDto ventaDividida(FacturacionVentaDivididaRequestDto requestDto) throws Exception;
 	public ResultadoFacturacionVentaDto ventaConsolidada(FacturacionVentasRequestDto requestDto) throws Exception;
 	public String cancelaFactura(Long idVenta, String cveCfdi) throws Exception;
 	public String cancelaFactura(CancelacionFacturaDto cancelacionFacturaDto) throws Exception;

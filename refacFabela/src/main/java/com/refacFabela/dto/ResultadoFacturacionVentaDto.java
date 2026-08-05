@@ -1,5 +1,8 @@
 package com.refacFabela.dto;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 public class ResultadoFacturacionVentaDto {
 
 	private boolean success;
@@ -14,6 +17,9 @@ public class ResultadoFacturacionVentaDto {
 	private String estadoComplemento;
 	private String codigoError;
 	private String mensajeError;
+	private Integer totalFacturasParciales;
+	private BigDecimal montoTotalFacturado;
+	private List<FacturaParcialDto> facturasParciales;
 
 	public boolean isSuccess() {
 		return success;
@@ -109,5 +115,29 @@ public class ResultadoFacturacionVentaDto {
 
 	public void setMensajeError(String mensajeError) {
 		this.mensajeError = mensajeError;
+	}
+
+	public Integer getTotalFacturasParciales() {
+		return totalFacturasParciales;
+	}
+
+	public void setTotalFacturasParciales(Integer totalFacturasParciales) {
+		this.totalFacturasParciales = totalFacturasParciales;
+	}
+
+	public BigDecimal getMontoTotalFacturado() {
+		return montoTotalFacturado;
+	}
+
+	public void setMontoTotalFacturado(BigDecimal montoTotalFacturado) {
+		this.montoTotalFacturado = montoTotalFacturado;
+	}
+
+	public List<FacturaParcialDto> getFacturasParciales() {
+		return facturasParciales;
+	}
+
+	public void setFacturasParciales(List<FacturaParcialDto> facturasParciales) {
+		this.facturasParciales = facturasParciales;
 	}
 }

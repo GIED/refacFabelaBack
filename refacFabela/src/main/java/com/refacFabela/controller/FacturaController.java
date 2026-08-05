@@ -28,6 +28,7 @@ import com.refacFabela.dto.CancelacionResponse;
 import com.refacFabela.dto.CfdiRelacionadosResponse;
 import com.refacFabela.dto.ComplementoPagoHistorialDto;
 import com.refacFabela.dto.FacturacionVentasRequestDto;
+import com.refacFabela.dto.FacturacionVentaDivididaRequestDto;
 import com.refacFabela.dto.ResultadoFacturacionVentaDto;
 import com.refacFabela.dto.SolicitudCancelacionDto;
 import com.refacFabela.dto.StatusCfdiResponse;
@@ -67,6 +68,13 @@ public class FacturaController {
 	@GetMapping("venta")
 	public ResponseEntity<?> venta(@RequestParam(required = false) Long nIdVenta , String cveCfdi) throws Exception {
 		ResultadoFacturacionVentaDto resultado = facturaService.venta(nIdVenta, cveCfdi);
+		return new ResponseEntity<ResultadoFacturacionVentaDto>(resultado,
+				resultado != null && resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@PostMapping("venta/dividida")
+	public ResponseEntity<?> ventaDividida(@RequestBody FacturacionVentaDivididaRequestDto requestDto) throws Exception {
+		ResultadoFacturacionVentaDto resultado = facturaService.ventaDividida(requestDto);
 		return new ResponseEntity<ResultadoFacturacionVentaDto>(resultado,
 				resultado != null && resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR);
 	}

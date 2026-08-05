@@ -13,11 +13,13 @@ import com.refacFabela.config.FacturacionProperties;
 import com.refacFabela.dto.CancelacionResponse;
 import com.refacFabela.dto.CfdiRelacionadosResponse;
 import com.refacFabela.dto.ComplementoPagoHistorialDto;
+import com.refacFabela.dto.FacturacionVentaDivididaRequestDto;
 import com.refacFabela.dto.FacturacionVentasRequestDto;
 import com.refacFabela.dto.ResultadoFacturacionVentaDto;
 import com.refacFabela.dto.SolicitudCancelacionDto;
 import com.refacFabela.dto.StatusCfdiResponse;
 import com.refacFabela.dto.TimbradoResponse;
+import com.refacFabela.exception.FacturacionException;
 import com.refacFabela.exception.PacFacturacionClientException;
 import com.refacFabela.service.PacFacturacionClient;
 import com.refacFabela.service.impl.ComplementoPagoService;
@@ -173,6 +175,27 @@ public class FacturacionServiceImpl implements FacturacionService {
 			resultado.setSuccess(false);
 			resultado.setMensaje("Error al facturar la venta");
 			resultado.setCodigoError("TIMBRADO_ERROR");
+			resultado.setMensajeError(e.getMessage());
+			return resultado;
+		}
+	}
+
+	@Override
+	public ResultadoFacturacionVentaDto ventaDividida(FacturacionVentaDivididaRequestDto requestDto) throws Exception {
+		ResultadoFacturacionVentaDto resultado = new ResultadoFacturacionVentaDto();
+		try {
+			if (requestDto == null || requestDto.getnIdVenta() == null) {
+				throw new FacturacionException("Debes indicar la venta a facturar en modo dividido.");
+			}
+			resultado = timbradoVentaService.timbrarVentaDivididaEfectivo(requestDto.getnIdVenta(), requestDto.getCveCfdi());
+			return resultado;
+		} catch (Exception e) {
+			logger.error("Error al facturar venta {} en modo dividido usando proveedor activo {}",
+					requestDto != null ? requestDto.getnIdVenta() : null,
+					facturacionProperties != null ? facturacionProperties.getProveedorActivo() : null, e);
+			resultado.setSuccess(false);
+			resultado.setMensaje("Error al facturar la venta en modo dividido");
+			resultado.setCodigoError("TIMBRADO_DIVIDIDO_ERROR");
 			resultado.setMensajeError(e.getMessage());
 			return resultado;
 		}
