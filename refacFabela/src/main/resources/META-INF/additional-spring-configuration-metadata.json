@@ -121,7 +121,11 @@
       "type": "java.lang.Boolean"
     },
     {
-      "name": "facturoporti.base-url",
+      "name": "facturoporti.sandbox-base-url",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.production-base-url",
       "type": "java.lang.String"
     },
     {
@@ -133,7 +137,11 @@
       "type": "java.lang.String"
     },
     {
-      "name": "facturoporti.auth.token",
+      "name": "facturoporti.auth.sandbox-token",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "facturoporti.auth.production-token",
       "type": "java.lang.String"
     },
     {
@@ -149,23 +157,7 @@
       "type": "java.lang.String"
     },
     {
-      "name": "facturoporti.auth.client-id",
-      "type": "java.lang.String"
-    },
-    {
-      "name": "facturoporti.auth.client-secret",
-      "type": "java.lang.String"
-    },
-    {
       "name": "facturoporti.endpoints.timbrado-cfdi",
-      "type": "java.lang.String"
-    },
-    {
-      "name": "facturoporti.endpoints.timbrado-complemento-pago",
-      "type": "java.lang.String"
-    },
-    {
-      "name": "facturoporti.endpoints.cancelacion",
       "type": "java.lang.String"
     },
     {

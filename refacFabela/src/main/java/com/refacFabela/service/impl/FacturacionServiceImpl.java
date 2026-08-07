@@ -13,6 +13,8 @@ import com.refacFabela.config.FacturacionProperties;
 import com.refacFabela.dto.CancelacionResponse;
 import com.refacFabela.dto.CfdiRelacionadosResponse;
 import com.refacFabela.dto.ComplementoPagoHistorialDto;
+import com.refacFabela.dto.FacturaReenvioCorreoRequestDto;
+import com.refacFabela.dto.FacturaReenvioCorreoResponseDto;
 import com.refacFabela.dto.FacturacionVentaDivididaRequestDto;
 import com.refacFabela.dto.FacturacionVentasRequestDto;
 import com.refacFabela.dto.ResultadoFacturacionVentaDto;
@@ -22,6 +24,7 @@ import com.refacFabela.dto.TimbradoResponse;
 import com.refacFabela.exception.FacturacionException;
 import com.refacFabela.exception.PacFacturacionClientException;
 import com.refacFabela.service.PacFacturacionClient;
+import com.refacFabela.service.GeneraReporteService;
 import com.refacFabela.service.impl.ComplementoPagoService;
 import com.refacFabela.service.impl.CancelacionFacturacionService;
 import com.refacFabela.service.impl.ConsultaFacturacionService;
@@ -36,7 +39,9 @@ import com.refacFabela.repository.TcDatosFacturaRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.FacturacionService;
 import com.refacFabela.utils.subirArchivo;
+import com.refacFabela.utils.envioMail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,6 +60,9 @@ public class FacturacionServiceImpl implements FacturacionService {
 	private final ConsultaFacturacionService consultaFacturacionService;
 	private final PacFacturacionClient pacFacturacionClient;
 	private final DatosFacturaStorageResolver datosFacturaStorageResolver;
+	private final CorreoClienteService correoClienteService;
+	private final GeneraReporteService generaReporteService;
+	private final envioMail mailSender;
 
 	public FacturacionServiceImpl(VentasRepository ventaRepository,
 			ClientesRepository clientesRepository,
@@ -66,7 +74,10 @@ public class FacturacionServiceImpl implements FacturacionService {
 			ComplementoPagoService complementoPagoService,
 			ConsultaFacturacionService consultaFacturacionService,
 			PacFacturacionClient pacFacturacionClient,
-			DatosFacturaStorageResolver datosFacturaStorageResolver) {
+			DatosFacturaStorageResolver datosFacturaStorageResolver,
+			CorreoClienteService correoClienteService,
+			GeneraReporteService generaReporteService,
+			envioMail mailSender) {
 		this.ventaRepository = ventaRepository;
 		this.clientesRepository = clientesRepository;
 		this.facturaRepository = facturaRepository;
@@ -78,6 +89,9 @@ public class FacturacionServiceImpl implements FacturacionService {
 		this.consultaFacturacionService = consultaFacturacionService;
 		this.pacFacturacionClient = pacFacturacionClient;
 		this.datosFacturaStorageResolver = datosFacturaStorageResolver;
+		this.correoClienteService = correoClienteService;
+		this.generaReporteService = generaReporteService;
+		this.mailSender = mailSender;
 	}
 
 	@Override
@@ -364,6 +378,99 @@ public class FacturacionServiceImpl implements FacturacionService {
 			resultado.setMensajeError(e.getMessage());
 			return resultado;
 		}
+	}
+
+	@Override
+	public FacturaReenvioCorreoResponseDto reenviarFacturaCorreo(Long nIdVenta,
+			FacturaReenvioCorreoRequestDto requestDto) throws Exception {
+		FacturaReenvioCorreoResponseDto response = new FacturaReenvioCorreoResponseDto();
+		response.setnIdVenta(nIdVenta);
+
+		if (nIdVenta == null) {
+			response.setEnviado(Boolean.FALSE);
+			response.setDetalle("Debes indicar la venta a reenviar.");
+			return response;
+		}
+
+		TwVenta venta = ventaRepository.findBynId(nIdVenta);
+		if (venta == null) {
+			response.setEnviado(Boolean.FALSE);
+			response.setDetalle("La venta no existe.");
+			return response;
+		}
+
+		if (venta.getnIdFacturacion() == null || venta.getnIdFacturacion().longValue() <= 0L) {
+			response.setEnviado(Boolean.FALSE);
+			response.setDetalle("La venta no tiene factura timbrada.");
+			return response;
+		}
+
+		TcCliente cliente = venta.getTcCliente() != null ? venta.getTcCliente()
+				: (venta.getnIdCliente() != null ? clientesRepository.findById(venta.getnIdCliente()).orElse(null) : null);
+
+		boolean usarCorreoRegistrado = requestDto == null || requestDto.getUsarCorreoRegistrado() == null
+				|| Boolean.TRUE.equals(requestDto.getUsarCorreoRegistrado());
+		String correoDestino = usarCorreoRegistrado && cliente != null ? cliente.getsCorreo() : null;
+		if (!usarCorreoRegistrado && requestDto != null) {
+			correoDestino = requestDto.getCorreoDestino();
+		}
+
+		if (!mailSender.esCorreoValido(correoDestino)) {
+			response.setEnviado(Boolean.FALSE);
+			response.setCorreoDestino(correoDestino);
+			response.setDetalle("Debes capturar un correo electrónico válido.");
+			return response;
+		}
+
+		List<envioMail.AdjuntoCorreo> adjuntos = construirAdjuntosFactura(venta);
+		if (adjuntos.isEmpty()) {
+			response.setEnviado(Boolean.FALSE);
+			response.setCorreoDestino(correoDestino);
+			response.setDetalle("No se localizaron archivos de factura para reenviar.");
+			return response;
+		}
+
+		envioMail.ResultadoEnvioCorreo resultado = correoClienteService.enviarCorreoDirectoConAdjuntos(correoDestino,
+				"Factura_" + venta.getnId(),
+				"<p>Adjuntamos los documentos fiscales de la venta <strong>#" + venta.getnId()
+						+ "</strong>.</p><p>Se incluyen los archivos PDF/XML disponibles y, cuando aplica, sus parciales en un ZIP.</p>",
+				adjuntos);
+
+		response.setCorreoDestino(correoDestino != null ? correoDestino.trim() : null);
+		response.setEnviado(Boolean.valueOf(resultado != null && resultado.isEnviado()));
+		response.setDetalle(resultado != null ? resultado.getDetalle() : "No fue posible reenviar la factura.");
+		return response;
+	}
+
+	private List<envioMail.AdjuntoCorreo> construirAdjuntosFactura(TwVenta venta) {
+		List<envioMail.AdjuntoCorreo> adjuntos = new ArrayList<envioMail.AdjuntoCorreo>();
+		if (venta == null || venta.getnId() == null) {
+			return adjuntos;
+		}
+
+		TcDatosFactura datosFactura = venta.getTcCliente() != null && venta.getTcCliente().getnIdDatoFactura() != null
+				? tcDatosFacturaRepository.obtenerDatos(venta.getTcCliente().getnIdDatoFactura())
+				: null;
+
+		String rutaRaiz = datosFacturaStorageResolver.resolveRutaRaiz(datosFactura);
+		byte[] zipFacturas = envioMail.crearZipFacturasRelacionadas(rutaRaiz, String.valueOf(venta.getnId()));
+		if (zipFacturas != null && zipFacturas.length > 0) {
+			adjuntos.add(new envioMail.AdjuntoCorreo("factura_venta_" + venta.getnId() + ".zip", "application/zip",
+					zipFacturas));
+			return adjuntos;
+		}
+
+		byte[] pdf = generaReporteService.getDocumento(venta.getnId(), com.refacFabela.enums.TipoDoc.PDF_FACTURA);
+		if (pdf != null && pdf.length > 0) {
+			adjuntos.add(new envioMail.AdjuntoCorreo("factura_" + venta.getnId() + ".pdf", "application/pdf", pdf));
+		}
+
+		byte[] xml = generaReporteService.getDocumento(venta.getnId(), com.refacFabela.enums.TipoDoc.XML_FACTURA);
+		if (xml != null && xml.length > 0) {
+			adjuntos.add(new envioMail.AdjuntoCorreo("factura_" + venta.getnId() + ".xml", "application/xml", xml));
+		}
+
+		return adjuntos;
 	}
 
 	@Override

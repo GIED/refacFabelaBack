@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 public class FacturoPorTiProperties {
 
 	private boolean sandbox;
-	private String baseUrl;
+	private String sandboxBaseUrl;
+	private String productionBaseUrl;
 	private boolean logRawPayloads;
 	private AuthProperties auth = new AuthProperties();
 	private TimeoutProperties timeout = new TimeoutProperties();
-	private RetryProperties retry = new RetryProperties();
 
 	public boolean isSandbox() {
 		return sandbox;
@@ -22,12 +22,20 @@ public class FacturoPorTiProperties {
 		this.sandbox = sandbox;
 	}
 
-	public String getBaseUrl() {
-		return baseUrl;
+	public String getSandboxBaseUrl() {
+		return sandboxBaseUrl;
 	}
 
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
+	public void setSandboxBaseUrl(String sandboxBaseUrl) {
+		this.sandboxBaseUrl = sandboxBaseUrl;
+	}
+
+	public String getProductionBaseUrl() {
+		return productionBaseUrl;
+	}
+
+	public void setProductionBaseUrl(String productionBaseUrl) {
+		this.productionBaseUrl = productionBaseUrl;
 	}
 
 	public boolean isLogRawPayloads() {
@@ -54,23 +62,14 @@ public class FacturoPorTiProperties {
 		this.timeout = timeout;
 	}
 
-	public RetryProperties getRetry() {
-		return retry;
-	}
-
-	public void setRetry(RetryProperties retry) {
-		this.retry = retry;
-	}
-
 	public static class AuthProperties {
 
 		private String type;
-		private String token;
+		private String sandboxToken;
+		private String productionToken;
 		private String apiKey;
 		private String username;
 		private String password;
-		private String clientId;
-		private String clientSecret;
 
 		public String getType() {
 			return type;
@@ -80,12 +79,20 @@ public class FacturoPorTiProperties {
 			this.type = type;
 		}
 
-		public String getToken() {
-			return token;
+		public String getSandboxToken() {
+			return sandboxToken;
 		}
 
-		public void setToken(String token) {
-			this.token = token;
+		public void setSandboxToken(String sandboxToken) {
+			this.sandboxToken = sandboxToken;
+		}
+
+		public String getProductionToken() {
+			return productionToken;
+		}
+
+		public void setProductionToken(String productionToken) {
+			this.productionToken = productionToken;
 		}
 
 		public String getApiKey() {
@@ -111,22 +118,6 @@ public class FacturoPorTiProperties {
 		public void setPassword(String password) {
 			this.password = password;
 		}
-
-		public String getClientId() {
-			return clientId;
-		}
-
-		public void setClientId(String clientId) {
-			this.clientId = clientId;
-		}
-
-		public String getClientSecret() {
-			return clientSecret;
-		}
-
-		public void setClientSecret(String clientSecret) {
-			this.clientSecret = clientSecret;
-		}
 	}
 
 	public static class TimeoutProperties {
@@ -148,28 +139,6 @@ public class FacturoPorTiProperties {
 
 		public void setReadMs(Integer readMs) {
 			this.readMs = readMs;
-		}
-	}
-
-	public static class RetryProperties {
-
-		private Integer maxAttempts = 3;
-		private Integer backoffMs = 1000;
-
-		public Integer getMaxAttempts() {
-			return maxAttempts;
-		}
-
-		public void setMaxAttempts(Integer maxAttempts) {
-			this.maxAttempts = maxAttempts;
-		}
-
-		public Integer getBackoffMs() {
-			return backoffMs;
-		}
-
-		public void setBackoffMs(Integer backoffMs) {
-			this.backoffMs = backoffMs;
 		}
 	}
 }

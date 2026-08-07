@@ -903,6 +903,25 @@ public class PagoClienteServiceImpl implements PagoClienteService {
 			}
 		}
 
+		TwFacturacionComplementoPago complementoAplicacion = aplicacion.getnId() != null
+				? facturacionComplementoPagoRepository
+						.findActivosByOrigenPago(aplicacion.getnIdVenta(), "TW_PAGO_CLIENTE_APLICACION", aplicacion.getnId())
+						.stream()
+						.findFirst()
+						.orElse(null)
+				: null;
+		if (complementoAplicacion == null && aplicacion.getnIdVenta() != null) {
+			complementoAplicacion = facturacionComplementoPagoRepository.findActivosByVenta(aplicacion.getnIdVenta())
+					.stream()
+					.filter(complemento -> complemento != null && "TW_PAGO_CLIENTE_APLICACION".equalsIgnoreCase(complemento.getsOrigenPago()))
+					.findFirst()
+					.orElse(null);
+		}
+		if (complementoAplicacion != null) {
+			linea.setnIdComplementoRepCanonico(complementoAplicacion.getnId());
+			linea.setUuidRepCanonico(complementoAplicacion.getsUuidComplementoPago());
+		}
+
 		if (aplicacion.getTwPagoCliente() != null) {
 			linea.setFechaPago(aplicacion.getTwPagoCliente().getdFechaPago());
 			linea.setFormaPagoSat(aplicacion.getTwPagoCliente().getsFormaPagoSat());

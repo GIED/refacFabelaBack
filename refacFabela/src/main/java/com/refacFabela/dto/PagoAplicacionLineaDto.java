@@ -9,6 +9,8 @@ public class PagoAplicacionLineaDto {
 	private Long nIdPagoCliente;
 	private Long nIdVenta;
 	private Long nIdFacturacion;
+	private Long nIdComplementoRepCanonico;
+	private String uuidRepCanonico;
 	private BigDecimal montoAplicado;
 	private BigDecimal saldoAnterior;
 	private BigDecimal saldoInsoluto;
@@ -60,6 +62,22 @@ public class PagoAplicacionLineaDto {
 
 	public void setnIdFacturacion(Long nIdFacturacion) {
 		this.nIdFacturacion = nIdFacturacion;
+	}
+
+	public Long getnIdComplementoRepCanonico() {
+		return nIdComplementoRepCanonico;
+	}
+
+	public void setnIdComplementoRepCanonico(Long nIdComplementoRepCanonico) {
+		this.nIdComplementoRepCanonico = nIdComplementoRepCanonico;
+	}
+
+	public String getUuidRepCanonico() {
+		return uuidRepCanonico;
+	}
+
+	public void setUuidRepCanonico(String uuidRepCanonico) {
+		this.uuidRepCanonico = uuidRepCanonico;
 	}
 
 	public BigDecimal getMontoAplicado() {

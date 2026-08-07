@@ -10,6 +10,8 @@ import com.refacFabela.dto.CfdiRelacionadosResponse;
 import com.refacFabela.dto.ComplementoPagoHistorialDto;
 import com.refacFabela.dto.FacturacionVentasRequestDto;
 import com.refacFabela.dto.FacturacionVentaDivididaRequestDto;
+import com.refacFabela.dto.FacturaReenvioCorreoRequestDto;
+import com.refacFabela.dto.FacturaReenvioCorreoResponseDto;
 import com.refacFabela.dto.ResultadoFacturacionVentaDto;
 import com.refacFabela.dto.SolicitudCancelacionDto;
 import com.refacFabela.dto.StatusCfdiResponse;
@@ -28,6 +30,8 @@ public interface FacturacionService {
 	public ResultadoFacturacionVentaDto complemento(Long idVenta, String cveCfdi) throws Exception;
 	public ResultadoFacturacionVentaDto complementoPagoCliente(Long nIdPagoCliente) throws Exception;
 	public ResultadoFacturacionVentaDto reintentarComplemento(Long nIdComplemento) throws Exception;
+	public FacturaReenvioCorreoResponseDto reenviarFacturaCorreo(Long nIdVenta,
+			FacturaReenvioCorreoRequestDto requestDto) throws Exception;
 	
 	public TwFacturacion guardar(TwFacturacion twFacturacion);
 	

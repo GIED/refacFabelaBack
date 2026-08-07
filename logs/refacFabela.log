@@ -1,1 +1,51 @@
-2026-07-28 08:47:02 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=10h36m53s489ms695µs).
+2026-08-07 09:13:19 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=12h27m43s918ms521µs900ns).
+2026-08-07 15:07:15 [http-nio-127.0.0.1-4043-exec-8] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:07:15 [http-nio-127.0.0.1-4043-exec-8] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:07:15 [http-nio-127.0.0.1-4043-exec-8] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:07:15 [http-nio-127.0.0.1-4043-exec-8] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:07:15 [http-nio-127.0.0.1-4043-exec-8] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:07:15 [http-nio-127.0.0.1-4043-exec-8] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:25:34 [http-nio-127.0.0.1-4043-exec-6] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:25:34 [http-nio-127.0.0.1-4043-exec-6] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:25:34 [http-nio-127.0.0.1-4043-exec-6] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:25:34 [http-nio-127.0.0.1-4043-exec-6] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:25:34 [http-nio-127.0.0.1-4043-exec-6] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:25:34 [http-nio-127.0.0.1-4043-exec-6] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:31:30 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 4776 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack)
+2026-08-07 15:31:30 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-08-07 15:31:30 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-08-07 15:31:31 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-07 15:31:31 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 280 ms. Found 86 JPA repository interfaces.
+2026-08-07 15:31:31 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@6ef4b591' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-08-07 15:31:31 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-08-07 15:31:32 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
+2026-08-07 15:31:32 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-08-07 15:31:32 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+2026-08-07 15:31:32 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
+2026-08-07 15:31:32 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2067 ms
+2026-08-07 15:31:32 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-07 15:31:32 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2026-08-07 15:31:32 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-08-07 15:31:32 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-08-07 15:31:33 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-08-07 15:31:33 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-08-07 15:31:34 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-08-07 15:31:34 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-07 15:31:37 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-08-07 15:31:37 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
+2026-08-07 15:31:37 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 7.624 seconds (JVM running for 7.933)
+2026-08-07 15:31:39 [RMI TCP Connection(1)-10.20.0.78] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-07 15:31:39 [RMI TCP Connection(1)-10.20.0.78] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-08-07 15:31:39 [RMI TCP Connection(1)-10.20.0.78] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-08-07 15:39:37 [http-nio-127.0.0.1-4043-exec-2] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:39:37 [http-nio-127.0.0.1-4043-exec-2] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:39:37 [http-nio-127.0.0.1-4043-exec-2] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:39:37 [http-nio-127.0.0.1-4043-exec-2] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:39:37 [http-nio-127.0.0.1-4043-exec-2] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:39:37 [http-nio-127.0.0.1-4043-exec-2] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:39:45 [http-nio-127.0.0.1-4043-exec-4] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:39:45 [http-nio-127.0.0.1-4043-exec-4] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:39:45 [http-nio-127.0.0.1-4043-exec-4] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:39:45 [http-nio-127.0.0.1-4043-exec-4] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:39:45 [http-nio-127.0.0.1-4043-exec-4] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-08-07 15:39:45 [http-nio-127.0.0.1-4043-exec-4] WARN  n.s.j.engine.xml.JRTextFieldFactory - The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.

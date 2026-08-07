@@ -88,6 +88,14 @@ public class CorreoClienteService {
 		return resultado;
 	}
 
+	public envioMail.ResultadoEnvioCorreo enviarCorreoDirectoConAdjuntos(String correoDestino, String asunto,
+			String mensaje, List<envioMail.AdjuntoCorreo> adjuntos) {
+		if (!envioMail.esCorreoValido(correoDestino)) {
+			return envioMail.ResultadoEnvioCorreo.error("Debes capturar un correo electr\u00f3nico v\u00e1lido.");
+		}
+		return mailSender.enviarCorreoDetalladoConAdjuntos(correoDestino, asunto, mensaje, adjuntos);
+	}
+
 	private TcCliente obtenerCliente(Long clienteId) {
 		if (clienteId == null) {
 			return null;

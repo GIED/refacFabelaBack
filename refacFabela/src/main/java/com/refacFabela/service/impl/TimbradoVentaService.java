@@ -246,9 +246,9 @@ public class TimbradoVentaService {
 
 			// Para evitar CFDI40180, cada parcial se calcula con una relación fiscal consistente
 			// (importe traslado dentro de límites SAT sobre la base gravable).
-			BigDecimal subtotalParcial = DateTimeUtil.truncarDosDecimales(
-					montoParcial.divide(BigDecimal.ONE.add(TASA_IVA), 6, RoundingMode.HALF_UP));
-			BigDecimal ivaParcial = DateTimeUtil.truncarDosDecimales(montoParcial.subtract(subtotalParcial));
+			BigDecimal subtotalParcial = montoParcial.divide(BigDecimal.ONE.add(TASA_IVA), 6, RoundingMode.HALF_UP)
+					.setScale(2, RoundingMode.HALF_UP);
+			BigDecimal ivaParcial = montoParcial.subtract(subtotalParcial).setScale(2, RoundingMode.HALF_UP);
 
 			CfdiTimbradoRequest request = buildRequest(venta, datosFactura, productos, cobros, null, cveCfdi,
 					nombresReceptorIntentados.get(0));

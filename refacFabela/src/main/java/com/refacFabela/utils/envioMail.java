@@ -1,10 +1,20 @@
 package com.refacFabela.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Date;
 import java.util.Properties;
+import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -266,6 +276,11 @@ public class envioMail {
 	private void agregarAdjuntos(Multipart multipart, String ruta, String nombreArchivo, int tipo)
 			throws MessagingException {
 		if (tipo == 2) {
+			byte[] zipContenido = crearZipFacturasRelacionadas(ruta, nombreArchivo);
+			if (zipContenido != null && zipContenido.length > 0) {
+				agregarAdjunto(multipart, new AdjuntoCorreo(nombreArchivo + ".zip", "application/zip", zipContenido));
+				return;
+			}
 			agregarAdjunto(multipart, new File(ruta, "pdf" + File.separator + nombreArchivo + ".pdf"),
 					nombreArchivo + ".pdf");
 			agregarAdjunto(multipart, new File(ruta, "xml" + File.separator + nombreArchivo + ".xml"),
@@ -297,6 +312,102 @@ public class envioMail {
 		adjunto.setDataHandler(new DataHandler(new ByteArrayDataSource(archivo.getContenido(), contentType)));
 		adjunto.setFileName(archivo.getNombreArchivo());
 		multipart.addBodyPart(adjunto);
+	}
+
+	public static byte[] crearZipFacturasRelacionadas(String rutaBase, String nombreArchivo) {
+		if (!tieneTexto(rutaBase) || !tieneTexto(nombreArchivo)) {
+			return null;
+		}
+
+		List<Path> archivos = new ArrayList<Path>();
+		try {
+			Path rutaRaiz = Paths.get(rutaBase);
+			Path directorioPdf = rutaRaiz.resolve("pdf");
+			Path directorioXml = rutaRaiz.resolve("xml");
+			archivos.addAll(obtenerFacturasRelacionadas(directorioPdf, nombreArchivo, "pdf"));
+			archivos.addAll(obtenerFacturasRelacionadas(directorioXml, nombreArchivo, "xml"));
+		} catch (Exception e) {
+			return null;
+		}
+
+		if (archivos.isEmpty()) {
+			return null;
+		}
+
+		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
+			for (Path archivo : archivos) {
+				if (archivo == null || !Files.exists(archivo) || !Files.isRegularFile(archivo)) {
+					continue;
+				}
+				byte[] contenido = Files.readAllBytes(archivo);
+				if (contenido == null || contenido.length == 0) {
+					continue;
+				}
+				zipOutputStream.putNextEntry(new ZipEntry(archivo.getFileName().toString()));
+				zipOutputStream.write(contenido);
+				zipOutputStream.closeEntry();
+			}
+			zipOutputStream.finish();
+			return byteArrayOutputStream.toByteArray();
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	private static List<Path> obtenerFacturasRelacionadas(Path directorio, String ventaToken, String extension) {
+		if (directorio == null || !Files.exists(directorio) || !Files.isDirectory(directorio)) {
+			return java.util.Collections.emptyList();
+		}
+
+		String nombrePrincipal = ventaToken + "." + extension;
+		String prefijoParcial = ventaToken + "_P";
+		String sufijoExtension = "." + extension;
+		List<Path> archivos = new ArrayList<Path>();
+
+		try (Stream<Path> stream = Files.list(directorio)) {
+			stream.filter(Files::isRegularFile)
+					.filter(path -> {
+						String fileName = path.getFileName().toString();
+						return fileName.equalsIgnoreCase(nombrePrincipal)
+								|| (fileName.startsWith(prefijoParcial) && fileName.endsWith(sufijoExtension));
+					})
+					.sorted(Comparator.comparingInt(path ->
+							extraerIndiceParcial(path.getFileName().toString(), ventaToken, extension)))
+					.forEach(archivos::add);
+		} catch (IOException e) {
+			return java.util.Collections.emptyList();
+		}
+
+		return archivos;
+	}
+
+	private static int extraerIndiceParcial(String fileName, String ventaToken, String extension) {
+		if (fileName == null || ventaToken == null || extension == null) {
+			return Integer.MAX_VALUE;
+		}
+
+		String principal = ventaToken + "." + extension;
+		if (fileName.equalsIgnoreCase(principal)) {
+			return 1;
+		}
+
+		String prefijoParcial = ventaToken + "_P";
+		String sufijoExtension = "." + extension;
+		if (!fileName.startsWith(prefijoParcial) || !fileName.endsWith(sufijoExtension)) {
+			return Integer.MAX_VALUE;
+		}
+
+		String parcial = fileName.substring(prefijoParcial.length(), fileName.length() - sufijoExtension.length());
+		try {
+			return Integer.parseInt(parcial);
+		} catch (NumberFormatException ex) {
+			return Integer.MAX_VALUE;
+		}
+	}
+
+	private static boolean tieneTexto(String texto) {
+		return texto != null && !texto.trim().isEmpty();
 	}
 
 	private String construirPlantillaHtml(String asunto, String cuerpo, boolean incluirAdjuntos) {
@@ -399,9 +510,6 @@ public class envioMail {
 		return texto != null && texto.matches("(?s).*</?[a-zA-Z][^>]*>.*");
 	}
 
-	private boolean tieneTexto(String texto) {
-		return texto != null && !texto.trim().isEmpty();
-	}
 
 	private String normalizarTexto(String texto) {
 		if (texto == null) {
@@ -416,6 +524,21 @@ public class envioMail {
 		InternetAddress[] direcciones = InternetAddress.parse(destinatario, true);
 		for (InternetAddress direccion : direcciones) {
 			direccion.validate();
+		}
+	}
+
+	public static boolean esCorreoValido(String correo) {
+		if (!tieneTexto(correo)) {
+			return false;
+		}
+		try {
+			InternetAddress[] direcciones = InternetAddress.parse(correo, true);
+			for (InternetAddress direccion : direcciones) {
+				direccion.validate();
+			}
+			return direcciones.length > 0;
+		} catch (Exception ex) {
+			return false;
 		}
 	}
 

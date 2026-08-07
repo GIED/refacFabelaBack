@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -217,8 +220,42 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 		validateActiveProvider();
 		String endpoint = resolveEndpoint(CONSULTA_TIMBRES_PATH);
 		try {
-			ResponseEntity<String> response = restTemplate.exchange(endpoint, HttpMethod.GET,
-					new HttpEntity<Object>(buildHeaders(rfcEmisor, null)), String.class);
+			String primaryToken = resolveBearerToken(rfcEmisor, null);
+			ResponseEntity<String> response = null;
+			try {
+				response = restTemplate.exchange(endpoint, HttpMethod.GET,
+						new HttpEntity<Object>(buildHeaders(rfcEmisor, primaryToken)), String.class);
+			} catch (HttpStatusCodeException httpEx) {
+				if (httpEx.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+					logger.warn(
+							"Token PAC no autorizado para RFC {} al consultar creditos. Probando autenticacion alterna.",
+							rfcEmisor);
+					List<String> fallbackTokens = resolveFallbackBearerTokens(rfcEmisor, primaryToken);
+					HttpStatusCodeException lastUnauthorized = httpEx;
+					boolean recovered = false;
+					for (String fallbackToken : fallbackTokens) {
+						try {
+							response = restTemplate.exchange(endpoint, HttpMethod.GET,
+									new HttpEntity<Object>(buildHeaders(rfcEmisor, fallbackToken)), String.class);
+							recovered = true;
+							break;
+						} catch (HttpStatusCodeException retryEx) {
+							if (retryEx.getStatusCode() != HttpStatus.UNAUTHORIZED) {
+								throw retryEx;
+							}
+							lastUnauthorized = retryEx;
+						}
+					}
+					if (!recovered) {
+						throw lastUnauthorized;
+					}
+				} else {
+					throw httpEx;
+				}
+			}
+			if (response == null) {
+				return 0;
+			}
 			if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null || response.getBody().trim().isEmpty()) {
 				return 0;
 			}
@@ -229,11 +266,15 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 				return 0;
 			}
 			return root.path("creditosRestantes").asInt(0);
+		} catch (HttpStatusCodeException e) {
+			logger.warn("No fue posible consultar creditos FacturoPorTi para RFC {}: {}", rfcEmisor,
+					buildHttpErrorMessage(e));
+			return 0;
 		} catch (PacFacturacionClientException e) {
-			logger.warn("No fue posible consultar créditos FacturoPorTi para RFC {}: {}", rfcEmisor, e.getMessage());
+			logger.warn("No fue posible consultar creditos FacturoPorTi para RFC {}: {}", rfcEmisor, e.getMessage());
 			return 0;
 		} catch (Exception e) {
-			logger.error("Error consultando créditos FacturoPorTi para RFC {}", rfcEmisor, e);
+			logger.error("Error consultando creditos FacturoPorTi para RFC {}", rfcEmisor, e);
 			return 0;
 		}
 	}
@@ -296,9 +337,9 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 	}
 
 	private String resolveBaseUrl() {
-		String configuredBaseUrl = properties.getBaseUrl();
-		if (configuredBaseUrl != null && !configuredBaseUrl.trim().isEmpty()) {
-			return configuredBaseUrl.trim();
+		String configuredEnvironmentBaseUrl = resolveConfiguredEnvironmentBaseUrl();
+		if (configuredEnvironmentBaseUrl != null && !configuredEnvironmentBaseUrl.trim().isEmpty()) {
+			return configuredEnvironmentBaseUrl.trim();
 		}
 		return properties.isSandbox() ? SANDBOX_BASE_URL : PRODUCTION_BASE_URL;
 	}
@@ -776,7 +817,7 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 	}
 
 	private boolean hasFixedTokenConfigured() {
-		String configuredToken = properties.getAuth() != null ? properties.getAuth().getToken() : null;
+		String configuredToken = resolveConfiguredEnvironmentToken();
 		return configuredToken != null && !configuredToken.trim().isEmpty();
 	}
 
@@ -788,20 +829,15 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 
 	private String resolveBearerToken(String rfcEmisor, String tokenOverride) {
 		if (tokenOverride != null && !tokenOverride.trim().isEmpty()) {
-			return tokenOverride;
+			return normalizeBearerToken(tokenOverride);
 		}
 
-		String emitterToken = resolveEmitterToken(rfcEmisor);
-		if (emitterToken != null) {
-			return emitterToken;
+		String configuredEnvironmentToken = resolveConfiguredEnvironmentToken();
+		if (configuredEnvironmentToken != null && !configuredEnvironmentToken.trim().isEmpty()) {
+			return normalizeBearerToken(configuredEnvironmentToken);
 		}
 
 		String authType = properties.getAuth() != null ? properties.getAuth().getType() : null;
-
-		String configuredToken = properties.getAuth() != null ? properties.getAuth().getToken() : null;
-		if (configuredToken != null && !configuredToken.trim().isEmpty()) {
-			return configuredToken;
-		}
 
 		if (hasUsernamePasswordConfigured()) {
 			String username = properties.getAuth() != null ? properties.getAuth().getUsername() : null;
@@ -811,7 +847,7 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 
 		if (authType != null && AUTH_TYPE_TOKEN.equalsIgnoreCase(authType.trim())) {
 			throw new PacFacturacionClientException(
-					"No hay token FacturoPorTi configurado en tc_datos_factura.s_token_api ni en facturoporti.auth.token.");
+					"No hay token FacturoPorTi configurado en facturoporti.auth.sandbox-token/facturoporti.auth.production-token.");
 		}
 
 		if (authType != null && !authType.trim().isEmpty()
@@ -821,7 +857,90 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 		}
 
 		throw new PacFacturacionClientException(
-				"No hay autenticación configurada para FacturoPorTi. Configure tc_datos_factura.s_token_api, facturoporti.auth.token o facturoporti.auth.username/facturoporti.auth.password.");
+				"No hay autenticacion configurada para FacturoPorTi. Configure facturoporti.auth.sandbox-token/facturoporti.auth.production-token o facturoporti.auth.username/facturoporti.auth.password.");
+	}
+
+	private String resolveConfiguredEnvironmentToken() {
+		if (properties.getAuth() == null) {
+			return null;
+		}
+
+		String configuredToken = properties.isSandbox()
+				? properties.getAuth().getSandboxToken()
+				: properties.getAuth().getProductionToken();
+		if (configuredToken == null || configuredToken.trim().isEmpty()) {
+			return null;
+		}
+		return configuredToken.trim();
+	}
+
+	private String resolveConfiguredEnvironmentBaseUrl() {
+		String configuredBaseUrl = properties.isSandbox() ? properties.getSandboxBaseUrl()
+				: properties.getProductionBaseUrl();
+		if (configuredBaseUrl == null || configuredBaseUrl.trim().isEmpty()) {
+			return null;
+		}
+		return configuredBaseUrl.trim();
+	}
+
+	private List<String> resolveFallbackBearerTokens(String rfcEmisor, String primaryToken) {
+		Set<String> candidates = new LinkedHashSet<String>();
+		String normalizedPrimary = normalizeBearerToken(primaryToken);
+
+		String configuredEnvironmentToken = normalizeBearerToken(resolveConfiguredEnvironmentToken());
+		if (configuredEnvironmentToken != null && !configuredEnvironmentToken.isEmpty()
+				&& !configuredEnvironmentToken.equals(normalizedPrimary)) {
+			candidates.add(configuredEnvironmentToken);
+		}
+
+		if (hasUsernamePasswordConfigured()) {
+			String username = properties.getAuth() != null ? properties.getAuth().getUsername() : null;
+			String password = properties.getAuth() != null ? properties.getAuth().getPassword() : null;
+			if (username != null && password != null) {
+				String trimmedUsername = username.trim();
+				String trimmedPassword = password.trim();
+				String tokenByRfc = safeCreateAndNormalizeToken(trimmedUsername, trimmedPassword, rfcEmisor);
+				if (tokenByRfc != null && !tokenByRfc.isEmpty() && !tokenByRfc.equals(normalizedPrimary)) {
+					candidates.add(tokenByRfc);
+				}
+				String tokenSinRfc = safeCreateAndNormalizeToken(trimmedUsername, trimmedPassword, null);
+				if (tokenSinRfc != null && !tokenSinRfc.isEmpty() && !tokenSinRfc.equals(normalizedPrimary)) {
+					candidates.add(tokenSinRfc);
+				}
+			}
+		}
+
+		return new ArrayList<String>(candidates);
+	}
+
+	private String safeCreateAndNormalizeToken(String username, String password, String rfcEmisor) {
+		try {
+			return normalizeBearerToken(createToken(username, password, rfcEmisor));
+		} catch (Exception e) {
+			logger.warn("No fue posible regenerar token PAC para RFC {}: {}", rfcEmisor, e.getMessage());
+			return null;
+		}
+	}
+
+	private String normalizeBearerToken(String tokenValue) {
+		if (tokenValue == null) {
+			return null;
+		}
+
+		String normalized = tokenValue.trim();
+		if (normalized.isEmpty()) {
+			return normalized;
+		}
+
+		if (normalized.regionMatches(true, 0, "Bearer ", 0, 7)) {
+			normalized = normalized.substring(7).trim();
+		}
+
+		if (normalized.startsWith("\"") && normalized.endsWith("\"") && normalized.length() > 1) {
+			normalized = normalized.substring(1, normalized.length() - 1).trim();
+		}
+
+		return normalized;
 	}
 
 	private String resolveEmitterToken(String rfcEmisor) {

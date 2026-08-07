@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,8 @@ import com.refacFabela.enums.TipoDoc;
 import com.refacFabela.dto.CancelacionResponse;
 import com.refacFabela.dto.CfdiRelacionadosResponse;
 import com.refacFabela.dto.ComplementoPagoHistorialDto;
+import com.refacFabela.dto.FacturaReenvioCorreoRequestDto;
+import com.refacFabela.dto.FacturaReenvioCorreoResponseDto;
 import com.refacFabela.dto.FacturacionVentasRequestDto;
 import com.refacFabela.dto.FacturacionVentaDivididaRequestDto;
 import com.refacFabela.dto.ResultadoFacturacionVentaDto;
@@ -133,6 +136,23 @@ public class FacturaController {
 		ResultadoFacturacionVentaDto resultado = facturaService.reintentarComplemento(nIdComplemento);
 		return new ResponseEntity<ResultadoFacturacionVentaDto>(resultado,
 				resultado != null && resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@PostMapping("ventas/{nIdVenta}/reenviar-correo")
+	public ResponseEntity<FacturaReenvioCorreoResponseDto> reenviarFacturaCorreo(
+			@PathVariable("nIdVenta") Long nIdVenta,
+			@RequestBody(required = false) FacturaReenvioCorreoRequestDto requestDto) {
+		try {
+			FacturaReenvioCorreoResponseDto response = facturaService.reenviarFacturaCorreo(nIdVenta, requestDto);
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			logger.error("Error al reenviar factura por correo para venta {}", nIdVenta, e);
+			FacturaReenvioCorreoResponseDto response = new FacturaReenvioCorreoResponseDto();
+			response.setnIdVenta(nIdVenta);
+			response.setEnviado(Boolean.FALSE);
+			response.setDetalle(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+		}
 	}
 	
 	@GetMapping("ventasParaFactura")
