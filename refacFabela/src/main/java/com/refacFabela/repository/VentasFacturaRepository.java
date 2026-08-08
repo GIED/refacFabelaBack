@@ -13,7 +13,26 @@ import com.refacFabela.model.TwVenta;
 public interface VentasFacturaRepository extends JpaRepository<TvVentasFactura, Long> {
 	
 	
-	@Query(value="Select * from tv_ventasFactura e where (d_fechaVenta + INTERVAL 15 DAY) >= SYSDATE() and e.n_estatusVenta > 1  order by e.n_id desc  ", nativeQuery=true)
+	@Query(value = "Select * from tv_ventasFactura e "
+			+ "where e.n_estatusVenta > 1 "
+			+ "and (( "
+			+ "	YEAR(e.d_fechaVenta) = YEAR(CURDATE()) "
+			+ "	and MONTH(e.d_fechaVenta) = MONTH(CURDATE()) "
+			+ "	and ( "
+			+ "		e.n_idFactura > 0 "
+			+ "\t\tor exists (select 1 from tr_venta_cobro cob where cob.n_id_venta = e.n_id) "
+			+ "		or exists (select 1 from tw_abonos abo where abo.n_idVenta = e.n_id) "
+			+ "	) "
+			+ ") "
+			+ "or ( "
+			+ "	e.n_idFactura > 0 "
+			+ "	and e.d_fechaVenta >= DATE_SUB(CURDATE(), INTERVAL 60 DAY) "
+			+ "\tand not exists (select 1 from tr_venta_cobro cob2 where cob2.n_id_venta = e.n_id) "
+			+ "	and not exists (select 1 from tw_abonos abo2 where abo2.n_idVenta = e.n_id) "
+			+ ") "
+			+ ") "
+			+ "order by e.n_id desc",
+			nativeQuery = true)
 	public List<TvVentasFactura> obtenerFacturas();
 	
 	@Query(value="Select * from tv_ventasFactura e where  e.n_idFactura > 0  order by e.n_id desc  ", nativeQuery=true)

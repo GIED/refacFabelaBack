@@ -21,6 +21,7 @@ import com.refacFabela.dto.VentaProductoDto;
 import com.refacFabela.model.TcBodega;
 import com.refacFabela.model.TcCatalogogeneral;
 import com.refacFabela.model.TcCliente;
+import com.refacFabela.model.TcFormapago;
 import com.refacFabela.model.TcHistoriaPrecioProducto;
 import com.refacFabela.model.TcProducto;
 import com.refacFabela.model.TrVentaCobro;
@@ -1158,8 +1159,26 @@ public List<TwProductosAlternativo> obtenerProductosAlternativosDescuento(Long n
 
 	@Override
 	public TrVentaCobro guardarVentaCobro(TrVentaCobro trVentaCobro) {
-		
+		validarDatosBancariosCobro(trVentaCobro);
 		return trVentaCobroRepository.save(trVentaCobro);
+	}
+
+	// Claves SAT c_FormaPago que se liquidan via banco (03 transferencia, 04 tarjeta credito, 28 tarjeta debito)
+	private static final java.util.Set<String> CLAVES_SAT_REQUIEREN_DATOS_BANCARIOS =
+			new java.util.HashSet<>(java.util.Arrays.asList("03", "04", "28"));
+
+	private void validarDatosBancariosCobro(TrVentaCobro trVentaCobro) {
+		if (trVentaCobro == null || trVentaCobro.getnIdFormaPago() == null) {
+			return;
+		}
+		TcFormapago formaPago = catalagoFormaPagoRepository.findById(trVentaCobro.getnIdFormaPago()).orElse(null);
+		String claveSat = formaPago != null && formaPago.getsClave() != null ? formaPago.getsClave().trim() : null;
+		if (claveSat == null || !CLAVES_SAT_REQUIEREN_DATOS_BANCARIOS.contains(claveSat)) {
+			return;
+		}
+		if (trVentaCobro.getsReferencia() == null || trVentaCobro.getsReferencia().trim().isEmpty()) {
+			throw new IllegalArgumentException("Esta forma de pago requiere capturar la referencia bancaria del cobro.");
+		}
 	}
 
 	@Override

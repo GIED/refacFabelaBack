@@ -11,6 +11,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -42,14 +43,13 @@ public boolean subirArchivoFactura(MultipartFile file,  Integer nombreArchivo, S
 			String fileExtension=fileOriginalName.substring(fileOriginalName.lastIndexOf("."));
 			
 			String newFileName=fileName+fileExtension;			
-			
-			Path path= Paths.get(ruta+newFileName);
+            Path path= resolveUniquePath(Paths.get(ruta+newFileName));
             if (path.getParent() != null) {
                 Files.createDirectories(path.getParent());
             }
 			System.err.println();
 			
-			Files.write(path,  bytes);
+            Files.write(path,  bytes, StandardOpenOption.CREATE_NEW);
 			
 			return true;
 			
@@ -62,6 +62,29 @@ public boolean subirArchivoFactura(MultipartFile file,  Integer nombreArchivo, S
 		
 		
 	}
+
+private Path resolveUniquePath(Path basePath) {
+    if (basePath == null || !Files.exists(basePath)) {
+        return basePath;
+    }
+
+    String fileName = basePath.getFileName().toString();
+    int lastDot = fileName.lastIndexOf('.');
+    String baseName = lastDot > 0 ? fileName.substring(0, lastDot) : fileName;
+    String extension = lastDot > 0 ? fileName.substring(lastDot) : "";
+    Path parent = basePath.getParent();
+
+    for (int index = 1; index <= 10000; index++) {
+        String candidateName = baseName + "_dup" + index + extension;
+        Path candidate = parent != null ? parent.resolve(candidateName) : Paths.get(candidateName);
+        if (!Files.exists(candidate)) {
+            return candidate;
+        }
+    }
+
+    String candidateName = baseName + "_dup" + System.currentTimeMillis() + extension;
+    return parent != null ? parent.resolve(candidateName) : Paths.get(candidateName);
+}
 
 // ✅ Guardar imagen desde una URL externa
 public boolean guardarImagenDesdeUrl(String urlImagen, String rutaDestinoCompleta) {

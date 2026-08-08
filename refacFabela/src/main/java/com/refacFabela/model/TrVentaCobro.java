@@ -39,6 +39,15 @@ public class TrVentaCobro implements Serializable {
 	@Column(name = "n_id_forma_pago")
 	private Long nIdFormaPago;
 
+	@Column(name = "s_referencia")
+	private String sReferencia;
+	@Column(name = "s_numero_autorizacion")
+	private String sNumeroAutorizacion;
+	@Column(name = "s_ultimos4_tarjeta")
+	private String sUltimos4Tarjeta;
+	@Column(name = "n_id_cuenta_bancaria")
+	private Long nIdCuentaBancaria;
+
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "n_id_caja", updatable = false, insertable = false, nullable = false)
@@ -51,6 +60,10 @@ public class TrVentaCobro implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "n_id_forma_pago", updatable = false, insertable = false, nullable = false)
 	private TcFormapago tcFormapago;
+
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "n_id_cuenta_bancaria", updatable = false, insertable = false)
+	private TcCuentaBancaria tcCuentaBancaria;
 
 	public Long getnId() {
 		return nId;
@@ -110,6 +123,46 @@ public class TrVentaCobro implements Serializable {
 
 	public void setnIdFormaPago(Long nIdFormaPago) {
 		this.nIdFormaPago = nIdFormaPago;
+	}
+
+	public String getsReferencia() {
+		return sReferencia;
+	}
+
+	public void setsReferencia(String sReferencia) {
+		this.sReferencia = sReferencia;
+	}
+
+	public String getsNumeroAutorizacion() {
+		return sNumeroAutorizacion;
+	}
+
+	public void setsNumeroAutorizacion(String sNumeroAutorizacion) {
+		this.sNumeroAutorizacion = sNumeroAutorizacion;
+	}
+
+	public String getsUltimos4Tarjeta() {
+		return sUltimos4Tarjeta;
+	}
+
+	public void setsUltimos4Tarjeta(String sUltimos4Tarjeta) {
+		this.sUltimos4Tarjeta = sUltimos4Tarjeta;
+	}
+
+	public Long getnIdCuentaBancaria() {
+		return nIdCuentaBancaria;
+	}
+
+	public void setnIdCuentaBancaria(Long nIdCuentaBancaria) {
+		this.nIdCuentaBancaria = nIdCuentaBancaria;
+	}
+
+	public TcCuentaBancaria getTcCuentaBancaria() {
+		return tcCuentaBancaria;
+	}
+
+	public void setTcCuentaBancaria(TcCuentaBancaria tcCuentaBancaria) {
+		this.tcCuentaBancaria = tcCuentaBancaria;
 	}
 
 	public TwCaja getTwCaja() {

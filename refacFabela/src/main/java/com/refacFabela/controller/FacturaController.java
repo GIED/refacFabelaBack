@@ -190,10 +190,13 @@ public class FacturaController {
 		
 		// Descargar Comprobantes
 		try {
-			System.err.println(TipoDoc);
-			return generaReporteService.getDocumento(nIdVenta, TipoDoc );
+			byte[] documento = generaReporteService.getDocumento(nIdVenta, TipoDoc );
+			if (documento == null || documento.length == 0) {
+				logger.warn("Documento no encontrado para venta {} tipo {}", nIdVenta, TipoDoc);
+			}
+			return documento;
 		} catch (Exception e) {
-			logger.error("Error al desargar documento ", e);
+			logger.error("Error al descargar documento para venta {} tipo {}", nIdVenta, TipoDoc, e);
 			return null;
 		}
 	}

@@ -3,9 +3,11 @@ package com.refacFabela.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
@@ -745,12 +747,15 @@ public class TimbradoVentaService {
 		if (ruta == null || ruta.trim().isEmpty() || xmlContent == null || xmlContent.trim().isEmpty()) {
 			return;
 		}
-		Path path = Paths.get(ruta + fileToken + ".xml");
+		Path basePath = Paths.get(ruta + fileToken + ".xml");
 		try {
+			Path path = resolveUniquePath(basePath);
 			if (path.getParent() != null) {
 				Files.createDirectories(path.getParent());
 			}
-			Files.write(path, resolveXmlBytes(xmlContent));
+			Files.write(path, resolveXmlBytes(xmlContent), StandardOpenOption.CREATE_NEW);
+		} catch (FileAlreadyExistsException ex) {
+			writeWithFallbackUniquePath(basePath, resolveXmlBytes(xmlContent));
 		} catch (Exception e) {
 			throw new FacturacionException("No fue posible guardar el XML timbrado.", e);
 		}
@@ -764,15 +769,53 @@ public class TimbradoVentaService {
 		if (ruta == null || ruta.trim().isEmpty() || pdfBase64 == null || pdfBase64.trim().isEmpty()) {
 			return;
 		}
-		Path path = Paths.get(ruta + fileToken + ".pdf");
+		Path basePath = Paths.get(ruta + fileToken + ".pdf");
 		try {
+			Path path = resolveUniquePath(basePath);
 			if (path.getParent() != null) {
 				Files.createDirectories(path.getParent());
 			}
-			Files.write(path, Base64.getDecoder().decode(pdfBase64));
+			Files.write(path, Base64.getDecoder().decode(pdfBase64), StandardOpenOption.CREATE_NEW);
+		} catch (FileAlreadyExistsException ex) {
+			writeWithFallbackUniquePath(basePath, Base64.getDecoder().decode(pdfBase64));
 		} catch (Exception e) {
 			throw new FacturacionException("No fue posible guardar el PDF timbrado.", e);
 		}
+	}
+
+	private void writeWithFallbackUniquePath(Path basePath, byte[] data) {
+		try {
+			Path fallback = resolveUniquePath(basePath);
+			if (fallback.getParent() != null) {
+				Files.createDirectories(fallback.getParent());
+			}
+			Files.write(fallback, data, StandardOpenOption.CREATE_NEW);
+		} catch (Exception e) {
+			throw new FacturacionException("No fue posible guardar el archivo timbrado sin sobreescritura.", e);
+		}
+	}
+
+	private Path resolveUniquePath(Path basePath) {
+		if (basePath == null || !Files.exists(basePath)) {
+			return basePath;
+		}
+
+		String fileName = basePath.getFileName().toString();
+		int lastDot = fileName.lastIndexOf('.');
+		String baseName = lastDot > 0 ? fileName.substring(0, lastDot) : fileName;
+		String extension = lastDot > 0 ? fileName.substring(lastDot) : "";
+
+		Path parent = basePath.getParent();
+		for (int index = 1; index <= 10000; index++) {
+			String candidateName = baseName + "_dup" + index + extension;
+			Path candidate = parent != null ? parent.resolve(candidateName) : Paths.get(candidateName);
+			if (!Files.exists(candidate)) {
+				return candidate;
+			}
+		}
+
+		String candidateName = baseName + "_dup" + System.currentTimeMillis() + extension;
+		return parent != null ? parent.resolve(candidateName) : Paths.get(candidateName);
 	}
 
 	private byte[] resolveXmlBytes(String xmlContent) {

@@ -11,30 +11,57 @@ public class DatosFacturaStorageResolver {
 	private static final String SUBDIRECTORIO_PDF = "pdf";
 	private static final String SUBDIRECTORIO_XML = "xml";
 
+	private final String rutaFacturacionRaiz;
+	private final boolean forzarRutaFacturacionRaiz;
 	private final String rutaComprobantesDefault;
 
 	public DatosFacturaStorageResolver(
+			@Value("${facturacion.storage.ruta-raiz:${FACTURACION_STORAGE_RUTA_RAIZ:/opt/webserver/backEnd/refacFabela}}") String rutaFacturacionRaiz,
+			@Value("${facturacion.storage.forzar-ruta-raiz:${FACTURACION_STORAGE_FORZAR_RUTA_RAIZ:true}}") boolean forzarRutaFacturacionRaiz,
 			@Value("${ventas.internet.ruta-comprobantes:${VENTAS_INTERNET_RUTA_COMPROBANTES:comprobantesInternet}}") String rutaComprobantesDefault) {
+		this.rutaFacturacionRaiz = rutaFacturacionRaiz;
+		this.forzarRutaFacturacionRaiz = forzarRutaFacturacionRaiz;
 		this.rutaComprobantesDefault = rutaComprobantesDefault;
 	}
 
 	public String resolveRutaPdf(TcDatosFactura datosFactura) {
+		if (forzarRutaFacturacionRaiz && hasText(rutaFacturacionRaiz)) {
+			return appendSubdirectory(resolveRutaRaiz(datosFactura), SUBDIRECTORIO_PDF);
+		}
+		return resolveRutaPdfLegacy(datosFactura);
+	}
+
+	public String resolveRutaPdfLegacy(TcDatosFactura datosFactura) {
 		String rutaPdf = datosFactura != null ? datosFactura.getsRutaPdf() : null;
 		if (hasText(rutaPdf)) {
 			return ensureTrailingSeparator(rutaPdf);
 		}
-		return appendSubdirectory(resolveRutaRaiz(datosFactura), SUBDIRECTORIO_PDF);
+		return appendSubdirectory(resolveRutaRaizLegacy(datosFactura), SUBDIRECTORIO_PDF);
 	}
 
 	public String resolveRutaXml(TcDatosFactura datosFactura) {
+		if (forzarRutaFacturacionRaiz && hasText(rutaFacturacionRaiz)) {
+			return appendSubdirectory(resolveRutaRaiz(datosFactura), SUBDIRECTORIO_XML);
+		}
+		return resolveRutaXmlLegacy(datosFactura);
+	}
+
+	public String resolveRutaXmlLegacy(TcDatosFactura datosFactura) {
 		String rutaXml = datosFactura != null ? datosFactura.getsRutaXml() : null;
 		if (hasText(rutaXml)) {
 			return ensureTrailingSeparator(rutaXml);
 		}
-		return appendSubdirectory(resolveRutaRaiz(datosFactura), SUBDIRECTORIO_XML);
+		return appendSubdirectory(resolveRutaRaizLegacy(datosFactura), SUBDIRECTORIO_XML);
 	}
 
 	public String resolveRutaRaiz(TcDatosFactura datosFactura) {
+		if (forzarRutaFacturacionRaiz && hasText(rutaFacturacionRaiz)) {
+			return ensureTrailingSeparator(rutaFacturacionRaiz);
+		}
+		return resolveRutaRaizLegacy(datosFactura);
+	}
+
+	public String resolveRutaRaizLegacy(TcDatosFactura datosFactura) {
 		String rutaRaiz = datosFactura != null ? datosFactura.getsRutaRaiz() : null;
 		if (hasText(rutaRaiz)) {
 			return ensureTrailingSeparator(rutaRaiz);

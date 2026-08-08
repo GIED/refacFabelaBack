@@ -516,13 +516,16 @@ public class VentasController {
 		return null;
 	}
 	@PostMapping("/guardarVentaCobro")
-	public TrVentaCobro guardarVentaCobro(@RequestBody  TrVentaCobro TrVentaCobro) {
+	public ResponseEntity<?> guardarVentaCobro(@RequestBody  TrVentaCobro TrVentaCobro) {
 		try {
-			return productosService.guardarVentaCobro(TrVentaCobro);
+			return ResponseEntity.ok(productosService.guardarVentaCobro(TrVentaCobro));
+		} catch (IllegalArgumentException e) {
+			logger.warn("Validación al guardar el cobro: {}", e.getMessage());
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			logger.error("Error al guardar el cobro" + e);
+			return new ResponseEntity<String>("No fue posible guardar el cobro.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return null;
 	}
 	
 	@GetMapping("/obtenerSaldosUtilizadosId")

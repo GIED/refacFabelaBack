@@ -16,16 +16,21 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.ls.LSInput;
 
 import com.refacFabela.dto.AbonoDto;
@@ -97,6 +102,9 @@ import antlr.Utils;
 
 @Service
 public class GenerarReporteServiceImpl implements GeneraReporteService {
+
+	private static final Logger logger = LogManager.getLogger("errorLogger");
+	private static final String RUTA_FACTURAS_OBLIGATORIA = "/opt/webserver/backEnd/refacFabela";
 
 	@Autowired
 	private CotizacionProductoRepository cotizacionProductoRepository;
@@ -1226,48 +1234,307 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 				return obtenerZipComplementosPago(nIdVenta);
 			}
 
-			TwVenta twVenta = this.ventasRepository.getById(nIdVenta);
-			if (twVenta == null || twVenta.getTcCliente() == null || twVenta.getTcCliente().getnIdDatoFactura() == null) {
+			if (nIdVenta == null || nIdVenta.longValue() <= 0L) {
 				return null;
 			}
 
-			TcDatosFactura tcDatosFactura = tcDatosFacturaRepository.getById(twVenta.getTcCliente().getnIdDatoFactura());
-			if (tcDatosFactura == null) {
-				return null;
-			}
-
-			String ruta;
 			String extension;
 			if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.PDF_FACTURA)) {
-				ruta = datosFacturaStorageResolver.resolveRutaPdf(tcDatosFactura);
 				extension = "pdf";
 			} else if (TipoDoc.equals(com.refacFabela.enums.TipoDoc.XML_FACTURA)) {
-				ruta = datosFacturaStorageResolver.resolveRutaXml(tcDatosFactura);
 				extension = "xml";
 			} else {
 				return null;
 			}
 
-			if (ruta == null || ruta.trim().isEmpty()) {
-				return null;
+			byte[] documentoDirectoVenta = obtenerDocumentoDirectoPorVentaId(nIdVenta, extension);
+			if (documentoDirectoVenta != null && documentoDirectoVenta.length > 0) {
+				return documentoDirectoVenta;
 			}
 
-			List<Path> documentosFactura = obtenerDocumentosFacturaVenta(ruta, nIdVenta, extension);
-			if (!documentosFactura.isEmpty()) {
+			List<String> rutasCandidatas = resolveRutasFacturaCandidatas(nIdVenta, TipoDoc);
+			for (String ruta : rutasCandidatas) {
+				List<Path> documentosFactura = obtenerDocumentosFacturaVenta(ruta, nIdVenta, extension);
+				if (documentosFactura.isEmpty()) {
+					continue;
+				}
 				if (documentosFactura.size() == 1) {
 					return Files.readAllBytes(documentosFactura.get(0));
 				}
 				return zipDocumentosFactura(documentosFactura, nIdVenta, extension);
 			}
 
-			byte[] localMirror = readDocumentoLocal(pathFacturaVenta(nIdVenta, TipoDoc));
-			if (localMirror != null) {
-				return localMirror;
+			byte[] porUuid = obtenerDocumentoFacturaPorUuidEnRutas(rutasCandidatas, nIdVenta, extension);
+			if (porUuid != null && porUuid.length > 0) {
+				return porUuid;
 			}
 
+			Path pathFactura = pathFacturaVenta(nIdVenta, TipoDoc);
+			if (pathFactura != null) {
+				byte[] localMirror = readDocumentoLocal(pathFactura);
+				if (localMirror != null) {
+					return localMirror;
+				}
+			}
+
+			logger.warn("No se encontro comprobante de factura para venta {} tipo {}. Rutas candidatas: {}",
+					nIdVenta, TipoDoc, rutasCandidatas);
+
 			return null;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private byte[] obtenerDocumentoDirectoPorVentaId(Long nIdVenta, String extension) {
+		if (nIdVenta == null || extension == null || extension.trim().isEmpty()) {
+			return null;
+		}
+
+		String normalizedExt = extension.toLowerCase();
+		String rutaRaizObligatoria = ensureTrailingSlash(RUTA_FACTURAS_OBLIGATORIA);
+		String base = rutaRaizObligatoria + ("xml".equalsIgnoreCase(normalizedExt) ? "xml/" : "pdf/");
+		Path path = Paths.get(base + nIdVenta + "." + normalizedExt);
+		byte[] direct = readDocumentoLocal(path);
+		if (direct != null && direct.length > 0) {
+			return direct;
+		}
+
+		List<Path> documentos = obtenerDocumentosFacturaVenta(base, nIdVenta, normalizedExt);
+		if (!documentos.isEmpty()) {
+			try {
+				if (documentos.size() == 1) {
+					return Files.readAllBytes(documentos.get(0));
+				}
+				return zipDocumentosFactura(documentos, nIdVenta, normalizedExt);
+			} catch (IOException e) {
+				return null;
+			}
+		}
+
+		Path recursivo = buscarArchivoPorVentaIdEnRuta(base, nIdVenta, normalizedExt);
+		if (recursivo != null) {
+			try {
+				return Files.readAllBytes(recursivo);
+			} catch (IOException ignored) {
+				return null;
+			}
+		}
+
+		Path recursivoRaizObligatoria = buscarArchivoPorVentaIdEnRuta(rutaRaizObligatoria, nIdVenta, normalizedExt);
+		if (recursivoRaizObligatoria != null) {
+			try {
+				return Files.readAllBytes(recursivoRaizObligatoria);
+			} catch (IOException ignored) {
+				return null;
+			}
+		}
+
+		String rutaRaizLegacy = datosFacturaStorageResolver.resolveRutaRaizLegacy(null);
+		Path recursivoRaizLegacy = buscarArchivoPorVentaIdEnRuta(rutaRaizLegacy, nIdVenta, normalizedExt);
+		if (recursivoRaizLegacy != null) {
+			try {
+				return Files.readAllBytes(recursivoRaizLegacy);
+			} catch (IOException ignored) {
+				return null;
+			}
+		}
+
+		return null;
+	}
+
+	private Path buscarArchivoPorVentaIdEnRuta(String ruta, Long nIdVenta, String extension) {
+		if (ruta == null || ruta.trim().isEmpty() || nIdVenta == null || extension == null || extension.trim().isEmpty()) {
+			return null;
+		}
+
+		Path directorio = Paths.get(ruta);
+		if (!Files.exists(directorio) || !Files.isDirectory(directorio)) {
+			return null;
+		}
+
+		String ventaToken = String.valueOf(nIdVenta).toLowerCase();
+		String extLower = "." + extension.toLowerCase();
+		String nombrePrincipal = ventaToken + extLower;
+
+		try (Stream<Path> stream = Files.walk(directorio, 4)) {
+			return stream
+					.filter(Files::isRegularFile)
+					.filter(path -> {
+						String fileName = path.getFileName().toString().toLowerCase();
+						if (!fileName.endsWith(extLower)) {
+							return false;
+						}
+						return fileName.equals(nombrePrincipal)
+								|| fileName.startsWith(ventaToken + "_")
+								|| fileName.startsWith(ventaToken + "_p");
+					})
+					.sorted((a, b) -> {
+						try {
+							return Files.getLastModifiedTime(b).compareTo(Files.getLastModifiedTime(a));
+						} catch (IOException ex) {
+							return 0;
+						}
+					})
+					.findFirst()
+					.orElse(null);
+		} catch (IOException e) {
+			logger.warn("No se pudo recorrer ruta {} para venta {} con extension {}: {}", ruta, nIdVenta,
+					extension, e.getMessage());
+			return null;
+		}
+	}
+
+	private List<String> resolveRutasFacturaCandidatas(Long nIdVenta, TipoDoc tipoDoc) {
+		Set<String> rutas = new LinkedHashSet<String>();
+		boolean esXml = TipoDoc.XML_FACTURA.equals(tipoDoc);
+		String rutaRaizObligatoria = ensureTrailingSlash(RUTA_FACTURAS_OBLIGATORIA);
+		String rutaObligatoria = rutaRaizObligatoria + (esXml ? "xml/" : "pdf/");
+		rutas.add(rutaObligatoria);
+		rutas.add(rutaRaizObligatoria);
+
+		appendRutaFactura(rutas, esXml, null, false);
+
+		if (nIdVenta != null) {
+			try {
+				List<TwFacturacion> facturas = facturaRepository.findActivasByVenta(nIdVenta);
+				if (facturas != null) {
+					for (TwFacturacion facturacion : facturas) {
+						if (facturacion == null || facturacion.getnIdDatoFactura() == null) {
+							continue;
+						}
+						TcDatosFactura datosFactura = tcDatosFacturaRepository.findById(facturacion.getnIdDatoFactura())
+								.orElse(null);
+						appendRutaFactura(rutas, esXml, datosFactura, false);
+						appendRutaFactura(rutas, esXml, datosFactura, true);
+					}
+				}
+			} catch (Exception ignored) {
+				// Si BD falla, se mantiene la ruta unificada para servir archivos locales.
+			}
+
+			try {
+				TwVenta venta = ventasRepository.findBynId(nIdVenta);
+				if (venta != null && venta.getTcCliente() != null && venta.getTcCliente().getnIdDatoFactura() != null) {
+					TcDatosFactura datosCliente = tcDatosFacturaRepository.findById(venta.getTcCliente().getnIdDatoFactura())
+							.orElse(null);
+					appendRutaFactura(rutas, esXml, datosCliente, false);
+					appendRutaFactura(rutas, esXml, datosCliente, true);
+				}
+			} catch (Exception ignored) {
+				// Si BD falla, se mantiene la ruta unificada para servir archivos locales.
+			}
+		}
+
+		return new ArrayList<String>(rutas);
+	}
+
+	private void appendRutaFactura(Set<String> rutas, boolean esXml, TcDatosFactura datosFactura, boolean legacy) {
+		String ruta = null;
+		if (legacy) {
+			ruta = esXml ? datosFacturaStorageResolver.resolveRutaXmlLegacy(datosFactura)
+					: datosFacturaStorageResolver.resolveRutaPdfLegacy(datosFactura);
+		} else {
+			ruta = esXml ? datosFacturaStorageResolver.resolveRutaXml(datosFactura)
+					: datosFacturaStorageResolver.resolveRutaPdf(datosFactura);
+		}
+		if (ruta != null && !ruta.trim().isEmpty()) {
+			rutas.add(ruta.trim());
+		}
+	}
+
+	private byte[] obtenerDocumentoFacturaPorUuidEnRutas(List<String> rutas, Long nIdVenta, String extension) {
+		if (rutas == null || rutas.isEmpty() || nIdVenta == null || extension == null || extension.trim().isEmpty()) {
+			return null;
+		}
+
+		Set<String> uuidTokens = new LinkedHashSet<String>();
+		try {
+			List<TwFacturacion> facturas = facturaRepository.findByVenta(nIdVenta);
+			if (facturas != null) {
+				for (TwFacturacion facturacion : facturas) {
+					if (facturacion == null || facturacion.getsUuid() == null || facturacion.getsUuid().trim().isEmpty()) {
+						continue;
+					}
+					uuidTokens.add(facturacion.getsUuid().trim());
+				}
+			}
+		} catch (Exception ignored) {
+			return null;
+		}
+
+		if (uuidTokens.isEmpty()) {
+			return null;
+		}
+
+		for (String ruta : rutas) {
+			if (ruta == null || ruta.trim().isEmpty()) {
+				continue;
+			}
+			Path encontrado = buscarArchivoPorTokensEnRuta(ruta, extension, uuidTokens);
+			if (encontrado == null) {
+				continue;
+			}
+			try {
+				return Files.readAllBytes(encontrado);
+			} catch (IOException ignored) {
+				// Continua con el siguiente candidato.
+			}
+		}
+
+		logger.warn("No se encontro documento por UUID en rutas candidatas para venta {} extension {}. UUIDs evaluados: {} Rutas: {}",
+				nIdVenta, extension, uuidTokens, rutas);
+
+		return null;
+	}
+
+	private Path buscarArchivoPorTokensEnRuta(String ruta, String extension, Set<String> tokens) {
+		if (ruta == null || ruta.trim().isEmpty() || extension == null || extension.trim().isEmpty()
+				|| tokens == null || tokens.isEmpty()) {
+			return null;
+		}
+
+		Path directorio = Paths.get(ruta);
+		if (!Files.exists(directorio) || !Files.isDirectory(directorio)) {
+			return null;
+		}
+
+		String extLower = "." + extension.toLowerCase();
+		Set<String> tokensLower = new HashSet<String>();
+		for (String token : tokens) {
+			if (token != null && !token.trim().isEmpty()) {
+				tokensLower.add(token.trim().toLowerCase());
+			}
+		}
+
+		try (Stream<Path> stream = Files.walk(directorio, 3)) {
+			return stream
+					.filter(Files::isRegularFile)
+					.filter(path -> {
+						String fileName = path.getFileName().toString().toLowerCase();
+						if (!fileName.endsWith(extLower)) {
+							return false;
+						}
+						for (String token : tokensLower) {
+							if (fileName.equals(token + extLower)
+									|| fileName.startsWith(token + "_")
+									|| fileName.contains("_" + token + "_")) {
+								return true;
+							}
+						}
+						return false;
+					})
+					.sorted((a, b) -> {
+						try {
+							return Files.getLastModifiedTime(b).compareTo(Files.getLastModifiedTime(a));
+						} catch (IOException ex) {
+							return 0;
+						}
+					})
+					.findFirst()
+					.orElse(null);
+		} catch (IOException e) {
 			return null;
 		}
 	}
@@ -1283,22 +1550,28 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		}
 
 		String ventaToken = String.valueOf(nIdVenta);
-		String nombrePrincipal = ventaToken + "." + extension;
-		String prefijoParcial = ventaToken + "_P";
-		String sufijoExtension = "." + extension;
+		String ventaTokenLower = ventaToken.toLowerCase();
+		String normalizedExt = extension.toLowerCase();
+		String nombrePrincipal = ventaTokenLower + "." + normalizedExt;
+		String prefijoParcial = ventaTokenLower + "_p";
+		String prefijoVersion = ventaTokenLower + "_";
+		String sufijoExtension = "." + normalizedExt;
 
 		List<Path> documentos = new ArrayList<Path>();
-		try (Stream<Path> stream = Files.list(directorio)) {
+		try (Stream<Path> stream = Files.walk(directorio, 4)) {
 			stream.filter(Files::isRegularFile)
 					.filter(path -> {
-						String fileName = path.getFileName().toString();
-						return fileName.equalsIgnoreCase(nombrePrincipal)
-								|| (fileName.startsWith(prefijoParcial) && fileName.endsWith(sufijoExtension));
+						String fileName = path.getFileName().toString().toLowerCase();
+						return fileName.equals(nombrePrincipal)
+								|| (fileName.startsWith(prefijoParcial) && fileName.endsWith(sufijoExtension))
+								|| (fileName.startsWith(prefijoVersion) && fileName.endsWith(sufijoExtension));
 					})
 					.sorted(Comparator.comparingInt(path ->
-						extraerIndiceParcial(path.getFileName().toString(), ventaToken, extension)))
+						extraerIndiceParcial(path.getFileName().toString(), ventaTokenLower, normalizedExt)))
 					.forEach(documentos::add);
 		} catch (IOException e) {
+			logger.warn("No se pudieron listar documentos de factura en {} para venta {} extension {}: {}", ruta,
+					nIdVenta, extension, e.getMessage());
 			return Collections.emptyList();
 		}
 
@@ -1310,18 +1583,22 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			return Integer.MAX_VALUE;
 		}
 
-		String nombrePrincipal = ventaToken + "." + extension;
-		if (fileName.equalsIgnoreCase(nombrePrincipal)) {
+		String fileNameLower = fileName.toLowerCase();
+		String ventaTokenLower = ventaToken.toLowerCase();
+		String extensionLower = extension.toLowerCase();
+
+		String nombrePrincipal = ventaTokenLower + "." + extensionLower;
+		if (fileNameLower.equals(nombrePrincipal)) {
 			return 1;
 		}
 
-		String prefijoParcial = ventaToken + "_P";
-		String sufijoExtension = "." + extension;
-		if (!fileName.startsWith(prefijoParcial) || !fileName.endsWith(sufijoExtension)) {
+		String prefijoParcial = ventaTokenLower + "_p";
+		String sufijoExtension = "." + extensionLower;
+		if (!fileNameLower.startsWith(prefijoParcial) || !fileNameLower.endsWith(sufijoExtension)) {
 			return Integer.MAX_VALUE;
 		}
 
-		String indice = fileName.substring(prefijoParcial.length(), fileName.length() - sufijoExtension.length());
+		String indice = fileNameLower.substring(prefijoParcial.length(), fileNameLower.length() - sufijoExtension.length());
 		try {
 			return Integer.parseInt(indice);
 		} catch (NumberFormatException ex) {
@@ -1590,17 +1867,14 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 	}
 
 	private Path pathFacturaVenta(Long nIdVenta, TipoDoc tipoDoc) {
-		TwVenta venta = nIdVenta != null ? ventasRepository.findBynId(nIdVenta) : null;
-		if (venta == null || venta.getTcCliente() == null || venta.getTcCliente().getnIdDatoFactura() == null) {
+		if (nIdVenta == null || tipoDoc == null) {
 			return null;
 		}
-		TcDatosFactura datosFactura = tcDatosFacturaRepository.findById(venta.getTcCliente().getnIdDatoFactura()).orElse(null);
-		if (datosFactura == null) {
+		List<String> rutas = resolveRutasFacturaCandidatas(nIdVenta, tipoDoc);
+		if (rutas == null || rutas.isEmpty()) {
 			return null;
 		}
-		String ruta = TipoDoc.XML_FACTURA.equals(tipoDoc)
-				? datosFacturaStorageResolver.resolveRutaXml(datosFactura)
-				: datosFacturaStorageResolver.resolveRutaPdf(datosFactura);
+		String ruta = rutas.get(0);
 		String ext = TipoDoc.XML_FACTURA.equals(tipoDoc) ? "xml" : "pdf";
 		return ruta != null ? Paths.get(ruta + nIdVenta + "." + ext) : null;
 	}
@@ -1651,8 +1925,24 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			}
 			return Files.readAllBytes(path);
 		} catch (IOException e) {
+			logger.warn("No se pudo leer documento local {}: {}", path, e.getMessage());
 			return null;
 		}
+	}
+
+	private boolean hasText(String value) {
+		return value != null && !value.trim().isEmpty();
+	}
+
+	private String ensureTrailingSlash(String value) {
+		if (!hasText(value)) {
+			return value;
+		}
+		String trimmed = value.trim();
+		if (trimmed.endsWith("/") || trimmed.endsWith("\\")) {
+			return trimmed;
+		}
+		return trimmed + "/";
 	}
 
 	private void writeDocumentoLocal(Path path, byte[] data) {
@@ -1660,12 +1950,28 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			return;
 		}
 		try {
+			if (Files.exists(path)) {
+				return;
+			}
 			if (path.getParent() != null) {
 				Files.createDirectories(path.getParent());
 			}
-			Files.write(path, data);
+			Files.write(path, data, java.nio.file.StandardOpenOption.CREATE_NEW);
 		} catch (IOException ignored) {
 			// Best effort mirror write; serving should continue with in-memory bytes.
+		}
+	}
+
+	private boolean mismaRuta(String rutaA, String rutaB) {
+		if (rutaA == null || rutaB == null) {
+			return false;
+		}
+		try {
+			Path a = Paths.get(rutaA).normalize();
+			Path b = Paths.get(rutaB).normalize();
+			return a.equals(b);
+		} catch (Exception ex) {
+			return rutaA.trim().equalsIgnoreCase(rutaB.trim());
 		}
 	}
 
