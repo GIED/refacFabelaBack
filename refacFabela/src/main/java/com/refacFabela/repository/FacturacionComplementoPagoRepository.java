@@ -18,6 +18,9 @@ public interface FacturacionComplementoPagoRepository extends JpaRepository<TwFa
 	@Query("SELECT e FROM TwFacturacionComplementoPago e WHERE e.nIdVenta = :nIdVenta ORDER BY e.nParcialidad ASC, e.nId ASC")
 	List<TwFacturacionComplementoPago> findByVenta(@Param("nIdVenta") Long nIdVenta);
 
+	@Query("SELECT e FROM TwFacturacionComplementoPago e WHERE e.nIdVenta IN :nIdsVenta ORDER BY e.nIdVenta ASC, e.nParcialidad ASC, e.nId ASC")
+	List<TwFacturacionComplementoPago> findByVentas(@Param("nIdsVenta") List<Long> nIdsVenta);
+
 	@Query("SELECT e FROM TwFacturacionComplementoPago e WHERE e.nIdFacturacion = :nIdFacturacion ORDER BY e.nParcialidad ASC, e.nId ASC")
 	List<TwFacturacionComplementoPago> findByFacturacion(@Param("nIdFacturacion") Long nIdFacturacion);
 

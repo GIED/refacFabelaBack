@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.refacFabela.model.TwPagoAplicacion;
@@ -17,6 +18,9 @@ public interface TwPagoAplicacionRepository extends JpaRepository<TwPagoAplicaci
 
 	@Query("select p from TwPagoAplicacion p where p.nIdVenta = :nIdVenta and p.nEstatus = 1 order by p.nOrdenAplicacion asc, p.nId asc")
 	List<TwPagoAplicacion> findActivasByVenta(Long nIdVenta);
+
+	@Query("select p from TwPagoAplicacion p where p.nIdVenta in :nIdsVenta and p.nEstatus = 1 order by p.nIdVenta asc, p.nOrdenAplicacion asc, p.nId asc")
+	List<TwPagoAplicacion> findActivasByVentas(@Param("nIdsVenta") List<Long> nIdsVenta);
 
 	@Query("select coalesce(sum(p.nMontoAplicado), 0) from TwPagoAplicacion p where p.nIdVenta = :nIdVenta and p.nEstatus = 1 and p.sEstatus <> 'CANCELADA'")
 	BigDecimal totalAplicadoActivoVenta(Long nIdVenta);

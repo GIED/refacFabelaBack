@@ -1156,20 +1156,87 @@ public class VentasServiceImpl implements VentasService {
 	}
 
 	private void enriquecerEstadosCanonicosFacturacion(List<TvVentasFactura> ventas) {
-		if (ventas == null) {
+		if (ventas == null || ventas.isEmpty()) {
 			return;
 		}
+
+		List<Long> idsVenta = new ArrayList<Long>();
 		for (TvVentasFactura venta : ventas) {
-			enriquecerEstadoCanonicoFacturacion(venta);
+			if (venta != null && venta.getnId() != null) {
+				idsVenta.add(venta.getnId());
+			}
+		}
+		if (idsVenta.isEmpty()) {
+			return;
+		}
+
+		Map<Long, List<TwPagoAplicacion>> aplicacionesPorVenta = new HashMap<Long, List<TwPagoAplicacion>>();
+		Set<Long> idsPagoCliente = new HashSet<Long>();
+		for (TwPagoAplicacion aplicacion : twPagoAplicacionRepository.findActivasByVentas(idsVenta)) {
+			if (aplicacion == null || aplicacion.getnIdVenta() == null) {
+				continue;
+			}
+			List<TwPagoAplicacion> aplicaciones = aplicacionesPorVenta.get(aplicacion.getnIdVenta());
+			if (aplicaciones == null) {
+				aplicaciones = new ArrayList<TwPagoAplicacion>();
+				aplicacionesPorVenta.put(aplicacion.getnIdVenta(), aplicaciones);
+			}
+			aplicaciones.add(aplicacion);
+			if (aplicacion.getnIdPagoCliente() != null) {
+				idsPagoCliente.add(aplicacion.getnIdPagoCliente());
+			}
+		}
+
+		Map<Long, TwPagoCliente> pagosPorId = new HashMap<Long, TwPagoCliente>();
+		if (!idsPagoCliente.isEmpty()) {
+			for (TwPagoCliente pago : twPagoClienteRepository.findAllById(idsPagoCliente)) {
+				if (pago != null && pago.getnId() != null) {
+					pagosPorId.put(pago.getnId(), pago);
+				}
+			}
+		}
+
+		Map<Long, List<com.refacFabela.model.TwFacturacionComplementoPago>> complementosPorVenta = new HashMap<Long, List<com.refacFabela.model.TwFacturacionComplementoPago>>();
+		for (com.refacFabela.model.TwFacturacionComplementoPago complemento : facturacionComplementoPagoRepository.findByVentas(idsVenta)) {
+			if (complemento == null || complemento.getnIdVenta() == null) {
+				continue;
+			}
+			List<com.refacFabela.model.TwFacturacionComplementoPago> complementos = complementosPorVenta.get(complemento.getnIdVenta());
+			if (complementos == null) {
+				complementos = new ArrayList<com.refacFabela.model.TwFacturacionComplementoPago>();
+				complementosPorVenta.put(complemento.getnIdVenta(), complementos);
+			}
+			complementos.add(complemento);
+		}
+
+		Set<Long> idsFacturacion = new HashSet<Long>();
+		for (TvVentasFactura venta : ventas) {
+			if (venta != null && venta.getIdFactura() != null && venta.getIdFactura().longValue() > 0L) {
+				idsFacturacion.add(venta.getIdFactura());
+			}
+		}
+		Map<Long, TwFacturacion> facturasPorId = new HashMap<Long, TwFacturacion>();
+		if (!idsFacturacion.isEmpty()) {
+			for (TwFacturacion factura : facturaRepository.findAllById(idsFacturacion)) {
+				if (factura != null && factura.getnId() != null) {
+					facturasPorId.put(factura.getnId(), factura);
+				}
+			}
+		}
+
+		for (TvVentasFactura venta : ventas) {
+			enriquecerEstadoCanonicoFacturacion(venta, aplicacionesPorVenta.get(venta.getnId()),
+					complementosPorVenta.get(venta.getnId()), pagosPorId, facturasPorId);
 		}
 	}
 
-	private void enriquecerEstadoCanonicoFacturacion(TvVentasFactura venta) {
+	private void enriquecerEstadoCanonicoFacturacion(TvVentasFactura venta, List<TwPagoAplicacion> aplicaciones,
+			List<com.refacFabela.model.TwFacturacionComplementoPago> complementos,
+			Map<Long, TwPagoCliente> pagosPorId, Map<Long, TwFacturacion> facturasPorId) {
 		if (venta == null || venta.getnId() == null) {
 			return;
 		}
 
-		List<TwPagoAplicacion> aplicaciones = twPagoAplicacionRepository.findActivasByVenta(venta.getnId());
 		if (aplicaciones == null || aplicaciones.isEmpty()) {
 			venta.setnIdPagoClienteCanonico(null);
 			venta.setsEstadoPagoCanonico("SIN_PAGO_CANONICO");
@@ -1180,9 +1247,9 @@ public class VentasServiceImpl implements VentasService {
 
 		TwPagoAplicacion ultimaAplicacion = aplicaciones.get(aplicaciones.size() - 1);
 		venta.setnIdPagoClienteCanonico(ultimaAplicacion.getnIdPagoCliente());
-		TwPagoCliente pagoCliente = ultimaAplicacion.getTwPagoCliente() != null
-				? ultimaAplicacion.getTwPagoCliente()
-				: twPagoClienteRepository.findBynId(ultimaAplicacion.getnIdPagoCliente());
+		TwPagoCliente pagoCliente = ultimaAplicacion.getnIdPagoCliente() != null
+				? pagosPorId.get(ultimaAplicacion.getnIdPagoCliente())
+				: null;
 		venta.setsEstadoPagoCanonico(pagoCliente != null && pagoCliente.getsEstatus() != null
 				? pagoCliente.getsEstatus()
 				: "APLICADA");
@@ -1202,10 +1269,10 @@ public class VentasServiceImpl implements VentasService {
 			}
 		}
 
-		List<com.refacFabela.model.TwFacturacionComplementoPago> complementos = facturacionComplementoPagoRepository.findByVenta(venta.getnId());
 		com.refacFabela.model.TwFacturacionComplementoPago ultimoTimbrado = null;
 		com.refacFabela.model.TwFacturacionComplementoPago ultimoFallido = null;
-		for (com.refacFabela.model.TwFacturacionComplementoPago complemento : complementos) {
+		for (com.refacFabela.model.TwFacturacionComplementoPago complemento : complementos != null
+				? complementos : java.util.Collections.<com.refacFabela.model.TwFacturacionComplementoPago>emptyList()) {
 			if (complemento == null || !"TW_PAGO_CLIENTE_APLICACION".equalsIgnoreCase(complemento.getsOrigenPago())
 					|| complemento.getnIdPagoOrigen() == null || !idsAplicacion.contains(complemento.getnIdPagoOrigen())) {
 				continue;
@@ -1239,7 +1306,7 @@ public class VentasServiceImpl implements VentasService {
 			return;
 		}
 
-		TwFacturacion facturacion = facturaRepository.findById(venta.getIdFactura()).orElse(null);
+		TwFacturacion facturacion = facturasPorId.get(venta.getIdFactura());
 		if (facturacion == null) {
 			venta.setsEstadoRepCanonico("NO_FACTURADA");
 			return;

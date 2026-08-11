@@ -107,11 +107,24 @@ public class TimbradoVentaService {
 		this.clasificacionFacturacionService = clasificacionFacturacionService;
 	}
 
+	private void validarVentaDelMesActual(TwVenta venta) {
+		if (venta == null || venta.getdFechaVenta() == null) {
+			throw new FacturacionException("La venta no tiene fecha de registro para validar su facturación.");
+		}
+
+		java.time.LocalDateTime fechaActual = DateTimeUtil.obtenerHoraExactaDeMexico();
+		java.time.LocalDateTime fechaVenta = venta.getdFechaVenta();
+		if (fechaVenta.getYear() != fechaActual.getYear() || fechaVenta.getMonthValue() != fechaActual.getMonthValue()) {
+			throw new FacturacionException("Solo se pueden facturar ventas realizadas en el mes actual.");
+		}
+	}
+
 	public TimbradoResponse timbrarVenta(Long idVenta, String cveCfdi) {
 		TwVenta venta = ventasRepository.findBynId(idVenta);
 		if (venta == null) {
 			throw new FacturacionException("La venta no existe.");
 		}
+		validarVentaDelMesActual(venta);
 		if (venta.getnIdFacturacion() != null && venta.getnIdFacturacion().longValue() > 0L) {
 			throw new FacturacionException("La venta ya fue facturada.");
 		}
@@ -204,6 +217,7 @@ public class TimbradoVentaService {
 		if (venta == null) {
 			throw new FacturacionException("La venta no existe.");
 		}
+		validarVentaDelMesActual(venta);
 		if (venta.getnIdFacturacion() != null && venta.getnIdFacturacion().longValue() > 0L) {
 			throw new FacturacionException("La venta ya fue facturada.");
 		}
@@ -355,6 +369,7 @@ public class TimbradoVentaService {
 			if (venta == null) {
 				throw new FacturacionException("La venta " + idVenta + " no existe.");
 			}
+			validarVentaDelMesActual(venta);
 			if (venta.getnIdFacturacion() != null && venta.getnIdFacturacion().longValue() > 0L) {
 				throw new FacturacionException("La venta " + idVenta + " ya fue facturada.");
 			}
