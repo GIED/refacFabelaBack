@@ -219,6 +219,8 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 	public int consultarCreditosDisponibles(String rfcEmisor) {
 		validateActiveProvider();
 		String endpoint = resolveEndpoint(CONSULTA_TIMBRES_PATH);
+		logger.info("Consultando creditos FacturoPorTi en ambiente {} para RFC {} mediante endpoint {}",
+				properties.isSandbox() ? "SANDBOX" : "PRODUCCION", rfcEmisor, endpoint);
 		try {
 			String primaryToken = resolveBearerToken(rfcEmisor, null);
 			ResponseEntity<String> response = null;
