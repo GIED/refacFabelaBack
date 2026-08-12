@@ -174,7 +174,7 @@ public class ComplementoPagoService {
 		request.setFechaPago(pagosPendientes.get(pagosPendientes.size() - 1).getFechaPago() != null
 				? pagosPendientes.get(pagosPendientes.size() - 1).getFechaPago()
 				: DateTimeUtil.obtenerHoraExactaDeMexico());
-		request.setPagos(buildPagos(pagosPendientes, facturaOrigen,
+		request.setPagos(buildPagos(pagosPendientes, facturaOrigen, datosFactura.getsSerie(), venta.getnId(),
 				estadoOperacion.getSaldoAnterior(), estadoOperacion.getSiguienteParcialidad()));
 		Map<String, Object> metadata = new HashMap<String, Object>();
 		metadata.put("certificado", datosFactura.getsCertificado());
@@ -376,7 +376,7 @@ public class ComplementoPagoService {
 	}
 
 	private List<ComplementoPagoRequest.PagoDto> buildPagos(List<PagoFuenteDto> pagosFuente, TwFacturacion facturaOrigen,
-			BigDecimal saldoAnteriorInicial, int parcialidadInicial) {
+			String serieFacturaOrigen, Long nIdVenta, BigDecimal saldoAnteriorInicial, int parcialidadInicial) {
 		List<ComplementoPagoRequest.PagoDto> pagos = new ArrayList<ComplementoPagoRequest.PagoDto>();
 		BigDecimal saldoAnterior = saldoAnteriorInicial != null ? saldoAnteriorInicial : BigDecimal.ZERO;
 
@@ -391,6 +391,8 @@ public class ComplementoPagoService {
 
 			ComplementoPagoRequest.DocumentoRelacionadoPagoDto documento = new ComplementoPagoRequest.DocumentoRelacionadoPagoDto();
 			documento.setIdDocumento(facturaOrigen.getsUuid());
+			documento.setSerie(serieFacturaOrigen);
+			documento.setFolio(nIdVenta != null ? String.valueOf(nIdVenta) : null);
 			documento.setMonedaDr("MXN");
 			documento.setEquivalenciaDr(BigDecimal.ONE);
 			documento.setNumParcialidad(Integer.valueOf(parcialidadInicial + i));
@@ -549,6 +551,11 @@ public class ComplementoPagoService {
 
 			ComplementoPagoRequest.DocumentoRelacionadoPagoDto documento = new ComplementoPagoRequest.DocumentoRelacionadoPagoDto();
 			documento.setIdDocumento(facturaOrigen.getsUuid());
+			TcDatosFactura datosFacturaOrigen = facturaOrigen.getnIdDatoFactura() != null
+					? tcDatosFacturaRepository.obtenerDatos(facturaOrigen.getnIdDatoFactura())
+					: null;
+			documento.setSerie(datosFacturaOrigen != null ? datosFacturaOrigen.getsSerie() : null);
+			documento.setFolio(aplicacion.getnIdVenta() != null ? String.valueOf(aplicacion.getnIdVenta()) : null);
 			documento.setMonedaDr("MXN");
 			documento.setEquivalenciaDr(BigDecimal.ONE);
 			documento.setNumParcialidad(aplicacion.getnParcialidad());

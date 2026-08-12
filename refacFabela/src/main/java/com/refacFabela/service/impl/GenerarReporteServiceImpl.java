@@ -1295,11 +1295,6 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 		String normalizedExt = extension.toLowerCase();
 		String rutaRaizObligatoria = ensureTrailingSlash(RUTA_FACTURAS_OBLIGATORIA);
 		String base = rutaRaizObligatoria + ("xml".equalsIgnoreCase(normalizedExt) ? "xml/" : "pdf/");
-		Path path = Paths.get(base + nIdVenta + "." + normalizedExt);
-		byte[] direct = readDocumentoLocal(path);
-		if (direct != null && direct.length > 0) {
-			return direct;
-		}
 
 		List<Path> documentos = obtenerDocumentosFacturaVenta(base, nIdVenta, normalizedExt);
 		if (!documentos.isEmpty()) {
@@ -1311,6 +1306,12 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 			} catch (IOException e) {
 				return null;
 			}
+		}
+
+		Path path = Paths.get(base + nIdVenta + "." + normalizedExt);
+		byte[] direct = readDocumentoLocal(path);
+		if (direct != null && direct.length > 0) {
+			return direct;
 		}
 
 		Path recursivo = buscarArchivoPorVentaIdEnRuta(base, nIdVenta, normalizedExt);
