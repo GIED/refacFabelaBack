@@ -17,7 +17,7 @@ public interface VentasFacturaRepository extends JpaRepository<TvVentasFactura, 
 			+ "and e.d_fechaVenta >= DATE_FORMAT(CURDATE(), '%Y-%m-01') "
 			+ "and e.d_fechaVenta < DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)) "
 			+ "or (e.n_estatusVenta = 1 "
-			+ "and e.n_idFactura is null "
+			+ "and (e.n_idFactura is null or e.n_idFactura <= 0) "
 			+ "and exists (select 1 from tw_pedido ped where ped.n_idVenta = e.n_id) "
 			+ "and exists (select 1 from tr_venta_cobro cob_pedido where cob_pedido.n_id_venta = e.n_id))) "
 			+ "and (e.n_idFactura > 0 "

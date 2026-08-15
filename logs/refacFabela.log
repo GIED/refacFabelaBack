@@ -1,3 +1,63 @@
 2026-08-15 10:20:43 [http-nio-127.0.0.1-4043-exec-7] INFO  com.refacFabela.jwt.JwtProvider - Refresh de token expirado, generando nuevo token
 2026-08-15 10:20:44 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=17h3m31s573ms989µs900ns).
 2026-08-15 10:20:46 [http-nio-127.0.0.1-4043-exec-3] INFO  c.r.s.impl.PacFacturacionClientImpl - Consultando creditos FacturoPorTi en ambiente PRODUCCION para RFC FAMJ810312FY6 mediante endpoint https://api.facturoporti.com.mx/servicios/consultar/timbres
+2026-08-15 12:19:42 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 38428 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack)
+2026-08-15 12:19:42 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-08-15 12:19:42 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-08-15 12:19:43 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-15 12:19:44 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 298 ms. Found 86 JPA repository interfaces.
+2026-08-15 12:19:44 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@1a8fe186' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-08-15 12:19:44 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-08-15 12:19:44 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
+2026-08-15 12:19:44 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-08-15 12:19:44 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+2026-08-15 12:19:45 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
+2026-08-15 12:19:45 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2139 ms
+2026-08-15 12:19:45 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-15 12:19:45 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2026-08-15 12:19:45 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-08-15 12:19:45 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-08-15 12:19:45 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-08-15 12:19:45 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-08-15 12:19:46 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-08-15 12:19:46 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-15 12:19:49 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-08-15 12:19:50 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
+2026-08-15 12:19:50 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 7.577 seconds (JVM running for 7.921)
+2026-08-15 12:19:52 [RMI TCP Connection(1)-192.168.0.140] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-15 12:19:52 [RMI TCP Connection(1)-192.168.0.140] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-08-15 12:19:52 [RMI TCP Connection(1)-192.168.0.140] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-08-15 13:34:52 [http-nio-127.0.0.1-4043-exec-5] INFO  c.r.s.impl.PacFacturacionClientImpl - Consultando creditos FacturoPorTi en ambiente PRODUCCION para RFC FAMJ810312FY6 mediante endpoint https://api.facturoporti.com.mx/servicios/consultar/timbres
+2026-08-15 13:37:09 [http-nio-127.0.0.1-4043-exec-5] INFO  c.r.s.impl.PacFacturacionClientImpl - Consultando creditos FacturoPorTi en ambiente PRODUCCION para RFC FAMJ810312FY6 mediante endpoint https://api.facturoporti.com.mx/servicios/consultar/timbres
+2026-08-15 13:37:38 [http-nio-127.0.0.1-4043-exec-4] INFO  c.r.s.impl.PacFacturacionClientImpl - Consultando creditos FacturoPorTi en ambiente PRODUCCION para RFC FAMJ810312FY6 mediante endpoint https://api.facturoporti.com.mx/servicios/consultar/timbres
+2026-08-15 13:39:09 [http-nio-127.0.0.1-4043-exec-1] INFO  c.r.s.impl.PacFacturacionClientImpl - Consultando creditos FacturoPorTi en ambiente PRODUCCION para RFC FAMJ810312FY6 mediante endpoint https://api.facturoporti.com.mx/servicios/consultar/timbres
+2026-08-15 13:41:00 [http-nio-127.0.0.1-4043-exec-7] INFO  c.r.s.impl.PacFacturacionClientImpl - Consultando creditos FacturoPorTi en ambiente PRODUCCION para RFC FAMJ810312FY6 mediante endpoint https://api.facturoporti.com.mx/servicios/consultar/timbres
+2026-08-15 13:41:29 [http-nio-127.0.0.1-4043-exec-8] INFO  c.r.s.impl.PacFacturacionClientImpl - Consultando creditos FacturoPorTi en ambiente PRODUCCION para RFC FAMJ810312FY6 mediante endpoint https://api.facturoporti.com.mx/servicios/consultar/timbres
+2026-08-15 13:42:15 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Starting RefacFabelaApplication using Java 1.8.0_202 on Pedro with PID 42056 (D:\Proyectos\Fabela\Backend\refacFabelaBack\refacFabela\target\classes started by pedro in D:\Proyectos\Fabela\Backend\refacFabelaBack)
+2026-08-15 13:42:15 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-08-15 13:42:15 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-08-15 13:42:16 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-15 13:42:16 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 258 ms. Found 86 JPA repository interfaces.
+2026-08-15 13:42:17 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@a69a0ca' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-08-15 13:42:17 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-08-15 13:42:17 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 4043 (http)
+2026-08-15 13:42:17 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-08-15 13:42:17 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+2026-08-15 13:42:17 [restartedMain] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring embedded WebApplicationContext
+2026-08-15 13:42:17 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1960 ms
+2026-08-15 13:42:17 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-15 13:42:17 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2026-08-15 13:42:17 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-08-15 13:42:17 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-08-15 13:42:18 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-08-15 13:42:18 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-08-15 13:42:20 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-08-15 13:42:20 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-15 13:42:23 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-08-15 13:42:24 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 4043 (http) with context path '/api/refacFabela'
+2026-08-15 13:42:24 [restartedMain] INFO  c.refacFabela.RefacFabelaApplication - Started RefacFabelaApplication in 9.127 seconds (JVM running for 9.402)
+2026-08-15 13:42:25 [RMI TCP Connection(2)-192.168.0.140] INFO  o.a.c.c.C.[.[.[/api/refacFabela] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-15 13:42:25 [RMI TCP Connection(2)-192.168.0.140] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-08-15 13:42:25 [RMI TCP Connection(2)-192.168.0.140] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-08-15 13:44:29 [http-nio-127.0.0.1-4043-exec-9] INFO  c.r.s.impl.PacFacturacionClientImpl - Consultando creditos FacturoPorTi en ambiente PRODUCCION para RFC FAMJ810312FY6 mediante endpoint https://api.facturoporti.com.mx/servicios/consultar/timbres
+2026-08-15 13:45:44 [http-nio-127.0.0.1-4043-exec-2] INFO  c.r.s.impl.PacFacturacionClientImpl - Consultando creditos FacturoPorTi en ambiente PRODUCCION para RFC CJE210818NY8 mediante endpoint https://api.facturoporti.com.mx/servicios/consultar/timbres
