@@ -15,6 +15,9 @@ public interface TrVentaCobroRepository extends JpaRepository<TrVentaCobro, Long
 
     public List<TrVentaCobro> findBynIdVenta(Long nIdVenta);
 
+    @Query("Select c from TrVentaCobro c where c.nIdVenta in :nIdsVenta")
+    public List<TrVentaCobro> findByVentas(List<Long> nIdsVenta);
+
    
     @Query("Select c from TrVentaCobro c where c.nIdCaja=:nIdCaja")
     public List<TrVentaCobro> obtenerPagosCaja(Long nIdCaja);

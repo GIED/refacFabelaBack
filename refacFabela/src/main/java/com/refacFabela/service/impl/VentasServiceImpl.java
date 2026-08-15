@@ -1209,6 +1209,26 @@ public class VentasServiceImpl implements VentasService {
 			complementos.add(complemento);
 		}
 
+		Set<Long> ventasPedido = new HashSet<Long>();
+		for (TwPedido pedido : twPedidoRepository.findByVentas(idsVenta)) {
+			if (pedido != null && pedido.getnIdVenta() != null) {
+				ventasPedido.add(pedido.getnIdVenta());
+			}
+		}
+
+		Map<Long, List<TrVentaCobro>> cobrosPorVenta = new HashMap<Long, List<TrVentaCobro>>();
+		for (TrVentaCobro cobro : trVentaCobroRepository.findByVentas(idsVenta)) {
+			if (cobro == null || cobro.getnIdVenta() == null) {
+				continue;
+			}
+			List<TrVentaCobro> cobros = cobrosPorVenta.get(cobro.getnIdVenta());
+			if (cobros == null) {
+				cobros = new ArrayList<TrVentaCobro>();
+				cobrosPorVenta.put(cobro.getnIdVenta(), cobros);
+			}
+			cobros.add(cobro);
+		}
+
 		Set<Long> idsFacturacion = new HashSet<Long>();
 		for (TvVentasFactura venta : ventas) {
 			if (venta != null && venta.getIdFactura() != null && venta.getIdFactura().longValue() > 0L) {
@@ -1225,9 +1245,36 @@ public class VentasServiceImpl implements VentasService {
 		}
 
 		for (TvVentasFactura venta : ventas) {
+			venta.setEsVentaPedido(Boolean.valueOf(ventasPedido.contains(venta.getnId())));
+			venta.setTieneCobroPendienteComplemento(Boolean.valueOf(tieneCobroPendienteComplemento(
+					cobrosPorVenta.get(venta.getnId()), complementosPorVenta.get(venta.getnId()))));
 			enriquecerEstadoCanonicoFacturacion(venta, aplicacionesPorVenta.get(venta.getnId()),
 					complementosPorVenta.get(venta.getnId()), pagosPorId, facturasPorId);
 		}
+	}
+
+	private boolean tieneCobroPendienteComplemento(List<TrVentaCobro> cobros,
+			List<com.refacFabela.model.TwFacturacionComplementoPago> complementos) {
+		if (cobros == null || cobros.isEmpty()) {
+			return false;
+		}
+		for (TrVentaCobro cobro : cobros) {
+			boolean tieneComplementoTimbrado = false;
+			if (complementos != null) {
+				for (com.refacFabela.model.TwFacturacionComplementoPago complemento : complementos) {
+					if (complemento != null && "TR_VENTA_COBRO".equalsIgnoreCase(complemento.getsOrigenPago())
+							&& cobro.getnId() != null && cobro.getnId().equals(complemento.getnIdPagoOrigen())
+							&& complemento.getnEstatus() != null && complemento.getnEstatus().intValue() == 1) {
+						tieneComplementoTimbrado = true;
+						break;
+					}
+				}
+			}
+			if (!tieneComplementoTimbrado) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void enriquecerEstadoCanonicoFacturacion(TvVentasFactura venta, List<TwPagoAplicacion> aplicaciones,

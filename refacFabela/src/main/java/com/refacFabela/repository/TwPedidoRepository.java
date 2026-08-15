@@ -18,4 +18,7 @@ public interface TwPedidoRepository extends JpaRepository<TwPedido, Long> {
 	   @Query("Select e from TwPedido e where e.nId=:pedido ")
 	 		public TwPedido pedidoId(Long pedido);
 
+	   @Query("Select e from TwPedido e where e.nIdVenta in :ventas")
+		public List<TwPedido> findByVentas(List<Long> ventas);
+
 }

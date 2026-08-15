@@ -86,6 +86,12 @@ public class TvVentasFactura implements Serializable {
 
 	@Transient
 	private String sUuidRepCanonico;
+
+	@Transient
+	private Boolean esVentaPedido;
+
+	@Transient
+	private Boolean tieneCobroPendienteComplemento;
 	
 	
 	
@@ -248,6 +254,22 @@ public class TvVentasFactura implements Serializable {
 
 	public void setsUuidRepCanonico(String sUuidRepCanonico) {
 		this.sUuidRepCanonico = sUuidRepCanonico;
+	}
+
+	public Boolean getEsVentaPedido() {
+		return esVentaPedido;
+	}
+
+	public void setEsVentaPedido(Boolean esVentaPedido) {
+		this.esVentaPedido = esVentaPedido;
+	}
+
+	public Boolean getTieneCobroPendienteComplemento() {
+		return tieneCobroPendienteComplemento;
+	}
+
+	public void setTieneCobroPendienteComplemento(Boolean tieneCobroPendienteComplemento) {
+		this.tieneCobroPendienteComplemento = tieneCobroPendienteComplemento;
 	}
 
 
