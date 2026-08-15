@@ -109,10 +109,6 @@ public class ComplementoPagoService {
 		if (venta.getnIdFacturacion() == null || venta.getnIdFacturacion().longValue() <= 0L) {
 			throw new FacturacionException("La venta no tiene factura origen timbrada.");
 		}
-		if (venta.getTcFormapago() == null || venta.getTcFormapago().getsClave() == null) {
-			throw new FacturacionException("La venta no tiene forma de pago definida.");
-		}
-
 		TwFacturacion facturaOrigen = facturaRepository.findById(venta.getnIdFacturacion()).orElse(null);
 		if (facturaOrigen == null || facturaOrigen.getsUuid() == null || facturaOrigen.getsUuid().trim().isEmpty()) {
 			throw new FacturacionException("No existe UUID de la factura origen.");
@@ -144,6 +140,7 @@ public class ComplementoPagoService {
 		if (pagosPendientes == null || pagosPendientes.isEmpty()) {
 			throw new FacturacionException("No hay pagos pendientes de relacionar para generar el complemento.");
 		}
+		validarFormasPagoSat(pagosPendientes);
 
 		EstadoComplementoVenta estadoOperacion = estadoComplementoVenta != null
 				? estadoComplementoVenta
@@ -192,6 +189,15 @@ public class ComplementoPagoService {
 		metadata.put("folio", venta.getnId().toString() + "_P" + estadoOperacion.getSiguienteParcialidad());
 		request.setMetadata(metadata);
 		return request;
+	}
+
+	private void validarFormasPagoSat(List<PagoFuenteDto> pagosPendientes) {
+		for (PagoFuenteDto pagoPendiente : pagosPendientes) {
+			if (pagoPendiente == null || pagoPendiente.getClaveFormaPagoSat() == null
+					|| pagoPendiente.getClaveFormaPagoSat().trim().isEmpty()) {
+				throw new FacturacionException("El cobro pendiente no tiene forma de pago SAT definida.");
+			}
+		}
 	}
 
 	public TimbradoResponse timbrarComplemento(Long idVenta, String usoCfdi) {
