@@ -32,10 +32,13 @@ import com.refacFabela.service.impl.TimbradoVentaService;
 import com.refacFabela.model.TcCliente;
 import com.refacFabela.model.TcDatosFactura;
 import com.refacFabela.model.TwFacturacion;
+import com.refacFabela.model.TrVentaCobro;
 import com.refacFabela.model.TwVenta;
 import com.refacFabela.repository.ClientesRepository;
 import com.refacFabela.repository.FacturaRepository;
 import com.refacFabela.repository.TcDatosFacturaRepository;
+import com.refacFabela.repository.TrVentaCobroRepository;
+import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.FacturacionService;
 import com.refacFabela.utils.subirArchivo;
@@ -53,6 +56,8 @@ public class FacturacionServiceImpl implements FacturacionService {
 	private final ClientesRepository clientesRepository;
 	private final FacturaRepository facturaRepository;
 	private final TcDatosFacturaRepository tcDatosFacturaRepository;
+	private final TwPedidoRepository twPedidoRepository;
+	private final TrVentaCobroRepository trVentaCobroRepository;
 	private final FacturacionProperties facturacionProperties;
 	private final TimbradoVentaService timbradoVentaService;
 	private final CancelacionFacturacionService cancelacionFacturacionService;
@@ -68,6 +73,8 @@ public class FacturacionServiceImpl implements FacturacionService {
 			ClientesRepository clientesRepository,
 			FacturaRepository facturaRepository,
 			TcDatosFacturaRepository tcDatosFacturaRepository,
+			TwPedidoRepository twPedidoRepository,
+			TrVentaCobroRepository trVentaCobroRepository,
 			FacturacionProperties facturacionProperties,
 			TimbradoVentaService timbradoVentaService,
 			CancelacionFacturacionService cancelacionFacturacionService,
@@ -82,6 +89,8 @@ public class FacturacionServiceImpl implements FacturacionService {
 		this.clientesRepository = clientesRepository;
 		this.facturaRepository = facturaRepository;
 		this.tcDatosFacturaRepository = tcDatosFacturaRepository;
+		this.twPedidoRepository = twPedidoRepository;
+		this.trVentaCobroRepository = trVentaCobroRepository;
 		this.facturacionProperties = facturacionProperties;
 		this.timbradoVentaService = timbradoVentaService;
 		this.cancelacionFacturacionService = cancelacionFacturacionService;
@@ -136,7 +145,24 @@ public class FacturacionServiceImpl implements FacturacionService {
 				}
 			} else {
 				boolean repCanonicoProcesado = false;
-				if (esFacturaPpd99(timbradoIngreso)) {
+				if (esPedidoConAnticipoRegistrado(ventaActualizada)) {
+					try {
+						TimbradoResponse complemento = complementoPagoService.timbrarComplemento(idVenta, cveCfdi);
+						resultado.setUuidComplementoPago(complemento.getUuid());
+						resultado.setEstadoComplemento("PENDIENTE_COMPLEMENTO_PAGO");
+						resultado.setMensaje("Factura de pedido y complemento del anticipo generados correctamente.");
+						repCanonicoProcesado = true;
+					} catch (Exception complementoPedidoError) {
+						logger.error("Factura de pedido generada pero el complemento del anticipo quedo pendiente para venta {}", idVenta,
+								complementoPedidoError);
+						resultado.setEstadoComplemento("PENDIENTE_COMPLEMENTO_PAGO");
+						resultado.setCodigoError("REP_ANTICIPO_PEDIDO_ERROR");
+						resultado.setMensajeError(complementoPedidoError.getMessage());
+						resultado.setMensaje("Factura de pedido generada correctamente; el complemento del anticipo quedo pendiente.");
+						repCanonicoProcesado = true;
+					}
+				}
+				if (!repCanonicoProcesado && esFacturaPpd99(timbradoIngreso)) {
 					try {
 						java.util.List<TimbradoResponse> complementosCanonicos = complementoPagoService
 								.timbrarComplementosPagoClientePendientesVentas(java.util.Collections.singletonList(idVenta));
@@ -192,6 +218,14 @@ public class FacturacionServiceImpl implements FacturacionService {
 			resultado.setMensajeError(e.getMessage());
 			return resultado;
 		}
+	}
+
+	private boolean esPedidoConAnticipoRegistrado(TwVenta venta) {
+		if (venta == null || venta.getnId() == null || twPedidoRepository.pedido(venta.getnId()) == null) {
+			return false;
+		}
+		java.util.List<TrVentaCobro> cobros = trVentaCobroRepository.findBynIdVenta(venta.getnId());
+		return cobros != null && !cobros.isEmpty();
 	}
 
 	@Override

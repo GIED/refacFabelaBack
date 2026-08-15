@@ -44,6 +44,7 @@ import com.refacFabela.repository.FacturaRepository;
 import com.refacFabela.repository.TcDatosFacturaRepository;
 import com.refacFabela.repository.TrVentaCobroRepository;
 import com.refacFabela.repository.TwPagoAplicacionRepository;
+import com.refacFabela.repository.TwPedidoRepository;
 import com.refacFabela.repository.VentasProductoRepository;
 import com.refacFabela.repository.VentasRepository;
 import com.refacFabela.service.impl.DatosFacturaStorageResolver;
@@ -66,6 +67,7 @@ public class TimbradoVentaService {
 	private final TcDatosFacturaRepository tcDatosFacturaRepository;
 	private final FacturaRepository facturaRepository;
 	private final TwPagoAplicacionRepository twPagoAplicacionRepository;
+	private final TwPedidoRepository twPedidoRepository;
 	private final VentasService ventasService;
 	private final PacFacturacionClient pacFacturacionClient;
 	private final PacFacturacionMapper pacFacturacionMapper;
@@ -82,6 +84,7 @@ public class TimbradoVentaService {
 			TcDatosFacturaRepository tcDatosFacturaRepository,
 			FacturaRepository facturaRepository,
 			TwPagoAplicacionRepository twPagoAplicacionRepository,
+			TwPedidoRepository twPedidoRepository,
 			VentasService ventasService,
 			PacFacturacionClient pacFacturacionClient,
 			PacFacturacionMapper pacFacturacionMapper,
@@ -97,6 +100,7 @@ public class TimbradoVentaService {
 		this.tcDatosFacturaRepository = tcDatosFacturaRepository;
 		this.facturaRepository = facturaRepository;
 		this.twPagoAplicacionRepository = twPagoAplicacionRepository;
+		this.twPedidoRepository = twPedidoRepository;
 		this.ventasService = ventasService;
 		this.pacFacturacionClient = pacFacturacionClient;
 		this.pacFacturacionMapper = pacFacturacionMapper;
@@ -111,12 +115,27 @@ public class TimbradoVentaService {
 		if (venta == null || venta.getdFechaVenta() == null) {
 			throw new FacturacionException("La venta no tiene fecha de registro para validar su facturación.");
 		}
+		if (esPedidoConAnticipoRegistrado(venta)) {
+			return;
+		}
 
 		java.time.LocalDateTime fechaActual = DateTimeUtil.obtenerHoraExactaDeMexico();
 		java.time.LocalDateTime fechaVenta = venta.getdFechaVenta();
 		if (fechaVenta.getYear() != fechaActual.getYear() || fechaVenta.getMonthValue() != fechaActual.getMonthValue()) {
 			throw new FacturacionException("Solo se pueden facturar ventas realizadas en el mes actual.");
 		}
+	}
+
+	private boolean esPedidoConAnticipoRegistrado(TwVenta venta) {
+		if (venta == null || venta.getnId() == null || venta.getnIdFacturacion() != null
+				&& venta.getnIdFacturacion().longValue() > 0L) {
+			return false;
+		}
+		if (twPedidoRepository.pedido(venta.getnId()) == null) {
+			return false;
+		}
+		List<TrVentaCobro> cobros = trVentaCobroRepository.findBynIdVenta(venta.getnId());
+		return cobros != null && !cobros.isEmpty();
 	}
 
 	public TimbradoResponse timbrarVenta(Long idVenta, String cveCfdi) {
