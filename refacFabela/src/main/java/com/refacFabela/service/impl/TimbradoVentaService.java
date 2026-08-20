@@ -597,7 +597,7 @@ public class TimbradoVentaService {
 			concepto.setCantidad(BigDecimal.valueOf(producto.getnCantidad()));
 			concepto.setClaveUnidad("H87");
 			concepto.setUnidad("PZA");
-			concepto.setDescripcion(producto.getTcProducto().getsDescripcion() != null ? producto.getTcProducto().getsDescripcion() : producto.getTcProducto().getsProducto());
+			concepto.setDescripcion(producto.getTcProducto().getsProducto());
 			concepto.setValorUnitario(producto.getnPrecioUnitario());
 			concepto.setImporte(producto.getnPrecioPartida());
 			concepto.setDescuento(BigDecimal.ZERO);

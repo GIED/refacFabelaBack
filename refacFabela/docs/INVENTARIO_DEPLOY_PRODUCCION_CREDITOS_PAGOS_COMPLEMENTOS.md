@@ -81,6 +81,11 @@ Controladores/servicios que usan esta ruta:
 - `src/main/java/com/refacFabela/service/impl/TimbradoVentaService.java`
 - `src/main/java/com/refacFabela/service/impl/GenerarReporteServiceImpl.java`
 
+### Regla de descripciones CFDI
+
+- Los conceptos de producto construidos por `TimbradoVentaService` deben usar `tc_productos.s_producto` como descripción fiscal.
+- No usar `tc_productos.s_descripcion` para el CFDI; ese campo puede contener información interna de utilidad.
+
 ### Rutas reales que usa el codigo
 
 1. Comprobantes de ventas internet (subida manual):
