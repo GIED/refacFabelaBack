@@ -109,12 +109,13 @@ public class FacturaController {
 	@PostMapping("cancelar")
 	public ResponseEntity<?> cancelar(@RequestBody CancelacionFacturaDto cancelacionFacturaDto) throws Exception {
 		Map<String, Object> response = new HashMap();
-		if (facturaService.cancelaFactura(cancelacionFacturaDto).equals("ok")) {
+		String resultado = facturaService.cancelaFactura(cancelacionFacturaDto);
+		if ("ok".equals(resultado)) {
 			response.put("mensaje", "Factura cancelada");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 		}
-		response.put("mensaje", "error al cancelar la factura");
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		response.put("mensaje", resultado);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 	}
 	
 	@GetMapping("complemento")

@@ -720,19 +720,36 @@ public class PacFacturacionMapper {
 		providerRequest.setUuid(request.getUuid());
 		providerRequest.setTotal(request.getTotal());
 		providerRequest.setMotivo(request.getMotivo());
-		providerRequest.setFolioFiscalSustitucion(request.getFolioFiscalSustitucion());
+		providerRequest.setFolioFiscalSustitucion("01".equals(request.getMotivo())
+				? request.getFolioFiscalSustitucion()
+				: null);
 		providerRequest.setSello(request.getSello());
 		if (request.getMetadata() != null) {
-			providerRequest.setCertificado(stringValue(request.getMetadata().get("certificado")));
-			providerRequest.setLlavePrivada(stringValue(request.getMetadata().get("llavePrivada")));
+			providerRequest.setCertificado(normalizeBase64Value(request.getMetadata().get("certificado")));
+			providerRequest.setLlavePrivada(normalizeBase64Value(request.getMetadata().get("llavePrivada")));
 			String password = stringValue(request.getMetadata().get("password"));
 			if (password == null) {
 				password = stringValue(request.getMetadata().get("passwordKey"));
 			}
 			providerRequest.setPassword(password);
 		}
-		providerRequest.setAdicionalData(request.getMetadata());
 		return providerRequest;
+	}
+
+	public Map<String, Object> toSanitizedFacturoPorTiCancelacionPayload(CancelacionRequest request) {
+		FacturoPorTiCancelacionRequest providerRequest = toFacturoPorTiCancelacionRequest(request);
+		Map<String, Object> payload = new LinkedHashMap<String, Object>();
+		payload.put("rfcEmisor", providerRequest.getRfcEmisor());
+		payload.put("rfcReceptor", providerRequest.getRfcReceptor());
+		payload.put("uuid", providerRequest.getUuid());
+		payload.put("total", providerRequest.getTotal());
+		payload.put("motivo", providerRequest.getMotivo());
+		payload.put("folioFiscalSustitucion", providerRequest.getFolioFiscalSustitucion());
+		payload.put("sello", providerRequest.getSello());
+		payload.put("certificado", providerRequest.getCertificado());
+		payload.put("llavePrivada", providerRequest.getLlavePrivada());
+		payload.put("password", providerRequest.getPassword());
+		return sanitizePayload(payload);
 	}
 
 	public CancelacionResponse toCancelacionResponse(FacturoPorTiCancelacionResponse response) {

@@ -1903,10 +1903,19 @@ public class GenerarReporteServiceImpl implements GeneraReporteService {
 
 	private Path pathAcuseCancelacionVenta(Long nIdVenta, String ext) {
 		TwVenta venta = nIdVenta != null ? ventasRepository.findBynId(nIdVenta) : null;
-		if (venta == null || venta.getTcCliente() == null || venta.getTcCliente().getnIdDatoFactura() == null) {
+		if (venta == null) {
 			return null;
 		}
-		TcDatosFactura datosFactura = tcDatosFacturaRepository.findById(venta.getTcCliente().getnIdDatoFactura()).orElse(null);
+		TcDatosFactura datosFactura = null;
+		if (venta.getnIdFacturacion() != null) {
+			TwFacturacion facturacion = facturaRepository.findById(venta.getnIdFacturacion()).orElse(null);
+			if (facturacion != null && facturacion.getnIdDatoFactura() != null) {
+				datosFactura = tcDatosFacturaRepository.findById(facturacion.getnIdDatoFactura()).orElse(null);
+			}
+		}
+		if (datosFactura == null && venta.getTcCliente() != null && venta.getTcCliente().getnIdDatoFactura() != null) {
+			datosFactura = tcDatosFacturaRepository.findById(venta.getTcCliente().getnIdDatoFactura()).orElse(null);
+		}
 		if (datosFactura == null) {
 			return null;
 		}

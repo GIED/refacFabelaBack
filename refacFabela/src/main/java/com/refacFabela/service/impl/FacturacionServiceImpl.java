@@ -336,7 +336,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 			logger.error("Error al cancelar venta {} con motivo {} usando proveedor activo {}",
 					cancelacionFacturaDto.getnIdVenta(), cancelacionFacturaDto.getMotivo(),
 					facturacionProperties != null ? facturacionProperties.getProveedorActivo() : null, e);
-			return "Error al facturar";
+			return e.getMessage() != null ? e.getMessage() : "No fue posible cancelar la factura.";
 		}
 	}
 

@@ -9,6 +9,7 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -654,11 +655,14 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 		String acuse = findText(root, "acuse", "acuseBase64", "xmlAcuse");
 		String estatusUuid = extractSatTagValueFromAcuse(acuse, "EstatusUUID");
 		String uuidFromAcuse = extractSatTagValueFromAcuse(acuse, "UUID");
+		String estatusProveedor = firstNonEmpty(readText(root, "estatusCancelacion"), findText(root, "resultado"));
 
-		boolean success = "000".equals(codigo) || isSatCancelSuccess(estatusUuid);
+		boolean success = "000".equals(codigo)
+				|| isSatCancelSuccess(estatusUuid)
+				|| isConfirmedCancelProviderState(estatusProveedor);
 		response.setSuccess(Boolean.valueOf(success));
 		response.setUuid(firstNonEmpty(readText(root, "uuid"), request != null ? request.getUuid() : null, uuidFromAcuse));
-		response.setEstatus(resolveCancelacionEstatus(response.getSuccess(), firstNonEmpty(readText(root, "estatusCancelacion"), readText(root, "estado"), findText(root, "resultado")), estatusUuid));
+		response.setEstatus(resolveCancelacionEstatus(response.getSuccess(), estatusProveedor, estatusUuid));
 		response.setCodigoError(resolveCancelacionErrorCode(response.getSuccess(), firstNonEmpty(findText(root, "codigoError", "errorCode", "codigo", "codigoEstatus"), codigo), estatusUuid));
 		response.setMensajeError(resolveCancelacionMensaje(response.getSuccess(), mensajeProveedor, estatusUuid));
 		response.setAcuseBase64(acuse);
@@ -670,17 +674,33 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 		return "201".equals(estatusUuid) || "202".equals(estatusUuid);
 	}
 
+	private boolean isConfirmedCancelProviderState(String estatusProveedor) {
+		if (estatusProveedor == null || estatusProveedor.trim().isEmpty()) {
+			return false;
+		}
+		String normalized = estatusProveedor.trim().toUpperCase(Locale.ROOT);
+		return "CANCELADA".equals(normalized)
+				|| "CANCELADO".equals(normalized)
+				|| "PREVIAMENTE_CANCELADA".equals(normalized)
+				|| "PREVIAMENTE_CANCELADO".equals(normalized)
+				|| "201".equals(normalized)
+				|| "202".equals(normalized);
+	}
+
 	private String resolveCancelacionEstatus(Boolean success, String estatus, String estatusUuid) {
+		if ("201".equals(estatusUuid) || "202".equals(estatusUuid)) {
+			return "CANCELADA";
+		}
+		if (isConfirmedCancelProviderState(estatus)) {
+			return "CANCELADA";
+		}
 		if (estatus != null && !estatus.trim().isEmpty()) {
 			return estatus;
 		}
 		if (!Boolean.TRUE.equals(success)) {
 			return "ERROR";
 		}
-		if ("202".equals(estatusUuid)) {
-			return "PREVIAMENTE_CANCELADO";
-		}
-		return "CANCELADO";
+		return "CANCELADA";
 	}
 
 	private String resolveCancelacionErrorCode(Boolean success, String codigoProveedor, String estatusUuid) {
@@ -691,6 +711,12 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 	}
 
 	private String resolveCancelacionMensaje(Boolean success, String mensajeProveedor, String estatusUuid) {
+		if ("202".equals(estatusUuid)) {
+			return "El CFDI ya se encontraba cancelado en SAT.";
+		}
+		if ("201".equals(estatusUuid)) {
+			return "Cancelacion aceptada por SAT.";
+		}
 		if (!Boolean.TRUE.equals(success)) {
 			if (mensajeProveedor != null && !mensajeProveedor.trim().isEmpty()) {
 				return mensajeProveedor;
@@ -698,16 +724,10 @@ public class PacFacturacionClientImpl implements PacFacturacionClient {
 			if (estatusUuid != null) {
 				return "Cancelacion rechazada por SAT (EstatusUUID=" + estatusUuid + ").";
 			}
-			return null;
+			return "FacturoPorTi rechazó la cancelación.";
 		}
 		if (mensajeProveedor != null && !mensajeProveedor.trim().isEmpty()) {
 			return mensajeProveedor;
-		}
-		if ("202".equals(estatusUuid)) {
-			return "El CFDI ya se encontraba cancelado en SAT.";
-		}
-		if ("201".equals(estatusUuid)) {
-			return "Cancelacion aceptada por SAT.";
 		}
 		return null;
 	}
